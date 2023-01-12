@@ -1,0 +1,5 @@
+DB_ROOT_HOST=localhost
+DB_NAME=docker-react-express
+DB_USER=user
+DB_PASS=password
+TZ=Asia/Tokyo
