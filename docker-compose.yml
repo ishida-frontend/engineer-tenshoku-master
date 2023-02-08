@@ -34,7 +34,7 @@ services:
     volumes:
       - ./api:/app
     working_dir: /app
-    command: yarn run dev
+    command: yarn run start
     networks:
       backend:
         ipv4_address: 172.28.1.10
