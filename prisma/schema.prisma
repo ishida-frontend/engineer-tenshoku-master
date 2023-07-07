@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Course {
-  category_id Int @id @default(autoincrement())
+  course_id Int @id @default(autoincrement())
   name String 
   description String
   published Boolean @default(false) // コースが公開されているかどうか。
@@ -23,7 +23,7 @@ model Video {
   video_id Int @id @default(autoincrement())
   name String
   description String
-  published Boolean @default(false) // コースが公開されているかどうか。
+  published Boolean @default(false) // 動画が公開されているかどうか。
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
