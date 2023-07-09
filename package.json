@@ -6,7 +6,9 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devStart": "nodemon prisma-script.ts",
+    "_comment": "devStart：yarn run devStart → prismascript.tsを変更すると自動でコンパイル＆実行"
   },
   "author": "",
   "license": "ISC",
