@@ -11,19 +11,24 @@ datasource db {
 }
 
 model Course {
-  course_id Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+  videos Video[]
   name String 
   description String
   published Boolean @default(false) // コースが公開されているかどうか。
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  deleted_at DateTime?
 }
 
 model Video {
-  video_id Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+  course Course @relation(fields: [course_id], references: [id])
+  course_id Int
   name String
   description String
   published Boolean @default(false) // 動画が公開されているかどうか。
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  deleted_at DateTime?
 }
