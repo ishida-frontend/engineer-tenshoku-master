@@ -26,9 +26,9 @@
 # Installation
 
 * Dockerの環境構築
-docker-compose-upのインストール方法を説明します。
+Dockerのインストール方法を説明します。
 
-ルートディレクトリに.envファイルがあることを確認し、
+ルートディレクトリに.envファイルがあることを確認しMYSQL_ROOT_PASSWORD, MYSQL_USER, MYSQL_PASSWORDの値を設定してください。
 ターミナルで以下を実行
 ```bash
 docker-compose up
