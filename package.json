@@ -1,5 +1,5 @@
 {
-  "type": "module",
+  "type": "commonjs",
   "name": "express-docker",
   "version": "1.0.0",
   "description": "",
@@ -7,7 +7,8 @@
   "scripts": {
     "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "createCourse": "nodemon ./scripts/createCourse.ts"
+    "createCourse": "nodemon ./scripts/createCourse.ts",
+    "readCourse": "nodemon ./scripts/readCourse.ts"
   },
   "author": "",
   "license": "ISC",
