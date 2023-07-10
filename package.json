@@ -8,7 +8,8 @@
     "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "createCourse": "nodemon ./scripts/createCourse.ts",
-    "readCourse": "nodemon ./scripts/readCourse.ts"
+    "readCourse": "nodemon ./scripts/readCourse.ts",
+    "updateCourse": "nodemon ./scripts/updateCourse.ts"
   },
   "author": "",
   "license": "ISC",
