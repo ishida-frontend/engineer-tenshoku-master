@@ -9,7 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "createCourse": "nodemon ./scripts/createCourse.ts",
     "readCourse": "nodemon ./scripts/readCourse.ts",
-    "updateCourse": "nodemon ./scripts/updateCourse.ts"
+    "updateCourse": "nodemon ./scripts/updateCourse.ts",
+    "deleteCourse": "nodemon ./scripts/deleteCourse.ts"
   },
   "author": "",
   "license": "ISC",
