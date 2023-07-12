@@ -44,3 +44,4 @@ testDeleteCourses(10, 11)
   .finally(async () => {
     await prisma.$disconnect()
   })
+
