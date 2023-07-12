@@ -5,14 +5,14 @@ prisma.$use(async (params, next) => {
   if (params.model === 'Course') {
     if (params.action === 'delete') {
       params.action = 'update';
-      params.args['data'] = { deleted_at: new Date() };
+      params.args.data = { deleted_at: new Date() };
     }
     if (params.action === 'deleteMany') {
       params.action = 'updateMany';
       if (params.args.data !== undefined) {
-        params.args.data['deleted_at'] = new Date();
+        params.args.data.deleted_at = new Date();
       } else {
-        params.args['data'] = { deleted_at: new Date() };
+        params.args.data = { deleted_at: new Date() };
       }
     }
   }
@@ -44,4 +44,3 @@ testDeleteCourses(10, 11)
   .finally(async () => {
     await prisma.$disconnect()
   })
-  
