@@ -11,7 +11,7 @@ const pool = mysql.createPool({
 });
 
 // HTTPサーバを起動する
-const port = process.env.SERVER_PORT || 3308;
+const port = process.env.SERVER_PORT ||8000;
 const app = express();
 
 app.get('/', (req, res) => {

@@ -23,4 +23,3 @@ videoCreate(1)
   .finally(async () => {
     await prisma.$disconnect();
   });
-
