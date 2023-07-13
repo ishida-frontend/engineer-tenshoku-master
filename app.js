@@ -7,11 +7,11 @@ const pool = mysql.createPool({
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
+  database: process.env.MYSQL_DATABASE
 });
 
 // HTTPサーバを起動する
-const port = process.env.SERVER_PORT || 8000;
+const port = process.env.SERVER_PORT || 8080;
 const app = express();
 
 app.get('/', (req, res) => {
