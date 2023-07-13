@@ -10,9 +10,11 @@
     "createCourse": "nodemon ./scripts/createCourse.ts",
     "readCourse": "nodemon ./scripts/readCourse.ts",
     "updateCourse": "nodemon ./scripts/updateCourse.ts",
+    "deleteCourse": "nodemon ./scripts/deleteCourse.ts",
     "createVideo": "nodemon ./scripts/createVideo.ts",
     "readVideo": "nodemon ./scripts/readVideo.ts",
-    "updateVideo": "nodemon ./scripts/updateVideo.ts"
+    "updateVideo": "nodemon ./scripts/updateVideo.ts",
+    "deleteVideo": "nodemon ./scripts/deleteVideo.ts"
   },
   "author": "",
   "license": "ISC",
