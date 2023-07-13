@@ -9,6 +9,7 @@ async function courseCreate() {
       published: true
     }
   })
+  return course.id;
   console.log(course);
 }
 
