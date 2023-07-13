@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-async function updateVideo() {
+async function updateVideo(videoId: number) {
   const video = await prisma.video.update({
     where: {
-      id: 2,
+      id: videoId,
     },
     data: {
       description: 'This video was made just for you!',
@@ -27,7 +27,7 @@ async function updateVideos() {
   console.log(videos);
 }
 
-updateVideo()
+updateVideo(3)
 updateVideos()
   .catch(e => {
     console.log(e.message);
