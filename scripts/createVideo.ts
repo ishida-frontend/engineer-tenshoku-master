@@ -10,10 +10,13 @@ async function videoCreate(courseId: number) {
       course: { connect: { id: courseId } } //受け取ったCourseのidを使用して紐付け
     }
   });
-  console.log(video);
+  return video;
 }
 
-videoCreate()
+videoCreate(1)
+  .then((res: any) => {
+    console.log(res);
+  })
   .catch(e => {
     console.log(e.message);
   })
@@ -21,17 +24,5 @@ videoCreate()
     await prisma.$disconnect();
   });
 
-// Connect Video.course_id to Course.id
-async function connectCourseAndVideo() {
-  const courseId = await courseCreate();
-  await videoCreate(courseId);  
-}
 
-connectCourseAndVideo()
-  .catch(e => {
-    console.log(e.message);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
   

@@ -1,5 +1,5 @@
 {
-  "type": "module",
+  "type": "commonjs",
   "name": "express-docker",
   "version": "1.0.0",
   "description": "",
