@@ -1,5 +1,6 @@
-import mysql from "mysql";
-import express from "express";
+import mysql from 'mysql';
+import express from 'express';
+import router from './routes/router';
 
 // 環境変数を使用してDBにアクセスする
 const pool = mysql.createPool({
@@ -11,12 +12,14 @@ const pool = mysql.createPool({
 });
 
 // HTTPサーバを起動する
-const port = process.env.SERVER_PORT || 8000;
+const port = process.env.SERVER_PORT || 8001;
 const app = express();
 
 app.get('/', (req, res) => {
   res.send('Hello world!');
 });
+
+app.use('/', router);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
