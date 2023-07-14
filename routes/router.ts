@@ -6,9 +6,9 @@ import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
 
 const router = express.Router();
 
-router.get('/create', (req, res) => {
+router.get('/create', async (req, res) => {
   try {
-    createCourse();
+    await createCourse();
     res.send('新しいコースが作成されました！');
   } catch (e: any) {
     console.log(e.message);
