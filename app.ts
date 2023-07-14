@@ -2,6 +2,7 @@ import mysql from 'mysql';
 import express from 'express';
 import router from './routes/router';
 
+commi!!!
 // 環境変数を使用してDBにアクセスする
 const pool = mysql.createPool({
   port: 3306,
