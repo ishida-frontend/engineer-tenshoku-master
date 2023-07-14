@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-async function readCourse() {
+export async function readCourse() {
   const course = await prisma.course.findUnique({
     where: {
       id: 5,
@@ -10,12 +10,12 @@ async function readCourse() {
   console.log(course);
 }
 
-async function readAllCourses() {
+export async function readAllCourses() {
   const courses = await prisma.course.findMany()
   console.log(courses);
 }
 
-async function readFilteredCourses() {
+export async function readFilteredCourses() {
   const courses = await prisma.course.findMany({
     where: {
       id: {
@@ -28,13 +28,3 @@ async function readFilteredCourses() {
   })
   console.log(courses)
 }
-
-readCourse()
-readAllCourses()
-readFilteredCourses()
-  .catch(e => {
-    console.log(e.message)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
