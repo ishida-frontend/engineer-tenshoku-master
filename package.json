@@ -1,16 +1,12 @@
 {
-  "type": "commonjs",
+  "type": "module",
   "name": "express-docker",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "createCourse": "nodemon ./scripts/createCourse.ts",
-    "readCourse": "nodemon ./scripts/readCourse.ts",
-    "updateCourse": "nodemon ./scripts/updateCourse.ts",
-    "deleteCourse": "nodemon ./scripts/deleteCourse.ts"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
