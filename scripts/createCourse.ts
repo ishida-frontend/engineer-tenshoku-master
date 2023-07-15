@@ -1,21 +1,19 @@
 import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-async function courseCreate() {
-  const course = await prisma.course.create({
-    data: {
-      name: "Course 1",
-      description: "The very first course in the whole site.",
-      published: true
-    }
-  })
-  console.log(course);
+export async function createCourse() {
+  try {
+    const createdCourse = await prisma.course.create({
+      data: {
+        name: 'Course Name',
+        description: 'Enjoy the course!',
+        published: true,
+      },
+    });
+    console.log(createdCourse);
+  } catch (e: any) {
+    console.log(e.message);
+  } finally {
+    await prisma.$disconnect();
+  }
 }
-
-courseCreate()
-  .catch(e => {
-    console.log(e.message)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
