@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-async function updateCourse() {
+export async function updateCourse() {
   const course = await prisma.course.update({
     where: {
       id: 3,
@@ -13,12 +13,13 @@ async function updateCourse() {
   console.log(course)
 }
 
-async function updateCourses() {
+export async function updateCourses() {
   const courses = await prisma.course.updateMany({
     where: {
       description: {
         contains: 'Enjoy the course!',
       },
+      
     },
     data: {
       description: 'This course will change your life!',
@@ -26,12 +27,3 @@ async function updateCourses() {
   })
   console.log(courses)
 }
-
-updateCourse()
-updateCourses()
-  .catch(e => {
-    console.log(e.message)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
