@@ -20,7 +20,6 @@ prisma.$use(async (params, next) => {
   return next(params);
 })
 
-<<<<<<< HEAD:scripts/deleteVideo.ts
 async function testDeleteVideo(videoId: number) {
   await prisma.video.delete({ where: {id: videoId}});
   console.log(`ID${videoId}のビデオをソフトデリートしました。`);
@@ -28,15 +27,6 @@ async function testDeleteVideo(videoId: number) {
 
 async function testDeleteVideos(videoId1:number, videoId2: number) {
   await prisma.video.deleteMany({
-=======
-export async function deleteCourse(courseId: number) {
-  await prisma.course.delete({ where: { id: courseId } });
-  console.log(`ID${courseId}のコースをソフトデリートしました。`);
-}
-
-export async function deleteCourses(courseId1: number, courseId2: number) {
-  await prisma.course.deleteMany({
->>>>>>> feature/TSK-60-updateVideo:scripts/deleteCourse.ts
     where: {
       id: {
         in: [videoId1, videoId2],
@@ -45,7 +35,6 @@ export async function deleteCourses(courseId1: number, courseId2: number) {
   })
   console.log(`ID${videoId1}と${videoId2}のビデオをソフトデリートしました。`);
 }
-<<<<<<< HEAD:scripts/deleteVideo.ts
 
 testDeleteVideo(8)
 testDeleteVideos(10, 11)
@@ -56,5 +45,3 @@ testDeleteVideos(10, 11)
     await prisma.$disconnect()
   })
 
-=======
->>>>>>> feature/TSK-60-updateVideo:scripts/deleteCourse.ts
