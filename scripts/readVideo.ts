@@ -38,3 +38,4 @@ readFilteredVideo(6)
   .finally(async () => {
     await prisma.$disconnect()
   })
+
