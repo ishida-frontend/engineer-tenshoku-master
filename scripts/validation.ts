@@ -13,7 +13,7 @@ const contactValidationRules = [
 ];
 
 // 型宣言と実際のデータを設定
-type Contact = {name: String, email: String, subject: String, message: String, status: number};
+type Contact = {name: string, email: string, subject: string, message: string, status: number};
 const contactData: Contact = {
   name: "yamada tarou",
   email: "yamadatarou@example.com",
