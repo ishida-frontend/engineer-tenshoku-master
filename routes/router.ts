@@ -9,6 +9,7 @@ router.use('/video', videoRouter)
 
 router.get('/contact/form-success', async (req, res) => {
   try {
+    // TODO 動的に変える
     const text = `テストメッセージ
     新しいお問合せが届きました。
     メールアドレス：test@test.com
