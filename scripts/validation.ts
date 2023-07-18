@@ -1,48 +1,52 @@
 import { PrismaClient } from '@prisma/client';
-import { body, validationResult } from 'express-validator';
+import { check, validationResult } from 'express-validator';
 
 const prisma = new PrismaClient();
 
 // データのバリデーションルールを定義
 const contactValidationRules = [
-  body('name').notEmpty().withMessage('名前は必須です。'),
-  body('email').notEmpty().withMessage('メールアドレスは必須です。').isEmail().withMessage('有効なメールアドレスの形式で入力してください。'),
-  body('subject').notEmpty().withMessage('件名は必須です。'),
-  body('message').notEmpty().withMessage('メッセージは必須です。'),
-  body('status').isInt({ min: 0, max: 2 }).withMessage('無効なステータス値です。'),
+  check('name').not().isEmpty().withMessage('名前は必須です。'),
+  check('email').not().isEmpty().withMessage('メールアドレスは必須です。').not().isEmail().withMessage('有効なメールアドレスの形式で入力してください。'),
+  check('subject').not().isEmpty().withMessage('件名は必須です。'),
+  check('message').not().isEmpty().withMessage('メッセージは必須です。'),
+  check('status').not().isIn([ 0 ]).withMessage('無効なステータス値です。'),
 ];
 
 // 型宣言と実際のデータを設定
 type Contact = {name: string, email: string, subject: string, message: string, status: number};
 const contactData: Contact = {
-  name: "yamada tarou",
-  email: "yamadatarou@example.com",
+  name: "Yamada",
+  email: "yamada0123@example.com",
   subject: "I like your videos.",
   message: "Thank you very much.",
   status: 0,
 };
+console.log('contactData',contactData);
 
-async function contactCreate(contactData) {
-  // データの作成
-  const contact = await prisma.contact.create({
-    data: {
-      name: contactData.name,
-      email: contactData.email,
-      subject: contactData.subject,
-      message: contactData.message,
-      status: contactData.status,
-    }
-  });
-
+async function contactCreate(contactData: Contact) {
   // データのバリデーションを実行
-  await Promise.all(contactValidationRules.map(validationRule => validationRule.run(contact)));
+  await Promise.all(contactValidationRules.map(validationRule => validationRule.run(contactData)));
+  console.log('validate-Data',contactData);
 
   // バリデーションエラーをチェック
-  const errors = validationResult(contact);
+  const errors = validationResult(contactData);
+  // console.log("b");
   if (!errors.isEmpty()) {
+    // console.log("c");
     throw new Error(errors.array().map(error => error.msg).join(', '));
+  } else {
+    // データの作成
+    const contact = await prisma.contact.create({
+      data: {
+        name: contactData.name,
+        email: contactData.email,
+        subject: contactData.subject,
+        message: contactData.message,
+        status: contactData.status,
+      }
+    });
+    console.log('contact',contact);
   }
-  console.log(errors);
 }
 
 contactCreate(contactData)
