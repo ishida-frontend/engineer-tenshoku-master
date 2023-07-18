@@ -13,9 +13,9 @@ const contactValidationRules = [
 ];
 
 // 型宣言と実際のデータを設定
-type Contact = {name: string, email: string, subject: string, message: string, status: number};
+type Contact = {name?: string, email: string, subject: string, message: string, status: number};
 const contactData: Contact = {
-  name: "Yamada Tarou",
+  name: undefined,
   email: "yamada0123@example.com",
   subject: "I like your videos.",
   message: "Thank you very much.",
@@ -25,20 +25,23 @@ console.log('contactData',contactData);
 
 async function contactCreate(contactData: Contact) {
   // データのバリデーションを実行
-  await Promise.all(contactValidationRules.map(validationRule => validationRule.run(contactData)));
+  const result = await Promise.all(contactValidationRules.map(validationRule => validationRule.run(contactData)));
+  console.log("result", result);
+  console.log("aaa");
   console.log('validate-Data',contactData);
 
   // バリデーションエラーをチェック
-  const errors = validationResult(contactData);
-  // console.log("b");
+  const errors = validationResult(result);
+  console.log("errors",errors);
+  console.log("b");
   if (!errors.isEmpty()) {
-    // console.log("c");
+    console.log("c");
     throw new Error(errors.array().map(error => error.msg).join(', '));
   } else {
     // データの作成
     const contact = await prisma.contact.create({
       data: {
-        name: contactData.name,
+        name: contactData.name ?? "",
         email: contactData.email,
         subject: contactData.subject,
         message: contactData.message,
