@@ -15,7 +15,7 @@ const contactValidationRules = [
 // 型宣言と実際のデータを設定
 type Contact = {name: string, email: string, subject: string, message: string, status: number};
 const contactData: Contact = {
-  name: "Yamada",
+  name: "Yamada Tarou",
   email: "yamada0123@example.com",
   subject: "I like your videos.",
   message: "Thank you very much.",
