@@ -40,5 +40,6 @@ model Contact {
   subject String
   message String
   created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
   status Int //対応ステータス(0:未対応, 1:対応中, 2:対応済み)
 }
