@@ -13,7 +13,7 @@ datasource db {
 model Course {
   id Int @id @default(autoincrement())
   videos Video[]
-  name String 
+  name String
   description String
   published Boolean @default(false) // コースが公開されているかどうか。
   created_at DateTime @default(now())
@@ -31,4 +31,15 @@ model Video {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   deleted_at DateTime?
+}
+
+model Contact {
+  id Int @id @default(autoincrement())
+  name String
+  email String
+  subject String
+  message String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  status Int //対応ステータス(0:未対応, 1:対応中, 2:対応済み)
 }
