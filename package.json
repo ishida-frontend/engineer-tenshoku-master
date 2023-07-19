@@ -3,9 +3,9 @@
   "name": "express-docker",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "app.ts",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "nodemon app.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "createVideo": "nodemon ./scripts/createVideo.ts",
     "readVideo": "nodemon ./scripts/readVideo.ts",
