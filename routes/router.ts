@@ -7,9 +7,11 @@ import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
 
 const router = express.Router();
+const courseRouter = express.Router();
 
+router.use('/course', courseRouter);
 
-router.get('/course/create', async (req, res) => {
+courseRouter.get('/create', async (req, res) => {
   try {
     await createCourse();
     res.send('新しいコースが作成されました！');
@@ -19,7 +21,7 @@ router.get('/course/create', async (req, res) => {
   }
 })
 
-router.get('/course/read', async (req, res) => {
+courseRouter.get('/read', async (req, res) => {
   try {
     await readCourse();
     await readAllCourses();
@@ -33,7 +35,7 @@ router.get('/course/read', async (req, res) => {
   }
 })
 
-router.get('/course/update', async (req, res) => {
+courseRouter.get('/update', async (req, res) => {
   try {
     await updateCourse();
     await updateCourses();
@@ -46,7 +48,7 @@ router.get('/course/update', async (req, res) => {
   }
 })
 
-router.get('/course/delete', async (req, res) => {
+courseRouter.get('/delete', async (req, res) => {
   try {
     await deleteCourse(9);
     await deleteCourses(25, 28);
