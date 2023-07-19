@@ -14,10 +14,10 @@ const courseRouter = express.Router();
 router.use('/admin', adminRouter); 
 router.use('/course', courseRouter);
 
-adminRouter.get('/contacts-test', async (req, res) => { // UIできたらpathを差し替え
+adminRouter.get('/contacts', async (req, res) => {
   try {
-    const contacts = await readAllContacts();
-    res.render('contacts-test', { contacts }) // UIできたらpathを差し替え
+    await readAllContacts();
+    res.send('お問合せを全件取得しました！') 
   } catch (e: any) {
     console.log(e.message);
     res.status(500).send('エラーが発生しました');
