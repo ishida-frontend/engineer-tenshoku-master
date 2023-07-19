@@ -5,6 +5,7 @@ import { createCourse } from '../scripts/createCourse'
 import { readCourse, readAllCourses, readFilteredCourses } from '../scripts/readCourse'
 import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
+import { createContact } from '../scripts/createContact'
 
 const router = express.Router();
 const courseRouter = express.Router();
@@ -60,6 +61,20 @@ courseRouter.get('/delete', async (req, res) => {
     res.status(500).send('エラーが発生しました');
   }
 })
+
+const contactRouter = express.Router();
+
+router.use('/contact', contactRouter);
+
+contactRouter.get('/create', async (req, res) => {
+  try {
+    await createContact();
+    res.send('新しいお問い合わせが作成されました！');
+  } catch (e: any) {
+    console.log(e.message);
+    res.status(500).send('エラーが発生しました');
+  }
+});
 
 router.get('/contact/form-success', async (req, res) => {
   try {
