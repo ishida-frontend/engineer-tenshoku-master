@@ -19,8 +19,6 @@ app.get('/', (req, res) => {
   res.send('Hello world!');
 });
 
-app.set('view engine', 'ejs');
-
 app.use('/', router);
 
 app.listen(port, () => {
