@@ -1,15 +1,28 @@
 import express from 'express';
 import axios from 'axios';
 import 'dotenv/config';
+import { readAllContacts } from '../scripts/readContact'
 import { createCourse } from '../scripts/createCourse'
 import { readCourse, readAllCourses, readFilteredCourses } from '../scripts/readCourse'
 import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
 
 const router = express.Router();
+const adminRouter = express.Router();
 const courseRouter = express.Router();
 
+router.use('/admin', adminRouter); 
 router.use('/course', courseRouter);
+
+adminRouter.get('/contacts', async (req, res) => {
+  try {
+    await readAllContacts();
+    res.send('お問合せを全件取得しました！') 
+  } catch (e: any) {
+    console.log(e.message);
+    res.status(500).send('エラーが発生しました');
+  }
+})
 
 courseRouter.get('/create', async (req, res) => {
   try {
