@@ -27,7 +27,7 @@ export async function createContact() {
     };
 
     // バリデーションの実行
-    app.post('/regist',contactValidationRules, async (req: any, res: any, next: any) => {
+    app.post(contactData, contactValidationRules, async (req: any, res: any, next: any) => {
       // エラーを取得
       const errors = validationResult(req);
       // エラーが発生していたらエラー内容を取得
