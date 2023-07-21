@@ -23,6 +23,7 @@ export async function createContact() {
       message: "Thank you very much.",
       status: 0,
     };
+
     // バリデーションの実行
     const result = await Promise.all(contactValidationRules.map(validationRule => validationRule.run(contactData)));
     // console.log("result", result);
