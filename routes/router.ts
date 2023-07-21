@@ -62,8 +62,8 @@ courseRouter.get('/delete', async (req, res) => {
   }
 })
 
+// Contact Router
 const contactRouter = express.Router();
-
 router.use('/contact', contactRouter);
 
 contactRouter.get('/create', async (req, res) => {
