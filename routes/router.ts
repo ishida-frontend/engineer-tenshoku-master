@@ -7,18 +7,20 @@ import { readCourse, readAllCourses, readFilteredCourses } from '../scripts/read
 import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
 import { createContact } from '../scripts/createContact'
+import { contactValidationRules } from '../validation'
+import { validationResult } from 'express-validator'
 
 const router = express.Router();
 const adminRouter = express.Router();
 const courseRouter = express.Router();
 
-router.use('/admin', adminRouter); 
+router.use('/admin', adminRouter);
 router.use('/course', courseRouter);
 
 adminRouter.get('/contacts', async (req, res) => {
   try {
     await readAllContacts();
-    res.send('お問合せを全件取得しました！') 
+    res.send('お問合せを全件取得しました！')
   } catch (e: any) {
     console.log(e.message);
     res.status(500).send('エラーが発生しました');
@@ -62,7 +64,7 @@ courseRouter.get('/update', async (req, res) => {
   }
 })
 
-courseRouter.get('/delete', async (req, res) => {
+courseRouter.get('/delete',async (req, res) => {
   try {
     await deleteCourse(9);
     await deleteCourses(25, 28);
@@ -75,16 +77,16 @@ courseRouter.get('/delete', async (req, res) => {
   }
 })
 
-// Contact Router
 const contactRouter = express.Router();
 router.use('/contact', contactRouter);
 
-contactRouter.get('/create', async (req, res) => {
+contactRouter.get('/create', contactValidationRules, async (req: any, res: any) => {
+  const errors = validationResult(req);
+  // createContact()でデータ取得してから、バリデーションを実行しないとvalueが空になる(フロントが出来上がってから要対応)
   try {
     await createContact();
     res.send('新しいお問い合わせが作成されました！');
   } catch (e: any) {
-    console.log(e.message);
     res.status(500).send('エラーが発生しました');
   }
 });
