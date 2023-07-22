@@ -29,7 +29,6 @@ adminRouter.get('/contacts', async (req, res) => {
     await readAllContacts();
     res.send('お問合せを全件取得しました！')
   } catch (e: any) {
-    console.log(e.message);
     res.status(500).send('エラーが発生しました');
   }
 })
@@ -39,7 +38,6 @@ courseRouter.get('/create', async (req, res) => {
     await createCourse();
     res.send('新しいコースが作成されました！');
   } catch (e: any) {
-    console.log(e.message);
     res.status(500).send('エラーが発生しました');
   }
 })
@@ -53,7 +51,6 @@ courseRouter.get('/read', async (req, res) => {
       '１件のコースを読み込みました！<br>全てのコースを読み込みました！<br>条件指定のコースを読み込みました！'
     );
   } catch (e: any) {
-    console.log(e.message);
     res.status(500).send('エラーが発生しました');
   }
 })
@@ -66,7 +63,6 @@ courseRouter.get('/update', async (req, res) => {
       '１件のコースを更新しました！<br>複数のコースを更新しました！'
     );
   } catch (e: any) {
-    console.log(e.message);
     res.status(500).send('エラーが発生しました');
   }
 })
@@ -79,7 +75,6 @@ courseRouter.get('/delete',async (req, res) => {
       '１件のコースを削除しました！<br>複数のコースを削除しました！'
     )
   } catch (e: any) {
-    console.log(e.message);
     res.status(500).send('エラーが発生しました');
   }
 })
@@ -92,7 +87,6 @@ videoRouter.get('/create', async (req, res) => {
     await createVideo(1);
     res.send('新しいビデオが作成されました！');
   } catch (e: any) {
-    console.log(e.message);
     res.status(500).send('エラーが発生しました');
   }
 })
@@ -106,7 +100,6 @@ videoRouter.get('/read', async (req, res) => {
       '１件のビデオを読み込みました！<br>全てのビデオを読み込みました！<br>条件指定のビデオを読み込みました！'
     );
   } catch (e: any) {
-    console.log(e.message);
     res.status(500).send('エラーが発生しました');
   }
 })
@@ -119,7 +112,6 @@ videoRouter.get('/update', async (req, res) => {
       '１件のビデオを更新しました！<br>複数のビデオを更新しました！'
     );
   } catch (e: any) {
-    console.log(e.message);
     res.status(500).send('エラーが発生しました');
   }
 })
@@ -132,7 +124,6 @@ videoRouter.get('/delete',async (req, res) => {
       '１件のビデオを削除しました！<br>複数のビデオを削除しました！'
     )
   } catch (e: any) {
-    console.log(e.message);
     res.status(500).send('エラーが発生しました');
   }
 })
@@ -194,7 +185,6 @@ router.get('/contact/success', async (req, res) => {
 
     res.status(200).send('お問合せを受け付けました。');
   } catch (e: any) {
-    console.error(e);
     res.status(500).send('エラーが発生しました。');
   }
 });
