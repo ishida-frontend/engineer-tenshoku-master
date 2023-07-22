@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 
 export async function createContact() {
   try {
-    // 型宣言と実際のデータを設定
     type Contact = {name?: string, email: string, subject: string, message: string, status: number};
     const contactData: Contact = {
       name: undefined,
@@ -15,14 +14,11 @@ export async function createContact() {
       status: 0,
     };
 
-    // エラーを取得
     const errors = validationResult(contactData);
 
-    // エラーが発生していたらエラー内容を取得
     if (!errors.isEmpty()) {
       throw new Error(errors.array().map(error => error.msg).join(', '));
     } else {
-      // エラーが無ければデータの格納
       const createdContact = await prisma.contact.create({
         data: {
           name: contactData.name ?? '',
