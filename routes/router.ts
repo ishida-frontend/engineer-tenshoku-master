@@ -7,7 +7,7 @@ import { readCourse, readAllCourses, readFilteredCourses } from '../scripts/read
 import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
 import { createVideo } from '../scripts/createVideo'
-import { readVideo, readAllVideos, readFilteredVideos } from '../scripts/readVideo'
+import { readVideo, readVideos, readFilteredVideos } from '../scripts/readVideo'
 import { updateVideo, updateVideos } from '../scripts/updateVideo'
 import { deleteVideo, deleteVideos } from '../scripts/deleteVideo'
 import { createContact } from '../scripts/createContact'
@@ -81,7 +81,6 @@ courseRouter.get('/delete',async (req, res) => {
   }
 })
 
-// Video Routing
 const videoRouter = express.Router();
 router.use('/video', videoRouter);
 
@@ -98,7 +97,7 @@ videoRouter.get('/create', async (req, res) => {
 videoRouter.get('/read', async (req, res) => {
   try {
     await readVideo(2);
-    await readAllVideos();
+    await readVideos();
     await readFilteredVideos(4);
     res.send(
       '１件のビデオを読み込みました！<br>全てのビデオを読み込みました！<br>条件指定のビデオを読み込みました！'

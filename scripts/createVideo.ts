@@ -8,7 +8,7 @@ export async function createVideo(courseId: number) {
         name: "video 1",
         description: "The very first video in the whole site.",
         published: true,
-        course: { connect: { id: courseId } } //受け取ったCourseのidを使用して紐付け
+        course: { connect: { id: courseId } }
       }
     });
     return video;
