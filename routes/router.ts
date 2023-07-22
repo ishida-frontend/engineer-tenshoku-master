@@ -1,5 +1,6 @@
 import express from 'express';
 import axios from 'axios';
+import { PrismaClient } from '@prisma/client'
 import 'dotenv/config';
 import { readAllContacts } from '../scripts/readContact'
 import { createCourse } from '../scripts/createCourse'
@@ -8,17 +9,19 @@ import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
 import { createContact } from '../scripts/createContact'
 
+const prisma = new PrismaClient()
+
 const router = express.Router();
 const adminRouter = express.Router();
 const courseRouter = express.Router();
 
-router.use('/admin', adminRouter); 
+router.use('/admin', adminRouter);
 router.use('/course', courseRouter);
 
 adminRouter.get('/contacts', async (req, res) => {
   try {
     await readAllContacts();
-    res.send('お問合せを全件取得しました！') 
+    res.send('お問合せを全件取得しました！')
   } catch (e: any) {
     console.log(e.message);
     res.status(500).send('エラーが発生しました');
@@ -89,17 +92,45 @@ contactRouter.get('/create', async (req, res) => {
   }
 });
 
-router.get('/contact/form-success', async (req, res) => {
+
+router.get('/contact/success', async (req, res) => {
   try {
-    // TODO 動的に変える
-    const text = `テストメッセージ
-    新しいお問合せが届きました。
-    メールアドレス：test@test.com
-    件名：テスト
-    本文：これはテストです。`;
+
+    // コンタクトデータ取得
+    const id = req.query.id
+
+    if (!id) {
+      throw new Error('無効なコンタクトIDです。')
+    }
+
+    const contactData  = await prisma.contact.findUnique({
+      where: { id: Number(id) }
+    });
+
+    if (!contactData) {
+      throw new Error('該当のIDが見つかりません。');
+    }
+
+
+    // Slackへの通知
+    const slackMessage = {
+      text: `【テスト】新しいお問合せが届きました。
+メールアドレス：${contactData.email}
+件名：${contactData.subject}
+本文：${contactData.message}`
+    }
 
     const url: string = process.env.WEBHOOK_URL || 'default';
-    await axios.post(url, { text });
+    const maxRetries = 3;
+    for (let i =0; i < maxRetries; i++) {
+      try {
+        await axios.post(url, slackMessage);
+        break;
+      } catch (error) {
+        console.log("Axios error", error)
+        await new Promise(resolve => setTimeout(resolve, 3000));
+      }
+    }
 
     res.status(200).send('お問合せを受け付けました。');
   } catch (e: any) {
