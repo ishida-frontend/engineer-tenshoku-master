@@ -40,3 +40,4 @@ export async function createContact() {
     await prisma.$disconnect();
   }
 }
+
