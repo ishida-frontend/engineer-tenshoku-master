@@ -35,13 +35,3 @@ export async function deleteCourses(courseId1: number, courseId2: number) {
   })
   console.log(`ID${courseId1}と${courseId2}のコースをソフトデリートしました。`);
 }
-
-deleteCourse(8)
-deleteCourses(10, 11)
-  .catch(e => {
-    console.log(e.message)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
-
