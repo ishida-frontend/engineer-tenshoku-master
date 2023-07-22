@@ -9,7 +9,7 @@ export async function readVideo(videoId: number) {
   })
 }
 
-export async function readAllVideos() {
+export async function readVideos() {
   const videos = await prisma.video.findMany()
 }
 
