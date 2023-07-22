@@ -83,7 +83,7 @@ router.get('/contact/success', async (req, res) => {
     // コンタクトデータ取得
     const id = req.query.id
 
-    if (!id || isNaN(Number(id))) {
+    if (!id) {
       throw new Error('無効なコンタクトIDです。')
     }
 
