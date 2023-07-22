@@ -6,6 +6,10 @@ import { createCourse } from '../scripts/createCourse'
 import { readCourse, readAllCourses, readFilteredCourses } from '../scripts/readCourse'
 import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
+import { createVideo } from '../scripts/createVideo'
+import { readVideo, readAllVideos, readFilteredVideos } from '../scripts/readVideo'
+import { updateVideo, updateVideos } from '../scripts/updateVideo'
+import { deleteVideo, deleteVideos } from '../scripts/deleteVideo'
 import { createContact } from '../scripts/createContact'
 import { contactValidationRules } from '../validation'
 import { validationResult } from 'express-validator'
@@ -70,6 +74,60 @@ courseRouter.get('/delete',async (req, res) => {
     await deleteCourses(25, 28);
     res.send(
       '１件のコースを削除しました！<br>複数のコースを削除しました！'
+    )
+  } catch (e: any) {
+    console.log(e.message);
+    res.status(500).send('エラーが発生しました');
+  }
+})
+
+// Video Routing
+const videoRouter = express.Router();
+router.use('/video', videoRouter);
+
+videoRouter.get('/create', async (req, res) => {
+  try {
+    await createVideo(1);
+    res.send('新しいビデオが作成されました！');
+  } catch (e: any) {
+    console.log(e.message);
+    res.status(500).send('エラーが発生しました');
+  }
+})
+
+videoRouter.get('/read', async (req, res) => {
+  try {
+    await readVideo(2);
+    await readAllVideos();
+    await readFilteredVideos(4);
+    res.send(
+      '１件のビデオを読み込みました！<br>全てのビデオを読み込みました！<br>条件指定のビデオを読み込みました！'
+    );
+  } catch (e: any) {
+    console.log(e.message);
+    res.status(500).send('エラーが発生しました');
+  }
+})
+
+videoRouter.get('/update', async (req, res) => {
+  try {
+    await updateVideo(5);
+    await updateVideos();
+    res.send(
+      '１件のビデオを更新しました！<br>複数のビデオを更新しました！'
+    );
+  } catch (e: any) {
+    console.log(e.message);
+    res.status(500).send('エラーが発生しました');
+  }
+})
+
+videoRouter.get('/delete',async (req, res) => {
+  try {
+    await deleteVideo(8);
+    await deleteVideos(10, 12);
+    res.send(
+      '１件のビデオを削除しました！<br>複数のビデオを削除しました！'
     )
   } catch (e: any) {
     console.log(e.message);

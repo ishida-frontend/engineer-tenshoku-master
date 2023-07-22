@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-async function updateVideo(videoId: number) {
+export async function updateVideo(videoId: number) {
   const video = await prisma.video.update({
     where: {
       id: videoId,
@@ -10,10 +10,11 @@ async function updateVideo(videoId: number) {
       description: 'This video was made just for you!',
     },
   })
+  console.log("video", video);
   return video;
 }
 
-async function updateVideos() {
+export async function updateVideos() {
   const videos = await prisma.video.updateMany({
     where: {
       description: {
@@ -27,11 +28,3 @@ async function updateVideos() {
   console.log(videos);
 }
 
-updateVideo(3)
-updateVideos()
-  .catch(e => {
-    console.log(e.message);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  })
