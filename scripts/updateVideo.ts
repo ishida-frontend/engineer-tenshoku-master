@@ -10,7 +10,6 @@ export async function updateVideo(videoId: number) {
       description: 'This video was made just for you!',
     },
   })
-  console.log("video", video);
   return video;
 }
 
@@ -25,6 +24,5 @@ export async function updateVideos() {
       description: 'This video will change your life!',
     },
   })
-  console.log(videos);
 }
 
