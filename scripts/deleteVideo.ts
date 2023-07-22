@@ -22,7 +22,6 @@ prisma.$use(async (params, next) => {
 
 export async function deleteVideo(videoId: number) {
   await prisma.video.delete({ where: {id: videoId}});
-  console.log("deleteVideo", deleteVideo);
 }
 
 export async function deleteVideos(videoId1:number, videoId2: number) {
@@ -33,7 +32,6 @@ export async function deleteVideos(videoId1:number, videoId2: number) {
       },
     },
   })
-  console.log("deleteVideos", deleteVideos);
 }
 
 
