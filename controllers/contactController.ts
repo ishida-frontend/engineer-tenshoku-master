@@ -1,3 +1,4 @@
+import express from 'express';
 import axios from 'axios';
 import { PrismaClient } from '@prisma/client'
 import { readAllContacts } from '../scripts/readContact'
@@ -6,7 +7,7 @@ import { validationResult } from 'express-validator'
 
 const prisma = new PrismaClient();
 
-exports.checkCreateContact = async function(req: any, res: any){
+exports.checkCreateContact = async function(req: express.Request, res: express.Response){
   const errors = validationResult(req);
   // createContact()でデータ取得してから、バリデーションを実行しないとvalueが空になる(フロントが出来上がってから要対応)
   try {
@@ -17,16 +18,17 @@ exports.checkCreateContact = async function(req: any, res: any){
   }
 }
 
-exports.checkReadContact = async function(req: any, res: any){
+exports.checkReadContact = async function(req: express.Request, res: express.Response){
   try {
     await readAllContacts();
-    res.send('お問合せを全件取得しました！')
+    res.send('お問合せを全件取得しました！');
+    console.log("readAllContacts()", readAllContacts());
   } catch (e: any) {
     res.status(500).send('エラーが発生しました');
   }
 }
 
-exports.checkSuccessContact = async function(req: any, res: any){
+exports.checkSuccessContact = async function(req: express.Request, res: express.Response){
   try {
     const id = req.query.id
     if (!id) {
@@ -40,7 +42,6 @@ exports.checkSuccessContact = async function(req: any, res: any){
       throw new Error('該当のIDが見つかりません。');
     }
 
-    type contactData = {email: string, subject: string, message: string};
     const slackMessage: {text:string} = {
       text: `【テスト】新しいお問合せが届きました。
 メールアドレス：${contactData.email}
