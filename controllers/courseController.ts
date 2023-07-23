@@ -3,9 +3,9 @@ import { readCourse, readAllCourses, readFilteredCourses } from '../scripts/read
 import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
 
-exports.checkCreateCourse = function(req: any, res: any) {
+exports.checkCreateCourse = async function(req: any, res: any) {
   try {
-    createCourse();
+    await createCourse();
     res.send('新しいコースが作成されました！');
   } catch (e: any) {
     console.log(e.message);
@@ -13,11 +13,11 @@ exports.checkCreateCourse = function(req: any, res: any) {
   }
 }
 
-exports.checkReadCourse = function(req: any, res: any) {
+exports.checkReadCourse = async function(req: any, res: any) {
   try {
-    readCourse();
-    readAllCourses();
-    readFilteredCourses();
+    await readCourse();
+    await readAllCourses();
+    await readFilteredCourses();
     res.send(
       '１件のコースを読み込みました！<br>全てのコースを読み込みました！<br>条件指定のコースを読み込みました！'
     );
@@ -26,10 +26,10 @@ exports.checkReadCourse = function(req: any, res: any) {
   }
 }
 
-exports.checkUpdateCourse = function(req: any, res: any) {
+exports.checkUpdateCourse = async function(req: any, res: any) {
   try {
-    updateCourse();
-    updateCourses();
+    await updateCourse();
+    await updateCourses();
     res.send(
       '１件のコースを更新しました！<br>複数のコースを更新しました！'
     );
@@ -38,10 +38,10 @@ exports.checkUpdateCourse = function(req: any, res: any) {
   }
 }
 
-exports.checkDeleteCourse = function(req: any, res: any) {
+exports.checkDeleteCourse = async function(req: any, res: any) {
   try {
-    deleteCourse(9);
-    deleteCourses(25, 28);
+    await deleteCourse(9);
+    await deleteCourses(25, 28);
     res.send(
       '１件のコースを削除しました！<br>複数のコースを削除しました！'
     )
