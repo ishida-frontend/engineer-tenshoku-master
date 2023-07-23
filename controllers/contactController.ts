@@ -6,48 +6,42 @@ import { validationResult } from 'express-validator'
 
 const prisma = new PrismaClient();
 
-exports.checkCreateContact = function(req: any, res: any){
+exports.checkCreateContact = async function(req: any, res: any){
   const errors = validationResult(req);
   // createContact()でデータ取得してから、バリデーションを実行しないとvalueが空になる(フロントが出来上がってから要対応)
   try {
-    createContact();
+    await createContact();
     res.send('新しいお問い合わせが作成されました！');
   } catch (e: any) {
     res.status(500).send('エラーが発生しました');
   }
 }
 
-exports.checkReadContact = function(req: any, res: any){
+exports.checkReadContact = async function(req: any, res: any){
   try {
-    readAllContacts();
+    await readAllContacts();
     res.send('お問合せを全件取得しました！')
   } catch (e: any) {
     res.status(500).send('エラーが発生しました');
   }
 }
 
-exports.checkSuccessContact = function(req: any, res: any){
+exports.checkSuccessContact = async function(req: any, res: any){
   try {
     const id = req.query.id
     if (!id) {
       throw new Error('無効なコンタクトIDです。')
     }
 
-    const contactData  = prisma.contact.findUnique({
+    const contactData  = await prisma.contact.findUnique({
       where: { id: Number(id) }
     });
     if (!contactData) {
       throw new Error('該当のIDが見つかりません。');
     }
 
-
-    // type contactData = {[email: string]: any, subject: string, message: string};
-    interface contactData {
-      [email: string]: any,
-      [subject: string]: any,
-      [message: string]: any
-    };
-    const slackMessage: contactData = {
+    type contactData = {email: string, subject: string, message: string};
+    const slackMessage: {text:string} = {
       text: `【テスト】新しいお問合せが届きました。
 メールアドレス：${contactData.email}
 件名：${contactData.subject}
@@ -58,7 +52,7 @@ exports.checkSuccessContact = function(req: any, res: any){
     const maxRetries = 3;
     for (let i =0; i < maxRetries; i++) {
       try {
-        axios.post(url, slackMessage);
+        await axios.post(url, slackMessage);
         break;
       } catch (error) {
         new Promise(resolve => setTimeout(resolve, 3000));
