@@ -40,6 +40,7 @@ exports.checkSuccessContact = function(req: any, res: any){
       throw new Error('該当のIDが見つかりません。');
     }
 
+
     // type contactData = {[email: string]: any, subject: string, message: string};
     interface contactData {
       [email: string]: any,
