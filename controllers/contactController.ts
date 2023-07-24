@@ -22,7 +22,6 @@ exports.checkReadContact = async function(req: express.Request, res: express.Res
   try {
     await readAllContacts();
     res.send('お問合せを全件取得しました！');
-    console.log("readAllContacts()", readAllContacts());
   } catch (e: any) {
     res.status(500).send('エラーが発生しました');
   }
