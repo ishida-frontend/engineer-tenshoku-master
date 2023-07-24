@@ -32,4 +32,3 @@ contactRouter.get('/create', contactValidationRules, checkCreateContact);
 router.get('/contact/success', checkSuccessContact);
 
 export default router;
-
