@@ -63,7 +63,7 @@ DEMOの実行方法など、"エンジニア転職マスター講座"の基本�
 # Author
 
 * 作成者
-Ishida, Sakai, Fumi, Daisuke
+Ishida, Sakai, Fumi, Dai
 * 所属
 Engineer Learning Team
 * E-mail
@@ -74,3 +74,4 @@ Engineer Learning Team
 "エンジニア転職マスター講座" is under [MIT license](https://).
 
 "エンジニア転職マスター講座" is Confidential.
+
