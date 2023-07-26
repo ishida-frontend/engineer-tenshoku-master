@@ -1,12 +1,10 @@
 import express from 'express';
-import { PrismaClient } from '@prisma/client'
 import 'dotenv/config';
 import { contactValidationRules } from '../validation'
 const {checkCreateCourse, checkReadCourse, checkUpdateCourse, checkDeleteCourse} = require('../controllers/courseController');
 const {checkCreateVideo, checkReadVideo, checkUpdateVideo, checkDeleteVideo} = require('../controllers/videoController');
 const {checkCreateContact, checkReadContact, checkSuccessContact} = require('../controllers/contactController');
 
-const prisma = new PrismaClient()
 const router = express.Router();
 
 const adminRouter = express.Router();
