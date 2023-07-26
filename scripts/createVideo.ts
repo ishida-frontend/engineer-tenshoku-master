@@ -12,11 +12,9 @@ export async function createVideo(courseId: number) {
       }
     });
     return video;
-
   } catch (e: any) {
     console.log(e.message);
   } finally {
     await prisma.$disconnect();
   }
 }
-

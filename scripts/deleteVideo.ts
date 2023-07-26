@@ -34,4 +34,3 @@ export async function deleteVideos(videoId1:number, videoId2: number) {
   })
 }
 
-
