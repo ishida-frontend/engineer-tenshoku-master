@@ -1,50 +1,44 @@
+import express from 'express'
 import { createCourse } from '../scripts/createCourse'
 import { readCourse, readAllCourses, readFilteredCourses } from '../scripts/readCourse'
 import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
 
-exports.checkCreateCourse = function(req: any, res: any) {
+exports.checkCreateCourse = async function(req: express.Request, res: express.Response) {
   try {
-    createCourse();
+    await createCourse();
     res.send('新しいコースが作成されました！');
   } catch (e: any) {
-    console.log(e.message);
     res.status(500).send('エラーが発生しました');
   }
 }
 
-exports.checkReadCourse = function(req: any, res: any) {
+exports.checkReadCourse = async function(req: express.Request, res: express.Response) {
   try {
-    readCourse();
-    readAllCourses();
-    readFilteredCourses();
-    res.send(
-      '１件のコースを読み込みました！<br>全てのコースを読み込みました！<br>条件指定のコースを読み込みました！'
-    );
+    await readCourse();
+    await readAllCourses();
+    await readFilteredCourses();
+    res.send('１件のコースを読み込みました！<br>全てのコースを読み込みました！<br>条件指定のコースを読み込みました！');
   } catch (e: any) {
     res.status(500).send('エラーが発生しました');
   }
 }
 
-exports.checkUpdateCourse = function(req: any, res: any) {
+exports.checkUpdateCourse = async function(req: express.Request, res: express.Response) {
   try {
-    updateCourse();
-    updateCourses();
-    res.send(
-      '１件のコースを更新しました！<br>複数のコースを更新しました！'
-    );
+    await updateCourse();
+    await updateCourses();
+    res.send('１件のコースを更新しました！<br>複数のコースを更新しました！');
   } catch (e: any) {
     res.status(500).send('エラーが発生しました');
   }
 }
 
-exports.checkDeleteCourse = function(req: any, res: any) {
+exports.checkDeleteCourse = async function(req: express.Request, res: express.Response) {
   try {
-    deleteCourse(9);
-    deleteCourses(25, 28);
-    res.send(
-      '１件のコースを削除しました！<br>複数のコースを削除しました！'
-    )
+    await deleteCourse(3);
+    await deleteCourses(5, 8);
+    res.send('１件のコースを削除しました！<br>複数のコースを削除しました！');
   } catch (e: any) {
     res.status(500).send('エラーが発生しました');
   }

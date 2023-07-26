@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 
 exports.checkCreateContact = async function(req: express.Request, res: express.Response){
   const errors = validationResult(req);
-  // createContact()でデータ取得してから、バリデーションを実行しないとvalueが空になる(フロントが出来上がってから要対応)
+  // TODO createContact()でデータ取得してから、バリデーションを実行しないとvalueが空になる(フロントが出来上がってから要対応)
   try {
     await createContact();
     res.send('新しいお問い合わせが作成されました！');
@@ -21,7 +21,7 @@ exports.checkCreateContact = async function(req: express.Request, res: express.R
 exports.checkReadContact = async function(req: express.Request, res: express.Response){
   try {
     await readAllContacts();
-    res.send('お問合せを全件取得しました！')
+    res.send('お問合せを全件取得しました！');
   } catch (e: any) {
     res.status(500).send('エラーが発生しました');
   }
