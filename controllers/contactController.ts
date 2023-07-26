@@ -7,34 +7,34 @@ import { validationResult } from 'express-validator'
 
 const prisma = new PrismaClient();
 
-exports.checkCreateContact = function(req: express.Request, res: express.Response){
+exports.checkCreateContact = async function(req: express.Request, res: express.Response){
   const errors = validationResult(req);
   // createContact()でデータ取得してから、バリデーションを実行しないとvalueが空になる(フロントが出来上がってから要対応)
   try {
-    createContact();
+    await createContact();
     res.send('新しいお問い合わせが作成されました！');
   } catch (e: any) {
     res.status(500).send('エラーが発生しました');
   }
 }
 
-exports.checkReadContact = function(req: express.Request, res: express.Response){
+exports.checkReadContact = async function(req: express.Request, res: express.Response){
   try {
-    readAllContacts();
+    await readAllContacts();
     res.send('お問合せを全件取得しました！')
   } catch (e: any) {
     res.status(500).send('エラーが発生しました');
   }
 }
 
-exports.checkSuccessContact = function(req: express.Request, res: express.Response){
+exports.checkSuccessContact = async function(req: express.Request, res: express.Response){
   try {
     const id = req.query.id
     if (!id) {
       throw new Error('無効なコンタクトIDです。')
     }
 
-    const contactData  = prisma.contact.findUnique({
+    const contactData  = await prisma.contact.findUnique({
       where: { id: Number(id) }
     });
     if (!contactData) {
@@ -52,7 +52,7 @@ exports.checkSuccessContact = function(req: express.Request, res: express.Respon
     const maxRetries = 3;
     for (let i =0; i < maxRetries; i++) {
       try {
-        axios.post(url, slackMessage);
+        await axios.post(url, slackMessage);
         break;
       } catch (error) {
         new Promise(resolve => setTimeout(resolve, 3000));

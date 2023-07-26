@@ -1,6 +1,6 @@
 import { check, validationResult } from 'express-validator';
 
-  // データのバリデーションルールを定義
+  // お問い合わせ
   export const contactValidationRules = [
     check('name').not().isEmpty().withMessage('名前は必須です。'),
     check('email').not().isEmpty().withMessage('メールアドレスは必須です。').not().isEmail().withMessage('有効なメールアドレスの形式で入力してください。'),
