@@ -1,6 +1,6 @@
 import express from 'express';
 import 'dotenv/config';
-import { contactValidationRules } from '../validation'
+import { contactValidationRules } from '../validation';
 const {checkCreateCourse, checkReadCourse, checkUpdateCourse, checkDeleteCourse} = require('../controllers/courseController');
 const {checkCreateVideo, checkReadVideo, checkUpdateVideo, checkDeleteVideo} = require('../controllers/videoController');
 const {checkCreateContact, checkReadContact, checkSuccessContact} = require('../controllers/contactController');
