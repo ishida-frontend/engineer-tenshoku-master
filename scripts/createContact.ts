@@ -1,12 +1,12 @@
 import { PrismaClient } from '@prisma/client'
 import { check, validationResult } from 'express-validator';
+import { ContactType } from '../types/index'
 
 const prisma = new PrismaClient();
 
 export async function createContact() {
   try {
-    type Contact = {name?: string, email: string, subject: string, message: string, status: number};
-    const contactData: Contact = {
+    const contactData: ContactType = {
       name: undefined,
       email: "yamada0123@example.com",
       subject: "I like your videos.",
