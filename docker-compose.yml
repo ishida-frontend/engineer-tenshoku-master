@@ -10,6 +10,8 @@ services:
       - db
     ports:
       - 8000:8000
+    environment:
+      - SERVER_PORT=${SERVER_PORT}
     volumes:
       - ./:/app
       - /app/node_modules # コンテナ内でnode_modulesを管理するために必要
@@ -26,10 +28,12 @@ services:
     environment:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
     volumes:
       - mysql:/var/lib/mysql
-      - ./docker/mysql/1_init.sql:/docker-entrypoint-initdb.d/1_init.sql # DBユーザーに権限付与させるSQLを実行
+      # Prisma用にDBユーザー権限を付与する処理を実行（https://polidog.jp/2023/05/03/prisma-mysql/）
+      - ./docker/mysql/1_init.sh:/docker-entrypoint-initdb.d/1_init.sh
     networks:
       - app
 
