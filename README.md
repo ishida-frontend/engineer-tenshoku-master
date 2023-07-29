@@ -34,6 +34,11 @@ Dockerのインストール方法を説明します。
 docker-compose up
 ```
 
+初回にdockerコンテナを作成する際、Prismaのmigrateする下記コマンドを実施してください。
+```
+docker-compose exec api npx prisma migrate dev
+```
+
 以下のローカルホストのURLを⌘+左クリック
 ```bash
 api  | Example app listening at http://localhost:8000
@@ -74,4 +79,3 @@ Engineer Learning Team
 "エンジニア転職マスター講座" is under [MIT license](https://).
 
 "エンジニア転職マスター講座" is Confidential.
-
