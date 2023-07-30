@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 export async function createContact() {
   try {
     const contactData: ContactType = {
-      name: undefined,
+      name: "",
       email: "yamada0123@example.com",
       subject: "I like your videos.",
       message: "Thank you very much.",
@@ -36,4 +36,3 @@ export async function createContact() {
     await prisma.$disconnect();
   }
 }
-
