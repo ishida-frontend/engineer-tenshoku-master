@@ -6,19 +6,15 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: npm start
     depends_on:
       - db
     ports:
       - 8000:8000
     environment:
       - SERVER_PORT=${SERVER_PORT}
-      - MYSQL_HOST=${MYSQL_HOST}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
     volumes:
       - ./:/app
+      - /app/node_modules # コンテナ内でnode_modulesを管理するために必要
     networks:
       - app
 
@@ -30,14 +26,14 @@ services:
     ports:
       - 3308:3306
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
     volumes:
       - mysql:/var/lib/mysql
-      - ./initdb.d:/docker-entrypoint-initdb.d
+      # Prisma用にDBユーザー権限を付与する処理を実行（https://polidog.jp/2023/05/03/prisma-mysql/）
+      - ./docker/mysql/1_init.sh:/docker-entrypoint-initdb.d/1_init.sh
     networks:
       - app
 

@@ -74,4 +74,3 @@ Engineer Learning Team
 "エンジニア転職マスター講座" is under [MIT license](https://).
 
 "エンジニア転職マスター講座" is Confidential.
-
