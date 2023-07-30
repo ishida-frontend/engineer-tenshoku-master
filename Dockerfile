@@ -11,4 +11,5 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["./startup.sh"]
+# DBコンテナでDBユーザー権限付与するまで待つ
+CMD sleep 45s; ./startup.sh
