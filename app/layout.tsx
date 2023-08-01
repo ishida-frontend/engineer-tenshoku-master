@@ -1,4 +1,4 @@
-import { Providers } from './providers'
+import { ChakraProviders } from './chakraproviders'
 
 export default function RootLayout({
   children,
@@ -8,7 +8,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <Providers>{children}</Providers>
+        <ChakraProviders>{children}</ChakraProviders>
       </body>
     </html>
   )
