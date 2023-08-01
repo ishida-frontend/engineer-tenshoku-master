@@ -4,6 +4,15 @@
   "version": "1.0.0",
   "main": "app.ts",
   "license": "MIT",
+  "scripts": {
+    "start": "nodemon app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "createVideo": "nodemon ./scripts/createVideo.ts",
+    "readVideo": "nodemon ./scripts/readVideo.ts",
+    "updateVideo": "nodemon ./scripts/updateVideo.ts",
+    "deleteVideo": "nodemon ./scripts/deleteVideo.ts",
+    "validation": "nodemon ./scripts/validation.ts"
+  },
   "dependencies": {
     "@prisma/client": "^5.0.0",
     "@types/express": "^4.17.17",
