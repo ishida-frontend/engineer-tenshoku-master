@@ -1,6 +1,6 @@
 {
   "type": "commonjs",
-  "name": "backend",
+  "name": "express-docker",
   "version": "1.0.0",
   "main": "app.ts",
   "license": "MIT",
