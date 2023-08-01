@@ -1,6 +1,7 @@
 import mysql from 'mysql';
 import express from 'express';
 import router from './routes/router';
+import authController from './controllers/authController';
 
 // 環境変数を使用してDBにアクセスする
 const pool = mysql.createPool({
@@ -15,10 +16,14 @@ const pool = mysql.createPool({
 const port = process.env.SERVER_PORT || 8001;
 const app = express();
 
+// JSONボディパーサーのミドルウェアを追加
+app.use(express.json());
+
 app.get('/', (req, res) => {
   res.send('Hello world!');
 });
 
+app.use('/auth', authController);
 app.use('/', router);
 
 app.listen(port, () => {
