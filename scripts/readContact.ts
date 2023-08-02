@@ -4,11 +4,11 @@ const prisma = new PrismaClient()
 export async function readAllContacts() {
   const contacts = await prisma.contact.findMany({
     select: {
+      id: true,
       name: true,
       email: true,
       subject: true,
-      message: true
-    }
+      message: true,
+    },
   })
-  console.log(contacts);
 }
