@@ -1,6 +1,6 @@
 import { memo, FC } from 'react'
-import { readAllContacts } from '../scripts/readContact'
-import { ContactType } from '../types/index'
+import { readAllContacts } from '../../backend/scripts/readContact'
+import { ContactType } from '../../backend/types/index'
 import { BrowserRouter, Link } from 'react-router-dom'
 
 const ContactList: FC<ContactType> = memo((props) => {
