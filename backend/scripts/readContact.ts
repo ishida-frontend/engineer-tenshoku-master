@@ -11,4 +11,5 @@ export async function readAllContacts() {
       message: true,
     },
   })
+  return contacts
 }

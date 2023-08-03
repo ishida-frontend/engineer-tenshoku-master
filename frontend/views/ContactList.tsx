@@ -1,21 +1,17 @@
-import { memo, FC } from 'react'
-import { readAllContacts } from '../../backend/scripts/readContact'
-import { ContactType } from '../../backend/types/index'
-import { BrowserRouter, Link } from 'react-router-dom'
+import { FC } from 'react'
+import useSWR from 'swr'
 
-const ContactList: FC<ContactType> = memo((props) => {
-  console.log('aaaaa')
-  console.log('readAllContacts', readAllContacts)
-  const arr = [...Array(readAllContacts)]
-  console.log('arr', arr)
-  const { name, email, subject, message, status } = props
+export const ContactList: FC = () => {
+  const fetcher = () => fetch('http://localhost:8000/admin/contacts')
+  const { data, error } = useSWR('http://localhost:3000', fetcher)
+
+  if (error) return <div>failed to load</div>
+  if (!data) return <div>loading...</div>
+
   return (
-    <BrowserRouter>
-      <div>
-        <Link to="/admin/contacts">お問い合わせ一覧</Link>
-        <h1>お問い合わせ一覧</h1>
-        <p>{`${name},${email},${subject},${message},${status}`}</p>
-      </div>
-    </BrowserRouter>
+    <div>
+      <p>お問い合わせ一覧</p>
+      <p>{data}</p>
+    </div>
   )
-})
+}
