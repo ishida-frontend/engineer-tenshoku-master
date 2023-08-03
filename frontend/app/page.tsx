@@ -1,8 +1,9 @@
 'use client'
 import { useState } from 'react'
-import { Route } from 'react-router-dom'
-import { Box, Button, Stack, Text, Switch } from '@chakra-ui/react'
-import { ContactList } from '../views/ContactList'
+import { Route, Routes, BrowserRouter } from 'react-router-dom'
+import { Box, Button, Stack, Text } from '@chakra-ui/react'
+import { ContactList } from './ContactList'
+// import { Router } from 'next/router'
 
 export default function Page() {
   const [fontSize, setFontSize] = useState(16)
@@ -30,9 +31,11 @@ export default function Page() {
         <Text fontSize={fontSize + 'px'}>
           上のボタンを押すと、このテキストのサイズが変わります(最小サイズ：10px・最大サイズ：50px)。
         </Text>
-        <Switch>
-          <Route path="/contact/read" Component={ContactList} />
-        </Switch>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/contact/read" element={<ContactList />} />
+          </Routes>
+        </BrowserRouter>
       </Box>
     </>
   )
