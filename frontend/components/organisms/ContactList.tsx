@@ -1,5 +1,5 @@
 'use client'
-import { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 export function ContactList() {
@@ -11,18 +11,22 @@ export function ContactList() {
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading...</div>
 
+  const dataDesc = data.sort((a, b) => a.id - b.id)
+
   return (
     <div>
       <p>お問い合わせ一覧</p>
-      {data &&
-        data.map((d) => {
+      {dataDesc &&
+        dataDesc.map((d) => {
           return (
             <div>
-              <p>{d.id}</p>
-              <p>{d.name}</p>
-              <p>{d.email}</p>
-              <p>{d.subject}</p>
-              <p>{d.message}</p>
+              <ul>
+                <li>{d.id}</li>
+                <li>{d.name}</li>
+                <li>{d.email}</li>
+                <li>{d.subject}</li>
+                <li>{d.message}</li>
+              </ul>
             </div>
           )
         })}
