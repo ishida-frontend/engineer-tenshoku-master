@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
+import { Container, VStack, StackDivider } from '@chakra-ui/react'
 
 export function ContactList() {
   const fetcher = async () =>
@@ -11,7 +12,9 @@ export function ContactList() {
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading...</div>
 
-  const dataDesc = data.sort((a, b) => a.id - b.id)
+  const dataDesc = data.sort(function (a, b) {
+    return b.id - a.id
+  })
 
   return (
     <div>
@@ -19,15 +22,28 @@ export function ContactList() {
       {dataDesc &&
         dataDesc.map((d) => {
           return (
-            <div>
-              <ul>
-                <li>{d.id}</li>
-                <li>{d.name}</li>
-                <li>{d.email}</li>
-                <li>{d.subject}</li>
-                <li>{d.message}</li>
-              </ul>
-            </div>
+            <VStack
+              divider={<StackDivider borderColor="gray.200" />}
+              spacing={4}
+              align="stretch"
+            >
+              <Container
+                maxW="container.sm"
+                bg="blue.600"
+                h="auto"
+                color="white"
+                border="1px"
+                p="3"
+              >
+                <div key={d.id}>
+                  <p>ID: {d.id}</p>
+                  <p>名前: {d.name}</p>
+                  <p>メール: {d.email}</p>
+                  <p>タイトル: {d.subject}</p>
+                  <p>内容: {d.message}</p>
+                </div>
+              </Container>
+            </VStack>
           )
         })}
     </div>
