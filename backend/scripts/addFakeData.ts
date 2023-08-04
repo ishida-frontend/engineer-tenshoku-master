@@ -1,24 +1,34 @@
-import { faker } from '@faker-js/faker';
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
+import { faker } from '@faker-js/faker'
 
 const prisma = new PrismaClient()
 
-const fakeData = Array.from({length: 10}, () => ({
-  name: faker.person.fullName(),
-  email: faker.internet.email(),
-  subject: faker.lorem.lines(1),
-  message: faker.lorem.lines(3),
-  status: 0
-}))
+async function fakeData() {
+  const courses = generateFakeCourses(10)
 
-async function addFakeData() {
-  const addedFakeData = await prisma.contact.createMany({
-    data: fakeData
+  await prisma.course.createMany({
+    data: courses
   })
 
-  await console.log(addedFakeData);
-
-  await prisma.$disconnect()
+  console.log("Courses inserted successfully!")
 }
 
-addFakeData();
+function generateFakeCourses(num: number) {
+  const courses =[]
+
+  for (let i = 0; i < num; i++) {
+    courses.push({
+      name: faker.commerce.product(),
+      description: faker.lorem.paragraph(),
+    })
+  }
+  return courses
+}
+
+fakeData()
+.catch(e => {
+  throw e
+})
+.finally(async () => {
+  await prisma.$disconnect()
+})
