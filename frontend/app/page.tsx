@@ -1,9 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import { Box, Button, Stack, Text } from '@chakra-ui/react'
-import { ContactList } from '../adminComponents/organisms/ContactList'
-// import { Router } from 'next/router'
 
 export default function Page() {
   const [fontSize, setFontSize] = useState(16)

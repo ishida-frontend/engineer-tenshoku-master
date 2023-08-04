@@ -2,7 +2,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { Box } from '@chakra-ui/react'
-import { ContactList } from '../../../adminComponents/organisms/ContactList'
+import { ContactList } from '../../../components/admin/organisms/ContactList'
 
 export default function Page() {
   return (
