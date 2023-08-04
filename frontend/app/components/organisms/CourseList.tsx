@@ -22,7 +22,7 @@ export function CourseList() {
   return (
     <div>
       <p>コース一覧</p>
-      {data && data.map((course: CourseType) => {
+      {data.map((course: CourseType) => {
         return (
           <div key={course.id}>
           <p>コースID：{course.id}</p>
