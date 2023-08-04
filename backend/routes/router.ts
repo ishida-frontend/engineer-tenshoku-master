@@ -1,7 +1,7 @@
 import express from 'express';
 import 'dotenv/config';
 import { contactValidationRules } from '../validation';
-const {checkCreateCourse, checkReadCourse, checkUpdateCourse, checkDeleteCourse, checkAllCourses} = require('../controllers/courseController');
+const {checkCreateCourse, checkReadCourse, checkUpdateCourse, checkDeleteCourse, checkReadAllCourses} = require('../controllers/courseController');
 const {checkCreateVideo, checkReadVideo, checkUpdateVideo, checkDeleteVideo} = require('../controllers/videoController');
 const {checkCreateContact, checkReadContact, checkSuccessContact} = require('../controllers/contactController');
 
@@ -17,7 +17,7 @@ courseRouter.get('/create', checkCreateCourse);
 courseRouter.get('/read', checkReadCourse);
 courseRouter.get('/update', checkUpdateCourse);
 courseRouter.get('/delete', checkDeleteCourse);
-courseRouter.get('/all', checkAllCourses);
+courseRouter.get('/all', checkReadAllCourses);
 
 const videoRouter = express.Router();
 router.use('/video', videoRouter);

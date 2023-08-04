@@ -24,7 +24,7 @@ exports.checkReadCourse = async function(req: express.Request, res: express.Resp
   }
 }
 
-exports.checkAllCourses = async function(req: express.Request, res: express.Response) {
+exports.checkReadAllCourses = async function(req: express.Request, res: express.Response) {
   try {
     const courses = await readAllCourses();
     res.json(courses);
