@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import { Box, Button, Stack, Text } from '@chakra-ui/react'
-import { ContactList } from '../components/organisms/ContactList'
+import { ContactList } from '../adminComponents/organisms/ContactList'
 // import { Router } from 'next/router'
 
 export default function Page() {
@@ -31,11 +31,6 @@ export default function Page() {
         <Text fontSize={fontSize + 'px'}>
           上のボタンを押すと、このテキストのサイズが変わります(最小サイズ：10px・最大サイズ：50px)。
         </Text>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/contact/read" element={<ContactList />} />
-          </Routes>
-        </BrowserRouter>
       </Box>
     </>
   )
