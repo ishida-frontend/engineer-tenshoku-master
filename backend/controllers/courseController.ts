@@ -24,6 +24,15 @@ exports.checkReadCourse = async function(req: express.Request, res: express.Resp
   }
 }
 
+exports.checkAllCourses = async function(req: express.Request, res: express.Response) {
+  try {
+    const courses = await readAllCourses();
+    res.json(courses);
+  } catch (e: any) {
+    res.status(500).send('エラーが発生しました');
+  }
+}
+
 exports.checkUpdateCourse = async function(req: express.Request, res: express.Response) {
   try {
     await updateCourse();
