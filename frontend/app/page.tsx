@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import { Box, Button, Stack, Text } from '@chakra-ui/react'
-import { ContactList } from './ContactList'
+import { ContactList } from '../components/organisms/ContactList'
 // import { Router } from 'next/router'
 
 export default function Page() {
