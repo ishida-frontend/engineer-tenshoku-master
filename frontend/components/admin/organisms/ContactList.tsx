@@ -18,7 +18,7 @@ export function ContactList() {
 
   return (
     <div>
-      <p>お問い合わせ一覧</p>
+      <h1>お問い合わせ一覧</h1>
       {dataDesc &&
         dataDesc.map((d) => {
           return (
