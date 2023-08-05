@@ -7,6 +7,7 @@ import { InitiateAuthCommand, InitiateAuthResponse } from "@aws-sdk/client-cogni
 
 const router = Router();
 
+// signup
 router.post('/signup', [
   body('username').notEmpty().normalizeEmail().isEmail(),
   body('password').isString().isLength({ min: 8 }),
@@ -34,6 +35,7 @@ router.post('/signup', [
   }
 });
 
+// signin
 router.post('/signin', async (req, res) => {
   const { username, password } = req.body;
 
@@ -49,6 +51,29 @@ router.post('/signin', async (req, res) => {
   try {
     const command = new InitiateAuthCommand(params);
     const data = await CognitoClient.send(command) as InitiateAuthResponse;
+    res.status(200).json(data.AuthenticationResult);
+  } catch (err) {
+    console.error(err);
+    const errorMessage = (err as Error).message;
+    res.status(400).json({ error: errorMessage });
+  }
+});
+
+// refresh
+router.post('/refresh', async (req, res) => {
+  const { refreshToken } = req.body;
+
+  const params = {
+    AuthFlow: 'REFRESH_TOKEN_AUTH',
+    ClientId: process.env.COGNITO_CLIENT_ID || '',
+    AuthParameters: {
+      REFRESH_TOKEN: refreshToken,
+    },
+  };
+
+  try {
+    const command = new InitiateAuthCommand(params);
+    const data = await CognitoClient.send(command);
     res.status(200).json(data.AuthenticationResult);
   } catch (err) {
     console.error(err);
