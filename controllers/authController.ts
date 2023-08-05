@@ -51,6 +51,11 @@ router.post('/signin', async (req, res) => {
   try {
     const command = new InitiateAuthCommand(params);
     const data = await CognitoClient.send(command) as InitiateAuthResponse;
+
+    // クッキーにアクセストークンとリフレッシュトークンを保存
+    res.cookie('accessToken', data.AuthenticationResult?.AccessToken, { httpOnly: true });
+    res.cookie('refreshToken', data.AuthenticationResult?.RefreshToken, { httpOnly: true });
+
     res.status(200).json(data.AuthenticationResult);
   } catch (err) {
     console.error(err);
@@ -74,6 +79,10 @@ router.post('/refresh', async (req, res) => {
   try {
     const command = new InitiateAuthCommand(params);
     const data = await CognitoClient.send(command);
+
+    // クッキーに新しいアクセストークンを保存
+    res.cookie('accessToken', data.AuthenticationResult?.AccessToken, { httpOnly: true });
+
     res.status(200).json(data.AuthenticationResult);
   } catch (err) {
     console.error(err);
