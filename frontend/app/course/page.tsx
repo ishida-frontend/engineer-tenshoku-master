@@ -2,6 +2,6 @@
 import React from 'react'
 import { CourseList } from '../../components/organisms/CourseList'
 
-export default function Course() {
+export default function UserCourseList() {
   return <CourseList />
 }
