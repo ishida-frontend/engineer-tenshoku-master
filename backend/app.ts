@@ -1,5 +1,6 @@
 import mysql from 'mysql'
 import express from 'express'
+import cors from 'cors'
 import router from './routes/router'
 
 // 環境変数を使用してDBにアクセスする
@@ -14,6 +15,12 @@ const pool = mysql.createPool({
 // HTTPサーバを起動する
 const port = process.env.SERVER_PORT || 8000
 const app = express()
+
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN
+  })
+)
 
 app.get('/', (req, res) => {
   res.send('Hello world!')
