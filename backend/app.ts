@@ -1,5 +1,6 @@
 import mysql from 'mysql';
 import express from 'express';
+import cors from 'cors'
 import router from './routes/router';
 import authController from './controllers/authController';
 
@@ -16,6 +17,11 @@ const pool = mysql.createPool({
 const port = process.env.SERVER_PORT || 8000
 const app = express()
 
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN
+  })
+)
 // JSONボディパーサーのミドルウェアを追加
 app.use(express.json());
 
