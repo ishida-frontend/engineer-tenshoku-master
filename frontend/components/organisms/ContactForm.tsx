@@ -4,13 +4,14 @@ import useSWR from 'swr'
 import TextareaItem from './molecules/TextareaItem'
 import FormItem from './molecules/FormItem'
 import InputItem from './molecules/InputItem'
+import axios from 'axios'
 
 export function UserContactForm() {
   const [state, setState] = useState({
     name: '',
     email: '',
-    title: '動画名や質問タイトルを入力ください',
-    comment: 'お問い合わせ内容を入力ください',
+    title: '',
+    comment: '',
   })
 
   // お問い合わせ内容に関するonChangeハンドラ
@@ -21,7 +22,7 @@ export function UserContactForm() {
     })
   }
 
-  // お問い合わせ内容、氏名・氏名（フリガナ）・メールアドレスに関するonChangeハンドラ
+  // お問い合わせタイトル、名前・メールアドレスに関するonChangeハンドラ
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.persist()
     const target = e.target
@@ -32,7 +33,7 @@ export function UserContactForm() {
   }
 
   // 送信ボタンを押下したら発火
-  const submitAlert = (e: React.MouseEvent) => {
+  const submitAlert = async (e: React.MouseEvent) => {
     e.persist()
     e.preventDefault()
     const stateError = Object.values(state).some((value) => {
@@ -43,13 +44,12 @@ export function UserContactForm() {
       alert('未入力項目があります')
     } else {
       alert('送信しました')
-      const fetcher = async () =>
-        (await fetch('http://localhost:8000/create/contact')).json()
-
-      const { data, error } = useSWR('contactFormContent', fetcher)
-
-      if (error) return <div>failed to load</div>
-      if (!data) return <div>loading...</div>
+      const res = await axios.post('http://localhost:8080/contact/create', {
+        name: state.name,
+        email: state.email,
+        title: state.title,
+        comment: state.comment,
+      })
     }
   }
 
@@ -63,7 +63,6 @@ export function UserContactForm() {
           </div>
           <div>
             <p>
-              名前
               <InputItem
                 name="name"
                 value={state.name}
@@ -93,10 +92,7 @@ export function UserContactForm() {
         <div>
           <div>
             <div>
-              <FormItem
-                title="お問い合わせタイトル"
-                required={false}
-              ></FormItem>
+              <FormItem title="お問い合わせタイトル" required={true}></FormItem>
             </div>
           </div>
           <p>
