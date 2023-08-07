@@ -1,10 +1,9 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import TextareaItem from './molecules/TextareaItem'
 import FormItem from './molecules/FormItem'
 import InputItem from './molecules/InputItem'
-import axios from 'axios'
 
 export function UserContactForm() {
   const [state, setState] = useState({
@@ -43,13 +42,14 @@ export function UserContactForm() {
     if (stateError) {
       alert('未入力項目があります')
     } else {
+      const fetcher = async () =>
+        (await fetch('../../../backend/routes/router')).json()
+      console.log('fetcher', fetcher)
+
+      const { data } = useSWR('contactContent', fetcher)
+      console.log('data', data)
+      return mutate('/api/user', { ...data }, false)
       alert('送信しました')
-      const res = await axios.post('http://localhost:8080/contact/create', {
-        name: state.name,
-        email: state.email,
-        title: state.title,
-        comment: state.comment,
-      })
     }
   }
 
