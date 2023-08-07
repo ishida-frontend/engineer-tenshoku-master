@@ -43,7 +43,7 @@ export function UserContactForm() {
       alert('未入力項目があります')
     } else {
       const fetcher = async () =>
-        (await fetch('../../../backend/routes/router')).json()
+        (await fetch('http://localhost:8080/contact/create')).json()
       console.log('fetcher', fetcher)
 
       const { data } = useSWR('contactContent', fetcher)
