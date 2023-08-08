@@ -15,9 +15,9 @@ console.log('Server is online.')
 
 app.post('http://localhost:3000/contact', function (req, res) {
   // リクエストボディを出力
-  console.log(req.body)
+  console.log('req.body', req.body)
   // パラメータ名、nameを出力
-  console.log(req.body.name)
+  console.log('req.body.name', req.body.name)
 
   res.send('POST request to the homepage')
 })
