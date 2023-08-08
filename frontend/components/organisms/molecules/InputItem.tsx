@@ -1,20 +1,25 @@
 import React, { FC } from 'react'
+import { Input } from '@chakra-ui/react'
 
 interface Props {
   name: string
   value: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  placeholder: string
 }
 
 const InputItem: FC<Props> = (props) => {
-  const { value, onChange, name } = props
+  const { value, onChange, name, placeholder } = props
   return (
     <>
-      <input
+      <Input
         type="text"
         name={name}
         value={value}
         onChange={(e) => onChange(e)}
+        placeholder={placeholder}
+        w={'904px'}
+        h={'48px'}
       />
     </>
   )

@@ -3,24 +3,6 @@ import { PrismaClient } from '@prisma/client'
 import { check, validationResult } from 'express-validator'
 import { ContactType } from '../types/index'
 const prisma = new PrismaClient()
-const app = express()
-const bodyParser = require('body-parser')
-
-// urlencodedとjsonは別々に初期化する
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-
-app.listen(3000)
-console.log('Server is online.')
-
-app.post('http://localhost:3000/contact', function (req, res) {
-  // リクエストボディを出力
-  console.log('req.body', req.body)
-  // パラメータ名、nameを出力
-  console.log('req.body.name', req.body.name)
-
-  res.send('POST request to the homepage')
-})
 
 type createContactParamsType = {
   name: string
@@ -32,12 +14,12 @@ type createContactParamsType = {
 
 export async function createContact(params: createContactParamsType) {
   try {
-    const contactData: createContactParamsType = {
-      name: 'Tarou Yamada',
-      email: 'yamada0123@example.com',
-      subject: 'I like your videos.',
-      message: 'Thank you very much.',
-      status: 0,
+    const contactData: ContactType = {
+      name: params.name,
+      email: params.email,
+      subject: params.subject,
+      message: params.message,
+      status: params.status,
     }
 
     const errors = validationResult(contactData)
