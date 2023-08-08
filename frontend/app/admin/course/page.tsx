@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
-import { AdminCourseList } from '../../../components/organisms/AdminCourseList'
+import { CourseList } from '../../../components/admin/organisms/CourseList'
 
 export default function AdminCourse() {
-  return <AdminCourseList />
+  return <CourseList />
 }
