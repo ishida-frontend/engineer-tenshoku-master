@@ -6,6 +6,7 @@ const {
   checkReadCourse,
   checkUpdateCourse,
   checkDeleteCourse,
+  checkReadAllCourses,
 } = require('../controllers/courseController')
 const {
   checkCreateVideo,
@@ -34,6 +35,7 @@ router.use(
 
 const adminRouter = express.Router()
 router.use('/admin', adminRouter)
+adminRouter.get('/course', checkReadAllCourses)
 adminRouter.get('/contacts', checkReadContact)
 
 const courseRouter = express.Router()
@@ -42,6 +44,7 @@ courseRouter.get('/create', checkCreateCourse)
 courseRouter.get('/read', checkReadCourse)
 courseRouter.get('/update', checkUpdateCourse)
 courseRouter.get('/delete', checkDeleteCourse)
+courseRouter.get('/all', checkReadAllCourses)
 
 const videoRouter = express.Router()
 router.use('/video', videoRouter)
