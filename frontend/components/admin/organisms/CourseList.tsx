@@ -10,9 +10,9 @@ type CourseType = {
   updated_at: string
 }
 
-export function AdminCourseList() {
+export function CourseList() {
   const fetcher = async () =>
-    (await fetch('http://localhost:8000/admin/course')).json()
+    (await fetch('http://localhost:8000/course/all')).json()
 
   const { data, error } = useSWR('courseList', fetcher)
 
