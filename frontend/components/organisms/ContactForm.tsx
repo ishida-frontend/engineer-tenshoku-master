@@ -4,17 +4,16 @@ import TextareaItem from './molecules/TextareaItem'
 import FormItem from './molecules/FormItem'
 import InputItem from './molecules/InputItem'
 import {
-  Center,
   Container,
-  Box,
   Button,
   Flex,
   Text,
   Link,
   FormControl,
-  Input,
   Wrap,
   Heading,
+  FormHelperText,
+  FormErrorMessage,
 } from '@chakra-ui/react'
 
 export function UserContactForm() {
@@ -24,6 +23,24 @@ export function UserContactForm() {
     subject: '',
     message: '',
   })
+
+  function errorMessage() {
+    const [input, setInput] = useState()
+    const handleInputChange = (e) => setInput(e.target.value)
+
+    const isError = input === ''
+    return (
+      <FormControl isInvalid={isError}>
+        {!isError ? (
+          <FormHelperText>
+            Enter the email you'd like to receive the newsletter on.
+          </FormHelperText>
+        ) : (
+          <FormErrorMessage>Email is required.</FormErrorMessage>
+        )}
+      </FormControl>
+    )
+  }
 
   const [isChecked, setIsChecked] = useState(false)
   const toggleCheckbox = () => {
@@ -67,11 +84,12 @@ export function UserContactForm() {
     e.persist()
     e.preventDefault()
     const stateError = Object.values(state).some((value) => {
+      console.log('state', state)
       return value.length === 0
     })
 
     if (stateError) {
-      alert('未入力項目があります')
+      alert('未入力があります')
     } else {
       const res = await fetcher()
       alert('送信しましました')
@@ -90,11 +108,15 @@ export function UserContactForm() {
                   <FormItem title="お名前" required={true}></FormItem>
                 </Container>
                 <InputItem
+                  type="text"
                   name="name"
                   value={state.name}
                   onChange={handleInputChange}
                   placeholder={'田中　太郎'}
                 />
+                {/* {nameError && (
+                  <FormErrorMessage>項目が空です。</FormErrorMessage>
+                )} */}
               </FormControl>
 
               <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
@@ -102,11 +124,17 @@ export function UserContactForm() {
                   <FormItem title="メールアドレス" required={true}></FormItem>
                 </Container>
                 <InputItem
+                  type="email"
                   name="email"
                   value={state.email}
                   onChange={handleInputChange}
                   placeholder={'sample@hoge.com'}
                 />
+                {/* {!emailError ? (
+                  <FormHelperText></FormHelperText>
+                ) : (
+                  <FormErrorMessage>項目が空です。</FormErrorMessage>
+                )} */}
               </FormControl>
 
               <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
@@ -117,11 +145,17 @@ export function UserContactForm() {
                   ></FormItem>
                 </Container>
                 <InputItem
+                  type="text"
                   name="subject"
                   value={state.subject}
                   onChange={handleInputChange}
                   placeholder={'動画名または質問タイトルを記入してください'}
                 />
+                {/* {!subjectError ? (
+                  <FormHelperText></FormHelperText>
+                ) : (
+                  <FormErrorMessage>項目が空です。</FormErrorMessage>
+                )} */}
               </FormControl>
 
               <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
@@ -134,6 +168,11 @@ export function UserContactForm() {
                   onChange={onChangeHandler}
                   placeholder={'こちらお問い合わせ内容を記入してください'}
                 />
+                {/* {!messageError ? (
+                  <FormHelperText></FormHelperText>
+                ) : (
+                  <FormErrorMessage>項目が空です。</FormErrorMessage>
+                )} */}
               </FormControl>
             </Container>
 
@@ -160,10 +199,13 @@ export function UserContactForm() {
               </Flex>
             </Container>
           </FormControl>
-          <Button mt={'20'} colorScheme="teal">
-            <button disabled={!isChecked} onClick={submitAlert}>
-              送信する
-            </button>
+          <Button
+            disabled={!isChecked}
+            onClick={submitAlert}
+            mt={'20'}
+            colorScheme="teal"
+          >
+            送信する
           </Button>
         </Container>
       </Container>
