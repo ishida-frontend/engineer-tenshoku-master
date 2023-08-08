@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import useSWR, { mutate } from 'swr'
 import TextareaItem from './molecules/TextareaItem'
 import FormItem from './molecules/FormItem'
 import InputItem from './molecules/InputItem'
@@ -31,6 +30,23 @@ export function UserContactForm() {
     })
   }
 
+  const fetcher = async () =>
+    (
+      await fetch('http://localhost:8000/contact/create', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: 'tanaka',
+          email: 'tanaka@aaa.com',
+          title: '田中です',
+          message: '田中と申します。',
+          status: 0,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+    ).json()
+  // const { data } = useSWR('contactContent', fetcher)
   // 送信ボタンを押下したら発火
   const submitAlert = async (e: React.MouseEvent) => {
     e.persist()
@@ -39,18 +55,13 @@ export function UserContactForm() {
       return value.length === 0
     })
 
-    if (stateError) {
-      alert('未入力項目があります')
-    } else {
-      const fetcher = async () =>
-        (await fetch('http://localhost:8080/contact/create')).json()
-      console.log('fetcher', fetcher)
-
-      const { data } = useSWR('contactContent', fetcher)
-      console.log('data', data)
-      return mutate('/api/user', { ...data }, false)
-      alert('送信しました')
-    }
+    // if (stateError) {
+    //   alert('未入力項目があります')
+    // } else {
+    const res = await fetcher()
+    // return mutate('/api/user', { ...data }, false)
+    // alert('送信しました')
+    // }
   }
 
   return (
