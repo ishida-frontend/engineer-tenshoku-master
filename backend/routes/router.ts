@@ -54,7 +54,7 @@ videoRouter.get('/delete', checkDeleteVideo)
 
 const contactRouter = express.Router()
 router.use('/contact', contactRouter)
-contactRouter.get('/create', contactValidationRules, checkCreateContact)
+contactRouter.post('/create', contactValidationRules, checkCreateContact)
 
 router.get('/contact/success', checkSuccessContact)
 

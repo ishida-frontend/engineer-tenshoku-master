@@ -16,10 +16,11 @@ const pool = mysql.createPool({
 const port = process.env.SERVER_PORT || 8000
 const app = express()
 
+app.use(express.json())
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN
-  })
+    origin: process.env.CORS_ORIGIN,
+  }),
 )
 
 app.get('/', (req, res) => {
