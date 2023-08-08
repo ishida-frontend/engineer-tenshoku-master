@@ -14,6 +14,7 @@ import {
   FormControl,
   Input,
   Wrap,
+  Heading,
 } from '@chakra-ui/react'
 
 export function UserContactForm() {
@@ -79,48 +80,12 @@ export function UserContactForm() {
 
   return (
     <>
-      <Container
-        minW={'1512px'}
-        width={'1512px'}
-        maxH="1116px"
-        height={'1116px'}
-        bg="gray.100"
-      >
-        <Container
-          maxW="1024px"
-          width={'1024px'}
-          maxH="1116px"
-          height={'1116px'}
-          bg="white"
-          centerContent
-        >
-          <Center
-            w={'144px'}
-            height={'29px'}
-            mt={'80px'}
-            bg="white"
-            color="black"
-            fontSize={'2xl'}
-            fontWeight="bold"
-          >
-            <h1>お問い合わせ</h1>
-          </Center>
+      <Container bg="gray.100">
+        <Container bg="white" centerContent>
+          <Heading mt={'80px'}>お問い合わせ</Heading>
           <FormControl ml={'0px'} pl={'0px'}>
-            <Container
-              maxW={'904px'}
-              w={'904px'}
-              h={'679px'}
-              m={'109px 0px 0px 60px'}
-              bg={'white'}
-              p={'0px'}
-            >
-              <FormControl
-                w={'904px'}
-                h={'80px'}
-                m={'80px 0px 40px 0px'}
-                p={'0px'}
-                bg={'white'}
-              >
+            <Container m={'109px 0px 0px 60px'} bg={'white'} p={'0px'}>
+              <FormControl m={'80px 0px 40px 0px'} p={'0px'} bg={'white'}>
                 <Container m={'0px'} pb={'10px'} pl={'0px'}>
                   <FormItem title="お名前" required={true}></FormItem>
                 </Container>
@@ -132,13 +97,7 @@ export function UserContactForm() {
                 />
               </FormControl>
 
-              <FormControl
-                w={'904px'}
-                h={'80px'}
-                m={'0px 0px 45px 0px'}
-                p={'0px'}
-                bg={'white'}
-              >
+              <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
                 <Container m={'0px'} pb={'10px'} pl={'0px'}>
                   <FormItem title="メールアドレス" required={true}></FormItem>
                 </Container>
@@ -150,13 +109,7 @@ export function UserContactForm() {
                 />
               </FormControl>
 
-              <FormControl
-                w={'904px'}
-                h={'80px'}
-                m={'0px 0px 45px 0px'}
-                p={'0px'}
-                bg={'white'}
-              >
+              <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
                 <Container m={'0px'} pb={'10px'} pl={'0px'}>
                   <FormItem
                     title="お問い合わせタイトル"
@@ -171,13 +124,7 @@ export function UserContactForm() {
                 />
               </FormControl>
 
-              <FormControl
-                w={'904px'}
-                h={'259px'}
-                m={'0px 0px 45px 0px'}
-                p={'0px'}
-                bg={'white'}
-              >
+              <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
                 <Container m={'0px'} pb={'10px'} pl={'0px'}>
                   <FormItem title="お問い合わせ内容" required={true}></FormItem>
                 </Container>
@@ -185,7 +132,6 @@ export function UserContactForm() {
                   name="お問い合わせ内容"
                   value={state.message}
                   onChange={onChangeHandler}
-                  height={'220px'}
                   placeholder={'こちらお問い合わせ内容を記入してください'}
                 />
               </FormControl>

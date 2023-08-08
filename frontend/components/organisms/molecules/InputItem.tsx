@@ -18,8 +18,6 @@ const InputItem: FC<Props> = (props) => {
         value={value}
         onChange={(e) => onChange(e)}
         placeholder={placeholder}
-        w={'904px'}
-        h={'48px'}
       />
     </>
   )
