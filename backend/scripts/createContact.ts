@@ -3,27 +3,36 @@ import { PrismaClient } from '@prisma/client'
 import { check, validationResult } from 'express-validator'
 import { ContactType } from '../types/index'
 const prisma = new PrismaClient()
+const app = express()
+const bodyParser = require('body-parser')
 
-export async function createContact() {
+// urlencodedとjsonは別々に初期化する
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+app.listen(3000)
+console.log('Server is online.')
+
+app.post('http://localhost:3000/contact', function (req, res) {
+  // リクエストボディを出力
+  console.log(req.body)
+  // パラメータ名、nameを出力
+  console.log(req.body.name)
+
+  res.send('POST request to the homepage')
+})
+
+type createContactParamsType = {
+  name: string
+  email: string
+  subject: string
+  message: string
+  status: number
+}
+
+export async function createContact(params: createContactParamsType) {
   try {
-    const express = require('express')
-    const app = express()
-
-    const bodyParser = require('body-parser')
-    app.use(bodyParser.urlencoded({ extended: true }))
-    app.use(bodyParser.json())
-
-    app.listen(3000)
-
-    app.post(
-      'http://localhost:3000/contact',
-      (req: express.Request, res: express.Response) => {
-        console.log('create.req.body', req.body)
-        res.send('OK')
-      },
-    )
-
-    const contactData: ContactType = {
+    const contactData: createContactParamsType = {
       name: 'Tarou Yamada',
       email: 'yamada0123@example.com',
       subject: 'I like your videos.',

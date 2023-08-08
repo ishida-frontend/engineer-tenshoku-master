@@ -8,7 +8,7 @@ export function UserContactForm() {
   const [state, setState] = useState({
     name: '',
     email: '',
-    title: '',
+    subject: '',
     comment: '',
   })
 
@@ -37,7 +37,7 @@ export function UserContactForm() {
         body: JSON.stringify({
           name: 'tanaka',
           email: 'tanaka@aaa.com',
-          title: '田中です',
+          subject: '田中です',
           message: '田中と申します。',
           status: 0,
         }),
@@ -108,8 +108,8 @@ export function UserContactForm() {
           </div>
           <p>
             <InputItem
-              name="title"
-              value={state.title}
+              name="subject"
+              value={state.subject}
               onChange={handleInputChange}
             />
           </p>
