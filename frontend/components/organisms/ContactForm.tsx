@@ -20,6 +20,13 @@ import {
   Textarea,
 } from '@chakra-ui/react'
 
+type Errors = {
+  name: string[]
+  email: string[]
+  subject: string[]
+  message: string[]
+}
+
 export function UserContactForm() {
   const [state, setState] = useState({
     name: '',
@@ -27,12 +34,12 @@ export function UserContactForm() {
     subject: '',
     message: '',
   })
-  const [errors, setErrors] = useState<{
-    name: string[]
-    email: string[]
-    subject: string[]
-    message: string[]
-  }>({ name: [''], email: [''], subject: [''], message: [''] })
+  const [errors, setErrors] = useState<Errors>({
+    name: [''],
+    email: [''],
+    subject: [''],
+    message: [''],
+  })
 
   const ContactSchema = z.object({
     name: z
@@ -91,7 +98,7 @@ export function UserContactForm() {
       })
     ).json()
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: Event) => {
     event.preventDefault()
     try {
       const result = ContactSchema.parse(contact)
@@ -102,7 +109,7 @@ export function UserContactForm() {
       }
     } catch (e) {
       if (e instanceof ZodError) {
-        setErrors(e.flatten().fieldErrors)
+        setErrors(e.flatten().fieldErrors as Errors)
       } else {
         console.log(e)
       }
