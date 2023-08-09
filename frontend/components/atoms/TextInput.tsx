@@ -9,7 +9,7 @@ interface Props {
   placeholder: string
 }
 
-const InputItem: FC<Props> = (props) => {
+const TextInput: FC<Props> = (props) => {
   const { type, value, onChange, name, placeholder } = props
 
   return (
@@ -25,4 +25,4 @@ const InputItem: FC<Props> = (props) => {
   )
 }
 
-export default InputItem
+export default TextInput
