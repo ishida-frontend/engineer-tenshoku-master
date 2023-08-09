@@ -84,29 +84,23 @@ export function UserContactForm() {
       })
     ).json()
 
-  const result = ContactSchema.safeParse(contact)
-  const errorMessage = result.error.format()
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('result', result)
-    console.log('contact', contact)
-    console.log('a')
-    if (result.success) {
+    try {
+      const result = ContactSchema.safeParse(contact)
+      console.log('contact', contact)
+      console.log('result', result)
+      console.log('a')
+      if (result.success) {
+        const res = await fetcher()
+      }
+    } catch (e) {
+      // const result = ContactSchema.safeParse(contact)
+      // const errors = result.success ? {} : result.error.flatten().fieldErrors
+      // setErrors(errors)
+      // console.log('errors', errors)
       console.log('b')
-      const res = await fetcher()
-    } else if (!result.success) {
-      console.log('c')
-      setErrors(errorMessage)
-      console.log('result.error.format()', result.error.format())
-      console.log('errorMessage.name._errors[0]', errorMessage.name._errors[0])
-      console.log(
-        'errorMessage.email._errors[0]',
-        errorMessage.email._errors[0],
-      )
       setErrors(e.flatten().fieldErrors)
-      console.log('setErrors', setErrors)
-    } else {
-      console.log('d')
     }
   }
 
@@ -128,13 +122,13 @@ export function UserContactForm() {
                   onChange={handleInputChange}
                   placeholder={'田中　太郎'}
                 />
-                <div>
+                {/* <div>
                   {errorMessage?.name && (
                     <FormErrorMessage>
                       {errorMessage.name._errors[0]}
                     </FormErrorMessage>
                   )}
-                </div>
+                </div> */}
               </FormControl>
 
               <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
@@ -148,11 +142,11 @@ export function UserContactForm() {
                   onChange={handleInputChange}
                   placeholder={'sample@hoge.com'}
                 />
-                {errorMessage?.email && (
+                {/* {errorMessage?.email && (
                   <FormErrorMessage>
                     {errorMessage.email._errors[0]}
                   </FormErrorMessage>
-                )}
+                )} */}
               </FormControl>
 
               <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
@@ -169,11 +163,11 @@ export function UserContactForm() {
                   onChange={handleInputChange}
                   placeholder={'動画名または質問タイトルを記入してください'}
                 />
-                {errorMessage?.subject && (
+                {/* {errorMessage?.subject && (
                   <FormErrorMessage>
                     {errorMessage.subject._errors[0]}
                   </FormErrorMessage>
-                )}
+                )} */}
               </FormControl>
 
               <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
@@ -189,11 +183,11 @@ export function UserContactForm() {
                   onChange={onChangeHandler}
                   placeholder={'こちらお問い合わせ内容を記入してください'}
                 />
-                {errorMessage?.message && (
+                {/* {errorMessage?.message && (
                   <FormErrorMessage>
                     {errorMessage.message._errors[0]}
                   </FormErrorMessage>
-                )}
+                )} */}
               </FormControl>
             </Container>
 
