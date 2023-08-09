@@ -13,7 +13,7 @@ exports.checkCreateCourse = async function (
   res: express.Response,
 ) {
   try {
-    const { name, description } = req.body
+    const { name, description, published } = req.body
 
     if (!name || !description) {
       return res
@@ -21,7 +21,7 @@ exports.checkCreateCourse = async function (
         .json({ message: 'コース名とコース概要は必須です。' })
     }
 
-    await createCourse(name, description)
+    await createCourse(name, description, published)
 
     res.status(201).json({ message: '新しいコースが作成されました！' })
   } catch (e: any) {

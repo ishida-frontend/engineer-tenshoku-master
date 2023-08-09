@@ -9,18 +9,21 @@ import {
   Box,
   FormControl,
   Stack,
+  Select,
 } from '@chakra-ui/react'
 
 export default function CreateCoursePage() {
   const toast = useToast()
   const [name, setName] = useState<string>('')
   const [description, setDescription] = useState<string>('')
+  const [published, setPublished] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (event: FormEvent) => {
     setIsSubmitting(true)
 
     event.preventDefault()
+    console.log(published)
 
     const response = await fetch('http://localhost:8000/admin/course/create', {
       method: 'POST',
@@ -30,6 +33,7 @@ export default function CreateCoursePage() {
       body: JSON.stringify({
         name: name,
         description: description,
+        published: published,
       }),
     })
 
@@ -85,6 +89,19 @@ export default function CreateCoursePage() {
               border="1px"
               borderColor="gray.400"
             ></Textarea>
+          </FormControl>
+          <FormControl id="coursePublished" isRequired>
+            <FormLabel htmlFor="CoursePublished">コースの公開設定</FormLabel>
+            <Select
+              id="coursePublished"
+              value={published ? 'public' : 'hidden'}
+              onChange={(e) => setPublished(e.target.value === 'public')}
+              border="1px"
+              borderColor="gray.400"
+            >
+              <option value="hidden">非公開</option>
+              <option value="public">公開</option>
+            </Select>
           </FormControl>
           <Button
             isDisabled={name === '' || description === ''}
