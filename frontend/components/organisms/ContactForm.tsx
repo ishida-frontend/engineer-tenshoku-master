@@ -84,18 +84,27 @@ export function UserContactForm() {
       })
     ).json()
 
-  const handleSubmit = async (e: React.FormEvent<HTMLDivElement>) => {
+  const result = ContactSchema.safeParse(contact)
+  const errorMessage = result.error.format()
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    const result = ContactSchema.safeParse(contact)
     console.log('result', result)
     console.log('contact', contact)
     console.log('a')
     if (result.success) {
       console.log('b')
       const res = await fetcher()
-    } else if (e instanceof ZodError) {
+    } else if (!result.success) {
       console.log('c')
+      setErrors(errorMessage)
+      console.log('result.error.format()', result.error.format())
+      console.log('errorMessage.name._errors[0]', errorMessage.name._errors[0])
+      console.log(
+        'errorMessage.email._errors[0]',
+        errorMessage.email._errors[0],
+      )
       setErrors(e.flatten().fieldErrors)
+      console.log('setErrors', setErrors)
     } else {
       console.log('d')
     }
@@ -120,8 +129,10 @@ export function UserContactForm() {
                   placeholder={'田中　太郎'}
                 />
                 <div>
-                  {errors?.name && (
-                    <FormErrorMessage>{errors.name}</FormErrorMessage>
+                  {errorMessage?.name && (
+                    <FormErrorMessage>
+                      {errorMessage.name._errors[0]}
+                    </FormErrorMessage>
                   )}
                 </div>
               </FormControl>
@@ -137,8 +148,10 @@ export function UserContactForm() {
                   onChange={handleInputChange}
                   placeholder={'sample@hoge.com'}
                 />
-                {errors?.email && (
-                  <FormErrorMessage>{errors.email}</FormErrorMessage>
+                {errorMessage?.email && (
+                  <FormErrorMessage>
+                    {errorMessage.email._errors[0]}
+                  </FormErrorMessage>
                 )}
               </FormControl>
 
@@ -156,8 +169,10 @@ export function UserContactForm() {
                   onChange={handleInputChange}
                   placeholder={'動画名または質問タイトルを記入してください'}
                 />
-                {errors?.subject && (
-                  <FormErrorMessage>{errors.subject}</FormErrorMessage>
+                {errorMessage?.subject && (
+                  <FormErrorMessage>
+                    {errorMessage.subject._errors[0]}
+                  </FormErrorMessage>
                 )}
               </FormControl>
 
@@ -174,8 +189,10 @@ export function UserContactForm() {
                   onChange={onChangeHandler}
                   placeholder={'こちらお問い合わせ内容を記入してください'}
                 />
-                {errors?.message && (
-                  <FormErrorMessage>{errors.message}</FormErrorMessage>
+                {errorMessage?.message && (
+                  <FormErrorMessage>
+                    {errorMessage.message._errors[0]}
+                  </FormErrorMessage>
                 )}
               </FormControl>
             </Container>
