@@ -1,8 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import TextareaItem from '../atoms/TextareaItem'
-import FormLabel from '../atoms/FormLabel'
-import TextInput from '../atoms/TextInput'
 import { z, ZodError } from 'zod'
 import {
   Container,
@@ -16,6 +13,11 @@ import {
   FormHelperText,
   FormErrorMessage,
   Center,
+  Box,
+  VStack,
+  HStack,
+  Input,
+  Textarea,
 } from '@chakra-ui/react'
 
 export function UserContactForm() {
@@ -25,7 +27,12 @@ export function UserContactForm() {
     subject: '',
     message: '',
   })
-  const [errors, setErrors] = useState(null)
+  const [errors, setErrors] = useState<{
+    name: string[]
+    email: string[]
+    subject: string[]
+    message: string[]
+  }>({ name: [''], email: [''], subject: [''], message: [''] })
 
   const ContactSchema = z.object({
     name: z
@@ -84,122 +91,137 @@ export function UserContactForm() {
       })
     ).json()
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleSubmit = async (event) => {
+    event.preventDefault()
     try {
-      const result = ContactSchema.safeParse(contact)
-      console.log('contact', contact)
-      console.log('result', result)
-      console.log('a')
-      if (result.success) {
+      const result = ContactSchema.parse(contact)
+      if (isChecked) {
         const res = await fetcher()
+      } else {
+        alert('利用規約に同意してください')
       }
     } catch (e) {
-      // const result = ContactSchema.safeParse(contact)
-      // const errors = result.success ? {} : result.error.flatten().fieldErrors
-      // setErrors(errors)
-      // console.log('errors', errors)
-      console.log('b')
-      setErrors(e.flatten().fieldErrors)
+      if (e instanceof ZodError) {
+        setErrors(e.flatten().fieldErrors)
+      } else {
+        console.log(e)
+      }
     }
   }
-
+  console.log('errors.name', errors.name[0])
   return (
     <>
-      <Container bg="gray.100">
-        <Container bg="white" centerContent>
-          <Heading mt={'80px'}>お問い合わせ</Heading>
-          <FormControl onSubmit={handleSubmit} ml={'0px'} pl={'0px'}>
-            <Container m={'109px 0px 0px 60px'} bg={'white'} p={'0px'}>
-              <FormControl m={'80px 0px 40px 0px'} p={'0px'} bg={'white'}>
-                <Container m={'0px'} pb={'10px'} pl={'0px'}>
-                  <FormLabel title="お名前" required={true}></FormLabel>
+      <Container bg="gray.100" maxW={'1512px'}>
+        <Container bg="white" maxW={'1024px'} centerContent>
+          <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
+            お問い合わせ
+          </Heading>
+          <FormControl onSubmit={handleSubmit} maxW={'904px'}>
+            <Container mt="109px" maxW={'100%'} bg={'white'} p={'0px'}>
+              <FormControl
+                isInvalid={!!errors.name[0]}
+                mt={'80px'}
+                mb={'40px'}
+                bg={'white'}
+              >
+                <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                  <Flex>
+                    <Text>お名前</Text>
+                    <Text color="teal">(必須)</Text>
+                  </Flex>
                 </Container>
-                <TextInput
+                <Input
                   type="text"
                   name="name"
                   value={state.name}
                   onChange={handleInputChange}
                   placeholder={'田中　太郎'}
                 />
-                {/* <div>
-                  {errorMessage?.name && (
-                    <FormErrorMessage>
-                      {errorMessage.name._errors[0]}
-                    </FormErrorMessage>
+                <div>
+                  {errors.name && (
+                    <FormErrorMessage>{errors.name[0]}</FormErrorMessage>
                   )}
-                </div> */}
+                </div>
               </FormControl>
 
-              <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
-                <Container m={'0px'} pb={'10px'} pl={'0px'}>
-                  <FormLabel title="メールアドレス" required={true}></FormLabel>
+              <FormControl
+                isInvalid={!!errors.email[0]}
+                mb={'40px'}
+                bg={'white'}
+              >
+                <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                  <Flex>
+                    <Text>メールアドレス</Text>
+                    <Text color="teal">(必須)</Text>
+                  </Flex>
                 </Container>
-                <TextInput
+                <Input
                   type="email"
                   name="email"
                   value={state.email}
                   onChange={handleInputChange}
                   placeholder={'sample@hoge.com'}
                 />
-                {/* {errorMessage?.email && (
-                  <FormErrorMessage>
-                    {errorMessage.email._errors[0]}
-                  </FormErrorMessage>
-                )} */}
+                {errors.email && (
+                  <FormErrorMessage>{errors.email[0]}</FormErrorMessage>
+                )}
               </FormControl>
 
-              <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
-                <Container m={'0px'} pb={'10px'} pl={'0px'}>
-                  <FormLabel
-                    title="お問い合わせタイトル"
-                    required={true}
-                  ></FormLabel>
+              <FormControl
+                isInvalid={!!errors.subject[0]}
+                mb={'40px'}
+                bg={'white'}
+              >
+                <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                  <Flex>
+                    <Text>お問い合わせタイトル</Text>
+                    <Text color="teal">(必須)</Text>
+                  </Flex>
                 </Container>
-                <TextInput
+                <Input
                   type="text"
                   name="subject"
                   value={state.subject}
                   onChange={handleInputChange}
                   placeholder={'動画名または質問タイトルを記入してください'}
                 />
-                {/* {errorMessage?.subject && (
-                  <FormErrorMessage>
-                    {errorMessage.subject._errors[0]}
-                  </FormErrorMessage>
-                )} */}
+                {errors.subject && (
+                  <FormErrorMessage>{errors.subject[0]}</FormErrorMessage>
+                )}
               </FormControl>
 
-              <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
-                <Container m={'0px'} pb={'10px'} pl={'0px'}>
-                  <FormLabel
-                    title="お問い合わせ内容"
-                    required={true}
-                  ></FormLabel>
+              <FormControl
+                isInvalid={!!errors.message[0]}
+                mb={'40px'}
+                bg={'white'}
+              >
+                <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                  <Flex>
+                    <Text>お問い合わせ内容</Text>
+                    <Text color="teal">(必須)</Text>
+                  </Flex>
                 </Container>
-                <TextareaItem
+                <Textarea
                   name="お問い合わせ内容"
                   value={state.message}
                   onChange={onChangeHandler}
                   placeholder={'こちらお問い合わせ内容を記入してください'}
                 />
-                {/* {errorMessage?.message && (
-                  <FormErrorMessage>
-                    {errorMessage.message._errors[0]}
-                  </FormErrorMessage>
-                )} */}
+                {errors.message && (
+                  <FormErrorMessage>{errors.message[0]}</FormErrorMessage>
+                )}
               </FormControl>
             </Container>
 
-            <Container m={'0px 0px 0px 60px'} p={'0px'}>
-              <Flex>
+            <Container ml={'0px'} p={'0px'}>
+              <HStack>
                 <input
                   type="checkbox"
                   name="agree"
                   id="agreeCheck"
                   onChange={() => toggleCheckbox()}
                 />
-                <Wrap pl={'8px'}>
+                <Wrap>
                   <Text>
                     <Link color="teal.500" href="#">
                       利用規約
@@ -211,19 +233,19 @@ export function UserContactForm() {
                     に同意する
                   </Text>
                 </Wrap>
-              </Flex>
+              </HStack>
             </Container>
-            <Button
-              type="submit"
-              disabled={!isChecked}
-              onClick={handleSubmit}
-              mt={'20'}
-              display="flex"
-              alignItems="center"
-              colorScheme="teal"
-            >
-              送信する
-            </Button>
+            <VStack>
+              <Button
+                type="submit"
+                disabled={!isChecked}
+                onClick={handleSubmit}
+                mt={'20'}
+                colorScheme="teal"
+              >
+                送信する
+              </Button>
+            </VStack>
           </FormControl>
         </Container>
       </Container>
