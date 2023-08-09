@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import TextareaItem from './molecules/TextareaItem'
 import FormItem from './molecules/FormItem'
 import InputItem from './molecules/InputItem'
+import { z } from 'zod'
 import {
   Container,
   Button,
@@ -24,22 +25,24 @@ export function UserContactForm() {
     message: '',
   })
 
-  function errorMessage() {
-    const [input, setInput] = useState()
-    const handleInputChange = (e) => setInput(e.target.value)
-
-    const isError = input === ''
-    return (
-      <FormControl isInvalid={isError}>
-        {!isError ? (
-          <FormHelperText>
-            Enter the email you'd like to receive the newsletter on.
-          </FormHelperText>
-        ) : (
-          <FormErrorMessage>Email is required.</FormErrorMessage>
-        )}
-      </FormControl>
-    )
+  const ContactSchema = z.object({
+    name: z.string().min(2).max(50),
+    email: z.string().email(),
+    subject: z.string().min(5),
+    message: z.string().min(5),
+  })
+  type Contact = z.infer<typeof ContactSchema>
+  const contact: Contact = {
+    name: state.name,
+    email: state.email,
+    subject: state.subject,
+    message: state.message,
+  }
+  const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    const result = ContactSchema.parse(contact)
+    console.log('result', result)
+    console.log('ContactSchema', ContactSchema)
   }
 
   const [isChecked, setIsChecked] = useState(false)
@@ -101,7 +104,7 @@ export function UserContactForm() {
       <Container bg="gray.100">
         <Container bg="white" centerContent>
           <Heading mt={'80px'}>お問い合わせ</Heading>
-          <FormControl ml={'0px'} pl={'0px'}>
+          <FormControl onSubmit={handleSubmit} ml={'0px'} pl={'0px'}>
             <Container m={'109px 0px 0px 60px'} bg={'white'} p={'0px'}>
               <FormControl m={'80px 0px 40px 0px'} p={'0px'} bg={'white'}>
                 <Container m={'0px'} pb={'10px'} pl={'0px'}>
