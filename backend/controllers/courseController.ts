@@ -35,10 +35,9 @@ exports.checkReadCourse = async function (
 ) {
   try {
     await readCourse()
-    await readAllCourses()
     await readFilteredCourses()
     res.send(
-      '１件のコースを読み込みました！<br>全てのコースを読み込みました！<br>条件指定のコースを読み込みました！',
+      '１件のコースを読み込みました！<br>条件指定のコースを読み込みました！',
     )
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
