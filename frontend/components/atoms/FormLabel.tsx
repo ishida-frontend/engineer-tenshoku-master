@@ -6,7 +6,7 @@ interface FormListProps {
   required: boolean
 }
 
-const FormItem: FC<FormListProps> = (props) => {
+const FormLabel: FC<FormListProps> = (props) => {
   const { title, required } = props
   return (
     <>
@@ -18,4 +18,4 @@ const FormItem: FC<FormListProps> = (props) => {
   )
 }
 
-export default FormItem
+export default FormLabel

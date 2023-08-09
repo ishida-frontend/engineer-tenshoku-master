@@ -1,9 +1,9 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import TextareaItem from './molecules/TextareaItem'
-import FormItem from './molecules/FormItem'
-import InputItem from './molecules/InputItem'
-import { z } from 'zod'
+import TextareaItem from '../atoms/TextareaItem'
+import FormLabel from '../atoms/FormLabel'
+import TextInput from '../atoms/TextInput'
+import { z, ZodError } from 'zod'
 import {
   Container,
   Button,
@@ -15,6 +15,7 @@ import {
   Heading,
   FormHelperText,
   FormErrorMessage,
+  Center,
 } from '@chakra-ui/react'
 
 export function UserContactForm() {
@@ -24,12 +25,18 @@ export function UserContactForm() {
     subject: '',
     message: '',
   })
+  const [errors, setErrors] = useState(null)
 
   const ContactSchema = z.object({
-    name: z.string().min(2).max(50),
-    email: z.string().email(),
-    subject: z.string().min(5),
-    message: z.string().min(5),
+    name: z
+      .string()
+      .min(2, { message: '2文字以上入力してください' })
+      .max(50, { message: '50文字以下で入力してください' }),
+    email: z
+      .string()
+      .email({ message: 'メールアドレスの形式ではありません。' }),
+    subject: z.string().min(5, { message: '5文字以上入力してください' }),
+    message: z.string().min(5, { message: '5文字以上入力してください' }),
   })
   type Contact = z.infer<typeof ContactSchema>
   const contact: Contact = {
@@ -37,12 +44,6 @@ export function UserContactForm() {
     email: state.email,
     subject: state.subject,
     message: state.message,
-  }
-  const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
-    event.preventDefault()
-    const result = ContactSchema.parse(contact)
-    console.log('result', result)
-    console.log('ContactSchema', ContactSchema)
   }
 
   const [isChecked, setIsChecked] = useState(false)
@@ -83,19 +84,20 @@ export function UserContactForm() {
       })
     ).json()
 
-  const submitAlert = async (e: React.MouseEvent) => {
-    e.persist()
+  const handleSubmit = async (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault()
-    const stateError = Object.values(state).some((value) => {
-      console.log('state', state)
-      return value.length === 0
-    })
-
-    if (stateError) {
-      alert('未入力があります')
-    } else {
+    const result = ContactSchema.safeParse(contact)
+    console.log('result', result)
+    console.log('contact', contact)
+    console.log('a')
+    if (result.success) {
+      console.log('b')
       const res = await fetcher()
-      alert('送信しましました')
+    } else if (e instanceof ZodError) {
+      console.log('c')
+      setErrors(e.flatten().fieldErrors)
+    } else {
+      console.log('d')
     }
   }
 
@@ -108,62 +110,63 @@ export function UserContactForm() {
             <Container m={'109px 0px 0px 60px'} bg={'white'} p={'0px'}>
               <FormControl m={'80px 0px 40px 0px'} p={'0px'} bg={'white'}>
                 <Container m={'0px'} pb={'10px'} pl={'0px'}>
-                  <FormItem title="お名前" required={true}></FormItem>
+                  <FormLabel title="お名前" required={true}></FormLabel>
                 </Container>
-                <InputItem
+                <TextInput
                   type="text"
                   name="name"
                   value={state.name}
                   onChange={handleInputChange}
                   placeholder={'田中　太郎'}
                 />
-                {/* {nameError && (
-                  <FormErrorMessage>項目が空です。</FormErrorMessage>
-                )} */}
+                <div>
+                  {errors?.name && (
+                    <FormErrorMessage>{errors.name}</FormErrorMessage>
+                  )}
+                </div>
               </FormControl>
 
               <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
                 <Container m={'0px'} pb={'10px'} pl={'0px'}>
-                  <FormItem title="メールアドレス" required={true}></FormItem>
+                  <FormLabel title="メールアドレス" required={true}></FormLabel>
                 </Container>
-                <InputItem
+                <TextInput
                   type="email"
                   name="email"
                   value={state.email}
                   onChange={handleInputChange}
                   placeholder={'sample@hoge.com'}
                 />
-                {/* {!emailError ? (
-                  <FormHelperText></FormHelperText>
-                ) : (
-                  <FormErrorMessage>項目が空です。</FormErrorMessage>
-                )} */}
+                {errors?.email && (
+                  <FormErrorMessage>{errors.email}</FormErrorMessage>
+                )}
               </FormControl>
 
               <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
                 <Container m={'0px'} pb={'10px'} pl={'0px'}>
-                  <FormItem
+                  <FormLabel
                     title="お問い合わせタイトル"
                     required={true}
-                  ></FormItem>
+                  ></FormLabel>
                 </Container>
-                <InputItem
+                <TextInput
                   type="text"
                   name="subject"
                   value={state.subject}
                   onChange={handleInputChange}
                   placeholder={'動画名または質問タイトルを記入してください'}
                 />
-                {/* {!subjectError ? (
-                  <FormHelperText></FormHelperText>
-                ) : (
-                  <FormErrorMessage>項目が空です。</FormErrorMessage>
-                )} */}
+                {errors?.subject && (
+                  <FormErrorMessage>{errors.subject}</FormErrorMessage>
+                )}
               </FormControl>
 
               <FormControl m={'0px 0px 45px 0px'} p={'0px'} bg={'white'}>
                 <Container m={'0px'} pb={'10px'} pl={'0px'}>
-                  <FormItem title="お問い合わせ内容" required={true}></FormItem>
+                  <FormLabel
+                    title="お問い合わせ内容"
+                    required={true}
+                  ></FormLabel>
                 </Container>
                 <TextareaItem
                   name="お問い合わせ内容"
@@ -171,11 +174,9 @@ export function UserContactForm() {
                   onChange={onChangeHandler}
                   placeholder={'こちらお問い合わせ内容を記入してください'}
                 />
-                {/* {!messageError ? (
-                  <FormHelperText></FormHelperText>
-                ) : (
-                  <FormErrorMessage>項目が空です。</FormErrorMessage>
-                )} */}
+                {errors?.message && (
+                  <FormErrorMessage>{errors.message}</FormErrorMessage>
+                )}
               </FormControl>
             </Container>
 
@@ -201,15 +202,18 @@ export function UserContactForm() {
                 </Wrap>
               </Flex>
             </Container>
+            <Button
+              type="submit"
+              disabled={!isChecked}
+              onClick={handleSubmit}
+              mt={'20'}
+              display="flex"
+              alignItems="center"
+              colorScheme="teal"
+            >
+              送信する
+            </Button>
           </FormControl>
-          <Button
-            disabled={!isChecked}
-            onClick={submitAlert}
-            mt={'20'}
-            colorScheme="teal"
-          >
-            送信する
-          </Button>
         </Container>
       </Container>
     </>
