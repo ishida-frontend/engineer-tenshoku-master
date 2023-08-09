@@ -1,13 +1,19 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-export async function createCourse(name: string, description: string) {
+export async function createCourse(
+  name: string,
+  description: string,
+  published: boolean,
+) {
   try {
+    console.log('Published value:', published)
+
     const createdCourse = await prisma.course.create({
       data: {
         name: name,
         description: description,
-        published: true,
+        published: published,
       },
     })
     console.log(createdCourse)
