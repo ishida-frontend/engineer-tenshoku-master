@@ -147,9 +147,9 @@ export function UserContactForm() {
                   onChange={handleInputChange}
                   placeholder={'田中　太郎'}
                 />
-                {errors.name && (
-                  <FormErrorMessage>{errors.name[0]}</FormErrorMessage>
-                )}
+                <FormErrorMessage>
+                  {errors.name && errors.name[0]}
+                </FormErrorMessage>
               </FormControl>
 
               <FormControl
@@ -170,9 +170,9 @@ export function UserContactForm() {
                   onChange={handleInputChange}
                   placeholder={'sample@hoge.com'}
                 />
-                {errors.email && (
-                  <FormErrorMessage>{errors.email[0]}</FormErrorMessage>
-                )}
+                <FormErrorMessage>
+                  {errors.email && errors.email[0]}
+                </FormErrorMessage>
               </FormControl>
 
               <FormControl
@@ -193,9 +193,9 @@ export function UserContactForm() {
                   onChange={handleInputChange}
                   placeholder={'動画名または質問タイトルを記入してください'}
                 />
-                {errors.subject && (
-                  <FormErrorMessage>{errors.subject[0]}</FormErrorMessage>
-                )}
+                <FormErrorMessage>
+                  {errors.subject && errors.subject[0]}
+                </FormErrorMessage>
               </FormControl>
 
               <FormControl
@@ -215,9 +215,9 @@ export function UserContactForm() {
                   onChange={onChangeHandler}
                   placeholder={'こちらお問い合わせ内容を記入してください'}
                 />
-                {errors.message && (
-                  <FormErrorMessage>{errors.message[0]}</FormErrorMessage>
-                )}
+                <FormErrorMessage>
+                  {errors.message && errors.message[0]}
+                </FormErrorMessage>
               </FormControl>
             </Container>
 
