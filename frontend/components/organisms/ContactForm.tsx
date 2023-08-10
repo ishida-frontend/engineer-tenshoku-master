@@ -133,6 +133,7 @@ export function UserContactForm() {
                 mt={'80px'}
                 mb={'40px'}
                 bg={'white'}
+                h={'80px'}
               >
                 <Container ml={'0px'} pb={'10px'} pl={'0px'}>
                   <Flex>
@@ -156,6 +157,7 @@ export function UserContactForm() {
                 isInvalid={!!errors.email[0]}
                 mb={'40px'}
                 bg={'white'}
+                h={'80px'}
               >
                 <Container ml={'0px'} pb={'10px'} pl={'0px'}>
                   <Flex>
@@ -179,6 +181,7 @@ export function UserContactForm() {
                 isInvalid={!!errors.subject[0]}
                 mb={'40px'}
                 bg={'white'}
+                h={'80px'}
               >
                 <Container ml={'0px'} pb={'10px'} pl={'0px'}>
                   <Flex>
@@ -202,6 +205,7 @@ export function UserContactForm() {
                 isInvalid={!!errors.message[0]}
                 mb={'40px'}
                 bg={'white'}
+                h={'120px'}
               >
                 <Container ml={'0px'} pb={'10px'} pl={'0px'}>
                   <Flex>
