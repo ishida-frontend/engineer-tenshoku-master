@@ -40,6 +40,7 @@ export function UserContactForm() {
     subject: [''],
     message: [''],
   })
+  console.log('errors', errors)
 
   const ContactSchema = z.object({
     name: z
@@ -102,6 +103,7 @@ export function UserContactForm() {
     event.preventDefault()
     try {
       const result = ContactSchema.parse(contact)
+      console.log('result', result)
       if (isChecked) {
         const res = await fetcher()
       } else {
@@ -110,12 +112,13 @@ export function UserContactForm() {
     } catch (e) {
       if (e instanceof ZodError) {
         setErrors(e.flatten().fieldErrors as Errors)
+        console.log('errors2', errors)
       } else {
         console.log(e)
       }
     }
   }
-  console.log('errors.name', errors.name[0])
+
   return (
     <>
       <Container bg="gray.100" maxW={'1512px'}>
@@ -144,11 +147,9 @@ export function UserContactForm() {
                   onChange={handleInputChange}
                   placeholder={'田中　太郎'}
                 />
-                <div>
-                  {errors.name && (
-                    <FormErrorMessage>{errors.name[0]}</FormErrorMessage>
-                  )}
-                </div>
+                {errors.name && (
+                  <FormErrorMessage>{errors.name[0]}</FormErrorMessage>
+                )}
               </FormControl>
 
               <FormControl
