@@ -36,6 +36,8 @@ router.use(
 const adminRouter = express.Router()
 router.use('/admin', adminRouter)
 adminRouter.get('/course', checkReadAllCourses)
+adminRouter.get('/course/:id', checkReadCourse)
+adminRouter.put('/course/edit/:id', checkUpdateCourse)
 adminRouter.get('/contacts', checkReadContact)
 
 const courseRouter = express.Router()
