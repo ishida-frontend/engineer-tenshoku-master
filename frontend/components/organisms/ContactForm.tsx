@@ -21,10 +21,10 @@ import {
 } from '@chakra-ui/react'
 
 type Errors = {
-  name: string[]
-  email: string[]
-  subject: string[]
-  message: string[]
+  name?: string[]
+  email?: string[]
+  subject?: string[]
+  message?: string[]
 }
 
 export function UserContactForm() {
@@ -129,7 +129,7 @@ export function UserContactForm() {
           <FormControl onSubmit={handleSubmit} maxW={'904px'}>
             <Container mt="109px" maxW={'100%'} bg={'white'} p={'0px'}>
               <FormControl
-                isInvalid={!!errors.name[0]}
+                isInvalid={!!errors?.name[0]}
                 mt={'80px'}
                 mb={'40px'}
                 bg={'white'}
@@ -154,7 +154,7 @@ export function UserContactForm() {
               </FormControl>
 
               <FormControl
-                isInvalid={!!errors.email[0]}
+                isInvalid={!!errors?.email[0]}
                 mb={'40px'}
                 bg={'white'}
                 h={'80px'}
@@ -178,7 +178,7 @@ export function UserContactForm() {
               </FormControl>
 
               <FormControl
-                isInvalid={!!errors.subject[0]}
+                isInvalid={!!errors?.subject[0]}
                 mb={'40px'}
                 bg={'white'}
                 h={'80px'}
@@ -202,7 +202,7 @@ export function UserContactForm() {
               </FormControl>
 
               <FormControl
-                isInvalid={!!errors.message[0]}
+                isInvalid={!!errors?.message[0]}
                 mb={'40px'}
                 bg={'white'}
                 h={'120px'}
