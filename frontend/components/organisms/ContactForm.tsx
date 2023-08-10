@@ -40,7 +40,6 @@ export function UserContactForm() {
     subject: [''],
     message: [''],
   })
-  console.log('errors', errors)
 
   const ContactSchema = z.object({
     name: z
@@ -103,7 +102,6 @@ export function UserContactForm() {
     event.preventDefault()
     try {
       const result = ContactSchema.parse(contact)
-      console.log('result', result)
       if (isChecked) {
         const res = await fetcher()
       } else {
@@ -112,7 +110,6 @@ export function UserContactForm() {
     } catch (e) {
       if (e instanceof ZodError) {
         setErrors(e.flatten().fieldErrors as Errors)
-        console.log('errors2', errors)
       } else {
         console.log(e)
       }
@@ -129,7 +126,7 @@ export function UserContactForm() {
           <FormControl onSubmit={handleSubmit} maxW={'904px'}>
             <Container mt="109px" maxW={'100%'} bg={'white'} p={'0px'}>
               <FormControl
-                isInvalid={!!errors?.name[0]}
+                isInvalid={!!errors.name?.[0]}
                 mt={'80px'}
                 mb={'40px'}
                 bg={'white'}
@@ -154,7 +151,7 @@ export function UserContactForm() {
               </FormControl>
 
               <FormControl
-                isInvalid={!!errors?.email[0]}
+                isInvalid={!!errors.email?.[0]}
                 mb={'40px'}
                 bg={'white'}
                 h={'80px'}
@@ -178,7 +175,7 @@ export function UserContactForm() {
               </FormControl>
 
               <FormControl
-                isInvalid={!!errors?.subject[0]}
+                isInvalid={!!errors.subject?.[0]}
                 mb={'40px'}
                 bg={'white'}
                 h={'80px'}
@@ -202,7 +199,7 @@ export function UserContactForm() {
               </FormControl>
 
               <FormControl
-                isInvalid={!!errors?.message[0]}
+                isInvalid={!!errors.message?.[0]}
                 mb={'40px'}
                 bg={'white'}
                 h={'120px'}
@@ -250,8 +247,8 @@ export function UserContactForm() {
             <VStack>
               <Button
                 type="submit"
-                disabled={!isChecked}
                 onClick={handleSubmit}
+                disabled={!isChecked}
                 mt={'20'}
                 colorScheme="teal"
               >
