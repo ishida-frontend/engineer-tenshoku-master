@@ -1,18 +1,18 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-export async function readCourse() {
+export async function readCourse(id: number) {
   const course = await prisma.course.findUnique({
     where: {
-      id: 5,
+      id: id,
     },
   })
-  console.log(course);
+  return course
 }
 
 export async function readAllCourses() {
   const courses = await prisma.course.findMany()
-  return courses;
+  return courses
 }
 
 export async function readFilteredCourses() {
