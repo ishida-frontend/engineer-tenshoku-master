@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
@@ -12,35 +12,43 @@ datasource db {
 }
 
 model Course {
-  id Int @id @default(autoincrement())
-  videos Video[]
-  name String
+  id          Int       @id @default(autoincrement())
+  videos      Video[]
+  name        String
   description String
-  published Boolean @default(false) // コースが公開されているかどうか。
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  deleted_at DateTime?
+  published   Boolean   @default(false) // コースが公開されているかどうか。
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  deleted_at  DateTime?
 }
 
 model Video {
-  id Int @id @default(autoincrement())
-  course Course @relation(fields: [course_id], references: [id])
-  course_id Int
-  name String
+  id          Int       @id @default(autoincrement())
+  course      Course    @relation(fields: [course_id], references: [id])
+  course_id   Int
+  name        String
   description String
-  published Boolean @default(false) // 動画が公開されているかどうか。
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  deleted_at DateTime?
+  published   Boolean   @default(false) // 動画が公開されているかどうか。
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  deleted_at  DateTime?
 }
 
 model Contact {
-  id Int @id @default(autoincrement())
-  name String
-  email String
-  subject String
-  message String
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String
+  subject    String
+  message    String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  status Int //対応ステータス(0:未対応, 1:対応中, 2:対応済み)
+  status     Int //対応ステータス(0:未対応, 1:対応中, 2:対応済み)
+}
+
+model Tag {
+  id         Int      @id @default(autoincrement())
+  name       String
+  color      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
