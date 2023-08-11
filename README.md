@@ -69,13 +69,6 @@ Engineer Learning Team
 * E-mail
 (今後追加予定)
 
-# Tag
-コース一覧
-
-1  
-2  
-3
-
 # License
 
 "エンジニア転職マスター講座" is under [MIT license](https://).
