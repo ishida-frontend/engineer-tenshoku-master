@@ -65,10 +65,10 @@ exports.checkUpdateCourse = async function (
     const { id, name, description, published } = req.body
 
     await updateCourse(id, name, description, published)
-    res.status(200).send('コースが正常に更新されました！')
+    res.status(200).json({ message: '変更が保存されました' })
   } catch (e: any) {
     console.log(e)
-    res.status(500).send('エラーが発生しました')
+    res.status(500).json({ message: 'サーバー内部のエラーが発生しました' })
   }
 }
 
