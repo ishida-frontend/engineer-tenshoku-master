@@ -16,6 +16,7 @@ import {
   Link,
 } from '@chakra-ui/react'
 
+import { CourseRemover } from './CourseRemover'
 import Loader from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
@@ -185,6 +186,7 @@ export function CourseEditor() {
           >
             変更を保存
           </Button>
+          <CourseRemover />
         </Stack>
       </Box>
     </>
