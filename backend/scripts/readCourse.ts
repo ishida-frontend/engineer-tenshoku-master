@@ -12,7 +12,7 @@ export async function readCourse() {
 
 export async function readAllCourses() {
   const courses = await prisma.course.findMany()
-  console.log(courses);
+  return courses;
 }
 
 export async function readFilteredCourses() {
