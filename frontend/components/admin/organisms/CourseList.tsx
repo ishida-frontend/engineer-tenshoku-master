@@ -12,6 +12,7 @@ import React from 'react'
 import useSWR from 'swr'
 import { format } from 'date-fns'
 
+import Loader from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 type CourseType = {
@@ -23,7 +24,7 @@ type CourseType = {
 }
 
 export function CourseList() {
-  const showToast = useCustomToast()
+  const { showErrorToast } = useCustomToast()
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -36,9 +37,10 @@ export function CourseList() {
   const { data, error } = useSWR('courseList', fetcher)
 
   if (error) {
-    showToast('エラー', 'コースの取得に失敗しました。', 'error')
+    showErrorToast('コースの取得に失敗しました。')
   }
-  if (!data) return <div>読み込み中……</div>
+
+  if (!data) return <Loader />
 
   return (
     <VStack spacing={5} p={4} maxW="800px" mx="auto">

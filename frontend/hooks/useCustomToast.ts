@@ -3,20 +3,30 @@ import { useToast } from '@chakra-ui/react'
 export const useCustomToast = () => {
   const toast = useToast()
 
-  const showToast = (
-    title: string,
-    description: string,
-    status: 'success' | 'error',
-  ) => {
+  const showSuccessToast = (description: string) => {
     toast({
-      title: title,
+      title: '成功',
       description: description,
-      status: status,
+      status: 'success',
       position: 'top',
       duration: 3000,
       isClosable: true,
     })
   }
 
-  return showToast
+  const showErrorToast = (description: string) => {
+    toast({
+      title: 'エラー',
+      description: description,
+      status: 'error',
+      position: 'top',
+      duration: 3000,
+      isClosable: true,
+    })
+  }
+
+  return {
+    showSuccessToast,
+    showErrorToast,
+  }
 }
