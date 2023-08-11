@@ -44,3 +44,11 @@ model Contact {
   updated_at DateTime @updatedAt
   status     Int //対応ステータス(0:未対応, 1:対応中, 2:対応済み)
 }
+
+model Tag {
+  id         Int      @id @default(autoincrement())
+  name       String
+  color      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
