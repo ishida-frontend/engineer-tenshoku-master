@@ -36,8 +36,8 @@ exports.checkCreateContact = async function (req: Request, res: Response) {
 
   try {
     const result = validate(contactValidationRules)
-    console.log('g')
-    console.log('result', result)
+    // console.log('g')
+    // console.log('result', result)
     // if (エラーがない場合の条件)　{
     // await createContact(req.body)
     res.send('新しいお問い合わせが作成されました！')
