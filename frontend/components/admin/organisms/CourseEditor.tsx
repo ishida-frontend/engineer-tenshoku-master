@@ -16,7 +16,7 @@ import {
 
 import { CourseType } from '../../../types'
 import formatDate from '../../../utils/formatDate'
-import Loader from '../../../components/admin/atoms/Loader'
+import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 // コースの汎用型定義＋このコンポーネントでのみ使う型定義
@@ -33,7 +33,6 @@ export function CourseEditor() {
   const params = useParams()
   const courseId = params.courseid
   const id = typeof courseId === 'string' ? parseInt(courseId, 10) : NaN
-  console.log('id:', id)
 
   // コースデータ取得
   const fetcher = async () =>
@@ -64,19 +63,19 @@ export function CourseEditor() {
   // ページを開いて１０秒でデータ取得ができなかった場合のエラートースト
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (!course) {
+      if (!courseData) {
         showErrorToast('データの取得に失敗しました')
       }
     }, 10000)
     return () => clearTimeout(timeout)
-  }, [course])
+  }, [courseData])
 
   // 取得したコースデータを適用
   useEffect(() => {
-    if (course) {
-      setCourse(course)
+    if (courseData) {
+      setCourse(courseData)
     }
-  }, [course])
+  }, [courseData])
 
   // PUTリクエストイベントハンドラ
   const updateCourse = async (event: FormEvent) => {
@@ -86,7 +85,7 @@ export function CourseEditor() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${courseId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/edit/${courseId}`,
         {
           method: 'PUT',
           headers: {
@@ -109,7 +108,7 @@ export function CourseEditor() {
         showErrorToast(data.message)
       }
     } catch (error) {
-      showErrorToast('データの取得に失敗しました')
+      showErrorToast('データの更新に失敗しました')
     } finally {
       setCourse({ ...course, isSubmitting: false })
     }

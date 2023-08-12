@@ -10,19 +10,14 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 import useSWR from 'swr'
-import { format } from 'date-fns'
 
 import { CourseType } from '../../../types'
-import Loader from '../../../components/admin/atoms/Loader'
+import formatDate from '../../../utils/formatDate'
+import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export function CourseList() {
   const { showErrorToast } = useCustomToast()
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return format(date, 'yyy-MM-dd HH:mm')
-  }
 
   const fetcher = async () =>
     (await fetch('http://localhost:8000/course/all')).json()

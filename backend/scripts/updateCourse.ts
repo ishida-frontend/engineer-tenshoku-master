@@ -11,7 +11,7 @@ export async function updateCourse({
   published,
 }: CourseUpdateInput) {
   try {
-    const updatedCourse = await prisma.course.update({
+    await prisma.course.update({
       where: {
         id,
       },
@@ -21,7 +21,6 @@ export async function updateCourse({
         published,
       },
     })
-    console.log(updatedCourse)
   } catch (error) {
     console.log('Error updating course:', error)
     throw error
