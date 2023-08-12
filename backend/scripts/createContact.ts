@@ -21,7 +21,7 @@ export async function createContact(params: createContactParamsType) {
       message: params.message,
       status: params.status,
     }
-
+    console.log('a')
     const errors = validationResult(contactData)
     console.log('3errors', errors)
 
