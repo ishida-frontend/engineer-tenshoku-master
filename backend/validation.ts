@@ -8,11 +8,14 @@ export const validate =
       await schema.parseAsync({ ...req.body })
       return next()
     } catch (error) {
-      console.log('error', error)
       if (error instanceof ZodError) {
-        console.log('e')
-        return res.status(500).send({
-          error: error.flatten(),
+        console.log(
+          'error',
+          error.issues.map((error) => error.message),
+        )
+        return res.status(500).json({
+          status: '500 Server Error',
+          error: error.issues.map((error) => error.message),
         })
       }
     }

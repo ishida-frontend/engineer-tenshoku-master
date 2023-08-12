@@ -103,8 +103,8 @@ export function UserContactForm() {
     try {
       const result = ContactSchema.parse(contact)
       if (isChecked) {
-        console.log('1result', result)
-        console.log('1errors', errors)
+        console.log('formResult', result)
+        console.log('formErrors', errors)
         const res = await fetcher()
       } else {
         alert('利用規約に同意してください')

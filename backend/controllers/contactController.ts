@@ -3,21 +3,14 @@ import axios from 'axios'
 import { PrismaClient } from '@prisma/client'
 import { readAllContacts } from '../scripts/readContact'
 import { createContact } from '../scripts/createContact'
-import { validationResult } from 'express-validator'
-import { ZodError, AnyZodObject } from 'zod'
-import { contactValidationRules } from '../validation'
 
 const prisma = new PrismaClient()
 const router = express.Router()
 
 exports.checkCreateContact = async function (req: Request, res: Response) {
   try {
-    // console.log('g')
-    // console.log('result', result)
-    // if (エラーがない場合の条件)　{
-    // await createContact(req.body)
+    await createContact(req.body)
     res.send('新しいお問い合わせが作成されました！')
-    // }
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
   }
