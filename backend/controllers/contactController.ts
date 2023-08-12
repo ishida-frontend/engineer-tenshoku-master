@@ -32,22 +32,16 @@ exports.checkCreateContact = async function (req: Request, res: Response) {
         }
       }
     }
-  const result = validate(contactValidationRules)
   console.log('f')
-  // console.log('contactValidationRules', contactValidationRules)
-  console.log('result', result)
-  router.post(
-    'http://localhost:3000/contact',
-    validate(contactValidationRules),
-    (req: Request, res: Response): Response => {
-      console.log('g')
-      return res.send('完了')
-    },
-  )
 
   try {
+    const result = validate(contactValidationRules)
+    console.log('g')
+    console.log('result', result)
+    // if (エラーがない場合の条件)　{
     // await createContact(req.body)
     res.send('新しいお問い合わせが作成されました！')
+    // }
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
   }
