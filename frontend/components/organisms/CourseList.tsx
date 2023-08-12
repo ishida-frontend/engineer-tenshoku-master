@@ -2,13 +2,7 @@
 import React from 'react'
 import useSWR from 'swr'
 
-type CourseType = {
-  id: number
-  name: string
-  description: string
-  created_at: string
-  updated_at: string
-}
+import { CourseType } from '../../types'
 
 export function CourseList() {
   const fetcher = async () =>

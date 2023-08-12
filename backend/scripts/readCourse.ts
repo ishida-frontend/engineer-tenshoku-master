@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 export async function readCourse(id: number) {
   const course = await prisma.course.findUnique({
     where: {
-      id: id,
+      id,
     },
   })
   return course
