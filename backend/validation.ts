@@ -11,11 +11,17 @@ export const validate =
       if (error instanceof ZodError) {
         console.log(
           'error',
-          error.issues.map((error) => error.message),
+          error.issues.map((error) => ({
+            path: error.path[0],
+            message: error.message,
+          })),
         )
         return res.status(500).json({
           status: '500 Server Error',
-          error: error.issues.map((error) => error.message),
+          error: error.issues.map((error) => ({
+            path: error.path[0],
+            message: error.message,
+          })),
         })
       }
     }
