@@ -12,14 +12,15 @@ datasource db {
 }
 
 model Course {
-  id          Int       @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   videos      Video[]
   name        String
   description String
-  published   Boolean   @default(false) // コースが公開されているかどうか。
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
+  published   Boolean     @default(false) // コースが公開されているかどうか。
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
   deleted_at  DateTime?
+  CourseTag   CourseTag[]
 }
 
 model Video {
@@ -46,9 +47,19 @@ model Contact {
 }
 
 model Tag {
-  id         Int      @id @default(autoincrement())
+  id         Int         @id @default(autoincrement())
   name       String
   color      String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  CourseTag  CourseTag[]
+}
+
+model CourseTag {
+  course    Course @relation(fields: [course_id], references: [id])
+  course_id Int
+  tag       Tag    @relation(fields: [tag_id], references: [id])
+  tag_id    Int
+
+  @@id([course_id, tag_id])
 }
