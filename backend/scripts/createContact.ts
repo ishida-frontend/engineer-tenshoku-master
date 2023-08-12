@@ -12,16 +12,16 @@ type createContactParamsType = {
   status: number
 }
 
-export async function createContact(params: createContactParamsType) {
+export async function createContact(req: createContactParamsType) {
   try {
     const contactData: ContactType = {
-      name: params.name,
-      email: params.email,
-      subject: params.subject,
-      message: params.message,
-      status: params.status,
+      name: req.name,
+      email: req.email,
+      subject: req.subject,
+      message: req.message,
+      status: req.status,
     }
-    console.log('a')
+    console.log('req', req)
     const errors = validationResult(contactData)
     console.log('3errors', errors)
 

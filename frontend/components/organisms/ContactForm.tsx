@@ -1,4 +1,5 @@
 'use client'
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { z, ZodError } from 'zod'
 import {
@@ -40,6 +41,14 @@ export function UserContactForm() {
     subject: [''],
     message: [''],
   })
+
+  console.log('a')
+  useEffect(() => {
+    axios.get('http://localhost:8000/contact/create').then((response) => {
+      setErrors(response.data)
+      console.log('response', response)
+    })
+  }, [])
 
   const ContactSchema = z.object({
     name: z.string(),
@@ -145,7 +154,7 @@ export function UserContactForm() {
                   name="name"
                   value={state.name}
                   onChange={handleInputChange}
-                  placeholder={'田中　太郎'}
+                  placeholder={'田中 太郎'}
                 />
                 <FormErrorMessage>
                   {errors.name && errors.name[0]}
