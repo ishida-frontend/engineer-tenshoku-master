@@ -24,9 +24,8 @@ exports.checkReadCourse = async function (
   req: express.Request,
   res: express.Response,
 ) {
-  const id = Number(req.params.id)
   try {
-    const course = await readCourse(id)
+    const course = await readCourse(Number(req.params.id))
     res.json(course)
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
@@ -64,7 +63,7 @@ exports.checkUpdateCourse = async function (
   try {
     const { id, name, description, published } = req.body
 
-    await updateCourse(id, name, description, published)
+    await updateCourse({ id, name, description, published })
     res.status(200).json({ message: '変更が保存されました' })
   } catch (e: any) {
     console.log(e)

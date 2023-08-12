@@ -12,16 +12,9 @@ import React from 'react'
 import useSWR from 'swr'
 import { format } from 'date-fns'
 
+import { CourseType } from '../../../types'
 import Loader from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-
-type CourseType = {
-  id: number
-  name: string
-  description: string
-  created_at: string
-  updated_at: string
-}
 
 export function CourseList() {
   const { showErrorToast } = useCustomToast()

@@ -1,21 +1,24 @@
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
+
 const prisma = new PrismaClient()
 
-export async function updateCourse(
-  id: number,
-  name: string,
-  description: string,
-  published: boolean,
-) {
+type CourseUpdateInput = Prisma.CourseUpdateInput & { id: number }
+
+export async function updateCourse({
+  id,
+  name,
+  description,
+  published,
+}: CourseUpdateInput) {
   try {
     const updatedCourse = await prisma.course.update({
       where: {
-        id: id,
+        id,
       },
       data: {
-        name: name,
-        description: description,
-        published: published,
+        name,
+        description,
+        published,
       },
     })
     console.log(updatedCourse)
