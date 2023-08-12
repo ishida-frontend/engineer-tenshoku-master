@@ -21,10 +21,9 @@ export async function createContact(params: createContactParamsType) {
       message: params.message,
       status: params.status,
     }
-    console.log('contactData', contactData)
 
     const errors = validationResult(contactData)
-    console.log('Fnal.errors', errors)
+    console.log('2errors', errors)
 
     if (!errors.isEmpty()) {
       throw new Error(
