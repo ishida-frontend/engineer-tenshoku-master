@@ -1,29 +1,49 @@
-import express from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import axios from 'axios'
 import { PrismaClient } from '@prisma/client'
 import { readAllContacts } from '../scripts/readContact'
 import { createContact } from '../scripts/createContact'
 import { validationResult } from 'express-validator'
+import { ZodError, AnyZodObject } from 'zod'
+import { contactValidationRules } from '../validation'
 
 const prisma = new PrismaClient()
+const router = express.Router()
 
-exports.checkCreateContact = async function (
-  req: express.Request,
-  res: express.Response,
-) {
-  console.log('1req.body', req.body)
-  console.log('1req.body.name', req.body.name)
-  const errors = validationResult(req)
-  console.log('1errors', errors)
-  if (!errors.isEmpty()) {
-    throw new Error(
-      errors
-        .array()
-        .map((error) => error.msg)
-        .join(', '),
-    )
-    res.render
-  }
+exports.checkCreateContact = async function (req: Request, res: Response) {
+  const validate =
+    (schema: AnyZodObject) =>
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        await schema.parseAsync({ ...req.body })
+        return next()
+      } catch (error) {
+        if (error instanceof ZodError) {
+          console.log('error', error)
+          return res.status(500).send({
+            error: error.flatten(),
+          })
+        }
+      }
+    }
+
+  router.post(
+    'http://localhost:3000/contact',
+    validate(contactValidationRules),
+    (req: Request, res: Response): Response => {
+      return res.send('完了')
+    },
+  )
+
+  // const errors = validationResult(req)
+  // if (!errors.isEmpty()) {
+  //   throw new Error(
+  //     errors
+  //       .array()
+  //       .map((error) => error.msg)
+  //       .join(', '),
+  //   )
+  // }
   // TODO createContact()でデータ取得してから、バリデーションを実行しないとvalueが空になる(フロントが出来上がってから要対応)
   try {
     await createContact(req.body)
@@ -86,3 +106,5 @@ exports.checkSuccessContact = async function (
     res.status(500).send('エラーが発生しました。')
   }
 }
+
+export default router
