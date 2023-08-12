@@ -1,6 +1,6 @@
 import express from 'express'
 import 'dotenv/config'
-import { contactValidationRules } from '../validation'
+import { contactValidationRules, validate } from '../validation'
 const {
   checkCreateCourse,
   checkReadCourse,
@@ -57,7 +57,11 @@ videoRouter.get('/delete', checkDeleteVideo)
 
 const contactRouter = express.Router()
 router.use('/contact', contactRouter)
-contactRouter.post('/create', contactValidationRules, checkCreateContact)
+contactRouter.post(
+  '/create',
+  validate(contactValidationRules),
+  checkCreateContact,
+)
 
 router.get('/contact/success', checkSuccessContact)
 
