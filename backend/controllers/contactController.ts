@@ -11,31 +11,7 @@ const prisma = new PrismaClient()
 const router = express.Router()
 
 exports.checkCreateContact = async function (req: Request, res: Response) {
-  const validate =
-    (schema: AnyZodObject) =>
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        console.log('a')
-        await schema.parseAsync({ ...req.body })
-        console.log('b')
-        console.log('req', req)
-        console.log('res', res)
-        console.log('c')
-        return next()
-      } catch (error) {
-        console.log('d')
-        if (error instanceof ZodError) {
-          console.log('e')
-          return res.status(500).send({
-            error: error.flatten(),
-          })
-        }
-      }
-    }
-  console.log('f')
-
   try {
-    const result = validate(contactValidationRules)
     // console.log('g')
     // console.log('result', result)
     // if (エラーがない場合の条件)　{
