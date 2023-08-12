@@ -15,38 +15,38 @@ exports.checkCreateContact = async function (req: Request, res: Response) {
     (schema: AnyZodObject) =>
     async (req: Request, res: Response, next: NextFunction) => {
       try {
+        console.log('a')
         await schema.parseAsync({ ...req.body })
+        console.log('b')
+        console.log('req', req)
+        console.log('res', res)
+        console.log('c')
         return next()
       } catch (error) {
+        console.log('d')
         if (error instanceof ZodError) {
-          console.log('error', error)
+          console.log('e')
           return res.status(500).send({
             error: error.flatten(),
           })
         }
       }
     }
-
+  const result = validate(contactValidationRules)
+  console.log('f')
+  // console.log('contactValidationRules', contactValidationRules)
+  console.log('result', result)
   router.post(
     'http://localhost:3000/contact',
     validate(contactValidationRules),
     (req: Request, res: Response): Response => {
+      console.log('g')
       return res.send('完了')
     },
   )
 
-  // const errors = validationResult(req)
-  // if (!errors.isEmpty()) {
-  //   throw new Error(
-  //     errors
-  //       .array()
-  //       .map((error) => error.msg)
-  //       .join(', '),
-  //   )
-  // }
-  // TODO createContact()でデータ取得してから、バリデーションを実行しないとvalueが空になる(フロントが出来上がってから要対応)
   try {
-    await createContact(req.body)
+    // await createContact(req.body)
     res.send('新しいお問い合わせが作成されました！')
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
@@ -59,7 +59,6 @@ exports.checkReadContact = async function (
 ) {
   try {
     const result = await readAllContacts()
-    console.log('result', result)
     res.json(result)
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')

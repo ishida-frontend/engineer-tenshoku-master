@@ -23,7 +23,7 @@ export async function createContact(params: createContactParamsType) {
     }
 
     const errors = validationResult(contactData)
-    console.log('2errors', errors)
+    console.log('3errors', errors)
 
     if (!errors.isEmpty()) {
       throw new Error(
