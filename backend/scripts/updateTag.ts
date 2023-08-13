@@ -23,12 +23,12 @@ updateTag()
   })
 
   export async function updateFilteredTag() {
-    const tag = await prisma.tag.updateMany({
+    const updatedTags = await prisma.tag.updateMany({
       data: {
         name: 'sano',
       },
     })
-    console.log("updateFilteredTag", tag)
+    console.log("updateFilteredTag", updatedTags)
   }
 
   updateFilteredTag()
