@@ -4,10 +4,11 @@ const prisma = new PrismaClient()
 export async function updateTag() {
   const tag = await prisma.tag.update({
     where: {
-      id: 1,
+      id: 3,
     },
     data: {
       name: 'github',
+      color: 'red',
     },
   })
   console.log("updateTag", tag)
@@ -24,7 +25,7 @@ updateTag()
   export async function updateFilteredTag() {
     const tag = await prisma.tag.updateMany({
       data: {
-        name: 'github',
+        name: 'sano',
       },
     })
     console.log("updateFilteredTag", tag)
