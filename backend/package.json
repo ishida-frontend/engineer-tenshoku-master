@@ -13,8 +13,7 @@
     "deleteVideo": "nodemon ./scripts/deleteVideo.ts",
     "validation": "nodemon ./scripts/validation.ts",
     "createTag": "nodemon ./scripts/createTag.ts",
-    "readTag": "nodemon ./scripts/readTag.ts",
-    "updateTag": "nodemon ./scripts/updateTag.ts"
+    "readTag": "nodemon ./scripts/readTag.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
