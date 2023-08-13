@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 export async function deleteTag() {
   const tag = await prisma.tag.delete({
     where: {
-      id: 2,
+      id: 3,
     },
   })
   console.log('deleteTag', tag)
