@@ -42,14 +42,6 @@ export function UserContactForm() {
     message: [''],
   })
 
-  console.log('a')
-  useEffect(() => {
-    axios.get('http://localhost:8000/contact/create').then((response) => {
-      setErrors(response.data)
-      console.log('response', response)
-    })
-  }, [])
-
   const ContactSchema = z.object({
     name: z.string(),
     // .min(2, { message: '2文字以上入力してください' })
@@ -90,22 +82,23 @@ export function UserContactForm() {
     })
   }
 
-  const fetcher = async () =>
-    (
-      await fetch('http://localhost:8000/contact/create', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: state.name,
-          email: state.email,
-          subject: state.subject,
-          message: state.message,
-          status: 0,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-    ).json()
+  const fetcher = async () => {
+    const res = await fetch('http://localhost:8000/contact/create', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: state.name,
+        email: state.email,
+        subject: state.subject,
+        message: state.message,
+        status: 0,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    // console.log('res.json()', res.json())
+    return res.json()
+  }
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
@@ -115,6 +108,8 @@ export function UserContactForm() {
         console.log('formResult', result)
         console.log('formErrors', errors)
         const res = await fetcher()
+        console.log('res', res)
+        setErrors(res as Errors)
       } else {
         alert('利用規約に同意してください')
       }

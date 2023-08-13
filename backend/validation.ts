@@ -9,15 +9,14 @@ export const validate =
       return next()
     } catch (error) {
       if (error instanceof ZodError) {
-        console.log(
-          'error',
-          error.issues.map((error) => ({
-            path: error.path[0],
-            message: error.message,
-          })),
-        )
-        return res.status(500).json({
-          status: '500 Server Error',
+        // console.log(
+        //   'error',
+        //   error.issues.map((error) => ({
+        //     path: error.path[0],
+        //     message: error.message,
+        //   })),
+        // )
+        return res.json({
           error: error.issues.map((error) => ({
             path: error.path[0],
             message: error.message,
@@ -28,11 +27,13 @@ export const validate =
   }
 
 export const contactValidationRules = z.object({
-  name: z.string().min(5, { message: '名前は5文字以上必要です。' }),
+  name: z
+    .string()
+    .min(2, { message: '2文字以上入力してください' })
+    .max(50, '50文字以下で入力してください'),
   email: z
     .string()
-    .min(5, { message: 'メールは5文字以上必要です。' })
     .email({ message: '有効なメールアドレスの形式で入力してください。' }),
-  subject: z.string().min(6, { message: 'タイトルは6文字以上必要です。' }),
-  message: z.string().min(6, { message: '内容は6文字以上必要です。' }),
+  subject: z.string().min(5, { message: '5文字以上入力してください' }),
+  message: z.string().min(5, { message: '5文字以上入力してください' }),
 })
