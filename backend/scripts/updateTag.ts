@@ -21,19 +21,6 @@ updateTag()
     await prisma.$disconnect()
   })
 
-  export async function updateAllTag() {
-    const tag = await prisma.tag.updateMany
-    console.log("updateAllTag", tag)
-  }
-
-  updateAllTag()
-  .catch((e) => {
-    throw e
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
-
   export async function updateFilteredTag() {
     const tag = await prisma.tag.updateMany({
       data: {
