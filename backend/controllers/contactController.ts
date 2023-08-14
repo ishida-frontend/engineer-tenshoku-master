@@ -9,7 +9,6 @@ const router = express.Router()
 
 exports.checkCreateContact = async function (req: Request, res: Response) {
   try {
-    console.log('req.body', req.body)
     await createContact(req.body)
     res.send('新しいお問い合わせが作成されました！')
   } catch (e: any) {
