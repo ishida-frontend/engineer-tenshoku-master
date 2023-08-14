@@ -63,6 +63,6 @@ contactRouter.post(
   checkCreateContact,
 )
 
-router.get('/contact/success', checkSuccessContact)
+router.post('/contact/success', checkSuccessContact)
 
 export default router

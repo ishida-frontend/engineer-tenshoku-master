@@ -9,6 +9,7 @@ const router = express.Router()
 
 exports.checkCreateContact = async function (req: Request, res: Response) {
   try {
+    console.log('req.body', req.body)
     await createContact(req.body)
     res.send('新しいお問い合わせが作成されました！')
   } catch (e: any) {
@@ -32,24 +33,33 @@ exports.checkSuccessContact = async function (
   req: express.Request,
   res: express.Response,
 ) {
+  console.log('aaaaa')
+  console.log('successReq', req.body)
+  console.log('successRes', res)
   try {
+    console.log('successReq', req.body)
+    console.log('successRes', res)
     const id = req.query.id
     if (!id) {
+      console.log('aaaaa')
       throw new Error('無効なコンタクトIDです。')
     }
 
     const contactData = await prisma.contact.findUnique({
       where: { id: Number(id) },
     })
+    console.log('aaaaa')
     if (!contactData) {
+      console.log('aaaaa')
       throw new Error('該当のIDが見つかりません。')
     }
 
+    console.log('aaaaa')
     const slackMessage: { text: string } = {
       text: `【テスト】新しいお問合せが届きました。
-メールアドレス：${contactData.email}
-件名：${contactData.subject}
-本文：${contactData.message}`,
+      メールアドレス：${contactData.email}
+      件名：${contactData.subject}
+      本文：${contactData.message}`,
     }
 
     const url: string = process.env.WEBHOOK_URL || 'default'
