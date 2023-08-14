@@ -20,8 +20,8 @@ export const validate =
   }
 
 export const courseValidationRules = z.object({
-  name: z.string().nonempty({ message: '入力必須です。' }),
+  name: z.string().min(5, { message: '5文字以上で入力してください' }),
   description: z
     .string()
-    .nonempty({ message: '入力必須です。' }),
+    .min(15, { message: '15文字以上で入力してください' }),
 })

@@ -113,12 +113,25 @@ export function CourseEditor() {
         setIsNameError(false)
         setIsDescError(false)
       } else if (response.status === 400) {
-        showErrorToast('データの更新に失敗しました。')
+        showErrorToast('データの更新に失敗しました')
+
+        if (course.name && course.name.length >= 5) {
+          setIsNameError(false)
+        } else {
+          setIsNameError(true)
+        }
         setShowNameError(validResults.errors.name)
+
+        if (course.description && course.description.length >= 15) {
+          setIsDescError(false)
+        } else {
+          setIsDescError(true)
+        }
         setShowDescError(validResults.errors.description)
+
       }
     } catch (error) {
-      showErrorToast('データの更新に失敗しました。')
+      showErrorToast('データの更新に失敗しました')
     } finally {
       setCourse({ ...course, isSubmitting: false })
     }
@@ -139,7 +152,7 @@ export function CourseEditor() {
             <Text>作成日時：{formatDate(courseData.created_at)}</Text>
             <Text>更新日時：{formatDate(courseData.updated_at)}</Text>
           </Box>
-          <FormControl id="courseName" isRequired isInvalid={course.name ? false : true}>
+          <FormControl id="courseName" isRequired isInvalid={isNameError}>
             <FormLabel htmlFor="courseName">コース名（必須）</FormLabel>
             <Input
               id="courseName"
@@ -150,12 +163,12 @@ export function CourseEditor() {
               border="1px"
               borderColor="gray.400"
             />
-            {course.name ? '' : <FormErrorMessage>{showNameError}</FormErrorMessage>}
+           <FormErrorMessage>{showNameError}</FormErrorMessage>
           </FormControl>
           <FormControl
             id="courseDescription"
             isRequired
-            isInvalid={course.description ? false : true}
+            isInvalid={isDescError}
           >
             <FormLabel htmlFor="courseDescription">
               コース概要（必須）
@@ -172,7 +185,7 @@ export function CourseEditor() {
               border="1px"
               borderColor="gray.400"
             ></Textarea>
-            <FormErrorMessage>{showDescError}</FormErrorMessage>
+           <FormErrorMessage>{showDescError}</FormErrorMessage>
           </FormControl>
           <FormControl id="coursePublished" isRequired>
             <FormLabel htmlFor="CoursePublished">コースの公開設定</FormLabel>
