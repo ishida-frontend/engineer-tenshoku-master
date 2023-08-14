@@ -43,15 +43,13 @@ export function UserContactForm() {
   })
 
   const ContactSchema = z.object({
-    name: z.string(),
-    // .min(2, { message: '2文字以上入力してください' })
-    // .max(50, { message: '50文字以下で入力してください' }),
-    email: z.string(),
-    // .email({ message: 'メールアドレスの形式ではありません' }),
-    subject: z.string(),
-    // .min(5, { message: '5文字以上入力してください' }),
-    message: z.string(),
-    // .min(5, { message: '5文字以上入力してください' }),
+    name: z
+      .string()
+      .min(2, { message: '2文字以上入力してください' })
+      .max(50, { message: '50文字以下で入力してください' }),
+    email: z.string().email({ message: 'メールアドレスの形式ではありません' }),
+    subject: z.string().min(5, { message: '5文字以上入力してください' }),
+    message: z.string().min(5, { message: '5文字以上入力してください' }),
   })
   type Contact = z.infer<typeof ContactSchema>
   const contact: Contact = {
@@ -99,30 +97,12 @@ export function UserContactForm() {
     return res.json()
   }
 
-  const notificatin = async () => {
-    const res = await fetch('http://localhost:8000/contact/success', {
-      method: 'POST',
-      body: JSON.stringify({
-        name: state.name,
-        email: state.email,
-        subject: state.subject,
-        message: state.message,
-        status: 0,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    // return res.json()
-  }
-
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
     try {
       const result = ContactSchema.parse(contact)
       if (isChecked) {
         const res = await fetcher()
-        console.log('res', res)
         const items = res.error.reduce(
           (accumulator, value, index: number) => {
             return { ...accumulator, [value.path]: [value.message] }
@@ -131,10 +111,6 @@ export function UserContactForm() {
             [res.error[0].path]: res.error[0].message,
           },
         )
-        console.log('items', items)
-        if (!items) {
-          await notificatin()
-        }
         setErrors(items as Errors)
       } else {
         alert('利用規約に同意してください')

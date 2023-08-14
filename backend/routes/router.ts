@@ -17,7 +17,6 @@ const {
 const {
   checkCreateContact,
   checkReadContact,
-  checkSuccessContact,
 } = require('../controllers/contactController')
 
 const router = express.Router()
@@ -62,7 +61,5 @@ contactRouter.post(
   validate(contactValidationRules),
   checkCreateContact,
 )
-
-router.post('/contact/success', checkSuccessContact)
 
 export default router
