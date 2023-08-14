@@ -28,7 +28,7 @@ exports.checkReadCourse = async function (
 ) {
   try {
     const course = await readCourse(Number(req.params.id))
-    res.json(course)
+    res.status(200).json(course)
   } catch (e: any) {
     res.status(500).json({ message: 'サーバー内部のエラーが発生しました' })
   }
@@ -40,7 +40,7 @@ exports.checkReadAllCourses = async function (
 ) {
   try {
     const courses = await readAllCourses()
-    res.json(courses)
+    res.status(200).json(courses)
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
   }
@@ -51,8 +51,8 @@ exports.checkReadFilteredCourses = async function (
   res: express.Response,
 ) {
   try {
-    await readFilteredCourses()
-    res.send('条件指定のコースを読み込みました！')
+    const filteredCourses = await readFilteredCourses()
+    res.status(200).json(filteredCourses)
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
   }
@@ -95,10 +95,10 @@ exports.checkDeleteCourse = async function (
 
     await deleteCourse(id)
     res.status(201).json({
-      message: 'コースが削除されました。自動的にコース一覧へ戻ります。',
+      message: '削除されました。自動的にコース一覧へ戻ります。',
     })
   } catch (e: any) {
-    res.status(500).json({ message: 'サーバー内部のエラーが発生しました' })
+    res.status(500).json({ message: 'サーバー内部エラーが発生しました' })
   }
 }
 
