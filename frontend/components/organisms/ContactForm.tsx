@@ -105,10 +105,19 @@ export function UserContactForm() {
     try {
       const result = ContactSchema.parse(contact)
       if (isChecked) {
-        console.log('formResult', result)
-        console.log('formErrors', errors)
         const res = await fetcher()
         console.log('res', res)
+        const items = res.error.reduce(
+          (accumulator, value, index: number) => {
+            console.log('value', value)
+            return { ...accumulator, [value.path]: value.message }
+          },
+          {
+            [res.error[0].path]: res.error[0].message,
+          },
+        )
+        console.log('items', items)
+
         setErrors(res as Errors)
       } else {
         alert('利用規約に同意してください')
