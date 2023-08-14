@@ -47,7 +47,7 @@ export function UserContactForm() {
     // .min(2, { message: '2文字以上入力してください' })
     // .max(50, { message: '50文字以下で入力してください' }),
     email: z.string(),
-    // .email({ message: 'メールアドレスの形式ではありません。' }),
+    // .email({ message: 'メールアドレスの形式ではありません' }),
     subject: z.string(),
     // .min(5, { message: '5文字以上入力してください' }),
     message: z.string(),
@@ -96,7 +96,6 @@ export function UserContactForm() {
         'Content-Type': 'application/json',
       },
     })
-    // console.log('res.json()', res.json())
     return res.json()
   }
 
@@ -109,16 +108,14 @@ export function UserContactForm() {
         console.log('res', res)
         const items = res.error.reduce(
           (accumulator, value, index: number) => {
-            console.log('value', value)
-            return { ...accumulator, [value.path]: value.message }
+            return { ...accumulator, [value.path]: [value.message] }
           },
           {
             [res.error[0].path]: res.error[0].message,
           },
         )
         console.log('items', items)
-
-        setErrors(res as Errors)
+        setErrors(items as Errors)
       } else {
         alert('利用規約に同意してください')
       }
