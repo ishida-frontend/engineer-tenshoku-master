@@ -99,6 +99,23 @@ export function UserContactForm() {
     return res.json()
   }
 
+  const notificatin = async () => {
+    const res = await fetch('http://localhost:8000/contact/success', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: state.name,
+        email: state.email,
+        subject: state.subject,
+        message: state.message,
+        status: 0,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    // return res.json()
+  }
+
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
     try {
@@ -115,6 +132,9 @@ export function UserContactForm() {
           },
         )
         console.log('items', items)
+        if (!items) {
+          await notificatin()
+        }
         setErrors(items as Errors)
       } else {
         alert('利用規約に同意してください')
