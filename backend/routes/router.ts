@@ -23,6 +23,7 @@ const {
 } = require('../controllers/contactController')
 
 const router = express.Router()
+
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
