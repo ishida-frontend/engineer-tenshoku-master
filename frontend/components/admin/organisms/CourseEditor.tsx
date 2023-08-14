@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
   Stack,
@@ -59,6 +60,11 @@ export function CourseEditor() {
   }
   const [course, setCourse] =
     useState<Partial<CourseEditorType>>(initialCourseState)
+  // initialCourseStateオブジェクトに入れると、なぜかstateが変更されないので外出し
+  const [isNameError, setIsNameError] = useState<boolean>(false)
+  const [isDescError, setIsDescError] = useState<boolean>(false)
+  const [showNameError, setShowNameError] = useState<string>('')
+  const [showDescError, setShowDescError] = useState<string>('')
 
   // ページを開いて１０秒でデータ取得ができなかった場合のエラートースト
   useEffect(() => {
@@ -100,15 +106,19 @@ export function CourseEditor() {
         },
       )
 
-      const data = await response.json()
+      const validResults = await response.json()
 
       if (response.ok) {
-        showSuccessToast(data.message)
-      } else {
-        showErrorToast(data.message)
+        showSuccessToast(validResults.message)
+        setIsNameError(false)
+        setIsDescError(false)
+      } else if (response.status === 400) {
+        showErrorToast('データの更新に失敗しました。')
+        setShowNameError(validResults.errors.name)
+        setShowDescError(validResults.errors.description)
       }
     } catch (error) {
-      showErrorToast('データの更新に失敗しました')
+      showErrorToast('データの更新に失敗しました。')
     } finally {
       setCourse({ ...course, isSubmitting: false })
     }
@@ -129,7 +139,7 @@ export function CourseEditor() {
             <Text>作成日時：{formatDate(courseData.created_at)}</Text>
             <Text>更新日時：{formatDate(courseData.updated_at)}</Text>
           </Box>
-          <FormControl id="courseName" isRequired>
+          <FormControl id="courseName" isRequired isInvalid={course.name ? false : true}>
             <FormLabel htmlFor="courseName">コース名（必須）</FormLabel>
             <Input
               id="courseName"
@@ -140,8 +150,13 @@ export function CourseEditor() {
               border="1px"
               borderColor="gray.400"
             />
+            {course.name ? '' : <FormErrorMessage>{showNameError}</FormErrorMessage>}
           </FormControl>
-          <FormControl id="courseDescription" isRequired>
+          <FormControl
+            id="courseDescription"
+            isRequired
+            isInvalid={course.description ? false : true}
+          >
             <FormLabel htmlFor="courseDescription">
               コース概要（必須）
             </FormLabel>
@@ -157,6 +172,7 @@ export function CourseEditor() {
               border="1px"
               borderColor="gray.400"
             ></Textarea>
+            <FormErrorMessage>{showDescError}</FormErrorMessage>
           </FormControl>
           <FormControl id="coursePublished" isRequired>
             <FormLabel htmlFor="CoursePublished">コースの公開設定</FormLabel>

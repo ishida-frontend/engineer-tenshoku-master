@@ -22,7 +22,6 @@ export async function updateCourse({
       },
     })
   } catch (error) {
-    console.log('Error updating course:', error)
     throw error
   }
 }
@@ -38,5 +37,4 @@ export async function updateCourses() {
       description: 'This course will change your life!',
     },
   })
-  console.log(courses)
 }

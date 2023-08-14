@@ -1,4 +1,6 @@
 import express from 'express'
+import z from 'zod'
+
 import { createCourse } from '../scripts/createCourse'
 import {
   readCourse,
@@ -65,9 +67,10 @@ exports.checkUpdateCourse = async function (
 
     await updateCourse({ id, name, description, published })
     res.status(200).json({ message: '変更が保存されました' })
-  } catch (e: any) {
-    console.log(e)
-    res.status(500).json({ message: 'サーバー内部のエラーが発生しました' })
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: error.issues[0].message })
+    }
   }
 }
 
