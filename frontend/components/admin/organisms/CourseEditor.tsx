@@ -1,12 +1,11 @@
 import React, { useState, FormEvent, useEffect } from 'react'
-import { useRouter, useParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import useSWR from 'swr'
-import { format } from 'date-fns'
 import {
   Box,
   Button,
-  Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
   Stack,
@@ -16,17 +15,13 @@ import {
   Link,
 } from '@chakra-ui/react'
 
-import { CourseRemover } from './CourseRemover'
-import Loader from '../../../components/admin/atoms/Loader'
+import { CourseType } from '../../../types'
+import formatDate from '../../../utils/formatDate'
+import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
-type CourseEditorType = {
-  id: number
-  name: string
-  description: string
-  published: boolean
-  created_at: string
-  updated_at: string
+// コースの汎用型定義＋このコンポーネントでのみ使う型定義
+type CourseEditorType = CourseType & {
   isLoading: boolean
   isSubmitting: boolean
 }
@@ -36,19 +31,25 @@ export function CourseEditor() {
   const { showSuccessToast, showErrorToast } = useCustomToast()
 
   // URLパラメータからコースIDを取得し、int型に変換
-  const router = useRouter()
   const params = useParams()
-  const courseid = params.courseid
-  const id = typeof courseid === 'string' ? parseInt(courseid, 10) : NaN
+  const courseId = params.courseid
+  const id = typeof courseId === 'string' ? parseInt(courseId, 10) : NaN
 
   // コースデータ取得
   const fetcher = async () =>
-    (await fetch(`http://localhost:8000/admin/course/${courseid}`)).json()
-  const { data: course, error } = useSWR<CourseEditorType>('course', fetcher)
+    (
+      await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${courseId}`,
+      )
+    ).json()
+  const { data: courseData, error } = useSWR<CourseEditorType>(
+    'courseData',
+    fetcher,
+  )
 
   // 初期状態を定義し、useStateで初期化
-  const initialState: CourseEditorType = {
-    id: id,
+  const initialCourseState: Partial<CourseEditorType> = {
+    id,
     name: '',
     description: '',
     published: false,
@@ -57,40 +58,40 @@ export function CourseEditor() {
     isLoading: false,
     isSubmitting: false,
   }
-  const [state, setState] = useState<CourseEditorType>(initialState)
-
-  // 日時フォーマット関数
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return format(date, 'yyy-MM-dd HH:mm')
-  }
+  const [course, setCourse] =
+    useState<Partial<CourseEditorType>>(initialCourseState)
+  // initialCourseStateオブジェクトに入れると、なぜかstateが変更されないので外出し
+  const [isNameError, setIsNameError] = useState<boolean>(false)
+  const [isDescError, setIsDescError] = useState<boolean>(false)
+  const [showNameError, setShowNameError] = useState<string>('')
+  const [showDescError, setShowDescError] = useState<string>('')
 
   // ページを開いて１０秒でデータ取得ができなかった場合のエラートースト
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (!course) {
+      if (!courseData) {
         showErrorToast('データの取得に失敗しました')
       }
     }, 10000)
     return () => clearTimeout(timeout)
-  }, [course])
+  }, [courseData])
 
   // 取得したコースデータを適用
   useEffect(() => {
-    if (course) {
-      setState(course)
+    if (courseData) {
+      setCourse(courseData)
     }
-  }, [course])
+  }, [courseData])
 
   // PUTリクエストイベントハンドラ
   const updateCourse = async (event: FormEvent) => {
-    setState({ ...state, isSubmitting: true })
+    setCourse({ ...course, isSubmitting: true })
 
     event.preventDefault()
 
     try {
       const response = await fetch(
-        `http://localhost:8000/admin/course/edit/${courseid}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/edit/${courseId}`,
         {
           method: 'PUT',
           headers: {
@@ -98,29 +99,46 @@ export function CourseEditor() {
           },
           body: JSON.stringify({
             id,
-            name: state.name,
-            description: state.description,
-            published: state.published,
+            name: course.name,
+            description: course.description,
+            published: course.published,
           }),
         },
       )
 
-      const data = await response.json()
+      const validResults = await response.json()
 
       if (response.ok) {
-        showSuccessToast(data.message)
-      } else {
-        showErrorToast(data.message)
+        showSuccessToast(validResults.message)
+        setIsNameError(false)
+        setIsDescError(false)
+      } else if (response.status === 400) {
+        showErrorToast('データの更新に失敗しました')
+
+        if (course.name && course.name.length >= 5) {
+          setIsNameError(false)
+        } else {
+          setIsNameError(true)
+        }
+        setShowNameError(validResults.errors.name)
+
+        if (course.description && course.description.length >= 15) {
+          setIsDescError(false)
+        } else {
+          setIsDescError(true)
+        }
+        setShowDescError(validResults.errors.description)
+
       }
     } catch (error) {
-      showErrorToast('データの取得に失敗しました')
+      showErrorToast('データの更新に失敗しました')
     } finally {
-      setState({ ...state, isSubmitting: false })
+      setCourse({ ...course, isSubmitting: false })
     }
   }
 
-  // コースデータ読み込みメッセージ
-  if (!course) return <Loader />
+  // コースデータ読み込みアニメーション
+  if (!courseData) return <Loader />
 
   return (
     <>
@@ -131,30 +149,35 @@ export function CourseEditor() {
           </Link>
           <Box p={4} border="1px" borderColor="gray.400" borderRadius={9}>
             <Text>コースID：{course.id}</Text>
-            <Text>作成日時：{formatDate(course.created_at)}</Text>
-            <Text>更新日時：{formatDate(course.updated_at)}</Text>
+            <Text>作成日時：{formatDate(courseData.created_at)}</Text>
+            <Text>更新日時：{formatDate(courseData.updated_at)}</Text>
           </Box>
-          <FormControl id="courseName" isRequired>
+          <FormControl id="courseName" isRequired isInvalid={isNameError}>
             <FormLabel htmlFor="courseName">コース名（必須）</FormLabel>
             <Input
               id="courseName"
               type="text"
-              value={state.name}
-              onChange={(e) => setState({ ...state, name: e.target.value })}
+              value={course.name}
+              onChange={(e) => setCourse({ ...course, name: e.target.value })}
               aria-required={true}
               border="1px"
               borderColor="gray.400"
             />
+           <FormErrorMessage>{showNameError}</FormErrorMessage>
           </FormControl>
-          <FormControl id="courseDescription" isRequired>
+          <FormControl
+            id="courseDescription"
+            isRequired
+            isInvalid={isDescError}
+          >
             <FormLabel htmlFor="courseDescription">
               コース概要（必須）
             </FormLabel>
             <Textarea
               id="courseDescription"
-              value={state.description}
+              value={course.description}
               onChange={(e) =>
-                setState({ ...state, description: e.target.value })
+                setCourse({ ...course, description: e.target.value })
               }
               size="lg"
               rows={10}
@@ -162,14 +185,15 @@ export function CourseEditor() {
               border="1px"
               borderColor="gray.400"
             ></Textarea>
+           <FormErrorMessage>{showDescError}</FormErrorMessage>
           </FormControl>
           <FormControl id="coursePublished" isRequired>
             <FormLabel htmlFor="CoursePublished">コースの公開設定</FormLabel>
             <Select
               id="coursePublished"
-              value={state.published ? 'public' : 'hidden'}
+              value={course.published ? 'public' : 'hidden'}
               onChange={(e) =>
-                setState({ ...state, published: e.target.value === 'public' })
+                setCourse({ ...course, published: e.target.value === 'public' })
               }
               border="1px"
               borderColor="gray.400"
@@ -180,7 +204,7 @@ export function CourseEditor() {
           </FormControl>
           <Button
             onClick={updateCourse}
-            isLoading={state.isSubmitting}
+            isLoading={course.isSubmitting}
             colorScheme="teal"
             variant="solid"
           >

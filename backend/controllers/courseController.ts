@@ -1,4 +1,6 @@
 import express from 'express'
+import z from 'zod'
+
 import { createCourse } from '../scripts/createCourse'
 import {
   readCourse,
@@ -24,10 +26,9 @@ exports.checkReadCourse = async function (
   req: express.Request,
   res: express.Response,
 ) {
-  const id = Number(req.params.id)
   try {
-    const course = await readCourse(id)
-    res.status(200).json(course)
+    const course = await readCourse(Number(req.params.id))
+    res.json(course)
   } catch (e: any) {
     res.status(500).json({ message: 'サーバー内部のエラーが発生しました' })
   }
@@ -64,11 +65,12 @@ exports.checkUpdateCourse = async function (
   try {
     const { id, name, description, published } = req.body
 
-    await updateCourse(id, name, description, published)
+    await updateCourse({ id, name, description, published })
     res.status(200).json({ message: '変更が保存されました' })
-  } catch (e: any) {
-    console.log(e)
-    res.status(500).json({ message: 'サーバー内部のエラーが発生しました' })
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: error.issues[0].message })
+    }
   }
 }
 
