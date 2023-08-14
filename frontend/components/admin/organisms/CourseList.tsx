@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Heading,
+  HStack,
   Link,
   SimpleGrid,
   Text,
@@ -11,7 +12,7 @@ import {
 import useSWR from 'swr'
 import { format } from 'date-fns'
 
-import Loader from '../../../components/admin/atoms/Loader'
+import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 type CourseType = {
@@ -33,7 +34,7 @@ export function CourseList() {
   }
 
   const fetcher = async () =>
-    (await fetch('http://localhost:8000/course/all')).json()
+    (await fetch('http://localhost:8000/admin/course')).json()
 
   const { data, error } = useSWR('courseList', fetcher)
 
@@ -44,12 +45,11 @@ export function CourseList() {
   if (!data) return <Loader />
 
   return (
-    <VStack spacing={5} p={4} maxW="800px" mx="auto">
-      <Heading size="lg">コース一覧</Heading>
-      <SimpleGrid columns={2} spacing={10}>
-        {data
-          .filter((course: CourseType) => !course.deleted_at)
-          .map((course: CourseType) => (
+    <>
+      <VStack spacing={5} p={4} maxW="800px" mx="auto">
+        <Heading size="lg">コース一覧</Heading>
+        <SimpleGrid columns={2} spacing={5}>
+          {data.map((course: CourseType) => (
             <Box key={course.id} p="4" boxShadow="lg" rounded="md">
               <Text>
                 <strong>コースID</strong>：{course.id}
@@ -76,7 +76,8 @@ export function CourseList() {
               </Link>
             </Box>
           ))}
-      </SimpleGrid>
-    </VStack>
+        </SimpleGrid>
+      </VStack>
+    </>
   )
 }

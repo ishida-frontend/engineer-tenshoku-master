@@ -15,6 +15,7 @@ import {
   Link,
 } from '@chakra-ui/react'
 
+import { CourseRemover } from './CourseRemover'
 import { CourseType } from '../../../types'
 import formatDate from '../../../utils/formatDate'
 import { Loader } from '../../../components/admin/atoms/Loader'

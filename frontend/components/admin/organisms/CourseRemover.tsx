@@ -41,15 +41,14 @@ export function CourseRemover() {
         },
       )
 
-      const data = await response.json()
+      const result = await response.json()
       if (response.ok) {
-        showSuccessToast(data.message)
+        showSuccessToast(result.message)
       } else {
-        const data = await response.json()
-        showErrorToast(data.message)
+        showErrorToast(result.message)
       }
     } catch (error) {
-      showErrorToast('コースの削除に失敗しました。')
+      showErrorToast('コースの削除に失敗しました')
     } finally {
       setShowModalContent(false)
       setTimeout(() => {
@@ -68,7 +67,7 @@ export function CourseRemover() {
         <ModalOverlay />
         {showModalContent && (
           <ModalContent>
-            <ModalHeader>コースを削除しますか？</ModalHeader>
+            <ModalHeader>このコースを削除しますか？</ModalHeader>
             <ModalCloseButton />
             <ModalFooter>
               <Button colorScheme="red" mr={3} onClick={deleteCourse}>
