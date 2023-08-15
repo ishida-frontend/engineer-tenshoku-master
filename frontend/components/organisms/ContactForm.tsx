@@ -21,8 +21,7 @@ import {
   Textarea,
 } from '@chakra-ui/react'
 import { UserContactDone } from './ContactDone'
-import { useRouter } from 'next/router'
-const router = useRouter()
+import { Router } from 'next/router'
 
 type Errors = {
   name?: string[]
@@ -100,7 +99,7 @@ export function UserContactForm() {
     return res.json()
   }
   const backToTop = async () => {
-    const backTop = router.push('/contact/done')
+    const backTop = await Router.push('/contact/done')
   }
 
   const handleSubmit = async (event: Event) => {
@@ -127,6 +126,7 @@ export function UserContactForm() {
       if (e instanceof ZodError) {
         setErrors(e.flatten().fieldErrors as Errors)
       } else {
+        console.log('backToTop')
         await backToTop
         console.log(e)
       }
