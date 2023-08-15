@@ -16,16 +16,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 export async function UserContactDone() {
-  const router = useRouter()
-  await router.push('/contact/done')
-
-  const theme = extendTheme({
-    colors: {
-      brand: {
-        400: '#38B2AC',
-      },
-    },
-  })
   return (
     <>
       <Container bg="gray.100" maxW={'1512px'}>
@@ -33,7 +23,7 @@ export async function UserContactDone() {
           <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
             お問い合わせが送信されました
           </Heading>
-          <EmailIcon mt={'80px'} boxSize={16} color="teal.400" />
+          <EmailIcon mt={'80px'} boxSize={16} color="teal" />
           <Stack spacing={1} mt={'40px'}>
             <Text fontSize="md">
               お問い合わせいただき、ありがとうございます。
