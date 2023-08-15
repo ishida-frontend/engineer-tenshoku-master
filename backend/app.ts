@@ -1,7 +1,8 @@
-import mysql from 'mysql'
-import express from 'express'
+import mysql from 'mysql';
+import express from 'express';
 import cors from 'cors'
-import router from './routes/router'
+import router from './routes/router';
+import authController from './controllers/authController';
 
 // 環境変数を使用してDBにアクセスする
 const pool = mysql.createPool({
@@ -22,6 +23,8 @@ app.use(
     origin: process.env.CORS_ORIGIN,
   }),
 )
+// JSONボディパーサーのミドルウェアを追加
+app.use(express.json());
 
 app.use(express.json())
 
@@ -29,7 +32,8 @@ app.get('/', (req, res) => {
   res.send('Hello world!')
 })
 
-app.use('/', router)
+app.use('/auth', authController);
+app.use('/', router);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
