@@ -28,6 +28,7 @@ model Video {
   course_id   Int
   name        String
   description String
+  url         String
   published   Boolean   @default(false) // 動画が公開されているかどうか。
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
