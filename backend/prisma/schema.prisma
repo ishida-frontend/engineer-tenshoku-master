@@ -13,7 +13,6 @@ datasource db {
 
 model Course {
   id          Int       @id @default(autoincrement())
-  sections    Section[]
   name        String
   description String
   published   Boolean   @default(false) // コースが公開されているかどうか。
@@ -24,8 +23,6 @@ model Course {
 
 model Section {
   id         Int      @id @default(autoincrement())
-  course     Course    @relation(fields: [course_id], references: [id])
-  course_id  Int
   title      String
   order      Int
   published  Boolean   @default(false) // セクションが公開されているかどうか。
