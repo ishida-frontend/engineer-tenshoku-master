@@ -21,7 +21,7 @@ import {
   Textarea,
 } from '@chakra-ui/react'
 import { UserContactDone } from './ContactDone'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 type Errors = {
   name?: string[]
@@ -31,10 +31,7 @@ type Errors = {
 }
 
 export function UserContactForm() {
-  function backToTop() {
-    const router = useRouter()
-    router.push('/contact/done')
-  }
+  const router = useRouter()
 
   const [state, setState] = useState({
     name: '',
@@ -129,7 +126,7 @@ export function UserContactForm() {
         setErrors(e.flatten().fieldErrors as Errors)
       } else {
         console.log('backToTop')
-        await backToTop()
+        router.push('/contact/done')
         console.log(e)
       }
     }
