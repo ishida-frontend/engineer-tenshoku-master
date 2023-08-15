@@ -1,23 +1,28 @@
 import { PrismaClient } from '@prisma/client'
-import { check, validationResult } from 'express-validator';
+import { check, validationResult } from 'express-validator'
 import { ContactType } from '../types/index'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export async function createContact() {
   try {
     const contactData: ContactType = {
-      name: "",
-      email: "yamada0123@example.com",
-      subject: "I like your videos.",
-      message: "Thank you very much.",
+      name: 'Tarou Yamada',
+      email: 'yamada0123@example.com',
+      subject: 'I like your videos.',
+      message: 'Thank you very much.',
       status: 0,
-    };
+    }
 
-    const errors = validationResult(contactData);
+    const errors = validationResult(contactData)
 
     if (!errors.isEmpty()) {
-      throw new Error(errors.array().map(error => error.msg).join(', '));
+      throw new Error(
+        errors
+          .array()
+          .map((error) => error.msg)
+          .join(', '),
+      )
     } else {
       const createdContact = await prisma.contact.create({
         data: {
@@ -27,12 +32,11 @@ export async function createContact() {
           message: contactData.message,
           status: contactData.status,
         },
-      });
+      })
     }
-
   } catch (e: any) {
-    console.log(e.message);
+    console.log(e.message)
   } finally {
-    await prisma.$disconnect();
+    await prisma.$disconnect()
   }
 }

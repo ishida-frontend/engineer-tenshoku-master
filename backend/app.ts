@@ -19,11 +19,13 @@ const app = express()
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN
-  })
+    origin: process.env.CORS_ORIGIN,
+  }),
 )
 // JSONボディパーサーのミドルウェアを追加
 app.use(express.json());
+
+app.use(express.json())
 
 app.get('/', (req, res) => {
   res.send('Hello world!')
