@@ -26,6 +26,7 @@ model Section {
   id         Int      @id @default(autoincrement())
   course     Course    @relation(fields: [course_id], references: [id])
   course_id  Int
+  videos     Video []
   title      String
   order      Int
   published  Boolean   @default(false) // セクションが公開されているかどうか。
@@ -35,6 +36,9 @@ model Section {
 
 model Video {
   id          Int       @id @default(autoincrement())
+  section     Section    @relation(fields: [section_id], references: [id])
+  section_id  Int
+  order       Int
   name        String
   description String
   url         String
