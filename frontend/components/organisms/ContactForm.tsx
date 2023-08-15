@@ -1,4 +1,5 @@
 'use client'
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { z, ZodError } from 'zod'
 import {
@@ -46,9 +47,7 @@ export function UserContactForm() {
       .string()
       .min(2, { message: '2文字以上入力してください' })
       .max(50, { message: '50文字以下で入力してください' }),
-    email: z
-      .string()
-      .email({ message: 'メールアドレスの形式ではありません。' }),
+    email: z.string().email({ message: 'メールアドレスの形式ではありません' }),
     subject: z.string().min(5, { message: '5文字以上入力してください' }),
     message: z.string().min(5, { message: '5文字以上入力してください' }),
   })
@@ -81,22 +80,22 @@ export function UserContactForm() {
     })
   }
 
-  const fetcher = async () =>
-    (
-      await fetch('http://localhost:8000/contact/create', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: state.name,
-          email: state.email,
-          subject: state.subject,
-          message: state.message,
-          status: 0,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-    ).json()
+  const fetcher = async () => {
+    const res = await fetch('http://localhost:8000/contact/create', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: state.name,
+        email: state.email,
+        subject: state.subject,
+        message: state.message,
+        status: 0,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    return res.json()
+  }
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
@@ -104,6 +103,15 @@ export function UserContactForm() {
       const result = ContactSchema.parse(contact)
       if (isChecked) {
         const res = await fetcher()
+        const items = res.error.reduce(
+          (accumulator, value, index: number) => {
+            return { ...accumulator, [value.path]: [value.message] }
+          },
+          {
+            [res.error[0].path]: res.error[0].message,
+          },
+        )
+        setErrors(items as Errors)
       } else {
         alert('利用規約に同意してください')
       }
@@ -143,7 +151,7 @@ export function UserContactForm() {
                   name="name"
                   value={state.name}
                   onChange={handleInputChange}
-                  placeholder={'田中　太郎'}
+                  placeholder={'田中 太郎'}
                 />
                 <FormErrorMessage>
                   {errors.name && errors.name[0]}

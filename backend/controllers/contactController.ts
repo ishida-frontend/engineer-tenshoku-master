@@ -1,20 +1,14 @@
-import express from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import axios from 'axios'
 import { PrismaClient } from '@prisma/client'
 import { readAllContacts } from '../scripts/readContact'
 import { createContact } from '../scripts/createContact'
-import { validationResult } from 'express-validator'
 
 const prisma = new PrismaClient()
+const router = express.Router()
 
-exports.checkCreateContact = async function (
-  req: express.Request,
-  res: express.Response,
-) {
-  const errors = validationResult(req)
-  // TODO createContact()でデータ取得してから、バリデーションを実行しないとvalueが空になる(フロントが出来上がってから要対応)
+exports.checkCreateContact = async function (req: Request, res: Response) {
   try {
-    // console.log('req.body', req.body)
     await createContact(req.body)
     res.send('新しいお問い合わせが作成されました！')
   } catch (e: any) {
@@ -28,7 +22,6 @@ exports.checkReadContact = async function (
 ) {
   try {
     const result = await readAllContacts()
-    console.log('result', result)
     res.json(result)
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
@@ -75,3 +68,5 @@ exports.checkSuccessContact = async function (
     res.status(500).send('エラーが発生しました。')
   }
 }
+
+export default router

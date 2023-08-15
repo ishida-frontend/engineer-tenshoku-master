@@ -1,6 +1,6 @@
 import express from 'express'
 import 'dotenv/config'
-import { contactValidationRules } from '../validation'
+import { contactValidationRules, validate } from '../validation'
 const {
   checkCreateCourse,
   checkReadCourse,
@@ -21,6 +21,7 @@ const {
 } = require('../controllers/contactController')
 
 const router = express.Router()
+
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
@@ -35,6 +36,7 @@ router.use(
 
 const adminRouter = express.Router()
 router.use('/admin', adminRouter)
+adminRouter.post('/course/create', checkCreateCourse)
 adminRouter.get('/course', checkReadAllCourses)
 adminRouter.get('/contacts', checkReadContact)
 
@@ -55,7 +57,11 @@ videoRouter.get('/delete', checkDeleteVideo)
 
 const contactRouter = express.Router()
 router.use('/contact', contactRouter)
-contactRouter.post('/create', contactValidationRules, checkCreateContact)
+contactRouter.post(
+  '/create',
+  validate(contactValidationRules),
+  checkCreateContact,
+)
 
 router.get('/contact/success', checkSuccessContact)
 
