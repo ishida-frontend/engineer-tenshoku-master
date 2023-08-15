@@ -31,6 +31,11 @@ type Errors = {
 }
 
 export function UserContactForm() {
+  function backToTop() {
+    const router = useRouter()
+    router.push('/contact/done')
+  }
+
   const [state, setState] = useState({
     name: '',
     email: '',
@@ -97,10 +102,6 @@ export function UserContactForm() {
       },
     })
     return res.json()
-  }
-  const backToTop = async () => {
-    const router = useRouter()
-    await router.push('/contact/done')
   }
 
   const handleSubmit = async (event: Event) => {
