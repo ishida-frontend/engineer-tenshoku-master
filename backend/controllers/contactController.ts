@@ -14,7 +14,6 @@ exports.checkCreateContact = async function (
   const errors = validationResult(req)
   // TODO createContact()でデータ取得してから、バリデーションを実行しないとvalueが空になる(フロントが出来上がってから要対応)
   try {
-    // console.log('req.body', req.body)
     await createContact(req.body)
     res.send('新しいお問い合わせが作成されました！')
   } catch (e: any) {
