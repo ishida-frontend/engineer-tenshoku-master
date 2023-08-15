@@ -31,23 +31,23 @@ export async function createContact(req: createContactParamsType) {
       },
     })
 
-    // const slackMessage: { text: string } = {
-    //   text: `【テスト】新しいお問合せが届きました。
-    //   メールアドレス：${contactData.email}
-    //   件名：${contactData.subject}
-    //   本文：${contactData.message}`,
-    // }
+    const slackMessage: { text: string } = {
+      text: `【テスト】新しいお問合せが届きました。
+      メールアドレス：${contactData.email}
+      件名：${contactData.subject}
+      本文：${contactData.message}`,
+    }
 
-    // const url: string = process.env.WEBHOOK_URL || 'default'
-    // const maxRetries = 3
-    // for (let i = 0; i < maxRetries; i++) {
-    //   try {
-    //     await axios.post(url, slackMessage)
-    //     break
-    //   } catch (error) {
-    //     new Promise((resolve) => setTimeout(resolve, 3000))
-    //   }
-    // }
+    const url: string = process.env.WEBHOOK_URL || 'default'
+    const maxRetries = 3
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        await axios.post(url, slackMessage)
+        break
+      } catch (error) {
+        new Promise((resolve) => setTimeout(resolve, 3000))
+      }
+    }
   } catch (e: any) {
     console.log(e.message)
   } finally {
