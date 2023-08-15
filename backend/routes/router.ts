@@ -1,6 +1,7 @@
 import express from 'express'
 import 'dotenv/config'
-import { contactValidationRules, validate } from '../validation'
+import { contactValidationRules, contactValidate } from '../validation'
+import { validate, courseValidationRules } from '../validation/courseValidation'
 const {
   checkCreateCourse,
   checkReadCourse,
@@ -37,6 +38,12 @@ const adminRouter = express.Router()
 router.use('/admin', adminRouter)
 adminRouter.post('/course/create', checkCreateCourse)
 adminRouter.get('/course', checkReadAllCourses)
+adminRouter.get('/course/:id', checkReadCourse)
+adminRouter.put(
+  '/course/edit/:id',
+  validate(courseValidationRules),
+  checkUpdateCourse,
+)
 adminRouter.get('/contacts', checkReadContact)
 
 const courseRouter = express.Router()
@@ -58,7 +65,7 @@ const contactRouter = express.Router()
 router.use('/contact', contactRouter)
 contactRouter.post(
   '/create',
-  validate(contactValidationRules),
+  contactValidate(contactValidationRules),
   checkCreateContact,
 )
 

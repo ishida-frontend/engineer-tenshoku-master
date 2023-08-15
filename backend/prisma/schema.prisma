@@ -13,7 +13,7 @@ datasource db {
 
 model Course {
   id          Int       @id @default(autoincrement())
-  videos      Video[]
+  sections    Section[]
   name        String
   description String
   published   Boolean   @default(false) // コースが公開されているかどうか。
@@ -22,10 +22,19 @@ model Course {
   deleted_at  DateTime?
 }
 
+model Section {
+  id         Int      @id @default(autoincrement())
+  course     Course    @relation(fields: [course_id], references: [id])
+  course_id  Int
+  title      String
+  order      Int
+  published  Boolean   @default(false) // セクションが公開されているかどうか。
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
 model Video {
   id          Int       @id @default(autoincrement())
-  course      Course    @relation(fields: [course_id], references: [id])
-  course_id   Int
   name        String
   description String
   url         String
@@ -45,3 +54,4 @@ model Contact {
   updated_at DateTime @updatedAt
   status     Int //対応ステータス(0:未対応, 1:対応中, 2:対応済み)
 }
+
