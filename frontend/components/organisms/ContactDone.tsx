@@ -13,8 +13,12 @@ import {
 } from '@chakra-ui/react'
 import { EmailIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
-export function UserContactDone() {
+export async function UserContactDone() {
+  const router = useRouter()
+  await router.push('/contact/done')
+
   const theme = extendTheme({
     colors: {
       brand: {
