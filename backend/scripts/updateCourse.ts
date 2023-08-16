@@ -1,16 +1,29 @@
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
+
 const prisma = new PrismaClient()
 
-export async function updateCourse() {
-  const course = await prisma.course.update({
-    where: {
-      id: 3,
-    },
-    data: {
-      description: 'This course was made just for you!',
-    },
-  })
-  console.log(course)
+type CourseUpdateInput = Prisma.CourseUpdateInput & { id: number }
+
+export async function updateCourse({
+  id,
+  name,
+  description,
+  published,
+}: CourseUpdateInput) {
+  try {
+    await prisma.course.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        description,
+        published,
+      },
+    })
+  } catch (error) {
+    throw error
+  }
 }
 
 export async function updateCourses() {
@@ -19,11 +32,9 @@ export async function updateCourses() {
       description: {
         contains: 'Enjoy the course!',
       },
-      
     },
     data: {
       description: 'This course will change your life!',
     },
   })
-  console.log(courses)
 }
