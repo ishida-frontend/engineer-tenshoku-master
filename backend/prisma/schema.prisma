@@ -29,7 +29,7 @@ model Section {
   videos      Video[]
   title       String?
   order       Int?
-  published   Boolean   @default(false) // 動画が公開されているかどうか。
+  published   Boolean   @default(false) // セクションが公開されているかどうか。
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
   deleted_at  DateTime?
