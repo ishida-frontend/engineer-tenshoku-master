@@ -11,6 +11,7 @@
     "readVideo": "nodemon ./scripts/readVideo.ts",
     "updateVideo": "nodemon ./scripts/updateVideo.ts",
     "deleteVideo": "nodemon ./scripts/deleteVideo.ts",
+    "createSection": "nodemon ./scripts/createSection.ts",
     "validation": "nodemon ./scripts/validation.ts"
   },
   "dependencies": {
