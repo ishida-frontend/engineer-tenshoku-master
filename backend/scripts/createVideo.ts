@@ -1,20 +1,20 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
-export async function createVideo(courseId: number) {
+export async function createVideo(sectionId: number) {
   try {
     const video = await prisma.video.create({
       data: {
-        name: "video 1",
-        description: "The very first video in the whole site.",
+        name: 'video 1',
+        description: 'The very first video in the whole site.',
         published: true,
-        course: { connect: { id: courseId } }
-      }
-    });
-    return video;
+        section: { connect: { id: sectionId } },
+      },
+    })
+    return video
   } catch (e: any) {
-    console.log(e.message);
+    console.log(e.message)
   } finally {
-    await prisma.$disconnect();
+    await prisma.$disconnect()
   }
 }
