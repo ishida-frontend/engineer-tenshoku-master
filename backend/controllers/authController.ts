@@ -6,6 +6,7 @@ import {
   InitiateAuthResponse,
   SignUpCommand,
 } from '@aws-sdk/client-cognito-identity-provider'
+import { jwtHelper } from '../utils/jwt'
 
 const router = Router()
 
@@ -72,6 +73,29 @@ router.post('/signin', async (req, res) => {
     console.error(err)
     const errorMessage = (err as Error).message
     res.status(400).json({ error: errorMessage })
+  }
+})
+
+//jwtトークンの検証
+router.get('/tokenVerification', async (req, res, next) => {
+  let token = ''
+  try {
+    if (req.cookies.accessToken) {
+      token = req.cookies.accessToken
+    } else {
+      //cookieにjwtトークンがない場合は、認証不可
+      return res.status(200).json({ isAuthenticated: false })
+    }
+    //  リクエストされたjwtトークンを検証
+    const decode = await jwtHelper.verifyToken(token)
+    if (decode) {
+      //検証がOKであれば、処理継続
+      res.status(200).json({
+        check: true,
+      })
+    }
+  } catch (e: any) {
+    throw new Error(e)
   }
 })
 

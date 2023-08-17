@@ -14,10 +14,10 @@ export const useAuth = () => {
     const handleCheckToken = async () => {
       try {
         //バックエンドでtokenの検証および再作成
-        const response = await checkToken(tokens.AccessToken)
+        const result: boolean = await checkToken(tokens.AccessToken)
         setCheck({
           checked: true,
-          isAuthenticated: response.data.isAuthenticated,
+          isAuthenticated: result,
         })
       } catch (error) {
         setCheck({ checked: true, isAuthenticated: false })

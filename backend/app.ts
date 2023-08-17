@@ -3,6 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import router from './routes/router'
 import authController from './controllers/authController'
+import cookieParser from "cookie-parser"
 
 // 環境変数を使用してDBにアクセスする
 const pool = mysql.createPool({
@@ -25,6 +26,8 @@ app.use(
 )
 // JSONボディパーサーのミドルウェアを追加
 app.use(express.json())
+// cookieを使えるようにするためのモジュール追加
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.send('Hello world!')
