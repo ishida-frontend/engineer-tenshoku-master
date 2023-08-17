@@ -1,13 +1,14 @@
-export const checkToken = async (accessToken: string) => {
+export const checkToken = async (accessToken: string): Promise<boolean> => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/tokenVerification`,
     {
-      method: 'POST',
+      method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
-      body: JSON.stringify({ accessToken }),
+      credentials: 'include',
     },
   )
-  return res
+  const data = await res.json()
+  return data.check
 }
