@@ -128,7 +128,6 @@ export function CourseEditor() {
           setIsDescError(true)
         }
         setShowDescError(validResults.errors.description)
-
       }
     } catch (error) {
       showErrorToast('データの更新に失敗しました')
@@ -163,7 +162,7 @@ export function CourseEditor() {
               border="1px"
               borderColor="gray.400"
             />
-           <FormErrorMessage>{showNameError}</FormErrorMessage>
+            <FormErrorMessage>{showNameError}</FormErrorMessage>
           </FormControl>
           <FormControl
             id="courseDescription"
@@ -185,7 +184,7 @@ export function CourseEditor() {
               border="1px"
               borderColor="gray.400"
             ></Textarea>
-           <FormErrorMessage>{showDescError}</FormErrorMessage>
+            <FormErrorMessage>{showDescError}</FormErrorMessage>
           </FormControl>
           <FormControl id="coursePublished" isRequired>
             <FormLabel htmlFor="CoursePublished">コースの公開設定</FormLabel>

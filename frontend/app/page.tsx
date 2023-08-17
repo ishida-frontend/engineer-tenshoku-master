@@ -1,8 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { Box, Button, Stack, Text } from '@chakra-ui/react'
-
-
+import { useAuth } from '../hooks/useAuth'
 
 export default function Page() {
   const [fontSize, setFontSize] = useState(16)
@@ -14,6 +13,10 @@ export default function Page() {
   const decrease = () => {
     setFontSize((prev) => Math.max(10, prev - 2))
   }
+
+  // 別ファイルに切り出し
+  const check = useAuth()
+  console.log('check', check)
 
   return (
     <>
