@@ -9,28 +9,14 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import useSWR from 'swr'
-import { format } from 'date-fns'
 
-import Loader from '../../../components/admin/atoms/Loader'
+import { CourseType } from '../../../types'
+import formatDate from '../../../utils/formatDate'
+import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-
-type CourseType = {
-  id: number
-  name: string
-  description: string
-  published: boolean
-  created_at: string
-  updated_at: string
-  deleted_at?: string
-}
 
 export function CourseList() {
   const { showErrorToast } = useCustomToast()
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return format(date, 'yyy-MM-dd HH:mm')
-  }
 
   const fetcher = async () =>
     (await fetch('http://localhost:8000/course/all')).json()

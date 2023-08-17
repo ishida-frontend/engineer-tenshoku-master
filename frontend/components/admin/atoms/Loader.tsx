@@ -1,12 +1,29 @@
-import { Box } from '@chakra-ui/react'
-import BeatLoader from 'react-spinners/BeatLoader'
+import { Spinner, Stack } from '@chakra-ui/react'
 
-const Loader = () => {
+export const Loader = () => {
   return (
-    <Box display="flex" justifyContent="center">
-      <BeatLoader color="teal" size={30} />
-    </Box>
+    <Stack direction="row" spacing={4} justify="center">
+      <Spinner
+        thickness="4px"
+        speed="0.65s"
+        emptyColor="gray.200"
+        color="teal"
+        size="xl"
+      />
+      <Spinner
+        thickness="4px"
+        speed="0.65s"
+        emptyColor="gray.200"
+        color="teal"
+        size="xl"
+      />
+      <Spinner
+        thickness="4px"
+        speed="0.65s"
+        emptyColor="gray.200"
+        color="teal"
+        size="xl"
+      />
+    </Stack>
   )
 }
-
-export default Loader
