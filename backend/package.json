@@ -14,6 +14,7 @@
     "createSection": "nodemon ./scripts/createSection.ts",
     "readSection": "nodemon ./scripts/readSection.ts",
     "updateSection": "nodemon ./scripts/updateSection.ts",
+    "deleteSection": "nodemon ./scripts/deleteSection.ts",
     "validation": "nodemon ./scripts/validation.ts"
   },
   "dependencies": {
