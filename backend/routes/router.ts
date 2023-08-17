@@ -39,6 +39,7 @@ router.use(
 const adminRouter = express.Router()
 router.use('/admin', adminRouter)
 adminRouter.get('/course', checkReadFilteredCourses)
+adminRouter.post('/course/create', checkCreateCourse)
 adminRouter.get('/course/:id', checkReadCourse)
 adminRouter.put(
   '/course/edit/:id',
