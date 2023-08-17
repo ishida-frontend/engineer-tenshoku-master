@@ -8,7 +8,6 @@ import {
   readFilteredCourses,
 } from '../scripts/readCourse'
 import { updateCourse, updateCourses } from '../scripts/updateCourse'
-import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
 
 exports.checkCreateCourse = async function (
   req: express.Request,
@@ -90,34 +89,6 @@ exports.checkUpdateCourses = async function (
   try {
     await updateCourses()
     res.send('複数のコースを更新しました！')
-  } catch (e: any) {
-    res.status(500).send('エラーが発生しました')
-  }
-}
-
-exports.checkDeleteCourse = async function (
-  req: express.Request,
-  res: express.Response,
-) {
-  try {
-    const { id } = req.body
-
-    await deleteCourse(id)
-    res.status(201).json({
-      message: '削除されました。自動的にコース一覧へ戻ります。',
-    })
-  } catch (e: any) {
-    res.status(500).json({ message: 'サーバー内部エラーが発生しました' })
-  }
-}
-
-exports.checkDeleteCourses = async function (
-  req: express.Request,
-  res: express.Response,
-) {
-  try {
-    await deleteCourses(5, 8)
-    res.send('複数のコースを削除しました！')
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
   }

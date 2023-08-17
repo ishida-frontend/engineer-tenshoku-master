@@ -2,6 +2,9 @@ import express from 'express'
 import 'dotenv/config'
 import { contactValidationRules } from '../validation'
 import { validate, courseValidationRules } from '../validation/courseValidation'
+
+import { deleteCourse } from '../scripts/deleteCourse'
+
 const {
   checkCreateCourse,
   checkReadCourse,
@@ -45,7 +48,7 @@ adminRouter.put(
   validate(courseValidationRules),
   checkUpdateCourse,
 )
-adminRouter.put('/course/delete/:id', checkDeleteCourse)
+adminRouter.put('/course/delete/:id', deleteCourse)
 adminRouter.get('/contacts', checkReadContact)
 
 const courseRouter = express.Router()
@@ -54,7 +57,6 @@ courseRouter.get('/create', checkCreateCourse)
 courseRouter.get('/read', checkReadCourse)
 courseRouter.get('/all', checkReadAllCourses)
 courseRouter.get('/update', checkUpdateCourse)
-courseRouter.get('/delete', checkDeleteCourse)
 
 const videoRouter = express.Router()
 router.use('/video', videoRouter)

@@ -34,7 +34,7 @@ export function CourseList() {
   }
 
   const fetcher = async () =>
-    (await fetch('http://localhost:8000/admin/course')).json()
+    (await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course`)).json()
 
   const { data, error } = useSWR('courseList', fetcher)
 

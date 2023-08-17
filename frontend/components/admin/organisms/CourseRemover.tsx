@@ -28,7 +28,7 @@ export function CourseRemover() {
   const deleteCourse = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/admin/course/delete/${courseid}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/delete/${courseid}`,
         {
           method: 'PUT',
           headers: {
@@ -44,16 +44,15 @@ export function CourseRemover() {
       const result = await response.json()
       if (response.ok) {
         showSuccessToast(result.message)
+        setShowModalContent(false)
+        setTimeout(() => {
+          router.push('/admin/course')
+        }, 4000)
       } else {
         showErrorToast(result.message)
       }
     } catch (error) {
-      showErrorToast('コースの削除に失敗しました')
-    } finally {
-      setShowModalContent(false)
-      setTimeout(() => {
-        router.push('/admin/course')
-      }, 4000)
+      showErrorToast('コースの削除に失敗しました。')
     }
   }
 

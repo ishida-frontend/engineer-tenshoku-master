@@ -6,7 +6,7 @@ import { CourseType } from '../../types'
 
 export function CourseList() {
   const fetcher = async () =>
-    (await fetch('http://localhost:8000/course/all')).json()
+    (await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/course/all`)).json()
 
   const { data, error } = useSWR('courseList', fetcher)
 

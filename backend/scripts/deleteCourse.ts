@@ -1,4 +1,6 @@
+import express from 'express'
 import { PrismaClient } from '@prisma/client'
+
 const prisma = new PrismaClient()
 
 prisma.$use(async (params, next) => {
@@ -20,8 +22,25 @@ prisma.$use(async (params, next) => {
   return next(params)
 })
 
-export async function deleteCourse(courseId: number) {
-  await prisma.course.delete({ where: { id: courseId } })
+export async function deleteCourse(
+  req: express.Request,
+  res: express.Response,
+) {
+  try {
+    const { id: courseId } = req.body
+
+    await prisma.course.delete({
+      where: { id: courseId },
+    })
+
+    res.status(201).json({
+      message: '削除されました。自動的にコース一覧へ戻ります。',
+    })
+  } catch (e: any) {
+    res.status(500).json({ message: 'サーバー内部エラーが発生しました。' })
+  } finally {
+    await prisma.$disconnect()
+  }
 }
 
 export async function deleteCourses(courseId1: number, courseId2: number) {
