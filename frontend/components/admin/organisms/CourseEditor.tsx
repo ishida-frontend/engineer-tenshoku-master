@@ -25,6 +25,10 @@ import { useCustomToast } from '../../../hooks/useCustomToast'
 type CourseEditorType = CourseType & {
   isLoading: boolean
   isSubmitting: boolean
+  isNameError: boolean
+  isDescError: boolean
+  showNameError: string
+  showDescError: string
 }
 
 export function CourseEditor() {
@@ -58,14 +62,13 @@ export function CourseEditor() {
     updated_at: '',
     isLoading: false,
     isSubmitting: false,
+    isNameError: false,
+    isDescError: false,
+    showNameError: '',
+    showDescError: '',
   }
   const [course, setCourse] =
     useState<Partial<CourseEditorType>>(initialCourseState)
-  // initialCourseStateオブジェクトに入れると、なぜかstateが変更されないので外出し
-  const [isNameError, setIsNameError] = useState<boolean>(false)
-  const [isDescError, setIsDescError] = useState<boolean>(false)
-  const [showNameError, setShowNameError] = useState<string>('')
-  const [showDescError, setShowDescError] = useState<string>('')
 
   // ページを開いて１０秒でデータ取得ができなかった場合のエラートースト
   useEffect(() => {
@@ -86,9 +89,9 @@ export function CourseEditor() {
 
   // PUTリクエストイベントハンドラ
   const updateCourse = async (event: FormEvent) => {
-    setCourse({ ...course, isSubmitting: true })
-
     event.preventDefault()
+
+    setCourse((prevCourse) => ({ ...prevCourse, isSubmitting: true }))
 
     try {
       const response = await fetch(
@@ -111,30 +114,35 @@ export function CourseEditor() {
 
       if (response.ok) {
         showSuccessToast(validResults.message)
-        setIsNameError(false)
-        setIsDescError(false)
+        setCourse((prevCourse) => ({ ...prevCourse, isNameError: false }))
+        setCourse((prevCourse) => ({ ...prevCourse, isDescError: false }))
       } else if (response.status === 400) {
         showErrorToast('データの更新に失敗しました')
 
         if (course.name && course.name.length >= 5) {
-          setIsNameError(false)
+          setCourse((prevCourse) => ({ ...prevCourse, isNameError: false }))
         } else {
-          setIsNameError(true)
+          setCourse((prevCourse) => ({ ...prevCourse, isNameError: true }))
         }
-        setShowNameError(validResults.errors.name)
+        setCourse((prevCourse) => ({
+          ...prevCourse,
+          showNameError: validResults.errors.name,
+        }))
 
         if (course.description && course.description.length >= 15) {
-          setIsDescError(false)
+          setCourse((prevCourse) => ({ ...prevCourse, isDescError: false }))
         } else {
-          setIsDescError(true)
+          setCourse((prevCourse) => ({ ...prevCourse, isDescError: true }))
         }
-        setShowDescError(validResults.errors.description)
-
+        setCourse((prevCourse) => ({
+          ...prevCourse,
+          showDescError: validResults.errors.description,
+        }))
       }
     } catch (error) {
       showErrorToast('データの更新に失敗しました')
     } finally {
-      setCourse({ ...course, isSubmitting: false })
+      setCourse((prevCourse) => ({ ...prevCourse, isSubmitting: false }))
     }
   }
 
@@ -153,7 +161,11 @@ export function CourseEditor() {
             <Text>作成日時：{formatDate(courseData.created_at)}</Text>
             <Text>更新日時：{formatDate(courseData.updated_at)}</Text>
           </Box>
-          <FormControl id="courseName" isRequired isInvalid={isNameError}>
+          <FormControl
+            id="courseName"
+            isRequired
+            isInvalid={course.isNameError}
+          >
             <FormLabel htmlFor="courseName">コース名（必須）</FormLabel>
             <Input
               id="courseName"
@@ -164,12 +176,12 @@ export function CourseEditor() {
               border="1px"
               borderColor="gray.400"
             />
-           <FormErrorMessage>{showNameError}</FormErrorMessage>
+            <FormErrorMessage>{course.showNameError}</FormErrorMessage>
           </FormControl>
           <FormControl
             id="courseDescription"
             isRequired
-            isInvalid={isDescError}
+            isInvalid={course.isDescError}
           >
             <FormLabel htmlFor="courseDescription">
               コース概要（必須）
@@ -186,7 +198,7 @@ export function CourseEditor() {
               border="1px"
               borderColor="gray.400"
             ></Textarea>
-           <FormErrorMessage>{showDescError}</FormErrorMessage>
+            <FormErrorMessage>{course.showDescError}</FormErrorMessage>
           </FormControl>
           <FormControl id="coursePublished" isRequired>
             <FormLabel htmlFor="CoursePublished">コースの公開設定</FormLabel>
