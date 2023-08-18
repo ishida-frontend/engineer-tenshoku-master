@@ -7,16 +7,15 @@ import {
   SignUpCommand,
 } from '@aws-sdk/client-cognito-identity-provider'
 import { jwtHelper } from '../utils/jwt'
+import { signupValidationRules } from '../validation/auth'
+import { validate } from '../validation/index'
 
 const router = Router()
 
 // signup
 router.post(
   '/signup',
-  [
-    body('email').notEmpty().normalizeEmail().isEmail(),
-    body('password').isString().isLength({ min: 8 }),
-  ],
+  validate(signupValidationRules),
   async (req: Request, res: Response) => {
     const result = validationResult(req)
     if (!result.isEmpty()) {
@@ -34,7 +33,9 @@ router.post(
 
     try {
       const data = await CognitoClient.send(signUpCommand)
-      res.status(200).end()
+      res.status(200).json({
+        success: true,
+      })
     } catch (err) {
       console.error(err)
       res.status(400).end()
@@ -92,6 +93,10 @@ router.get('/tokenVerification', async (req, res, next) => {
       //検証がOKであれば、処理継続
       res.status(200).json({
         check: true,
+      })
+    } else {
+      res.status(200).json({
+        check: false,
       })
     }
   } catch (e: any) {

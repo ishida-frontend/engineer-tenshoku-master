@@ -2,6 +2,7 @@
 import {
   Box,
   Button,
+  Center,
   Checkbox,
   Container,
   Flex,
@@ -9,16 +10,19 @@ import {
   HStack,
   Heading,
   Input,
-  Link,
   Text,
   VStack,
   Wrap,
+  Link as ChakraLink,
+  useToast,
 } from '@chakra-ui/react'
+import Link from 'next/link'
 import React, { useState } from 'react'
+import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export default function Register() {
+  const { showSuccessToast } = useCustomToast()
   const [formState, setFormState] = useState({
-    username: '',
     email: '',
     password: '',
   })
@@ -28,21 +32,32 @@ export default function Register() {
   const handleSubmit = async (e) => {
     // https://github.com/ishida-frontend/engineer-tenshoku-master/pull/59
     e.preventDefault()
-    console.log(formState)
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formState),
         },
-        body: JSON.stringify(formState),
-      },
-    )
+      )
+      const data = await res.json()
+
+      if (data.success) {
+        showSuccessToast(
+          'メールアドレスに認証メールをお届けしました。そちらのリンクからログインしてください。',
+        )
+      }
+    } catch (err) {
+      console.log('err', err)
+      throw new Error('エラーが発生しました')
+    }
   }
 
   return (
-    <Box bg={'gray.200'}>
+    <Center minH={'100vh'} bg={'gray.200'}>
       <Container padding="60px 96px" bg={'white'}>
         <Heading
           fontSize={'2xl'}
@@ -52,31 +67,7 @@ export default function Register() {
         >
           新規登録
         </Heading>
-
         <VStack gap={'36px'}>
-          <FormControl id="username" isRequired>
-            <Container ml={'0px'} pb={'10px'} pl={'0px'}>
-              <Flex>
-                <Text>お名前</Text>
-                <Text color="teal">(必須)</Text>
-              </Flex>
-            </Container>
-            <Input
-              id="courseName"
-              type="text"
-              value={formState.username}
-              onChange={(e) =>
-                setFormState({
-                  ...formState,
-                  username: e.target.value,
-                })
-              }
-              aria-required={true}
-              border="1px"
-              borderColor="gray.400"
-            />
-          </FormControl>
-
           <FormControl id="courseDescription" isRequired>
             <Container ml={'0px'} pb={'10px'} pl={'0px'}>
               <Flex>
@@ -132,20 +123,19 @@ export default function Register() {
               />
               <Wrap>
                 <Text>
-                  <Link color="teal.500" href="#">
+                  <ChakraLink color="teal.500" href="#">
                     利用規約
-                  </Link>
+                  </ChakraLink>
                   および
-                  <Link color="teal.500" href="#">
+                  <ChakraLink color="teal.500" href="#">
                     プライバシーポリシー
-                  </Link>
+                  </ChakraLink>
                   に同意する
                 </Text>
               </Wrap>
             </HStack>
           </Container>
         </VStack>
-
         <Button
           w={'100%'}
           mt={'42px'}
@@ -155,11 +145,11 @@ export default function Register() {
         >
           登録する
         </Button>
-
-        <Box border={'1px solid '} />
-
-        <Box>ログイン</Box>
+        <Box border={'1px solid'} borderColor={'#C400'} />
+        <Box color={'teal'}>
+          <Link href={'/auth/login'}>ログインはこちら</Link>
+        </Box>{' '}
       </Container>
-    </Box>
+    </Center>
   )
 }

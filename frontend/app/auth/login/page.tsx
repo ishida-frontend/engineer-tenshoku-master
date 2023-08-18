@@ -2,6 +2,7 @@
 import {
   Box,
   Button,
+  Center,
   Container,
   Flex,
   FormControl,
@@ -9,13 +10,14 @@ import {
   Input,
   Text,
   VStack,
-  Wrap,
 } from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
-import { useAuth } from '../../../hooks/useAuth'
 import { TokenContext } from '../../../providers/AuthProviders'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function Login() {
+  const router = useRouter()
   const { tokens, setTokens } = useContext(TokenContext)
   const [formState, setFormState] = useState({
     email: '',
@@ -40,23 +42,15 @@ export default function Login() {
           body: JSON.stringify(formState),
         },
       )
-      const { AccessToken, ExpiresIn, IdToken, RefreshToken } = await res.json()
-      setTokens({
-        AccessToken,
-        ExpiresIn,
-        IdToken,
-        RefreshToken,
-      })
-      console.log('tokens', tokens)
+      router.push('/')
     } catch (err) {
       console.log('err', err)
-
       throw new Error('エラーが発生しました')
     }
   }
 
   return (
-    <Box bg={'gray.200'}>
+    <Center minH={'100vh'} bg={'gray.200'}>
       <Container padding="60px 96px" bg={'white'}>
         <Heading
           fontSize={'2xl'}
@@ -79,6 +73,7 @@ export default function Login() {
               id="email"
               type="text"
               value={formState.email}
+              placeholder="frontendengineer@gmail.com"
               onChange={(e) =>
                 setFormState({
                   ...formState,
@@ -100,7 +95,8 @@ export default function Login() {
             </Container>
             <Input
               id="password"
-              type="text"
+              type="password"
+              placeholder="passwordを入力してください"
               value={formState.password}
               onChange={(e) =>
                 setFormState({
@@ -125,11 +121,14 @@ export default function Login() {
           ログイン
         </Button>
 
-        <Box border={'1px solid '} />
+        <Box border={'1px solid #C400'} />
 
-        <Box>パスワードを忘れた場合はこちら</Box>
-        <Box>新規登録はこちら</Box>
+        {/* // TODO パスワードを忘れた場合       */}
+        {/* <Text>パスワードを忘れた場合はこちら</Text> */}
+        <Box color={'teal'}>
+          <Link href={'/auth/register'}>新規登録はこちら</Link>
+        </Box>
       </Container>
-    </Box>
+    </Center>
   )
 }
