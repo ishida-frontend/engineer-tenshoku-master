@@ -3,15 +3,14 @@ import {
   Box,
   Button,
   Heading,
-  HStack,
   Link,
   SimpleGrid,
   Text,
   VStack,
 } from '@chakra-ui/react'
 import useSWR from 'swr'
-import { format } from 'date-fns'
 
+import formatDate from '../../../utils/formatDate'
 import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
@@ -27,11 +26,6 @@ type CourseType = {
 
 export function CourseList() {
   const { showErrorToast } = useCustomToast()
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return format(date, 'yyy-MM-dd HH:mm')
-  }
 
   const fetcher = async () =>
     (await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course`)).json()
