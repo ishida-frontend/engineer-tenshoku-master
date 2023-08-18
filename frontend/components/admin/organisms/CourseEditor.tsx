@@ -25,10 +25,8 @@ import { useCustomToast } from '../../../hooks/useCustomToast'
 type CourseEditorType = CourseType & {
   isLoading: boolean
   isSubmitting: boolean
-  isNameError: boolean
-  isDescError: boolean
-  showNameError: string
-  showDescError: string
+  nameError: ''
+  descError: ''
 }
 
 export function CourseEditor() {
@@ -53,28 +51,26 @@ export function CourseEditor() {
   )
 
   // 初期状態を定義し、useStateで初期化
-  const initialCourseState: Partial<CourseEditorType> = {
+  const initialCourseState: CourseEditorType = {
     id,
     name: '',
     description: '',
     published: false,
     created_at: '',
     updated_at: '',
+    deleted_at: '',
     isLoading: false,
     isSubmitting: false,
-    isNameError: false,
-    isDescError: false,
-    showNameError: '',
-    showDescError: '',
+    nameError: '',
+    descError: '',
   }
-  const [course, setCourse] =
-    useState<Partial<CourseEditorType>>(initialCourseState)
+  const [course, setCourse] = useState<CourseEditorType>(initialCourseState)
 
   // ページを開いて１０秒でデータ取得ができなかった場合のエラートースト
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (!courseData) {
-        showErrorToast('データの取得に失敗しました')
+        showErrorToast('データの取得に失敗しました。')
       }
     }, 10000)
     return () => clearTimeout(timeout)
@@ -114,33 +110,29 @@ export function CourseEditor() {
 
       if (response.ok) {
         showSuccessToast(validResults.message)
-        setCourse((prevCourse) => ({ ...prevCourse, isNameError: false }))
-        setCourse((prevCourse) => ({ ...prevCourse, isDescError: false }))
+        setCourse((prevCourse) => ({ ...prevCourse, nameError: '' }))
+        setCourse((prevCourse) => ({ ...prevCourse, descError: '' }))
       } else if (response.status === 400) {
-        showErrorToast('データの更新に失敗しました')
-
         if (course.name && course.name.length >= 5) {
-          setCourse((prevCourse) => ({ ...prevCourse, isNameError: false }))
+          setCourse((prevCourse) => ({ ...prevCourse, nameError: '' }))
         } else {
-          setCourse((prevCourse) => ({ ...prevCourse, isNameError: true }))
+          setCourse((prevCourse) => ({
+            ...prevCourse,
+            nameError: validResults.errors.name,
+          }))
         }
-        setCourse((prevCourse) => ({
-          ...prevCourse,
-          showNameError: validResults.errors.name,
-        }))
 
         if (course.description && course.description.length >= 15) {
-          setCourse((prevCourse) => ({ ...prevCourse, isDescError: false }))
+          setCourse((prevCourse) => ({ ...prevCourse, descError: '' }))
         } else {
-          setCourse((prevCourse) => ({ ...prevCourse, isDescError: true }))
+          setCourse((prevCourse) => ({
+            ...prevCourse,
+            descError: validResults.errors.description,
+          }))
         }
-        setCourse((prevCourse) => ({
-          ...prevCourse,
-          showDescError: validResults.errors.description,
-        }))
       }
     } catch (error) {
-      showErrorToast('データの更新に失敗しました')
+      showErrorToast('データの更新に失敗しました。')
     } finally {
       setCourse((prevCourse) => ({ ...prevCourse, isSubmitting: false }))
     }
@@ -158,15 +150,21 @@ export function CourseEditor() {
           </Link>
           <Box p={4} border="1px" borderColor="gray.400" borderRadius={9}>
             <Text>コースID：{course.id}</Text>
-            <Text>作成日時：{formatDate(courseData.created_at)}</Text>
-            <Text>更新日時：{formatDate(courseData.updated_at)}</Text>
+            <Text>
+              作成日時：
+              {courseData.created_at && formatDate(courseData.created_at)}
+            </Text>
+            <Text>
+              更新日時：
+              {courseData.updated_at && formatDate(courseData.updated_at)}
+            </Text>
           </Box>
           <FormControl
             id="courseName"
             isRequired
-            isInvalid={course.isNameError}
+            isInvalid={!!course.nameError}
           >
-            <FormLabel htmlFor="courseName">コース名（必須）</FormLabel>
+            <FormLabel htmlFor="courseName">コース名（5文字以上）</FormLabel>
             <Input
               id="courseName"
               type="text"
@@ -176,15 +174,15 @@ export function CourseEditor() {
               border="1px"
               borderColor="gray.400"
             />
-            <FormErrorMessage>{course.showNameError}</FormErrorMessage>
+            <FormErrorMessage>{course.nameError}</FormErrorMessage>
           </FormControl>
           <FormControl
             id="courseDescription"
             isRequired
-            isInvalid={course.isDescError}
+            isInvalid={!!course.descError}
           >
             <FormLabel htmlFor="courseDescription">
-              コース概要（必須）
+              コース概要（15文字以上）
             </FormLabel>
             <Textarea
               id="courseDescription"
@@ -198,7 +196,7 @@ export function CourseEditor() {
               border="1px"
               borderColor="gray.400"
             ></Textarea>
-            <FormErrorMessage>{course.showDescError}</FormErrorMessage>
+            <FormErrorMessage>{course.descError}</FormErrorMessage>
           </FormControl>
           <FormControl id="coursePublished" isRequired>
             <FormLabel htmlFor="CoursePublished">コースの公開設定</FormLabel>
