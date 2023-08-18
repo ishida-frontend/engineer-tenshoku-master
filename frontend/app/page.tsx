@@ -20,6 +20,7 @@ export default function Page() {
   }
 
   if (check.isAuthenticated) {
+    // TODO 教材一覧画面に飛ばす
     return <Box>認証成功</Box>
   }
 

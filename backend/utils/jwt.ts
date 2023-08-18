@@ -12,7 +12,8 @@ export class jwtHelper {
       // TODO 期限が過ぎてたらfalseを返す処理
       return payload ? true : false
     } catch (err) {
-      console.log(err)
+      console.log('err', err)
+      return false
     }
   }
 }
