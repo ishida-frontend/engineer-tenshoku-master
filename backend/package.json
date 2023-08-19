@@ -14,7 +14,7 @@
     "validation": "nodemon ./scripts/validation.ts",
     "createTag": "nodemon ./scripts/createTag.ts",
     "readTag": "nodemon ./scripts/readTag.ts",
-    "updateTag": "nodemon ./scripts/updateTag.ts"
+    "deleteTag":"nodemon ./scripts/deleteTag.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
