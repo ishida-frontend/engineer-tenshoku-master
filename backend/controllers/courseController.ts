@@ -1,4 +1,6 @@
 import express from 'express'
+import z from 'zod'
+
 import { createCourse } from '../scripts/createCourse'
 import {
   readCourse,
@@ -13,10 +15,19 @@ exports.checkCreateCourse = async function (
   res: express.Response,
 ) {
   try {
-    await createCourse()
-    res.send('新しいコースが作成されました！')
+    const { name, description, published } = req.body
+
+    if (!name || !description) {
+      return res
+        .status(400)
+        .json({ message: 'コース名とコース概要は必須です。' })
+    }
+
+    await createCourse(name, description, published)
+
+    res.status(201).json({ message: '新しいコースが作成されました！' })
   } catch (e: any) {
-    res.status(500).send('エラーが発生しました')
+    res.status(500).json({ message: 'エラーが発生しました' })
   }
 }
 
@@ -25,11 +36,8 @@ exports.checkReadCourse = async function (
   res: express.Response,
 ) {
   try {
-    await readCourse()
-    await readFilteredCourses()
-    res.send(
-      '１件のコースを読み込みました！<br>条件指定のコースを読み込みました！',
-    )
+    const course = await readCourse(Number(req.params.id))
+    res.json(course)
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
   }
@@ -41,7 +49,19 @@ exports.checkReadAllCourses = async function (
 ) {
   try {
     const courses = await readAllCourses()
-    res.json(courses)
+    res.status(200).json(courses)
+  } catch (e: any) {
+    res.status(500).send('エラーが発生しました')
+  }
+}
+
+exports.checkReadFilteredCourses = async function (
+  req: express.Request,
+  res: express.Response,
+) {
+  try {
+    await readFilteredCourses()
+    res.send('条件指定のコースを読み込みました！')
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
   }
@@ -52,9 +72,24 @@ exports.checkUpdateCourse = async function (
   res: express.Response,
 ) {
   try {
-    await updateCourse()
+    const { id, name, description, published } = req.body
+
+    await updateCourse({ id, name, description, published })
+    res.status(200).json({ message: '変更が保存されました' })
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: error.issues[0].message })
+    }
+  }
+}
+
+exports.checkUpdateCourses = async function (
+  req: express.Request,
+  res: express.Response,
+) {
+  try {
     await updateCourses()
-    res.send('１件のコースを更新しました！<br>複数のコースを更新しました！')
+    res.send('複数のコースを更新しました！')
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
   }
