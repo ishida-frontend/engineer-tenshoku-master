@@ -3,15 +3,13 @@ import 'dotenv/config'
 import { contactValidationRules } from '../validation'
 import { validate, courseValidationRules } from '../validation/courseValidation'
 
-import { deleteCourse } from '../scripts/deleteCourse'
-
 const {
   checkCreateCourse,
   checkReadCourse,
   checkReadAllCourses,
   checkReadFilteredCourses,
   checkUpdateCourse,
-  checkDeleteCourse,
+  deleteCourse,
 } = require('../controllers/courseController')
 const {
   checkCreateVideo,
@@ -61,7 +59,7 @@ courseRouter.get('/update', checkUpdateCourse)
 
 const videoRouter = express.Router()
 router.use('/video', videoRouter)
-videoRouter.get('/create', checkCreateVideo)
+// videoRouter.get('/create', checkCreateVideo)
 videoRouter.get('/read', checkReadVideo)
 videoRouter.get('/update', checkUpdateVideo)
 videoRouter.get('/delete', checkDeleteVideo)
