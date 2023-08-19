@@ -15,39 +15,23 @@ import {
 } from '@chakra-ui/react'
 
 export function SectionManage() {
-  const [state, setState] = useState({
-    course_id: 1,
-    title: '',
-    published: '',
-  })
-  // React Hook Form を使うための基本設定
-  const { register, handleSubmit, reset, control } = useForm({
-    // input の value の 初期値を設置
-    defaultValues: {
-      sections: [{ sectionTitle: '' }],
+  const [state, setState] = useState([
+    {
+      course_id: 1,
+      title: '',
+      published: true,
     },
-  })
+  ])
 
-  // input を動的に増減させるための設定
-  const { fields, prepend, append, remove } = useFieldArray({
-    control,
-    sections: 'sections',
-  })
-
-  // submitボタンを押した時に行う処理
-  const onSubmit = (data) => {
-    const list = []
-    data.sections.forEach((item, index) =>
-      list.push(`\nセクジョンNo.${index}:${item.sectionTitle}`),
-    )
-    // 送信後 input の入力欄を初期化
-    reset()
-  }
-
-  // input をいくつ追加したカウント
   const [count, setCount] = useState(0)
-  const countUp = () => setCount(count + 1)
-  console.log('count', count)
+  const [sectionTitle, setSectionTitle] = useState([])
+
+  //クリック時にitems配列に新しいitemを作る処理
+  const handleAddSection = () => {
+    // input をいくつ追加したカウント
+    const countUp = () => setCount(count + 1)
+    console.log('count', count)
+  }
 
   // input を減らすボタンを押した時の処理
   const reduce = () => {
@@ -57,13 +41,32 @@ export function SectionManage() {
     }
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.persist()
-    const target = e.target
+  // React Hook Form を使うための基本設定
+  const { register, handleSubmit, reset, control } = useForm({
+    // input の value の 初期値を設置
+    defaultValues: {
+      sections: [{ sectionTitle: '' }],
+    },
+  })
+
+  // inputタグ を動的に増減させるための設定
+  const { fields, prepend, append, remove } = useFieldArray({
+    control,
+    name: 'sections',
+  })
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index) => {
+    e[index].persist()
+    const target[index] = e[index].target
     const name = target.name
     setState(() => {
       return { ...state, [name]: target.value }
     })
+  }
+
+  // submitボタンを押した時に行う処理
+  const onSubmit = (data) => {
+    const list = []
   }
 
   return (
@@ -75,24 +78,30 @@ export function SectionManage() {
         <Container mt="109px" maxW={'100%'} bg={'white'} p={'0px'}>
           <FormControl onSubmit={handleSubmit(onSubmit)} maxW={'904px'}>
             {fields.map((field, index) => (
-              <div key={field.id}>
+              <Box
+                key={field.id}
+                border={'2px solid gray'}
+                borderRadius={'2xl'}
+                p={'8px'}
+                m={'10px'}
+              >
                 <label htmlFor={`sections.${index}.sectionTitle`}>
-                  セクションNo.{index}：
+                  セクション No.{index}
                   <Input
                     {...register(`sections.${index}.sectionTitle`)}
                     type="text"
-                    name="title"
-                    value={state.title}
+                    name={'title[' + index + ']'}
+                    value={state[index].title}
                     onChange={handleInputChange}
-                    placeholder={'JavaScript環境設定'}
+                    placeholder={'セクション名'}
                   />
                 </label>
-              </div>
+              </Box>
             ))}
 
             <button
               type="button"
-              onClick={() => [append({ sectionTitle: '' }), countUp()]}
+              onClick={() => [append({ sectionTitle: '' }), handleAddSection()]}
             >
               セクションを追加
             </button>
