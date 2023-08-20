@@ -133,147 +133,144 @@ export function UserContactForm() {
   }
 
   return (
-    <>
-      <Container bg="gray.100" maxW={'1512px'}>
-        <Container bg="white" maxW={'1024px'} centerContent>
-          <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
-            お問い合わせ
-          </Heading>
-          <FormControl onSubmit={handleSubmit} maxW={'904px'}>
-            <Container mt="109px" maxW={'100%'} bg={'white'} p={'0px'}>
-              <FormControl
-                isInvalid={!!errors.name?.[0]}
-                mt={'80px'}
-                mb={'40px'}
-                bg={'white'}
-                h={'80px'}
-              >
-                <Container ml={'0px'} pb={'10px'} pl={'0px'}>
-                  <Flex>
-                    <Text>お名前</Text>
-                    <Text color="teal">(必須)</Text>
-                  </Flex>
-                </Container>
-                <Input
-                  type="text"
-                  name="name"
-                  value={state.name}
-                  onChange={handleInputChange}
-                  placeholder={'田中 太郎'}
-                />
-                <FormErrorMessage>
-                  {errors.name && errors.name[0]}
-                </FormErrorMessage>
-              </FormControl>
+    <Container bg="gray.100" maxW={'1512px'}>
+      <Container bg="white" maxW={'1024px'} centerContent>
+        <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
+          お問い合わせ
+        </Heading>
+        <FormControl onSubmit={handleSubmit} maxW={'904px'}>
+          <Container mt="109px" maxW={'100%'} bg={'white'} p={'0px'}>
+            <FormControl
+              isInvalid={!!errors.name?.[0]}
+              mt={'80px'}
+              mb={'40px'}
+              bg={'white'}
+              h={'80px'}
+            >
+              <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                <Flex>
+                  <Text>お名前</Text>
+                  <Text color="teal">(必須)</Text>
+                </Flex>
+              </Container>
+              <Input
+                type="text"
+                name="name"
+                value={state.name}
+                onChange={handleInputChange}
+                placeholder={'田中　太郎'}
+              />
+              <FormErrorMessage>
+                {errors.name && errors.name[0]}
+              </FormErrorMessage>
+            </FormControl>
 
-              <FormControl
-                isInvalid={!!errors.email?.[0]}
-                mb={'40px'}
-                bg={'white'}
-                h={'80px'}
-              >
-                <Container ml={'0px'} pb={'10px'} pl={'0px'}>
-                  <Flex>
-                    <Text>メールアドレス</Text>
-                    <Text color="teal">(必須)</Text>
-                  </Flex>
-                </Container>
-                <Input
-                  type="email"
-                  name="email"
-                  value={state.email}
-                  onChange={handleInputChange}
-                  placeholder={'sample@hoge.com'}
-                />
-                <FormErrorMessage>
-                  {errors.email && errors.email[0]}
-                </FormErrorMessage>
-              </FormControl>
+            <FormControl
+              isInvalid={!!errors.email?.[0]}
+              mb={'40px'}
+              bg={'white'}
+              h={'80px'}
+            >
+              <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                <Flex>
+                  <Text>メールアドレス</Text>
+                  <Text color="teal">(必須)</Text>
+                </Flex>
+              </Container>
+              <Input
+                type="email"
+                name="email"
+                value={state.email}
+                onChange={handleInputChange}
+                placeholder={'sample@hoge.com'}
+              />
+              <FormErrorMessage>
+                {errors.email && errors.email[0]}
+              </FormErrorMessage>
+            </FormControl>
 
-              <FormControl
-                isInvalid={!!errors.subject?.[0]}
-                mb={'40px'}
-                bg={'white'}
-                h={'80px'}
-              >
-                <Container ml={'0px'} pb={'10px'} pl={'0px'}>
-                  <Flex>
-                    <Text>お問い合わせタイトル</Text>
-                    <Text color="teal">(必須)</Text>
-                  </Flex>
-                </Container>
-                <Input
-                  type="text"
-                  name="subject"
-                  value={state.subject}
-                  onChange={handleInputChange}
-                  placeholder={'動画名または質問タイトルを記入してください'}
-                />
-                <FormErrorMessage>
-                  {errors.subject && errors.subject[0]}
-                </FormErrorMessage>
-              </FormControl>
+            <FormControl
+              isInvalid={!!errors.subject?.[0]}
+              mb={'40px'}
+              bg={'white'}
+              h={'80px'}
+            >
+              <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                <Flex>
+                  <Text>お問い合わせ概要</Text>
+                  <Text color="teal">(必須)</Text>
+                </Flex>
+              </Container>
+              <Input
+                type="text"
+                name="subject"
+                value={state.subject}
+                onChange={handleInputChange}
+                placeholder={'お問い合わせ概要を記入してください'}
+              />
+              <FormErrorMessage>
+                {errors.subject && errors.subject[0]}
+              </FormErrorMessage>
+            </FormControl>
 
-              <FormControl
-                isInvalid={!!errors.message?.[0]}
-                mb={'40px'}
-                bg={'white'}
-                h={'120px'}
-              >
-                <Container ml={'0px'} pb={'10px'} pl={'0px'}>
-                  <Flex>
-                    <Text>お問い合わせ内容</Text>
-                    <Text color="teal">(必須)</Text>
-                  </Flex>
-                </Container>
-                <Textarea
-                  name="お問い合わせ内容"
-                  value={state.message}
-                  onChange={onChangeHandler}
-                  placeholder={'こちらお問い合わせ内容を記入してください'}
-                />
-                <FormErrorMessage>
-                  {errors.message && errors.message[0]}
-                </FormErrorMessage>
-              </FormControl>
-            </Container>
+            <FormControl
+              isInvalid={!!errors.message?.[0]}
+              mb={'40px'}
+              bg={'white'}
+              h={'120px'}
+            >
+              <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                <Flex>
+                  <Text>お問い合わせ内容</Text>
+                  <Text color="teal">(必須)</Text>
+                </Flex>
+              </Container>
+              <Textarea
+                name="お問い合わせ内容"
+                value={state.message}
+                onChange={onChangeHandler}
+                placeholder={'こちらお問い合わせ内容を記入してください'}
+              />
+              <FormErrorMessage>
+                {errors.message && errors.message[0]}
+              </FormErrorMessage>
+            </FormControl>
+          </Container>
 
-            <Container ml={'0px'} p={'0px'}>
-              <HStack>
-                <input
-                  type="checkbox"
-                  name="agree"
-                  id="agreeCheck"
-                  onChange={() => toggleCheckbox()}
-                />
-                <Wrap>
-                  <Text>
-                    <Link color="teal.500" href="#">
-                      利用規約
-                    </Link>
-                    および
-                    <Link color="teal.500" href="#">
-                      プライバシーポリシー
-                    </Link>
-                    に同意する
-                  </Text>
-                </Wrap>
-              </HStack>
-            </Container>
-            <VStack>
-              <Button
-                type="submit"
-                onClick={handleSubmit}
-                disabled={!isChecked}
-                mt={'20'}
-                colorScheme="teal"
-              >
-                送信する
-              </Button>
-            </VStack>
-          </FormControl>
-        </Container>
+          <Container ml={'0px'} p={'0px'}>
+            <HStack>
+              <input
+                type="checkbox"
+                name="agree"
+                id="agreeCheck"
+                onChange={() => toggleCheckbox()}
+              />
+              <Wrap>
+                <Text>
+                  <Link color="teal.500" href="#">
+                    利用規約
+                  </Link>
+                  および
+                  <Link color="teal.500" href="#">
+                    プライバシーポリシー
+                  </Link>
+                  に同意する
+                </Text>
+              </Wrap>
+            </HStack>
+          </Container>
+          <VStack>
+            <Button
+              onClick={handleSubmit}
+              disabled={!isChecked}
+              mt={'20'}
+              colorScheme="teal"
+            >
+              送信する
+            </Button>
+          </VStack>
+        </FormControl>
       </Container>
-    </>
+    </Container>
   )
 }
