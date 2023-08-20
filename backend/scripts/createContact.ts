@@ -23,7 +23,7 @@ export async function createContact(req: createContactParamsType) {
     }
     const createdContact = await prisma.contact.create({
       data: {
-        name: contactData.name ?? '',
+        name: contactData.name,
         email: contactData.email,
         subject: contactData.subject,
         message: contactData.message,
