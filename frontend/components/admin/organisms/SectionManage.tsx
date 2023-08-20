@@ -26,11 +26,9 @@ export function SectionManage() {
   const [count, setCount] = useState(0)
 
   //クリック時にitems配列に新しいitemを作る処理
-  const handleAddSection = () => {
-    // input をいくつ追加したカウント
-    const countUp = () => setCount(count + 1)
-    console.log('count', count)
-  }
+  // input をいくつ追加したカウント
+  const countUp = () => setCount(count + 1)
+  console.log('count', count)
 
   // input を減らすボタンを押した時の処理
   const reduce = () => {
@@ -55,16 +53,32 @@ export function SectionManage() {
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index) => {
-    // const target[index] = e[index].target
     const name = e.target.name
     setState(() => {
       return { ...state, [name]: e.target.value }
     })
   }
 
+  const fetcher = async (state, index) => {
+    const res = await fetch('http://localhost:8000/section/create', {
+      method: 'POST',
+      body: JSON.stringify({
+        order: index,
+        course_id: state[index].course_id,
+        title: state[index].title,
+        publised: state[index].published,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    return res.json()
+  }
+
   // submitボタンを押した時に行う処理
-  const onSubmit = (data) => {
-    const list = []
+  const onSubmit = async (index) => {
+    console.log('fetcher')
+    await fetcher(state, index)
   }
 
   return (
@@ -74,47 +88,54 @@ export function SectionManage() {
           コース内容
         </Heading>
         <Container mt="109px" maxW={'100%'} bg={'white'} p={'0px'}>
-          <FormControl onSubmit={handleSubmit(onSubmit)} maxW={'904px'}>
-            {fields.map((field, index) => (
-              <Box
-                key={field.id}
-                border={'2px solid gray'}
-                borderRadius={'2xl'}
-                p={'8px'}
-                m={'10px'}
+          <VStack>
+            <FormControl onSubmit={handleSubmit(onSubmit)} maxW={'904px'}>
+              {fields.map((field, index) => (
+                <Box
+                  key={field.id}
+                  border={'2px solid gray'}
+                  borderRadius={'2xl'}
+                  p={'8px'}
+                  mb={'10px'}
+                >
+                  <label htmlFor={`sections.${index}.sectionTitle`}>
+                    セクション No.{index}
+                    <Input
+                      {...register(`sections.${index}.sectionTitle`)}
+                      type="text"
+                      name={'title[' + index + ']'}
+                      value={state[index + 1]?.title}
+                      onChange={(e) => handleInputChange(e, index)}
+                      placeholder={'セクション名'}
+                    />
+                  </label>
+                </Box>
+              ))}
+
+              <button
+                type="button"
+                onClick={() => [append({ sectionTitle: '' }), countUp()]}
               >
-                <label htmlFor={`sections.${index}.sectionTitle`}>
-                  セクション No.{index}
-                  <Input
-                    {...register(`sections.${index}.sectionTitle`)}
-                    type="text"
-                    name={'title[' + index + ']'}
-                    value={state[index + 1]?.title}
-                    onChange={(e) => handleInputChange(e, index)}
-                    placeholder={'セクション名'}
-                  />
-                </label>
-              </Box>
-            ))}
+                セクションを追加
+              </button>
+              <br />
 
-            <button
-              type="button"
-              onClick={() => [append({ sectionTitle: '' }), handleAddSection()]}
-            >
-              セクションを追加
-            </button>
-            <br />
-
-            <button type="button" onClick={reduce}>
-              セクションを削除
-            </button>
-            <br />
-            <VStack>
-              <Button mt={'20'} colorScheme="teal">
-                送信する
-              </Button>
-            </VStack>
-          </FormControl>
+              <button type="button" onClick={reduce}>
+                セクションを削除
+              </button>
+              <br />
+              <VStack>
+                <Button
+                  mt={'20'}
+                  colorScheme="teal"
+                  type="submit"
+                  onClick={onSubmit}
+                >
+                  送信する
+                </Button>
+              </VStack>
+            </FormControl>
+          </VStack>
         </Container>
       </Container>
     </Container>
