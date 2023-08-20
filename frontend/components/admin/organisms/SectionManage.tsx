@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 
 export function SectionManage() {
-  const [state, setState] = useState([
+  const [sections, setSections] = useState([
     {
       course_id: 1,
       title: '',
@@ -54,19 +54,21 @@ export function SectionManage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index) => {
     const name = e.target.name
-    setState(() => {
-      return { ...state, [name]: e.target.value }
+    setSections(() => {
+      return { ...sections, [name]: e.target.value }
     })
   }
 
-  const fetcher = async (state, index) => {
+  const fetcher = async (sections, index) => {
+    console.log('sections', sections)
+    console.log('index', index)
     const res = await fetch('http://localhost:8000/section/create', {
       method: 'POST',
       body: JSON.stringify({
-        order: index,
-        course_id: state[index].course_id,
-        title: state[index].title,
-        publised: state[index].published,
+        order: sections.count,
+        course_id: sections.course_id,
+        title: sections.title,
+        publised: sections.published,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -76,9 +78,14 @@ export function SectionManage() {
   }
 
   // submitボタンを押した時に行う処理
-  const onSubmit = async (index) => {
-    console.log('fetcher')
-    await fetcher(state, index)
+  const onSubmit = async (event: Event) => {
+    event.preventDefault()
+    try {
+      console.log('fetcher')
+      const res = await fetcher(sections)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
@@ -104,7 +111,7 @@ export function SectionManage() {
                       {...register(`sections.${index}.sectionTitle`)}
                       type="text"
                       name={'title[' + index + ']'}
-                      value={state[index + 1]?.title}
+                      value={sections[index + 1]?.title}
                       onChange={(e) => handleInputChange(e, index)}
                       placeholder={'セクション名'}
                     />
