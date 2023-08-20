@@ -24,7 +24,6 @@ export function SectionManage() {
   ])
 
   const [count, setCount] = useState(0)
-  const [sectionTitle, setSectionTitle] = useState([])
 
   //クリック時にitems配列に新しいitemを作る処理
   const handleAddSection = () => {
@@ -56,11 +55,10 @@ export function SectionManage() {
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index) => {
-    e[index].persist()
-    const target[index] = e[index].target
-    const name = target.name
+    // const target[index] = e[index].target
+    const name = e.target.name
     setState(() => {
-      return { ...state, [name]: target.value }
+      return { ...state, [name]: e.target.value }
     })
   }
 
@@ -91,8 +89,8 @@ export function SectionManage() {
                     {...register(`sections.${index}.sectionTitle`)}
                     type="text"
                     name={'title[' + index + ']'}
-                    value={state[index].title}
-                    onChange={handleInputChange}
+                    value={state[index + 1]?.title}
+                    onChange={(e) => handleInputChange(e, index)}
                     placeholder={'セクション名'}
                   />
                 </label>
