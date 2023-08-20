@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { Box, Button, Stack, Text } from '@chakra-ui/react'
 
-
+import { HeaderLoggedOut } from '../components/organisms/HeaderLoggedOut'
 
 export default function Page() {
   const [fontSize, setFontSize] = useState(16)
@@ -17,6 +17,7 @@ export default function Page() {
 
   return (
     <>
+      <HeaderLoggedOut />
       <h1>Hello, Next.js!</h1>
       <Box>
         <Stack direction="row" spacing={4}>
