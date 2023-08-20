@@ -24,7 +24,7 @@ export function Footer() {
   )
   const logoAndTitle = () => (
     <>
-      <Image boxSize="45px" src="../images/jslogo.png" alt="JSロゴ" />
+      <Image boxSize="45px" src="../images/js-logo.png" alt="JSロゴ" />
       <Link href="/" _hover={{ textDecoration: 'none' }}>
         <Text ml={1} fontSize="30px">
           JS学習プラットフォーム
