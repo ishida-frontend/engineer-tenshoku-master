@@ -20,7 +20,6 @@ import {
   Input,
   Textarea,
 } from '@chakra-ui/react'
-import { UserContactDone } from './ContactDone'
 import { useRouter } from 'next/navigation'
 
 type Errors = {
@@ -105,9 +104,7 @@ export function UserContactForm() {
     event.preventDefault()
     try {
       const result = ContactSchema.parse(contact)
-      console.log('result', result)
       if (isChecked) {
-        console.log('a')
         const res = await fetcher()
         const items = res.error.reduce(
           (accumulator, value, index: number) => {
@@ -125,7 +122,6 @@ export function UserContactForm() {
       if (e instanceof ZodError) {
         setErrors(e.flatten().fieldErrors as Errors)
       } else {
-        console.log('backToTop')
         router.push('/contact/done')
         console.log(e)
       }
