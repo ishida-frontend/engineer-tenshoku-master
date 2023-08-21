@@ -17,9 +17,10 @@ import {
 export function SectionManage() {
   const [sections, setSections] = useState([
     {
+      order: 0,
       course_id: 1,
       title: '',
-      published: true,
+      publised: true,
     },
   ])
 
@@ -59,16 +60,15 @@ export function SectionManage() {
     })
   }
 
-  const fetcher = async (sections, index) => {
+  const createSection = async (sections, index) => {
     console.log('sections', sections)
-    console.log('index', index)
     const res = await fetch('http://localhost:8000/section/create', {
       method: 'POST',
       body: JSON.stringify({
-        order: sections.count,
-        course_id: sections.course_id,
-        title: sections.title,
-        publised: sections.published,
+        order: sections.title.index,
+        course_id: sections[0].course_id,
+        title: sections.title[index],
+        publised: sections[0].published,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export function SectionManage() {
     event.preventDefault()
     try {
       console.log('fetcher')
-      const res = await fetcher(sections)
+      const res = await createSection(sections, index)
     } catch (e) {
       console.log(e)
     }
