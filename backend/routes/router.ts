@@ -20,6 +20,14 @@ const {
   checkSuccessContact,
 } = require('../controllers/contactController')
 
+const {
+  checkCreateTag,
+  checkReadTag,
+  checkUpdateTag,
+  checkDeleteTag,
+  checkReadAllTag,
+} = require('../controllers/tagController')
+
 const router = express.Router()
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -37,6 +45,7 @@ const adminRouter = express.Router()
 router.use('/admin', adminRouter)
 adminRouter.get('/course', checkReadAllCourses)
 adminRouter.get('/contacts', checkReadContact)
+adminRouter.get('/tag', checkReadAllTag)
 
 const courseRouter = express.Router()
 router.use('/course', courseRouter)
@@ -56,6 +65,14 @@ videoRouter.get('/delete', checkDeleteVideo)
 const contactRouter = express.Router()
 router.use('/contact', contactRouter)
 contactRouter.get('/create', contactValidationRules, checkCreateContact)
+
+const tagRouter = express.Router()
+router.use('/tag', tagRouter)
+tagRouter.get('/create', checkCreateTag)
+tagRouter.get('/read', checkReadTag)
+tagRouter.get('/update', checkUpdateTag)
+tagRouter.get('/delete', checkDeleteTag)
+tagRouter.get('/all', checkReadAllTag)
 
 router.get('/contact/success', checkSuccessContact)
 
