@@ -6,6 +6,8 @@ export const sectionCreateController = async function (
   res: express.Response,
 ) {
   try {
+    console.log('req')
+    console.log('req', req)
     await createSection({
       courseId: 1,
       order: 1,
