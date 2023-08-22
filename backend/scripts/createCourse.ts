@@ -7,8 +7,6 @@ export async function createCourse(
   published: boolean,
 ) {
   try {
-    console.log('Published value:', published)
-
     const createdCourse = await prisma.course.create({
       data: {
         name: name,
