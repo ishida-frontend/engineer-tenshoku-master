@@ -30,7 +30,6 @@ export default function Register() {
   const [isChecked, setIsChecked] = useState(false)
 
   const handleSubmit = async (e) => {
-    // https://github.com/ishida-frontend/engineer-tenshoku-master/pull/59
     e.preventDefault()
     if (!isChecked) {
       showErrorToast('利用規約とプライバシーポリシーに同意してください')

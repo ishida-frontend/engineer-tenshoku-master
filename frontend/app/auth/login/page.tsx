@@ -27,7 +27,6 @@ export default function Login() {
   const [isChecked, setIsChecked] = useState(false)
 
   const handleSubmit = async (e) => {
-    // https://github.com/ishida-frontend/engineer-tenshoku-master/pull/59
     e.preventDefault()
     console.log(formState)
     try {
