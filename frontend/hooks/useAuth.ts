@@ -12,21 +12,20 @@ export const useAuth = () => {
     checked: boolean
     isAuthenticated: boolean
   }>({ checked: false, isAuthenticated: false })
-  //レンダリング後に実行
   useEffect(() => {
     const handleCheckToken = async () => {
       try {
-        //バックエンドでtokenの検証および再作成
         const result: boolean = await checkToken(tokens.AccessToken)
         setCheck({
           checked: true,
           isAuthenticated: result,
         })
-        if (!result) {
-          router.push('/auth/login')
-        } else {
-          router.push('/')
-        }
+        // 認証が必要なところでは都度呼び出す
+        // if (!result) {
+        //   router.push('/auth/login')
+        // } else {
+        //   router.push('/')
+        // }
       } catch (error) {
         setCheck({ checked: true, isAuthenticated: false })
       }
