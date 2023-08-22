@@ -12,8 +12,8 @@ import {
   Input,
   Box,
   HStack,
+  Center,
 } from '@chakra-ui/react'
-import process from 'node:process'
 
 export function SectionManage() {
   type sectionType = {
@@ -33,12 +33,9 @@ export function SectionManage() {
 
   const [count, setCount] = useState(0)
 
-  //クリック時にitems配列に新しいitemを作る処理
-  // input をいくつ追加したカウント
   const countUp = () => setCount(count + 1)
   console.log('count', count)
 
-  // input を減らすボタンを押した時の処理
   const reduce = () => {
     if (count > 0) {
       remove(count)
@@ -46,15 +43,12 @@ export function SectionManage() {
     }
   }
 
-  // React Hook Form を使うための基本設定
   const { register, handleSubmit, reset, control } = useForm({
-    // input の value の 初期値を設置
     defaultValues: {
-      sections: [{ sectionTitle: '' }],
+      sections: [{ title: '' }],
     },
   })
 
-  // inputタグ を動的に増減させるための設定
   const { fields, prepend, append, remove } = useFieldArray({
     control,
     name: 'sections',
@@ -68,23 +62,23 @@ export function SectionManage() {
   }
 
   const createSection = async (sections: sectionType) => {
-    console.log('sections', sections)
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          sections: sections,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
+    console.log(
+      'process.env.NEXT_PUBLIC_BACKEND_URL',
+      process.env.NEXT_PUBLIC_BACKEND_URL,
     )
+    console.log('sections', sections)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/create`, {
+      method: 'POST',
+      body: JSON.stringify({
+        sections: sections,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
     return res.json()
   }
 
-  // submitボタンを押した時に行う処理
   const onSubmit = async (event: Event) => {
     event.preventDefault()
     try {
@@ -96,7 +90,7 @@ export function SectionManage() {
   }
 
   return (
-    <Container bg="gray.100" maxW={'1512px'}>
+    <Center minH={'100vh'} bg={'gray.200'} maxW={'1512px'}>
       <Container bg="white" maxW={'1024px'} centerContent>
         <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
           コース内容
@@ -112,10 +106,10 @@ export function SectionManage() {
                   p={'8px'}
                   mb={'10px'}
                 >
-                  <label htmlFor={`sections.${index}.sectionTitle`}>
+                  <label htmlFor={`sections.${index}.title`}>
                     セクション No.{index}
                     <Input
-                      {...register(`sections.${index}.sectionTitle`)}
+                      {...register(`sections.${index}.title`)}
                       type="text"
                       name={'title[' + index + ']'}
                       value={sections[index + 1]?.title}
@@ -126,18 +120,18 @@ export function SectionManage() {
                 </Box>
               ))}
 
-              <button
-                type="button"
-                onClick={() => [append({ sectionTitle: '' }), countUp()]}
-              >
-                セクションを追加
-              </button>
-              <br />
+              <HStack>
+                <Button
+                  type="button"
+                  onClick={() => [append({ title: '' }), countUp()]}
+                >
+                  セクションを追加
+                </Button>
 
-              <button type="button" onClick={reduce}>
-                セクションを削除
-              </button>
-              <br />
+                <Button type="button" onClick={reduce}>
+                  セクションを削除
+                </Button>
+              </HStack>
               <VStack>
                 <Button
                   mt={'20'}
@@ -152,6 +146,6 @@ export function SectionManage() {
           </VStack>
         </Container>
       </Container>
-    </Container>
+    </Center>
   )
 }
