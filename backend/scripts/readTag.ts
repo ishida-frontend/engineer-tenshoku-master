@@ -19,8 +19,9 @@ readTag()
   })
 
 export async function readAllTag() {
-  const tag = await prisma.tag.findMany({})
-  console.log("readAllTag", tag)
+  const tags = await prisma.tag.findMany({})
+  console.log("readAllTag", tags)
+  return tags
 }
 
 readAllTag()

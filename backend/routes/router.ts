@@ -21,11 +21,7 @@ const {
 } = require('../controllers/contactController')
 
 const {
-  checkCreateTag,
-  checkReadTag,
-  checkUpdateTag,
-  checkDeleteTag,
-  checkReadAllTag,
+  readAllTag
 } = require('../controllers/tagController')
 
 const router = express.Router()
@@ -45,7 +41,7 @@ const adminRouter = express.Router()
 router.use('/admin', adminRouter)
 adminRouter.get('/course', checkReadAllCourses)
 adminRouter.get('/contacts', checkReadContact)
-adminRouter.get('/tag', checkReadAllTag)
+adminRouter.get('/tag', readAllTag)
 
 const courseRouter = express.Router()
 router.use('/course', courseRouter)
@@ -68,11 +64,7 @@ contactRouter.get('/create', contactValidationRules, checkCreateContact)
 
 const tagRouter = express.Router()
 router.use('/tag', tagRouter)
-tagRouter.get('/create', checkCreateTag)
-tagRouter.get('/read', checkReadTag)
-tagRouter.get('/update', checkUpdateTag)
-tagRouter.get('/delete', checkDeleteTag)
-tagRouter.get('/all', checkReadAllTag)
+tagRouter.get('/all', readAllTag)
 
 router.get('/contact/success', checkSuccessContact)
 
