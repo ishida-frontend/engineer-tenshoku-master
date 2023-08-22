@@ -21,7 +21,7 @@ import React, { useState } from 'react'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export default function Register() {
-  const { showSuccessToast } = useCustomToast()
+  const { showSuccessToast, showErrorToast } = useCustomToast()
   const [formState, setFormState] = useState({
     email: '',
     password: '',
@@ -32,6 +32,9 @@ export default function Register() {
   const handleSubmit = async (e) => {
     // https://github.com/ishida-frontend/engineer-tenshoku-master/pull/59
     e.preventDefault()
+    if (!isChecked) {
+      showErrorToast('利用規約とプライバシーポリシーに同意してください')
+    }
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup`,

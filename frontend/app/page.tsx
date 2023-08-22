@@ -19,14 +19,10 @@ export default function Page() {
     return <Spinner />
   }
 
-  if (check.isAuthenticated) {
-    // TODO 教材一覧画面に飛ばす
-    return <Box>認証成功</Box>
-  }
-
   return (
     <>
       <h1>Hello, Next.js!</h1>
+      <Box>{check.isAuthenticated ? '認証成功' : '未認証'}</Box>
       <Box>
         <Stack direction="row" spacing={4}>
           <Button bg="teal.300" color="white" onClick={increase}>
