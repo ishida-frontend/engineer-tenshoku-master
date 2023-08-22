@@ -22,7 +22,11 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "types": [
+      "node",
+      "node:process"
+    ],
   },
   "include": [
     "next-env.d.ts",
