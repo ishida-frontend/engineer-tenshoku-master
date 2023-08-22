@@ -13,12 +13,19 @@ import {
   Box,
   HStack,
 } from '@chakra-ui/react'
+import process from 'node:process'
 
 export function SectionManage() {
+  type sectionType = {
+    courseId?: number
+    order?: number
+    title?: string
+    published?: boolean
+  }[]
   const [sections, setSections] = useState([
     {
-      order: 0,
       course_id: 1,
+      order: 0,
       title: '',
       publised: true,
     },
@@ -60,20 +67,20 @@ export function SectionManage() {
     })
   }
 
-  const createSection = async (sections, index) => {
+  const createSection = async (sections: sectionType) => {
     console.log('sections', sections)
-    const res = await fetch('http://localhost:8000/section/create', {
-      method: 'POST',
-      body: JSON.stringify({
-        order: sections.title.index,
-        course_id: sections[0].course_id,
-        title: sections.title[index],
-        publised: sections[0].published,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          sections: sections,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    })
+    )
     return res.json()
   }
 
@@ -82,7 +89,7 @@ export function SectionManage() {
     event.preventDefault()
     try {
       console.log('fetcher')
-      const res = await createSection(sections, index)
+      const res = await createSection(sections)
     } catch (e) {
       console.log(e)
     }
