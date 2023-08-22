@@ -67,15 +67,18 @@ export function SectionManage() {
       process.env.NEXT_PUBLIC_BACKEND_URL,
     )
     console.log('sections', sections)
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/create`, {
-      method: 'POST',
-      body: JSON.stringify({
-        sections: sections,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          sections: sections,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    })
+    )
     return res.json()
   }
 
