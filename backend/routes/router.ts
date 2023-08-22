@@ -1,7 +1,7 @@
 import express from 'express'
 import 'dotenv/config'
 import { contactValidationRules } from '../validation'
-import { validate, courseValidationRules } from '../validation/courseValidation'
+// import { validate, courseValidationRules } from '../validation/courseValidation'
 const {
   checkCreateCourse,
   checkReadCourse,
@@ -20,6 +20,10 @@ const {
   checkReadContact,
   checkSuccessContact,
 } = require('../controllers/contactController')
+
+const{
+  createTag,
+} = require('../controllers/createTagController')
 
 const router = express.Router()
 
@@ -42,7 +46,7 @@ adminRouter.get('/course', checkReadAllCourses)
 adminRouter.get('/course/:id', checkReadCourse)
 adminRouter.put(
   '/course/edit/:id',
-  validate(courseValidationRules),
+  // validate(courseValidationRules),
   checkUpdateCourse,
 )
 adminRouter.get('/contacts', checkReadContact)
@@ -65,6 +69,10 @@ videoRouter.get('/delete', checkDeleteVideo)
 const contactRouter = express.Router()
 router.use('/contact', contactRouter)
 contactRouter.get('/create', contactValidationRules, checkCreateContact)
+
+const tagRouter = express.Router()
+router.use('/tag', tagRouter)
+tagRouter.get('/create', createTag)
 
 router.get('/contact/success', checkSuccessContact)
 
