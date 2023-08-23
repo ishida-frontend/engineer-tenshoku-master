@@ -4,11 +4,11 @@ import { contactValidationRules } from '../validation'
 import { validate, courseValidationRules } from '../validation/courseValidation'
 
 const {
-  checkCreateCourse,
-  checkReadCourse,
-  checkReadAllCourses,
-  checkReadFilteredCourses,
-  checkUpdateCourse,
+  createCourse,
+  readCourse,
+  readAllCourses,
+  readFilteredCourses,
+  updateCourse,
   deleteCourse,
 } = require('../controllers/courseController')
 const {
@@ -39,23 +39,23 @@ router.use(
 
 const adminRouter = express.Router()
 router.use('/admin', adminRouter)
-adminRouter.get('/course', checkReadFilteredCourses)
-adminRouter.post('/course/create', checkCreateCourse)
-adminRouter.get('/course/:id', checkReadCourse)
+adminRouter.post('/course/create', createCourse)
+adminRouter.get('/course/:id', readCourse)
+adminRouter.get('/course', readFilteredCourses)
 adminRouter.put(
   '/course/edit/:id',
   validate(courseValidationRules),
-  checkUpdateCourse,
+  updateCourse,
 )
-adminRouter.put('/course/delete/:id', deleteCourse)
+adminRouter.delete('/course/delete/:id', deleteCourse)
 adminRouter.get('/contacts', checkReadContact)
 
 const courseRouter = express.Router()
 router.use('/course', courseRouter)
-courseRouter.get('/create', checkCreateCourse)
-courseRouter.get('/read', checkReadCourse)
-courseRouter.get('/all', checkReadAllCourses)
-courseRouter.get('/update', checkUpdateCourse)
+courseRouter.get('/create', createCourse)
+courseRouter.get('/read', readCourse)
+courseRouter.get('/all', readAllCourses)
+courseRouter.get('/update', updateCourse)
 
 const videoRouter = express.Router()
 router.use('/video', videoRouter)

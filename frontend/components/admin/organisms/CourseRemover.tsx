@@ -22,21 +22,20 @@ export function CourseRemover() {
 
   const router = useRouter()
   const params = useParams()
-  const courseid = params.courseid
-  const id = typeof courseid === 'string' ? parseInt(courseid, 10) : NaN
+  const courseId = params.courseId
+  const id = typeof courseId === 'string' ? parseInt(courseId, 10) : NaN
 
   const deleteCourse = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/delete/${courseid}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/delete/${courseId}`,
         {
-          method: 'PUT',
+          method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             id,
-            deleted_at: true,
           }),
         },
       )

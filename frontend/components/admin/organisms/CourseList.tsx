@@ -30,20 +30,20 @@ export function CourseList() {
   const fetcher = async () =>
     (await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course`)).json()
 
-  const { data, error } = useSWR('courseList', fetcher)
+  const { data: courses, error } = useSWR('courseList', fetcher)
 
   if (error) {
     showErrorToast('コースの取得に失敗しました。')
   }
 
-  if (!data) return <Loader />
+  if (!courses) return <Loader />
 
   return (
     <>
       <VStack spacing={5} p={4} maxW="800px" mx="auto">
         <Heading size="lg">コース一覧</Heading>
         <SimpleGrid columns={2} spacing={5}>
-          {data.map((course: CourseType) => (
+          {courses.map((course: CourseType) => (
             <Box key={course.id} p="4" boxShadow="lg" rounded="md">
               <Text>
                 <strong>コースID</strong>：{course.id}
@@ -64,7 +64,7 @@ export function CourseList() {
                 <strong>更新日</strong>：{formatDate(course.updated_at)}
               </Text>
               <Link href={`/admin/course/edit/${course.id}`}>
-                <Button mt="2" colorScheme="teal" variant="solid">
+                <Button mt="2" colorScheme="green" variant="solid">
                   編集
                 </Button>
               </Link>
