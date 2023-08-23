@@ -45,7 +45,7 @@ export function SectionManage() {
 
   const { register, handleSubmit, reset, control } = useForm({
     defaultValues: {
-      sections: [{ title: '' }],
+      sections: [{ sectionTitle: '' }],
     },
   })
 
@@ -100,7 +100,7 @@ export function SectionManage() {
         </Heading>
         <Container mt="109px" maxW={'100%'} bg={'white'} p={'0px'}>
           <VStack>
-            <FormControl onSubmit={handleSubmit(onSubmit)} maxW={'904px'}>
+            <FormControl maxW={'904px'}>
               {fields.map((field, index) => (
                 <Box
                   key={field.id}
@@ -109,10 +109,10 @@ export function SectionManage() {
                   p={'8px'}
                   mb={'10px'}
                 >
-                  <label htmlFor={`sections.${index}.title`}>
+                  <label htmlFor={`sections.${index}.sectionTitle`}>
                     セクション No.{index}
                     <Input
-                      {...register(`sections.${index}.title`)}
+                      {...register(`sections.${index}.sectionTitle`)}
                       type="text"
                       name={'title[' + index + ']'}
                       value={sections[index + 1]?.title}
@@ -126,7 +126,7 @@ export function SectionManage() {
               <HStack>
                 <Button
                   type="button"
-                  onClick={() => [append({ title: '' }), countUp()]}
+                  onClick={() => [append({ sectionTitle: '' }), countUp()]}
                 >
                   セクションを追加
                 </Button>

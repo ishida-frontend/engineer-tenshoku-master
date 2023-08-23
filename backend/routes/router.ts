@@ -57,7 +57,7 @@ courseRouter.get('/all', checkReadAllCourses)
 
 const sectionRouter = express.Router()
 router.use('/section', sectionRouter)
-sectionRouter.get('/create', sectionCreateController)
+sectionRouter.post('/create', sectionCreateController)
 
 const videoRouter = express.Router()
 router.use('/video', videoRouter)

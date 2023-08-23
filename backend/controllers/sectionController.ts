@@ -6,14 +6,8 @@ export const sectionCreateController = async function (
   res: express.Response,
 ) {
   try {
-    console.log('req')
-    console.log('req', req)
-    await createSection({
-      courseId: 1,
-      order: 1,
-      title: 'JS環境構築',
-      published: true,
-    })
+    console.log('req.body', req.body)
+    await createSection(req.body)
     res.send('新しいセクションが作成されました！')
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
