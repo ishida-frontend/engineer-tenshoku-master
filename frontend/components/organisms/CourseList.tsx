@@ -82,7 +82,7 @@ export function CourseList() {
               <Card key={course.id} w="288px" boxShadow="md" borderRadius="8px">
                 <CardHeader p={0}>
                   <Image
-                    src="/images/reactIcon.png"
+                    src="/images/image_react.png"
                     alt={`${course.name}のアイコン`}
                     width="100%"
                     height="auto"
