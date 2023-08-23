@@ -23,9 +23,3 @@ export async function createSection(sectionData: {
     await prisma.$disconnect()
   }
 }
-export default createSection({
-  courseId: 1,
-  order: 1,
-  title: 'aaaaa',
-  published: true,
-})
