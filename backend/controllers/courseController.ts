@@ -10,7 +10,7 @@ import {
 import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
 
-exports.checkCreateCourse = async function (
+exports.createCourse = async function (
   req: express.Request,
   res: express.Response,
 ) {
@@ -31,7 +31,7 @@ exports.checkCreateCourse = async function (
   }
 }
 
-exports.checkReadCourse = async function (
+exports.readCourse = async function (
   req: express.Request,
   res: express.Response,
 ) {
@@ -43,7 +43,7 @@ exports.checkReadCourse = async function (
   }
 }
 
-exports.checkReadAllCourses = async function (
+exports.readAllCourses = async function (
   req: express.Request,
   res: express.Response,
 ) {
@@ -55,7 +55,7 @@ exports.checkReadAllCourses = async function (
   }
 }
 
-exports.checkReadFilteredCourses = async function (
+exports.readFilteredCourses = async function (
   req: express.Request,
   res: express.Response,
 ) {
@@ -67,7 +67,7 @@ exports.checkReadFilteredCourses = async function (
   }
 }
 
-exports.checkUpdateCourse = async function (
+exports.updateCourse = async function (
   req: express.Request,
   res: express.Response,
 ) {
@@ -83,7 +83,7 @@ exports.checkUpdateCourse = async function (
   }
 }
 
-exports.checkUpdateCourses = async function (
+exports.updateCourses = async function (
   req: express.Request,
   res: express.Response,
 ) {
