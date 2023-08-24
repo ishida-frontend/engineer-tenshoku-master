@@ -10,7 +10,7 @@ import {
 import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
 
-exports.checkCreateCourse = async function (
+exports.createCourse = async function (
   req: express.Request,
   res: express.Response,
 ) {
@@ -27,23 +27,23 @@ exports.checkCreateCourse = async function (
 
     res.status(201).json({ message: '新しいコースが作成されました！' })
   } catch (e: any) {
-    res.status(500).json({ message: 'エラーが発生しました' })
+    res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })
   }
 }
 
-exports.checkReadCourse = async function (
+exports.readCourse = async function (
   req: express.Request,
   res: express.Response,
 ) {
   try {
     const course = await readCourse(Number(req.params.id))
-    res.json(course)
+    res.status(200).json(course)
   } catch (e: any) {
-    res.status(500).send('エラーが発生しました')
+    res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })
   }
 }
 
-exports.checkReadAllCourses = async function (
+exports.readAllCourses = async function (
   req: express.Request,
   res: express.Response,
 ) {
@@ -55,19 +55,19 @@ exports.checkReadAllCourses = async function (
   }
 }
 
-exports.checkReadFilteredCourses = async function (
+exports.readFilteredCourses = async function (
   req: express.Request,
   res: express.Response,
 ) {
   try {
-    await readFilteredCourses()
-    res.send('条件指定のコースを読み込みました！')
+    const filteredCourses = await readFilteredCourses()
+    res.status(200).json(filteredCourses)
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
   }
 }
 
-exports.checkUpdateCourse = async function (
+exports.updateCourse = async function (
   req: express.Request,
   res: express.Response,
 ) {
@@ -75,7 +75,7 @@ exports.checkUpdateCourse = async function (
     const { id, name, description, published } = req.body
 
     await updateCourse({ id, name, description, published })
-    res.status(200).json({ message: '変更が保存されました' })
+    res.status(200).json({ message: '変更が保存されました。' })
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: error.issues[0].message })
@@ -83,7 +83,7 @@ exports.checkUpdateCourse = async function (
   }
 }
 
-exports.checkUpdateCourses = async function (
+exports.updateCourses = async function (
   req: express.Request,
   res: express.Response,
 ) {
@@ -95,14 +95,29 @@ exports.checkUpdateCourses = async function (
   }
 }
 
-exports.checkDeleteCourse = async function (
+exports.deleteCourse = async function (
   req: express.Request,
   res: express.Response,
 ) {
   try {
-    await deleteCourse(3)
+    const { id } = req.body
+
+    await deleteCourse(id)
+    res.status(201).json({
+      message: '削除されました。自動的にコース一覧へ戻ります。',
+    })
+  } catch (e: any) {
+    res.status(500).json({ message: 'サーバー内部エラーが発生しました。' })
+  }
+}
+
+exports.deleteCourses = async function (
+  req: express.Request,
+  res: express.Response,
+) {
+  try {
     await deleteCourses(5, 8)
-    res.send('１件のコースを削除しました！<br>複数のコースを削除しました！')
+    res.send('複数のコースを削除しました！')
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
   }
