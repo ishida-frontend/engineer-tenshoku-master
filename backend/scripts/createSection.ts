@@ -3,7 +3,7 @@ const prisma = new PrismaClient()
 
 export async function createSection(sectionData: {
   courseId: number
-  order: number
+  index: number
   title: string
   published: boolean
 }) {
@@ -11,7 +11,7 @@ export async function createSection(sectionData: {
     const section = await prisma.section.create({
       data: {
         course: { connect: { id: sectionData.courseId } },
-        order: sectionData.order,
+        order: sectionData.index,
         title: sectionData.title,
         published: sectionData.published,
       },
