@@ -11,7 +11,7 @@ type TagType = {
 
 export function TagList() {
   const fetcher = async () =>
-    (await fetch('http://localhost:8000/tag/all')).json()
+    (await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/tag/all`)).json()
 
   const { data, error } = useSWR('TagList', fetcher)
 
