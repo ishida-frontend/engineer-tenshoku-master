@@ -1,12 +1,17 @@
 'use client'
-import { Box, Heading, HStack, Image, Spacer } from '@chakra-ui/react'
-
-import { LoginButton, SignUpButton } from '../atoms/Buttons'
+import {
+  Box,
+  Button,
+  Heading,
+  HStack,
+  Image,
+  Link,
+  Spacer,
+} from '@chakra-ui/react'
 
 export function HeaderLoggedOut() {
   return (
     <Box as="body" pt="100px">
-      {/* ヘッダーの表示スペース(100px)確保 */}
       <HStack
         as="header"
         py="18px"
@@ -29,8 +34,31 @@ export function HeaderLoggedOut() {
         </HStack>
         <Spacer />
         <HStack spacing="40px" pr="40px">
-          <LoginButton />
-          <SignUpButton />
+          <Link href="/auth/login">
+            <Button
+              w="144px"
+              h="64px"
+              fontSize="24px"
+              bg="green.500"
+              color="white"
+              borderRadius="12px"
+            >
+              ログイン
+            </Button>
+          </Link>
+          <Link href="/auth/register">
+            <Button
+              w="144px"
+              h="64px"
+              fontSize="24px"
+              bg="white"
+              border="1px"
+              borderColor="blackAlpha.400"
+              borderRadius="12px"
+            >
+              新規登録
+            </Button>
+          </Link>
         </HStack>
       </HStack>
     </Box>

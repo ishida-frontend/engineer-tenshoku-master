@@ -5,7 +5,6 @@ import { AiOutlineUser } from 'react-icons/ai'
 export function HeaderLoggedIn() {
   return (
     <Box as="body" pt="100px">
-      {/* ヘッダーの表示スペース(100px)確保 */}
       <HStack
         as="header"
         py="18px"
