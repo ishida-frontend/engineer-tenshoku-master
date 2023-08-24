@@ -1,10 +1,12 @@
 'use client'
 import { useState } from 'react'
-import { Box, Button, Stack, Text } from '@chakra-ui/react'
+import { Box, Button, Spinner, Stack, Text } from '@chakra-ui/react'
+import { useAuth } from '../hooks/useAuth'
 
 import { Footer } from '../components/organisms/Footer'
 
 export default function Page() {
+  const check = useAuth()
   const [fontSize, setFontSize] = useState(16)
 
   const increase = () => {
@@ -15,9 +17,14 @@ export default function Page() {
     setFontSize((prev) => Math.max(10, prev - 2))
   }
 
+  if (!check.checked) {
+    return <Spinner />
+  }
+
   return (
     <>
-      <h1>Hello, Next.js!</h1>
+      <Box>{check.isAuthenticated ? '認証成功' : '未認証'}</Box>
+
       <Box>
         <Stack direction="row" spacing={4}>
           <Button bg="teal.300" color="white" onClick={increase}>
