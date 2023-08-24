@@ -1,6 +1,6 @@
 import { Center, Spinner, VStack } from '@chakra-ui/react'
 
-import { PRIMARY_FONT_COLOR } from '../../../constants/colors'
+import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 
 export const Loader = () => {
   return (
