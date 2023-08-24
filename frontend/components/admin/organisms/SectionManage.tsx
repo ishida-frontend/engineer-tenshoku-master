@@ -16,15 +16,17 @@ import {
 } from '@chakra-ui/react'
 
 type SectionType = {
-  courseId?: number
-  index?: number
-  title?: string
-  published?: boolean
+  courseId: number
+  index: number
+  title: string
+  published: boolean
 }[]
 
 export function SectionManage() {
   const defaultCourseValues = {
     courseId: 1,
+    index: 0,
+    title: '',
     published: false,
   }
   const [sections, setSections] = useState<SectionType>([
@@ -32,7 +34,7 @@ export function SectionManage() {
       courseId: 1,
       index: 0,
       title: '',
-      published: true,
+      published: false,
     },
   ])
 
@@ -57,7 +59,7 @@ export function SectionManage() {
   })
 
   const handleInputChange = (value: string, index: number) => {
-    const newSection = { index, title: value, ...defaultCourseValues }
+    const newSection = { ...defaultCourseValues, index, title: value }
     const newSections = sections.filter((t) => {
       return t.index !== index
     })
@@ -90,8 +92,8 @@ export function SectionManage() {
   }
 
   return (
-    <Center minH={'100vh'} bg={'gray.200'} maxW={'1512px'}>
-      <Container bg="white" maxW={'1024px'} centerContent>
+    <Center minH={'100vh'} bg={'gray.200'}>
+      <Container bg="white" minW={'100vh'} centerContent>
         <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
           コース内容
         </Heading>
@@ -106,12 +108,9 @@ export function SectionManage() {
                   p={'8px'}
                   mb={'10px'}
                 >
-                  <label
-                  // htmlFor={`sections.${index}.sectionTitle`}
-                  >
+                  <label>
                     セクション No.{index}
                     <Input
-                      // {...register(`sections.${index}.sectionTitle`)}
                       type="text"
                       value={field.title}
                       onChange={(e) => handleInputChange(e.target.value, index)}
