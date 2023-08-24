@@ -10,32 +10,40 @@ import {
 } from '@chakra-ui/react'
 import useSWR from 'swr'
 
-import { CourseType } from '../../../types'
 import formatDate from '../../../utils/formatDate'
 import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
+
+type CourseType = {
+  id: number
+  name: string
+  description: string
+  published: boolean
+  created_at: string
+  updated_at: string
+  deleted_at?: string
+}
 
 export function CourseList() {
   const { showErrorToast } = useCustomToast()
 
   const fetcher = async () =>
-    (await fetch('http://localhost:8000/course/all')).json()
+    (await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course`)).json()
 
-  const { data, error } = useSWR('courseList', fetcher)
+  const { data: courses, error } = useSWR('courseList', fetcher)
 
   if (error) {
     showErrorToast('コースの取得に失敗しました。')
   }
 
-  if (!data) return <Loader />
+  if (!courses) return <Loader />
 
   return (
-    <VStack spacing={5} p={4} maxW="800px" mx="auto">
-      <Heading size="lg">コース一覧</Heading>
-      <SimpleGrid columns={2} spacing={10}>
-        {data
-          .filter((course: CourseType) => !course.deleted_at)
-          .map((course: CourseType) => (
+    <>
+      <VStack spacing={5} p={4} maxW="800px" mx="auto">
+        <Heading size="lg">コース一覧</Heading>
+        <SimpleGrid columns={2} spacing={5}>
+          {courses.map((course: CourseType) => (
             <Box key={course.id} p="4" boxShadow="lg" rounded="md">
               <Text>
                 <strong>コースID</strong>：{course.id}
@@ -56,13 +64,14 @@ export function CourseList() {
                 <strong>更新日</strong>：{formatDate(course.updated_at)}
               </Text>
               <Link href={`/admin/course/edit/${course.id}`}>
-                <Button mt="2" colorScheme="teal" variant="solid">
+                <Button mt="2" colorScheme="green" variant="solid">
                   編集
                 </Button>
               </Link>
             </Box>
           ))}
-      </SimpleGrid>
-    </VStack>
+        </SimpleGrid>
+      </VStack>
+    </>
   )
 }

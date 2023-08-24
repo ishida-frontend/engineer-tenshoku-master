@@ -1,13 +1,15 @@
 import express from 'express'
 import 'dotenv/config'
-import { contactValidationRules } from '../validation'
+import { contactValidationRules, contactValidate } from '../validation'
 import { validate, courseValidationRules } from '../validation/courseValidation'
+
 const {
-  checkCreateCourse,
-  checkReadCourse,
-  checkUpdateCourse,
-  checkDeleteCourse,
-  checkReadAllCourses,
+  createCourse,
+  readCourse,
+  readAllCourses,
+  readFilteredCourses,
+  updateCourse,
+  deleteCourse,
 } = require('../controllers/courseController')
 const {
   checkCreateVideo,
@@ -18,7 +20,6 @@ const {
 const {
   checkCreateContact,
   checkReadContact,
-  checkSuccessContact,
 } = require('../controllers/contactController')
 
 const router = express.Router()
@@ -37,35 +38,37 @@ router.use(
 
 const adminRouter = express.Router()
 router.use('/admin', adminRouter)
-adminRouter.post('/course/create', checkCreateCourse)
-adminRouter.get('/course', checkReadAllCourses)
-adminRouter.get('/course/:id', checkReadCourse)
+adminRouter.post('/course/create', createCourse)
+adminRouter.get('/course/:id', readCourse)
+adminRouter.get('/course', readFilteredCourses)
 adminRouter.put(
   '/course/edit/:id',
   validate(courseValidationRules),
-  checkUpdateCourse,
+  updateCourse,
 )
+adminRouter.delete('/course/delete/:id', deleteCourse)
 adminRouter.get('/contacts', checkReadContact)
 
 const courseRouter = express.Router()
 router.use('/course', courseRouter)
-courseRouter.get('/create', checkCreateCourse)
-courseRouter.get('/read', checkReadCourse)
-courseRouter.get('/update', checkUpdateCourse)
-courseRouter.get('/delete', checkDeleteCourse)
-courseRouter.get('/all', checkReadAllCourses)
+courseRouter.get('/create', createCourse)
+courseRouter.get('/read', readCourse)
+courseRouter.get('/all', readAllCourses)
+courseRouter.get('/update', updateCourse)
 
 const videoRouter = express.Router()
 router.use('/video', videoRouter)
-videoRouter.get('/create', checkCreateVideo)
+// videoRouter.get('/create', checkCreateVideo)
 videoRouter.get('/read', checkReadVideo)
 videoRouter.get('/update', checkUpdateVideo)
 videoRouter.get('/delete', checkDeleteVideo)
 
 const contactRouter = express.Router()
 router.use('/contact', contactRouter)
-contactRouter.get('/create', contactValidationRules, checkCreateContact)
-
-router.get('/contact/success', checkSuccessContact)
+contactRouter.post(
+  '/create',
+  contactValidate(contactValidationRules),
+  checkCreateContact,
+)
 
 export default router

@@ -15,16 +15,11 @@ import {
   Link,
 } from '@chakra-ui/react'
 
+import { CourseRemover } from './CourseRemover'
 import { CourseType } from '../../../types'
 import formatDate from '../../../utils/formatDate'
 import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-
-// コースの汎用型定義＋このコンポーネントでのみ使う型定義
-type CourseEditorType = CourseType & {
-  isLoading: boolean
-  isSubmitting: boolean
-}
 
 export function CourseEditor() {
   // カスタムフック準備
@@ -32,7 +27,7 @@ export function CourseEditor() {
 
   // URLパラメータからコースIDを取得し、int型に変換
   const params = useParams()
-  const courseId = params.courseid
+  const courseId = params.courseId
   const id = typeof courseId === 'string' ? parseInt(courseId, 10) : NaN
 
   // コースデータ取得
@@ -42,35 +37,32 @@ export function CourseEditor() {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${courseId}`,
       )
     ).json()
-  const { data: courseData, error } = useSWR<CourseEditorType>(
-    'courseData',
-    fetcher,
-  )
+  const { data: courseData, error } = useSWR<CourseType>('courseData', fetcher)
 
   // 初期状態を定義し、useStateで初期化
-  const initialCourseState: Partial<CourseEditorType> = {
+  const initialCourseState: CourseType = {
     id,
     name: '',
     description: '',
     published: false,
     created_at: '',
     updated_at: '',
-    isLoading: false,
-    isSubmitting: false,
+    deleted_at: '',
   }
-  const [course, setCourse] =
-    useState<Partial<CourseEditorType>>(initialCourseState)
-  // initialCourseStateオブジェクトに入れると、なぜかstateが変更されないので外出し
-  const [isNameError, setIsNameError] = useState<boolean>(false)
-  const [isDescError, setIsDescError] = useState<boolean>(false)
-  const [showNameError, setShowNameError] = useState<string>('')
-  const [showDescError, setShowDescError] = useState<string>('')
+  const [course, setCourse] = useState<CourseType>(initialCourseState)
+
+  const [errors, setErrors] = useState({
+    nameError: '',
+    descError: '',
+  })
+
+  const [isSubmitting, SetIsSubmitting] = useState(false)
 
   // ページを開いて１０秒でデータ取得ができなかった場合のエラートースト
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (!courseData) {
-        showErrorToast('データの取得に失敗しました')
+        showErrorToast('データの取得に失敗しました。')
       }
     }, 10000)
     return () => clearTimeout(timeout)
@@ -85,9 +77,9 @@ export function CourseEditor() {
 
   // PUTリクエストイベントハンドラ
   const updateCourse = async (event: FormEvent) => {
-    setCourse({ ...course, isSubmitting: true })
-
     event.preventDefault()
+
+    SetIsSubmitting(true)
 
     try {
       const response = await fetch(
@@ -110,29 +102,33 @@ export function CourseEditor() {
 
       if (response.ok) {
         showSuccessToast(validResults.message)
-        setIsNameError(false)
-        setIsDescError(false)
+        setErrors({
+          nameError: '',
+          descError: '',
+        })
       } else if (response.status === 400) {
-        showErrorToast('データの更新に失敗しました')
-
         if (course.name && course.name.length >= 5) {
-          setIsNameError(false)
+          setErrors((prevErrors) => ({ ...prevErrors, nameError: '' }))
         } else {
-          setIsNameError(true)
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            nameError: validResults.errors.name,
+          }))
         }
-        setShowNameError(validResults.errors.name)
 
         if (course.description && course.description.length >= 15) {
-          setIsDescError(false)
+          setErrors((prevErrors) => ({ ...prevErrors, descError: '' }))
         } else {
-          setIsDescError(true)
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            descError: validResults.errors.description,
+          }))
         }
-        setShowDescError(validResults.errors.description)
       }
     } catch (error) {
-      showErrorToast('データの更新に失敗しました')
+      showErrorToast('データの更新に失敗しました。')
     } finally {
-      setCourse({ ...course, isSubmitting: false })
+      SetIsSubmitting(false)
     }
   }
 
@@ -144,15 +140,25 @@ export function CourseEditor() {
       <Box w="full" maxW="600px" mx="auto" p={6}>
         <Stack spacing={4}>
           <Link href="/admin/course">
-            <Button colorScheme="teal">一覧へ戻る</Button>
+            <Button colorScheme="green">一覧へ戻る</Button>
           </Link>
           <Box p={4} border="1px" borderColor="gray.400" borderRadius={9}>
             <Text>コースID：{course.id}</Text>
-            <Text>作成日時：{formatDate(courseData.created_at)}</Text>
-            <Text>更新日時：{formatDate(courseData.updated_at)}</Text>
+            <Text>
+              作成日時：
+              {courseData.created_at && formatDate(courseData.created_at)}
+            </Text>
+            <Text>
+              更新日時：
+              {courseData.updated_at && formatDate(courseData.updated_at)}
+            </Text>
           </Box>
-          <FormControl id="courseName" isRequired isInvalid={isNameError}>
-            <FormLabel htmlFor="courseName">コース名（必須）</FormLabel>
+          <FormControl
+            id="courseName"
+            isRequired
+            isInvalid={!!errors.nameError}
+          >
+            <FormLabel htmlFor="courseName">コース名（5文字以上）</FormLabel>
             <Input
               id="courseName"
               type="text"
@@ -162,15 +168,15 @@ export function CourseEditor() {
               border="1px"
               borderColor="gray.400"
             />
-            <FormErrorMessage>{showNameError}</FormErrorMessage>
+            <FormErrorMessage>{errors.nameError}</FormErrorMessage>
           </FormControl>
           <FormControl
             id="courseDescription"
             isRequired
-            isInvalid={isDescError}
+            isInvalid={!!errors.descError}
           >
             <FormLabel htmlFor="courseDescription">
-              コース概要（必須）
+              コース概要（15文字以上）
             </FormLabel>
             <Textarea
               id="courseDescription"
@@ -184,7 +190,7 @@ export function CourseEditor() {
               border="1px"
               borderColor="gray.400"
             ></Textarea>
-            <FormErrorMessage>{showDescError}</FormErrorMessage>
+            <FormErrorMessage>{errors.descError}</FormErrorMessage>
           </FormControl>
           <FormControl id="coursePublished" isRequired>
             <FormLabel htmlFor="CoursePublished">コースの公開設定</FormLabel>
@@ -203,8 +209,8 @@ export function CourseEditor() {
           </FormControl>
           <Button
             onClick={updateCourse}
-            isLoading={course.isSubmitting}
-            colorScheme="teal"
+            isLoading={isSubmitting}
+            colorScheme="green"
             variant="solid"
           >
             変更を保存
