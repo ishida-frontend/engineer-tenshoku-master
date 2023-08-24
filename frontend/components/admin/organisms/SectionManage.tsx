@@ -15,26 +15,29 @@ import {
   Center,
 } from '@chakra-ui/react'
 
+type SectionType = {
+  courseId?: number
+  index?: number
+  title?: string
+  published?: boolean
+}[]
+
 export function SectionManage() {
-  type sectionType = {
-    courseId?: number
-    index?: number
-    title?: string
-    published?: boolean
-  }[]
-  const [titles, setTitles] = useState([{ index: 0, title: '' }])
-  const [sections, setSections] = useState([
+  const defaultCourseValues = {
+    course_id: 1,
+    published: false,
+  }
+  const [sections, setSections] = useState<SectionType>([
     {
-      course_id: 1,
+      courseId: 1,
       index: 0,
       title: '',
       published: true,
     },
   ])
-  console.log('sections', sections)
 
   const fixedValue = {
-    course_id: 1,
+    courseId: 1,
     published: true,
   }
   console.log('fixedValue', fixedValue)
@@ -42,7 +45,6 @@ export function SectionManage() {
   const [count, setCount] = useState(0)
 
   const countUp = () => setCount(count + 1)
-  console.log('count', count)
 
   const reduce = () => {
     if (count > 0) {
@@ -51,7 +53,7 @@ export function SectionManage() {
     }
   }
 
-  const { register, handleSubmit, reset, control } = useForm({
+  const { register, reset, control } = useForm({
     defaultValues: {
       sections: [{ sectionTitle: '' }],
     },
@@ -63,17 +65,14 @@ export function SectionManage() {
   })
 
   const handleInputChange = (value: string, index: number) => {
-    console.log('value', value)
-    console.log('index', index)
-    const newTitle = { index, title: value }
-    const newTitles = titles.filter((t) => {
+    const newSection = { index, title: value, ...defaultCourseValues }
+    const newSections = sections.filter((t) => {
       return t.index !== index
     })
-    setTitles([...newTitles, newTitle])
-    setSections([...titles, fixedValue])
+    setSections([...newSections, newSection])
   }
 
-  const createSection = async (sections: sectionType) => {
+  const createSection = async (sections: SectionType) => {
     console.log('sections', sections)
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
@@ -93,13 +92,13 @@ export function SectionManage() {
   const onSubmit = async (event: Event) => {
     event.preventDefault()
     try {
-      console.log('fetcher')
       const res = await createSection(sections)
     } catch (e) {
       console.log(e)
     }
   }
-  console.log('titles', titles)
+
+  console.log('sections', sections)
   return (
     <Center minH={'100vh'} bg={'gray.200'} maxW={'1512px'}>
       <Container bg="white" maxW={'1024px'} centerContent>
@@ -111,7 +110,7 @@ export function SectionManage() {
             <FormControl maxW={'904px'}>
               {fields.map((field, index) => (
                 <Box
-                  key={field.id}
+                  key={index}
                   border={'2px solid gray'}
                   borderRadius={'2xl'}
                   p={'8px'}
@@ -122,7 +121,7 @@ export function SectionManage() {
                     <Input
                       {...register(`sections.${index}.sectionTitle`)}
                       type="text"
-                      value={sections[index + 1]?.title}
+                      value={field.title}
                       onChange={(e) => handleInputChange(e.target.value, index)}
                       placeholder={'セクション名'}
                     />
@@ -147,7 +146,7 @@ export function SectionManage() {
                   mt={'20'}
                   colorScheme="teal"
                   type="submit"
-                  onClick={onSubmit}
+                  onClick={(e) => onSubmit(e)}
                 >
                   送信する
                 </Button>
