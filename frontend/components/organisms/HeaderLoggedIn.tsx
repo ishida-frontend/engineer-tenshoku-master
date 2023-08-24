@@ -1,9 +1,8 @@
 'use client'
-import { Box, Heading, HStack, Image, Spacer } from '@chakra-ui/react'
+import { Avatar, Box, Heading, HStack, Image, Spacer } from '@chakra-ui/react'
+import { AiOutlineUser } from 'react-icons/ai'
 
-import { LoginButton, SignUpButton } from '../atoms/Buttons'
-
-export function HeaderLoggedOut() {
+export function HeaderLoggedIn() {
   return (
     <Box as="body" pt="100px">
       {/* ヘッダーの表示スペース(100px)確保 */}
@@ -21,16 +20,20 @@ export function HeaderLoggedOut() {
       >
         <HStack spacing={0}>
           <Box pl="22px">
-            <Image boxSize="52px" src="../images/js-logo.png" alt="JSロゴ" />
+            <Image boxSize="64px" src="../images/js-logo.png" alt="JSロゴ" />
           </Box>
           <Heading as="h1" fontSize="30px" fontWeight="400" pl="17px">
             JS学習プラットフォーム
           </Heading>
         </HStack>
         <Spacer />
-        <HStack spacing="40px" pr="40px">
-          <LoginButton />
-          <SignUpButton />
+        <HStack pr="36px">
+          {/* TODO:プロフィールページへのリンクを貼る */}
+          <Avatar
+            bg="blue.300"
+            color="black"
+            icon={<AiOutlineUser fontSize="2rem" />}
+          />
         </HStack>
       </HStack>
     </Box>
