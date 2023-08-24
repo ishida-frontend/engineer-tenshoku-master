@@ -16,15 +16,10 @@ export async function readAllCourses() {
 }
 
 export async function readFilteredCourses() {
-  const courses = await prisma.course.findMany({
+  const filteredCourses = await prisma.course.findMany({
     where: {
-      id: {
-        gt: 9,
-      },
-      deleted_at: {
-        not: null,
-      },
+      deleted_at: null,
     },
   })
-  console.log(courses)
+  return filteredCourses
 }

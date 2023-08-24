@@ -20,6 +20,7 @@ import {
   Input,
   Textarea,
 } from '@chakra-ui/react'
+import { useRouter } from 'next/navigation'
 
 type Errors = {
   name?: string[]
@@ -29,6 +30,8 @@ type Errors = {
 }
 
 export function UserContactForm() {
+  const router = useRouter()
+
   const [state, setState] = useState({
     name: '',
     email: '',
@@ -119,6 +122,7 @@ export function UserContactForm() {
       if (e instanceof ZodError) {
         setErrors(e.flatten().fieldErrors as Errors)
       } else {
+        router.push('/contact/done')
         console.log(e)
       }
     }
