@@ -2,6 +2,8 @@
 import { useState } from 'react'
 import { Box, Button, Stack, Text } from '@chakra-ui/react'
 
+import { HeaderLoggedIn } from '../components/organisms/HeaderLoggedIn'
+import { HeaderLoggedOut } from '../components/organisms/HeaderLoggedOut'
 import { Footer } from '../components/organisms/Footer'
 
 export default function Page() {
@@ -17,6 +19,7 @@ export default function Page() {
 
   return (
     <>
+      <HeaderLoggedOut />
       <h1>Hello, Next.js!</h1>
       <Box>
         <Stack direction="row" spacing={4}>
