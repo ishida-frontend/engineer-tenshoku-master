@@ -9,6 +9,8 @@ import {
   Spacer,
 } from '@chakra-ui/react'
 
+import jsLogo from '../../public/images/js-logo.png'
+
 export function HeaderLoggedOut() {
   return (
     <Box as="body" pt="100px">
@@ -26,7 +28,7 @@ export function HeaderLoggedOut() {
       >
         <HStack spacing={0}>
           <Box pl="22px">
-            <Image boxSize="52px" src="../images/js-logo.png" alt="JSロゴ" />
+            <Image boxSize="52px" src={jsLogo.src} alt="JSロゴ" />
           </Box>
           <Heading as="h1" fontSize="30px" fontWeight="400" pl="17px">
             JS学習プラットフォーム
