@@ -102,7 +102,7 @@ export default function Register() {
             </Container>
             <Input
               id="password"
-              type="text"
+              type="password"
               value={formState.password}
               onChange={(e) =>
                 setFormState({
