@@ -1,4 +1,4 @@
-type CourseType = {
+export type CourseType = {
   id: number
   name: string
   description: string
@@ -7,5 +7,3 @@ type CourseType = {
   updated_at: string
   deleted_at: string
 }
-
-export type { CourseType }
