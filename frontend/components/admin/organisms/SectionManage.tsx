@@ -22,6 +22,7 @@ export function SectionManage() {
     title?: string
     published?: boolean
   }[]
+  const [titles, setTitles] = useState([{ index: 0, title: '' }])
   const [sections, setSections] = useState([
     {
       course_id: 1,
@@ -30,6 +31,13 @@ export function SectionManage() {
       publised: true,
     },
   ])
+  console.log('sections', sections)
+
+  const fixedValue = {
+    course_id: 1,
+    publised: true,
+  }
+  console.log('fixedValue', fixedValue)
 
   const [count, setCount] = useState(0)
 
@@ -54,25 +62,27 @@ export function SectionManage() {
     name: 'sections',
   })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index) => {
-    const name = e.target.name
-    setSections(() => {
-      return { ...sections, [name]: e.target.value }
+  const handleInputChange = (value: string, index: number) => {
+    console.log('value', value)
+    console.log('index', index)
+    const newTitle = { index, title: value }
+    const newTitles = titles.filter((t) => {
+      return t.index !== index
     })
+    setTitles([...newTitles, newTitle])
+    const updatedSections = () => {
+      setSections((setTitles) => [...setTitles, fixedValue])
+    }
   }
 
   const createSection = async (sections: sectionType) => {
-    console.log(
-      'process.env.NEXT_PUBLIC_BACKEND_URL',
-      process.env.NEXT_PUBLIC_BACKEND_URL,
-    )
     console.log('sections', sections)
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
       {
         method: 'POST',
         body: JSON.stringify({
-          sections: sections,
+          sections,
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +101,7 @@ export function SectionManage() {
       console.log(e)
     }
   }
-
+  console.log('titles', titles)
   return (
     <Center minH={'100vh'} bg={'gray.200'} maxW={'1512px'}>
       <Container bg="white" maxW={'1024px'} centerContent>
@@ -114,9 +124,8 @@ export function SectionManage() {
                     <Input
                       {...register(`sections.${index}.sectionTitle`)}
                       type="text"
-                      name={'title[' + index + ']'}
                       value={sections[index + 1]?.title}
-                      onChange={(e) => handleInputChange(e, index)}
+                      onChange={(e) => handleInputChange(e.target.value, index)}
                       placeholder={'セクション名'}
                     />
                   </label>
