@@ -24,7 +24,7 @@ type SectionType = {
 
 export function SectionManage() {
   const defaultCourseValues = {
-    course_id: 1,
+    courseId: 1,
     published: false,
   }
   const [sections, setSections] = useState<SectionType>([
@@ -36,16 +36,8 @@ export function SectionManage() {
     },
   ])
 
-  const fixedValue = {
-    courseId: 1,
-    published: true,
-  }
-  console.log('fixedValue', fixedValue)
-
   const [count, setCount] = useState(0)
-
   const countUp = () => setCount(count + 1)
-
   const reduce = () => {
     if (count > 0) {
       remove(count)
@@ -73,20 +65,19 @@ export function SectionManage() {
   }
 
   const createSection = async (sections: SectionType) => {
-    console.log('sections', sections)
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          sections,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
+    sections.map(async (sectionData) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
+        {
+          method: 'POST',
+          body: JSON.stringify(sectionData),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      },
-    )
-    return res.json()
+      )
+      return res.json()
+    })
   }
 
   const onSubmit = async (event: Event) => {
@@ -98,7 +89,6 @@ export function SectionManage() {
     }
   }
 
-  console.log('sections', sections)
   return (
     <Center minH={'100vh'} bg={'gray.200'} maxW={'1512px'}>
       <Container bg="white" maxW={'1024px'} centerContent>
@@ -116,10 +106,12 @@ export function SectionManage() {
                   p={'8px'}
                   mb={'10px'}
                 >
-                  <label htmlFor={`sections.${index}.sectionTitle`}>
+                  <label
+                  // htmlFor={`sections.${index}.sectionTitle`}
+                  >
                     セクション No.{index}
                     <Input
-                      {...register(`sections.${index}.sectionTitle`)}
+                      // {...register(`sections.${index}.sectionTitle`)}
                       type="text"
                       value={field.title}
                       onChange={(e) => handleInputChange(e.target.value, index)}
