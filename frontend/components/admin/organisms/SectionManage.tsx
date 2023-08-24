@@ -18,7 +18,7 @@ import {
 export function SectionManage() {
   type sectionType = {
     courseId?: number
-    order?: number
+    index?: number
     title?: string
     published?: boolean
   }[]
@@ -26,16 +26,16 @@ export function SectionManage() {
   const [sections, setSections] = useState([
     {
       course_id: 1,
-      order: 0,
+      index: 0,
       title: '',
-      publised: true,
+      published: true,
     },
   ])
   console.log('sections', sections)
 
   const fixedValue = {
     course_id: 1,
-    publised: true,
+    published: true,
   }
   console.log('fixedValue', fixedValue)
 
@@ -70,9 +70,7 @@ export function SectionManage() {
       return t.index !== index
     })
     setTitles([...newTitles, newTitle])
-    const updatedSections = () => {
-      setSections((setTitles) => [...setTitles, fixedValue])
-    }
+    setSections([...titles, fixedValue])
   }
 
   const createSection = async (sections: sectionType) => {
