@@ -215,7 +215,6 @@ export function CourseEditor() {
           >
             変更を保存
           </Button>
-          <CourseRemover />
         </Stack>
       </Box>
     </>
