@@ -3,13 +3,15 @@ import {
   Box,
   Container,
   HStack,
-  Image,
   Link,
   Text,
   Stack,
   VStack,
 } from '@chakra-ui/react'
 import { AiFillYoutube, AiOutlineTwitter, AiFillFacebook } from 'react-icons/ai'
+
+import { TitleLogo } from '../atoms/TitleLogo'
+import { TitleText } from '../atoms/TitleText'
 
 export function Footer() {
   const footerMenu = () => (
@@ -24,10 +26,10 @@ export function Footer() {
   )
   const logoAndTitle = () => (
     <>
-      <Image boxSize="45px" src="../images/js-logo.png" alt="JSロゴ" />
+      <TitleLogo boxSize="45px" />
       <Link href="/" _hover={{ textDecoration: 'none' }}>
         <Text ml={1} fontSize="30px">
-          JS学習プラットフォーム
+          <TitleText />
         </Text>
       </Link>
     </>
@@ -83,7 +85,7 @@ export function Footer() {
 
         {/* 共通 */}
         <Text pt={2} pb={4} fontSize="12px" align="center">
-          &copy; {new Date().getFullYear()} JS学習プラットフォーム
+          &copy; {new Date().getFullYear()} <TitleText />
         </Text>
       </Container>
     </Box>
