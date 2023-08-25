@@ -17,7 +17,7 @@ import {
 
 type SectionType = {
   courseId: number
-  index: number
+  order: number
   title: string
   published: boolean
 }[]
@@ -25,14 +25,14 @@ type SectionType = {
 export function SectionManage() {
   const defaultCourseValues = {
     courseId: 1,
-    index: 0,
+    order: 0,
     title: '',
     published: false,
   }
   const [sections, setSections] = useState<SectionType>([
     {
       courseId: 1,
-      index: 0,
+      order: 0,
       title: '',
       published: false,
     },
@@ -59,15 +59,17 @@ export function SectionManage() {
   })
 
   const handleInputChange = (value: string, index: number) => {
-    const newSection = { ...defaultCourseValues, index, title: value }
+    const newSection = { ...defaultCourseValues, order: index, title: value }
     const newSections = sections.filter((t) => {
-      return t.index !== index
+      return t.order !== index
     })
     setSections([...newSections, newSection])
   }
 
   const createSection = async (sections: SectionType) => {
+    console.log('sections', sections)
     sections.map(async (sectionData) => {
+      console.log('sectionData', sectionData)
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
         {
