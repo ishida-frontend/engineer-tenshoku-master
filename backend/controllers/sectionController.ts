@@ -5,6 +5,7 @@ export const sectionCreateController = async function (
   req: express.Request,
   res: express.Response,
 ) {
+  console.log('req.body', req.body)
   try {
     await createSection(req.body)
     res.send('新しいセクションが作成されました！')
