@@ -1,7 +1,10 @@
 import express from 'express'
 import 'dotenv/config'
+
 import { contactValidationRules, contactValidate } from '../validation'
 import { validate, courseValidationRules } from '../validation/courseValidation'
+import { VideoValidator } from '../validation/videoValidator'
+import { VideoController } from '../controllers/videoController'
 
 const {
   createCourse,
@@ -12,17 +15,14 @@ const {
   deleteCourse,
 } = require('../controllers/courseController')
 const {
-  checkCreateVideo,
-  checkReadVideo,
-  checkUpdateVideo,
-  checkDeleteVideo,
-} = require('../controllers/videoController')
-const {
   checkCreateContact,
   checkReadContact,
 } = require('../controllers/contactController')
 
 const router = express.Router()
+
+const videoValidator = new VideoValidator()
+const videoController = new VideoController()
 
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -48,6 +48,11 @@ adminRouter.put(
 )
 adminRouter.delete('/course/delete/:id', deleteCourse)
 adminRouter.get('/contacts', checkReadContact)
+adminRouter.post(
+  '/video/create',
+  videoValidator.createVideo,
+  videoController.createVideo,
+)
 
 const courseRouter = express.Router()
 router.use('/course', courseRouter)
@@ -55,13 +60,6 @@ courseRouter.get('/create', createCourse)
 courseRouter.get('/read', readCourse)
 courseRouter.get('/all', readAllCourses)
 courseRouter.get('/update', updateCourse)
-
-const videoRouter = express.Router()
-router.use('/video', videoRouter)
-// videoRouter.get('/create', checkCreateVideo)
-videoRouter.get('/read', checkReadVideo)
-videoRouter.get('/update', checkUpdateVideo)
-videoRouter.get('/delete', checkDeleteVideo)
 
 const contactRouter = express.Router()
 router.use('/contact', contactRouter)
