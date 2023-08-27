@@ -8,7 +8,6 @@ export async function createSection(sectionData: {
   published: boolean
 }) {
   try {
-    console.log('sectionData1', sectionData)
     const section = await prisma.section.create({
       data: {
         course: { connect: { id: sectionData.courseId } },

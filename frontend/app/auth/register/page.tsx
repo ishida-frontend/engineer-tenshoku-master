@@ -14,7 +14,6 @@ import {
   VStack,
   Wrap,
   Link as ChakraLink,
-  useToast,
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import React, { useState } from 'react'
@@ -29,7 +28,9 @@ export default function Register() {
 
   const [isChecked, setIsChecked] = useState(false)
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     e.preventDefault()
     if (!isChecked) {
       showErrorToast('利用規約とプライバシーポリシーに同意してください')

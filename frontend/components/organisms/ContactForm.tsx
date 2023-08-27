@@ -1,7 +1,6 @@
 'use client'
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { z, ZodError } from 'zod'
+import React, { useState } from 'react'
+import { ZodError } from 'zod'
 import {
   Container,
   Button,
@@ -11,10 +10,7 @@ import {
   FormControl,
   Wrap,
   Heading,
-  FormHelperText,
   FormErrorMessage,
-  Center,
-  Box,
   VStack,
   HStack,
   Input,
@@ -44,23 +40,6 @@ export function UserContactForm() {
     subject: [''],
     message: [''],
   })
-
-  const ContactSchema = z.object({
-    name: z
-      .string()
-      .min(2, { message: '2文字以上入力してください' })
-      .max(50, { message: '50文字以下で入力してください' }),
-    email: z.string().email({ message: 'メールアドレスの形式ではありません' }),
-    subject: z.string().min(5, { message: '5文字以上入力してください' }),
-    message: z.string().min(5, { message: '5文字以上入力してください' }),
-  })
-  type Contact = z.infer<typeof ContactSchema>
-  const contact: Contact = {
-    name: state.name,
-    email: state.email,
-    subject: state.subject,
-    message: state.message,
-  }
 
   const [isChecked, setIsChecked] = useState(false)
   const toggleCheckbox = () => {
@@ -100,14 +79,15 @@ export function UserContactForm() {
     return res.json()
   }
 
-  const handleSubmit = async (event: Event) => {
+  const handleSubmit = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     event.preventDefault()
     try {
-      const result = ContactSchema.parse(contact)
       if (isChecked) {
         const res = await fetcher()
         const items = res.error.reduce(
-          (accumulator, value, index: number) => {
+          (accumulator: any, value: { path: string; message: string }) => {
             return { ...accumulator, [value.path]: [value.message] }
           },
           {
@@ -134,7 +114,7 @@ export function UserContactForm() {
         <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
           お問い合わせ
         </Heading>
-        <FormControl onSubmit={handleSubmit} maxW={'904px'}>
+        <FormControl maxW={'904px'}>
           <Container mt="109px" maxW={'100%'} bg={'white'} p={'0px'}>
             <FormControl
               isInvalid={!!errors.name?.[0]}
