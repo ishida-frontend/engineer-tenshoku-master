@@ -1,3 +1,6 @@
+export * from './CourseType'
+export * from './VideoType'
+
 export type { CourseType } from './CourseType'
 
 export type ContactType = {
