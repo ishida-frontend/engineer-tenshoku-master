@@ -27,11 +27,3 @@ export async function createVideo(videoData: {
     await prisma.$disconnect()
   }
 }
-export default createVideo({
-  name: 'aaaaaa',
-  description: 'aaaaaa',
-  url: 'aaaaaa',
-  published: true,
-  order: 1,
-  sectionId: 1,
-})
