@@ -15,7 +15,6 @@ import {
   Link,
 } from '@chakra-ui/react'
 
-import { CourseRemover } from './CourseRemover'
 import { CourseType } from '../../../types'
 import formatDate from '../../../utils/formatDate'
 import { Loader } from '../../../components/admin/atoms/Loader'
@@ -37,7 +36,7 @@ export function CourseEditor() {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${courseId}`,
       )
     ).json()
-  const { data: courseData, error } = useSWR<CourseType>('courseData', fetcher)
+  const { data: courseData } = useSWR<CourseType>('courseData', fetcher)
 
   // 初期状態を定義し、useStateで初期化
   const initialCourseState: CourseType = {
