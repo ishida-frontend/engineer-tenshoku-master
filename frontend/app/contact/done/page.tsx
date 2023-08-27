@@ -1,15 +1,6 @@
 'use client'
 import React from 'react'
-import {
-  Container,
-  Button,
-  Text,
-  Heading,
-  VStack,
-  HStack,
-  Stack,
-  extendTheme,
-} from '@chakra-ui/react'
+import { Container, Button, Text, Heading, Stack } from '@chakra-ui/react'
 import Link from 'next/link'
 import { EmailIcon } from '@chakra-ui/icons'
 

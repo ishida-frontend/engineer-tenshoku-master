@@ -14,6 +14,7 @@ const {
   updateCourse,
   deleteCourse,
 } = require('../controllers/courseController')
+const { sectionCreateController } = require('../controllers/sectionController')
 const {
   checkCreateContact,
   checkReadContact,
