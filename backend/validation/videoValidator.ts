@@ -8,10 +8,12 @@ export class VideoValidator {
     next: express.NextFunction,
   ) => {
     const videoCreateSchema = z.object({
-      name: z.string().nonempty({ message: '入力必須です' }),
-      description: z.string().nonempty({ message: '入力必須です' }),
+      name: z.string().min(5, { message: '※5文字以上で入力してください' }),
+      description: z
+        .string()
+        .min(15, { message: '※15文字以上で入力してください' }),
       url: z.string().url({
-        message: 'URLの形式で入力してください',
+        message: '※URLの形式で入力してください',
       }),
       order: z.number().positive(),
     })
