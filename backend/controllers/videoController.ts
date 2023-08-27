@@ -3,7 +3,7 @@ import express from 'express'
 import { createVideo } from '../scripts/createVideo'
 import {
   readVideo,
-  readAllVideos,
+  readVideos,
   readFilteredVideos,
 } from '../scripts/readVideo'
 import { updateVideo, updateVideos } from '../scripts/updateVideo'
@@ -24,7 +24,7 @@ export class VideoController {
 
   readAllVideos = async function (req: express.Request, res: express.Response) {
     try {
-      const videos = await readAllVideos()
+      const videos = await readVideos()
       res.status(200).json(videos)
     } catch (e: any) {
       res.status(500).send('エラーが発生しました')
