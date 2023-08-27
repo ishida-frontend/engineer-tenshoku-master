@@ -1,6 +1,5 @@
 'use client'
-import React, { useState } from 'react'
-import { useForm, useFieldArray } from 'react-hook-form'
+import React, { useEffect, useState } from 'react'
 import {
   Container,
   Button,
@@ -21,17 +20,53 @@ type SectionType = {
   title: string
   published: boolean
 }[]
+type PreSectionType = {
+  courseId: number
+  order: number
+  title: string
+  published: boolean
+  id?: number
+  created_at?: string
+  updated_at?: string
+  delete_at?: string
+}[]
+
+type ItemsProps = {
+  title: string
+}[]
+
+const course_id = 1
 
 export function SectionManage() {
   const defaultCourseValues = {
-    courseId: 1,
+    courseId: course_id,
     order: 0,
     title: '',
     published: false,
   }
   const [sections, setSections] = useState<SectionType>([
     {
-      courseId: 1,
+      courseId: course_id,
+      order: 0,
+      title: '',
+      published: false,
+    },
+  ])
+  const [preSections, setPreSections] = useState<PreSectionType>([
+    {
+      courseId: course_id,
+      order: 0,
+      title: '',
+      published: false,
+      id: 1,
+      created_at: '',
+      updated_at: '',
+      delete_at: '',
+    },
+  ])
+  const [initialSections, setInitialSections] = useState<SectionType>([
+    {
+      courseId: course_id,
       order: 0,
       title: '',
       published: false,
@@ -39,32 +74,72 @@ export function SectionManage() {
   ])
 
   const [count, setCount] = useState(0)
-  const countUp = () => setCount(count + 1)
+  const countUp = () => setCount((prevCount) => prevCount + 1)
   const reduce = () => {
     if (count > 0) {
-      remove(count)
-      setCount(count - 1)
+      setCount((prevCount) => prevCount - 1)
     }
   }
 
-  const { register, reset, control } = useForm({
-    defaultValues: {
-      sections: [{ sectionTitle: '' }],
-    },
-  })
+  const [items, setItems] = useState<ItemsProps>([])
+  const [inputValue, setInputValue] = useState('')
+  const handleAddInput = () => {
+    countUp()
+    const newItem = {
+      title: inputValue,
+    }
+    const newItems = [...items, newItem]
+    setItems(newItems)
+  }
 
-  const { fields, prepend, append, remove } = useFieldArray({
-    control,
-    name: 'sections',
-  })
+  // const [preSections, setPreSections] = useState<preSectionType>([])
+  useEffect(() => {
+    const getSections = async () => {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/read/${course_id}`,
+      )
+        .then((res) => res.json())
+        .then((json) => setPreSections(json))
+        .catch(() => console.log('Error:No data in this course'))
+    }
+    getSections()
+    // setSections(...preSections)
+    preSections.map(async (preSection) => {
+      delete preSection.id
+      delete preSection.created_at
+      delete preSection.updated_at
+      delete preSection.delete_at
+      console.log('preSection', preSection)
+      countUp
+      const initialSections = {
+        courseId: preSection.courseId,
+        title: preSection.title,
+        order: preSection.order,
+        published: preSection.published,
+      }
+      return setSections([initialSections])
+    })
+  }, [])
+  console.log('initialSections', initialSections)
+  console.log('preSections', preSections)
 
   const handleInputChange = (value: string, index: number) => {
-    const newSection = { ...defaultCourseValues, order: index, title: value }
+    const newItems = [...items]
+    newItems[index].title = value
+    setItems(newItems)
+    console.log('items', items)
+
+    const newSection = {
+      ...defaultCourseValues,
+      title: items[index].title,
+      order: index,
+    }
     const newSections = sections.filter((t) => {
       return t.order !== index
     })
     setSections([...newSections, newSection])
   }
+  console.log('sections', sections)
 
   const createSection = async (sections: SectionType) => {
     console.log('sections', sections)
@@ -102,7 +177,7 @@ export function SectionManage() {
         <Container mt="109px" maxW={'100%'} bg={'white'} p={'0px'}>
           <VStack>
             <FormControl maxW={'904px'}>
-              {fields.map((field, index) => (
+              {preSections.map((item, index) => (
                 <Box
                   key={index}
                   border={'2px solid gray'}
@@ -114,7 +189,26 @@ export function SectionManage() {
                     セクション No.{index}
                     <Input
                       type="text"
-                      value={field.title}
+                      value={item.title}
+                      onChange={(e) => handleInputChange(e.target.value, index)}
+                      placeholder={'セクション名'}
+                    />
+                  </label>
+                </Box>
+              ))}
+              {items.map((item, index) => (
+                <Box
+                  key={index}
+                  border={'2px solid gray'}
+                  borderRadius={'2xl'}
+                  p={'8px'}
+                  mb={'10px'}
+                >
+                  <label>
+                    セクション No.{index}
+                    <Input
+                      type="text"
+                      value={item.title}
                       onChange={(e) => handleInputChange(e.target.value, index)}
                       placeholder={'セクション名'}
                     />
@@ -123,10 +217,7 @@ export function SectionManage() {
               ))}
 
               <HStack>
-                <Button
-                  type="button"
-                  onClick={() => [append({ sectionTitle: '' }), countUp()]}
-                >
+                <Button type="button" onClick={() => handleAddInput()}>
                   セクションを追加
                 </Button>
 
@@ -141,7 +232,7 @@ export function SectionManage() {
                   type="submit"
                   onClick={(e) => onSubmit(e)}
                 >
-                  送信する
+                  保存する
                 </Button>
               </VStack>
             </FormControl>
