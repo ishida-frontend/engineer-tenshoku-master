@@ -9,7 +9,14 @@ export const checkCreateVideo = async function (
   res: express.Response,
 ) {
   try {
-    // await createVideo(1);
+    await createVideo({
+      name: 'jsインストール',
+      description: 'インストール方法',
+      url: 'http://js.install',
+      published: true,
+      order: 1,
+      sectionId: 1,
+    })
     res.send('新しいビデオが作成されました！')
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
