@@ -1,7 +1,8 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import useSWR from 'swr'
 import { Container, VStack, StackDivider } from '@chakra-ui/react'
+import { ContactType } from '../../../types'
 
 export function ContactList() {
   const fetcher = async () =>
@@ -12,7 +13,7 @@ export function ContactList() {
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading...</div>
 
-  const dataDesc = data.sort(function (a, b) {
+  const dataDesc = data.sort(function (a: { id: number }, b: { id: number }) {
     return b.id - a.id
   })
 
@@ -20,7 +21,7 @@ export function ContactList() {
     <div>
       <h1>お問い合わせ一覧</h1>
       {dataDesc &&
-        dataDesc.map((d) => {
+        dataDesc.map((d: ContactType) => {
           return (
             <VStack
               divider={<StackDivider borderColor="gray.200" />}

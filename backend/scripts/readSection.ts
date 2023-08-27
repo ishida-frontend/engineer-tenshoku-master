@@ -7,10 +7,12 @@ export async function readSection(sectionId: number) {
       id: sectionId,
     },
   })
+  return section
 }
 
 export async function readSections() {
   const sections = await prisma.section.findMany()
+  return sections
 }
 
 export async function readFilteredSections(courseId: number) {

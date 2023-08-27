@@ -142,9 +142,7 @@ export function SectionManage() {
   console.log('sections', sections)
 
   const createSection = async (sections: SectionType) => {
-    console.log('sections', sections)
     sections.map(async (sectionData) => {
-      console.log('sectionData', sectionData)
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
         {
