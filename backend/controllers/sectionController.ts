@@ -20,6 +20,7 @@ exports.sectionRead = async function (
   try {
     console.log('req.body', req.body)
     const result = await readFilteredSections(req.body)
+    console.log('result', result)
     res.json(result)
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
