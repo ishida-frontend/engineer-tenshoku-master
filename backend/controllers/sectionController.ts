@@ -18,7 +18,7 @@ exports.sectionRead = async function (
   res: express.Response,
 ) {
   try {
-    const result = await readFilteredSections(req.body)
+    const result = await readFilteredSections(req.params.course_id)
     res.json(result)
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
