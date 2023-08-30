@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Course {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(autoincrement())
   sections    Section[]
   name        String?
   description String?
@@ -25,7 +25,7 @@ model Course {
 model Section {
   id          Int       @id @default(autoincrement())
   course      Course    @relation(fields: [course_id], references: [id])
-  course_id   Int
+  course_id   String
   videos      Video[]
   title       String?
   order       Int?
