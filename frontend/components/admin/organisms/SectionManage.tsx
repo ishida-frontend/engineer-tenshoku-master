@@ -26,7 +26,10 @@ type SectionType = {
 export function SectionManage() {
   const params = useParams()
   const course_id = Number(params.course_id) || 1
-  console.log('is params.course_id number?', isNaN(Number(params.course_id)))
+  console.log(
+    'isNaN(Number(params.course_id)@component',
+    isNaN(Number(params.course_id)),
+  )
 
   const defaultCourseValues = {
     course_id,
