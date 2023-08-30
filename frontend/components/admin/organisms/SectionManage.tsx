@@ -26,14 +26,14 @@ const course_id = 1
 
 export function SectionManage() {
   const defaultCourseValues = {
-    course_id: course_id,
+    course_id,
     order: 0,
     title: '',
     published: false,
   }
   const [sections, setSections] = useState<SectionType[]>([
     {
-      course_id: course_id,
+      course_id,
       order: 0,
       title: '',
       published: false,
@@ -42,10 +42,10 @@ export function SectionManage() {
 
   const handleAddInput = () => {
     const orderMax = sections.reduce((a, b) => (a.order > b.order ? a : b))
-    const orderAdd = orderMax.order + 1
+    const nextOrder = orderMax.order + 1
     const addSection: SectionType = {
       course_id: course_id,
-      order: orderAdd,
+      order: nextOrder,
       title: '',
       published: false,
     }
@@ -72,8 +72,8 @@ export function SectionManage() {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/read/${course_id}`,
       )
-      const data = await res.json()
-      const newSections = data.map((newSection: SectionType) => {
+      const sections = await res.json()
+      const newSections = sections.map((newSection: SectionType) => {
         return {
           course_id: newSection.course_id,
           order: newSection.order,
