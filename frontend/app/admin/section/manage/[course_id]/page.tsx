@@ -1,21 +1,17 @@
-'use client'
 import React from 'react'
 import { useParams } from 'next/navigation'
 import { SectionManage } from '../../../../../components/admin/organisms/SectionManage'
-import { number } from 'zod'
 
-export default function AdminSectionManage() {
-  const params = useParams()
-  console.log(
-    'isNaN(Number(params.course_id)@page',
-    isNaN(Number(params.course_id)),
+export default async function AdminSectionManage({
+  params,
+}: {
+  params: { course_id: string }
+}) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/read/${params.course_id}`,
   )
-  console.log('params.course_id', params.course_id)
-  const course_id: number = Number(params.course_id)
+  const sections = await res.json()
   return (
-    <div>
-      <p>{params.course_id}</p>
-      <SectionManage course_id={Number(params.course_id)} />
-    </div>
+    <SectionManage course_id={params.course_id} initialSections={sections} />
   )
 }
