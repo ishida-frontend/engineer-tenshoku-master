@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
 import {
   Container,
   Button,
@@ -53,8 +52,25 @@ export function SectionManage({
     setSections((prev) => [...prev, addSection])
   }
 
-  const handleRemoveInput = (e, index) => {
+  const handleRemoveInput = (e, index: number) => {
     e.preventDefault()
+    initialSections.map(async (initialSection) => {
+      if (sections[index].order === initialSection.order) {
+        const params = { course_id, initialSection }
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${params.course_id}/order/${params.initialSection.order}`,
+          {
+            method: 'GET',
+            body: JSON.stringify(params),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+        return res.json()
+      }
+    })
+
     setSections((prev) => prev.filter((item) => item !== prev[index]))
     sections.splice(index, 1)
     const newSections = sections.map((section: SectionType) => {
