@@ -11,8 +11,8 @@ export async function createVideo(videoData: VideoType) {
         name: videoData.name,
         description: videoData.description,
         url: videoData.url,
-        published: videoData.published,
         order: videoData.order,
+        published: videoData.published,
         section: { connect: { id: videoData.sectionId } },
       },
     })
