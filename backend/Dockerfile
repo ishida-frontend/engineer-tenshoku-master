@@ -1,4 +1,30 @@
-FROM node:18.16.0
+###############
+#     dev     #
+###############
+# docker-composeでコードを共有する前提
+# 実行ステージ（開発環境）
+# 開発用のイメージをビルドするステージ
+FROM node:18.16.0 AS development
+
+WORKDIR /app
+
+COPY package*.json ./
+COPY prisma ./prisma/
+
+RUN npm install
+
+EXPOSE 8000
+
+# DBコンテナでDBユーザー権限付与するまで待つ
+CMD sleep 45s; ./startup.sh
+
+
+###############
+#    build    #
+###############
+# ソースコードをビルドする。
+# 基本的なベースイメージを設定し、アプリケーションのビルドを行う
+FROM node:18.16.0 AS build
 
 WORKDIR /app
 
@@ -9,7 +35,30 @@ RUN npm install
 
 COPY . .
 
+# TypeScriptをJavaScriptにコンパイル
+RUN npm run build
+
+###############
+#    prod     #
+###############
+# 実行ステージ（本番環境）
+# 本番環境用のイメージをビルドするステージ
+FROM node:18.16.0 AS production
+ENV NODE_ENV=production
+
+WORKDIR /app
+
+COPY package*.json ./
+COPY prisma ./prisma/
+# ビルドステージでコンパイルされたJavaScriptファイルをコピー
+COPY --from=build /app/dist ./dist
+
+RUN npm install --only=production
+
+# Prismaマイグレーションの実行
+RUN npx prisma migrate deploy
+
 EXPOSE 8000
 
-# DBコンテナでDBユーザー権限付与するまで待つ
-CMD sleep 45s; ./startup.sh
+# アプリケーションの起動
+CMD ["node", "dist/app.js"]
