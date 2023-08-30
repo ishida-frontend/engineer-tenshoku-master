@@ -42,9 +42,7 @@ export function SectionManage() {
 
   const handleAddInput = () => {
     const orderMax = sections.reduce((a, b) => (a.order > b.order ? a : b))
-    console.log('orderMax', orderMax)
-    const orderAdd = orderMax + 1
-    console.log('orderAdd', orderAdd)
+    const orderAdd = orderMax.order + 1
     const addSection: SectionType = {
       course_id: course_id,
       order: orderAdd,
@@ -57,19 +55,16 @@ export function SectionManage() {
   const handleRemoveInput = (e, index) => {
     e.preventDefault()
     setSections((prev) => prev.filter((item) => item !== prev[index]))
-    const deletedSections = [...sections]
-    deletedSections.splice(index, 1)
-    const refleshedSections = deletedSections.map(
-      (deletedSection: SectionType) => {
-        return {
-          course_id: deletedSection.course_id,
-          order: deletedSection.order,
-          title: deletedSection.title,
-          published: deletedSection.published,
-        }
-      },
-    )
-    setSections(refleshedSections)
+    sections.splice(index, 1)
+    const newSections = sections.map((section: SectionType) => {
+      return {
+        course_id: section.course_id,
+        order: section.order,
+        title: section.title,
+        published: section.published,
+      }
+    })
+    setSections(newSections)
   }
 
   useEffect(() => {
@@ -77,10 +72,7 @@ export function SectionManage() {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/read/${course_id}`,
       )
-      // console.log('res.body', res.body)
       const data = await res.json()
-      // console.log('data', data)
-      // setSections(...preSections)
       const newSections = data.map((newSection: SectionType) => {
         return {
           course_id: newSection.course_id,
@@ -96,15 +88,14 @@ export function SectionManage() {
   const handleInputChange = (value: string, index: number) => {
     const newSection = {
       ...defaultCourseValues,
-      order: index,
+      order: sections[index].order,
       title: value,
     }
     const newSections = sections.filter((t) => {
-      return t.order !== index
+      return t.order !== sections[index].order
     })
     setSections([...newSections, newSection])
   }
-  console.log('sections', sections)
 
   const createSection = async (sections: SectionType[]) => {
     sections.map(async (sectionData) => {
@@ -138,7 +129,6 @@ export function SectionManage() {
           コース内容
         </Heading>
         <Container mt="109px" maxW={'100%'} bg={'white'} p={'0px'}>
-          {JSON.stringify(sections)}
           <VStack>
             <FormControl maxW={'904px'}>
               {sections.map((section, index) => (
@@ -175,10 +165,6 @@ export function SectionManage() {
                 <Button type="button" onClick={() => handleAddInput()}>
                   セクションを追加
                 </Button>
-
-                {/* <Button type="button" onClick={() => handleRemoveInput()}>
-                  セクションを削除
-                </Button> */}
               </HStack>
               <VStack>
                 <Button
