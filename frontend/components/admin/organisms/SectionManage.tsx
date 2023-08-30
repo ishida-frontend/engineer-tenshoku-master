@@ -13,6 +13,7 @@ import {
   HStack,
   Center,
 } from '@chakra-ui/react'
+import { add } from 'date-fns'
 
 type SectionType = {
   course_id: number
@@ -40,10 +41,14 @@ export function SectionManage() {
   ])
 
   const handleAddInput = () => {
+    const orderMax = sections.reduce((a, b) => (a.order > b.order ? a : b))
+    console.log('orderMax', orderMax)
+    const orderAdd = orderMax + 1
+    console.log('orderAdd', orderAdd)
     const addSection: SectionType = {
       course_id: course_id,
+      order: orderAdd,
       title: '',
-      order: sections.length,
       published: false,
     }
     setSections((prev) => [...prev, addSection])
@@ -72,9 +77,9 @@ export function SectionManage() {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/read/${course_id}`,
       )
-      console.log('res.body', res.body)
+      // console.log('res.body', res.body)
       const data = await res.json()
-      console.log('data', data)
+      // console.log('data', data)
       // setSections(...preSections)
       const newSections = data.map((newSection: SectionType) => {
         return {
@@ -91,8 +96,8 @@ export function SectionManage() {
   const handleInputChange = (value: string, index: number) => {
     const newSection = {
       ...defaultCourseValues,
-      title: value,
       order: index,
+      title: value,
     }
     const newSections = sections.filter((t) => {
       return t.order !== index
