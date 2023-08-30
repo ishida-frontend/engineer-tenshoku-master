@@ -22,7 +22,7 @@ type SectionType = {
   published: boolean
 }
 
-const course_id = 1
+const course_id = course_path_id
 
 export function SectionManage() {
   const defaultCourseValues = {
