@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import {
   Container,
   Button,
@@ -22,9 +23,11 @@ type SectionType = {
   published: boolean
 }
 
-const course_id = course_path_id
-
 export function SectionManage() {
+  const params = useParams()
+  const course_id = Number(params.course_id) || 1
+  console.log('is params.course_id number?', isNaN(Number(params.course_id)))
+
   const defaultCourseValues = {
     course_id,
     order: 0,
