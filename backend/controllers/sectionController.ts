@@ -1,6 +1,6 @@
 import express from 'express'
 import { createSection } from '../scripts/createSection'
-import { readFilteredSections } from '../scripts/readSection'
+import { readOrderedSections } from '../scripts/readSection'
 import { deleteSection } from '../scripts/deleteSection'
 
 export const sectionCreate = async function (
@@ -19,7 +19,7 @@ exports.sectionRead = async function (
   res: express.Response,
 ) {
   try {
-    const result = await readFilteredSections(req.params.course_id)
+    const result = await readOrderedSections(req.params.course_id)
     res.json(result)
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
