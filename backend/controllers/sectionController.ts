@@ -9,9 +9,9 @@ export const sectionCreate = async function (
 ) {
   try {
     await createSection(req.body)
-    res.send('新しいセクションが作成されました！')
+    res.status(201).json({ message: 'セクションが保存されました' })
   } catch (e: any) {
-    res.status(500).send('エラーが発生しました')
+    res.status(500).json({ message: 'セクション保存でエラーが発生しました' })
   }
 }
 exports.sectionRead = async function (
@@ -22,7 +22,7 @@ exports.sectionRead = async function (
     const result = await readOrderedSections(req.params.course_id)
     res.json(result)
   } catch (e: any) {
-    res.status(500).send('エラーが発生しました')
+    res.status(500).json({ message: '一覧読み込みにエラーが発生しました' })
   }
 }
 exports.sectionDelete = async function (
@@ -31,8 +31,8 @@ exports.sectionDelete = async function (
 ) {
   try {
     await deleteSection(req.params.id)
-    res.send('１件のビデオを削除しました')
+    res.status(201).json({ message: '削除されました' })
   } catch (e: any) {
-    res.status(500).send('エラーが発生しました')
+    res.status(500).json({ message: 'セクション削除でエラーが発生しました' })
   }
 }

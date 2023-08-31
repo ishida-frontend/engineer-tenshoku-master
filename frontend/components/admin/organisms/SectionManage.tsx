@@ -12,7 +12,9 @@ import {
   Box,
   HStack,
   Center,
+  useDisclosure,
 } from '@chakra-ui/react'
+import { useCustomToast } from '../../../hooks/useCustomToast'
 
 type SectionType = {
   course_id: string
@@ -44,6 +46,8 @@ export function SectionManage({
     title: '',
     published: false,
   }
+  const { showSuccessToast, showErrorToast } = useCustomToast()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [sections, setSections] = useState<SectionType[]>(initialSections)
 
@@ -61,13 +65,24 @@ export function SectionManage({
 
   const handleRemoveInput = async (e, index: number) => {
     e.preventDefault()
-    const deleteSection: InitialSectionType = initialSections.find(
-      (initialSection) => sections[index].order === initialSection.order,
-    )
-    const sectionId = deleteSection.id
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`,
-    )
+    try {
+      const deleteSection: InitialSectionType = initialSections.find(
+        (initialSection) => sections[index].order === initialSection.order,
+      )
+      const sectionId = deleteSection.id
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`,
+      )
+      const result = await res.json()
+      if (res.status === 201) {
+        onClose()
+        showSuccessToast(result.message)
+      } else if (res.status === 500) {
+        showErrorToast(result.message)
+      }
+    } catch (error) {
+      showErrorToast('An error occurred while creating the video.')
+    }
 
     setSections((prev) => prev.filter((item) => item !== prev[index]))
     sections.splice(index, 1)
