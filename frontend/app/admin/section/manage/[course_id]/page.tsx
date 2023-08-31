@@ -10,6 +10,7 @@ export default async function AdminSectionManage({
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/read/${params.course_id}`,
   )
   const sections = await res.json()
+  console.log('sections', sections)
   return (
     <SectionManage course_id={params.course_id} initialSections={sections} />
   )

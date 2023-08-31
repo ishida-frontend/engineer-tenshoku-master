@@ -21,9 +21,17 @@ type SectionType = {
   published: boolean
 }
 
+type InitialSectionType = {
+  id: number
+  course_id: string
+  order: number
+  title: string
+  published: boolean
+}
+
 type SectionManageProps = {
   course_id: string
-  initialSections: SectionType[]
+  initialSections: InitialSectionType[]
 }
 
 export function SectionManage({
@@ -55,16 +63,21 @@ export function SectionManage({
     e.preventDefault()
     initialSections.map(async (initialSection) => {
       if (sections[index].order === initialSection.order) {
-        const params = { course_id, initialSection }
+        const params = initialSection.id
+        console.log('params', params)
+        console.log(
+          '${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${params}',
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${params}`,
+        )
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${params.course_id}/order/${params.initialSection.order}`,
-          {
-            method: 'GET',
-            body: JSON.stringify(params),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${params}`,
+          // {
+          //   method: 'GET',
+          //   body: JSON.stringify(params),
+          //   headers: {
+          //     'Content-Type': 'application/json',
+          //   },
+          // },
         )
         return res.json()
       }
