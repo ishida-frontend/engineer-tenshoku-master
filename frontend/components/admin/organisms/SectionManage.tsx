@@ -59,17 +59,15 @@ export function SectionManage({
     setSections((prev) => [...prev, addSection])
   }
 
-  const handleRemoveInput = (e, index: number) => {
+  const handleRemoveInput = async (e, index: number) => {
     e.preventDefault()
-    initialSections.map(async (initialSection) => {
-      if (sections[index].order === initialSection.order) {
-        const params = initialSection.id
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${params}`,
-        )
-        return res.json()
-      }
-    })
+    const deleteSection: InitialSectionType = initialSections.find(
+      (initialSection) => sections[index].order === initialSection.order,
+    )
+    const sectionId = deleteSection.id
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`,
+    )
 
     setSections((prev) => prev.filter((item) => item !== prev[index]))
     sections.splice(index, 1)
