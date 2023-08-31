@@ -81,7 +81,7 @@ export function SectionManage({
         showErrorToast(result.message)
       }
     } catch (error) {
-      showErrorToast('An error occurred while creating the video.')
+      showErrorToast('エラーにより、セクションを保存することができません。')
     }
 
     setSections((prev) => prev.filter((item) => item !== prev[index]))
