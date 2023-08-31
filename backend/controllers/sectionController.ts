@@ -29,9 +29,6 @@ exports.sectionDelete = async function (
   req: express.Request,
   res: express.Response,
 ) {
-  console.log('req.body', req.body)
-  console.log('req.params', req.params)
-  console.log('req.params.section_id', req.params.section_id)
   try {
     await deleteSection(req.params.id)
     res.send('１件のビデオを削除しました')
