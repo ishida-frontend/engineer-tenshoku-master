@@ -64,20 +64,8 @@ export function SectionManage({
     initialSections.map(async (initialSection) => {
       if (sections[index].order === initialSection.order) {
         const params = initialSection.id
-        console.log('params', params)
-        console.log(
-          '${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${params}',
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${params}`,
-        )
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${params}`,
-          // {
-          //   method: 'GET',
-          //   body: JSON.stringify(params),
-          //   headers: {
-          //     'Content-Type': 'application/json',
-          //   },
-          // },
         )
         return res.json()
       }
