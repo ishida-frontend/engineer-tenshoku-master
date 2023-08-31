@@ -31,10 +31,9 @@ exports.sectionDelete = async function (
 ) {
   console.log('req.body', req.body)
   console.log('req.params', req.params)
-  console.log('req.params.course_id', req.params.course_id)
-  console.log('req.params.order', req.params.order)
+  console.log('req.params.section_id', req.params.section_id)
   try {
-    await deleteSection(req.params.course_id, req.params.order)
+    await deleteSection(req.params.id)
     res.send('１件のビデオを削除しました')
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
