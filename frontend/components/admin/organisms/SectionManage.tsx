@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
 import {
   Container,
   Button,
@@ -14,7 +13,6 @@ import {
   HStack,
   Center,
 } from '@chakra-ui/react'
-import { add } from 'date-fns'
 
 type SectionType = {
   course_id: string
@@ -53,7 +51,7 @@ export function SectionManage({
     setSections((prev) => [...prev, addSection])
   }
 
-  const handleRemoveInput = (e, index) => {
+  const handleRemoveInput = (e, index: number) => {
     e.preventDefault()
     setSections((prev) => prev.filter((item) => item !== prev[index]))
     sections.splice(index, 1)
