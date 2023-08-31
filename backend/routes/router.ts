@@ -15,7 +15,10 @@ const {
   updateCourse,
   deleteCourse,
 } = require('../controllers/courseController')
-const { sectionCreateController } = require('../controllers/sectionController')
+const {
+  sectionCreate,
+  sectionRead,
+} = require('../controllers/sectionController')
 const {
   checkCreateContact,
   checkReadContact,
@@ -66,6 +69,18 @@ courseRouter.get('/create', createCourse)
 courseRouter.get('/read', readCourse)
 courseRouter.get('/all', readAllCourses)
 courseRouter.get('/update', updateCourse)
+
+const sectionRouter = express.Router()
+router.use('/section', sectionRouter)
+sectionRouter.post('/create', sectionCreate)
+sectionRouter.get('/read/:id', sectionRead)
+
+const videoRouter = express.Router()
+router.use('/video', videoRouter)
+// videoRouter.get('/create', checkCreateVideo)
+videoRouter.get('/read', checkReadVideo)
+videoRouter.get('/update', checkUpdateVideo)
+videoRouter.get('/delete', checkDeleteVideo)
 
 const contactRouter = express.Router()
 router.use('/contact', contactRouter)
