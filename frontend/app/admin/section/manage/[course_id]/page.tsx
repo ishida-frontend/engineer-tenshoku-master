@@ -1,5 +1,4 @@
 import React from 'react'
-import { useParams } from 'next/navigation'
 import { SectionManage } from '../../../../../components/admin/organisms/SectionManage'
 
 export default async function AdminSectionManage({

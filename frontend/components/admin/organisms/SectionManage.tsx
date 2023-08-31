@@ -13,7 +13,6 @@ import {
   HStack,
   Center,
 } from '@chakra-ui/react'
-import { add } from 'date-fns'
 
 type SectionType = {
   course_id: string
