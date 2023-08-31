@@ -6,13 +6,6 @@ export async function readCourse(id: number) {
     where: {
       id,
     },
-    include: {
-      sections: {
-        include: {
-          videos: true,
-        },
-      },
-    },
   })
   return course
 }

@@ -12,19 +12,18 @@ export class VideoValidator {
       description: z
         .string()
         .min(15, { message: '※15文字以上で入力してください' }),
-      order: z.number().positive(),
       url: z.string().url({
         message: '※URLの形式で入力してください',
       }),
-      sectionId: z.number().positive(),
+      order: z.number().positive(),
     })
 
-    const videoData = videoCreateSchema.safeParse(req.body)
+    const result = videoCreateSchema.safeParse(req.body)
 
-    if (videoData.success) {
+    if (result.success) {
       next()
     } else {
-      res.status(400).json({ errors: videoData.error.formErrors.fieldErrors })
+      res.status(400).json({ errors: result.error.formErrors.fieldErrors })
     }
   }
 }

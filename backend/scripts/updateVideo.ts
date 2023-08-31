@@ -1,33 +1,16 @@
 import { PrismaClient } from '@prisma/client'
-
-import { VideoType } from '../types'
-
 const prisma = new PrismaClient()
 
-export async function updateVideo({
-  id,
-  name,
-  description,
-  order,
-  url,
-  published,
-}: Partial<VideoType>) {
-  try {
-    await prisma.video.update({
-      where: {
-        id,
-      },
-      data: {
-        name,
-        description,
-        order,
-        url,
-        published,
-      },
-    })
-  } catch (error) {
-    throw error
-  }
+export async function updateVideo(videoId: number) {
+  const video = await prisma.video.update({
+    where: {
+      id: videoId,
+    },
+    data: {
+      description: 'This video was made just for you!',
+    },
+  })
+  return video;
 }
 
 export async function updateVideos() {
@@ -42,3 +25,4 @@ export async function updateVideos() {
     },
   })
 }
+
