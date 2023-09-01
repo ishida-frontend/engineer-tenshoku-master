@@ -5,7 +5,6 @@ import { contactValidationRules, contactValidate } from '../validation'
 import { validate, courseValidationRules } from '../validation/courseValidation'
 import { VideoValidator } from '../validation/videoValidator'
 import { VideoController } from '../controllers/videoController'
-import { readVideo } from '../scripts/readVideo'
 
 const {
   createCourse,
@@ -78,13 +77,6 @@ const sectionRouter = express.Router()
 router.use('/section', sectionRouter)
 sectionRouter.post('/create', sectionCreate)
 sectionRouter.get('/read/:id', sectionRead)
-
-const videoRouter = express.Router()
-router.use('/video', videoRouter)
-// videoRouter.get('/create', checkCreateVideo)
-videoRouter.get('/read', checkReadVideo)
-videoRouter.get('/update', checkUpdateVideo)
-videoRouter.get('/delete', checkDeleteVideo)
 
 const contactRouter = express.Router()
 router.use('/contact', contactRouter)
