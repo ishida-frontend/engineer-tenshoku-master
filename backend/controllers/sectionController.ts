@@ -2,13 +2,14 @@ import express from 'express'
 import { createSection } from '../scripts/createSection'
 import { readOrderedSections } from '../scripts/readSection'
 import { deleteSection } from '../scripts/deleteSection'
-import { updateSection } from '../scripts/updateSection'
+import { updateSections } from '../scripts/updateSection'
 
 export const sectionCreate = async function (
   req: express.Request,
   res: express.Response,
 ) {
   try {
+    console.log('create:req.body', req.body)
     await createSection(req.body)
     res.status(201).json({ message: 'セクションが保存されました' })
   } catch (e: any) {
@@ -33,8 +34,8 @@ exports.sectionUpdate = async function (
   res: express.Response,
 ) {
   try {
-    console.log('req.body', req.body)
-    await updateSection(req.body)
+    console.log('update:req.body', req.body)
+    await updateSections(req.body)
     res.status(201).json({ message: 'セクションが保存されました' })
   } catch (e: any) {
     res.status(500).json({ message: 'セクション保存でエラーが発生しました' })

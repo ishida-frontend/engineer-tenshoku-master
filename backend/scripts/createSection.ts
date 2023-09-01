@@ -7,10 +7,11 @@ export async function createSection(sectionData: {
   title: string
   published: boolean
 }) {
+  // console.log('create:sectionData', sectionData)
   try {
     const section = await prisma.section.create({
       data: {
-        course: { connect: { id: sectionData.course_id } },
+        course: { connect: { id: Number(sectionData.course_id) } },
         order: sectionData.order,
         title: sectionData.title,
         published: sectionData.published,

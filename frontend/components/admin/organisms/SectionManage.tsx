@@ -35,7 +35,6 @@ export function SectionManage({
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [sections, setSections] = useState<SectionType[]>(initialSections)
-  const [results, setResults] = useState()
 
   const handleAddInput = () => {
     const orderMax = sections.reduce((a, b) => (a.order > b.order ? a : b))
@@ -67,7 +66,7 @@ export function SectionManage({
         showErrorToast(result.message)
       }
     } catch (error) {
-      showErrorToast('エラーにより、セクションを保存することができません。')
+      showErrorToast('エラーにより、セクションを削除することができません。')
     }
 
     setSections((prev) => prev.filter((item) => item !== prev[index]))
@@ -89,63 +88,50 @@ export function SectionManage({
       order: sections[index].order,
       title: value,
     }
-    const newSections = sections.filter((t) => {
-      return t.order !== sections[index].order
+    const newSections = sections.filter((section) => {
+      return section.order !== sections[index].order
     })
     setSections([...newSections, newSection])
+    // setSections(sections.sort((a, b) => a.order - b.order))
   }
 
   const createSection = async (sections: SectionType[]) => {
-    try {
-      sections.map(async (createSection) => {
-        const updateSection = sections.find(
-          (sectionData, index) =>
-            sectionData.order === initialSections[index].order,
-        )
-        if (updateSection) {
-          // const params = initialSection.id
-          // console.log('params', params)
-          console.log('updateSection', updateSection)
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/update`,
-            {
-              method: 'POST',
-              body: JSON.stringify(updateSection),
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            },
-          )
-          const result = await res.json()
-          setResults(result)
-        } else {
-          console.log('createSection', createSection)
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
-            {
-              method: 'POST',
-              body: JSON.stringify(createSection),
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            },
-          )
-          const result = await res.json()
-          setResults(result)
-        }
-      })
-      console.log('results', results)
-      const success = results.find((result) => result.status === 201)
-      const error = results.find((result) => result.status === 500)
-      if (!error) {
-        onClose()
-        showSuccessToast(success.message)
-      } else if (error) {
-        showErrorToast(error.message)
-      }
-    } catch (error) {
-      showErrorToast('エラーにより、セクションを保存することができません。')
-    }
+    const updateSections: SectionType[] = sections.filter(
+      (section) =>
+        initialSections.filter(
+          (initialSection) => initialSection.order === section.order,
+        ).length > 0,
+    )
+
+    const createSections: SectionType[] = sections.filter(
+      (section) => updateSections.indexOf(section) == -1,
+    )
+    updateSections.map(async (updateSection) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/update`,
+        {
+          method: 'POST',
+          body: JSON.stringify(updateSection),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      res.json()
+    })
+    createSections.map(async (createSection) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
+        {
+          method: 'POST',
+          body: JSON.stringify(createSection),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      res.json()
+    })
   }
 
   const onSubmit = async (event: Event) => {
