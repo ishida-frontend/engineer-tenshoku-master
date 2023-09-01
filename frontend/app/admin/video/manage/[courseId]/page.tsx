@@ -1,18 +1,25 @@
 'use client'
 import React from 'react'
+import useSWR from 'swr'
 import { useParams } from 'next/navigation'
 import {
-  Box,
-  Button,
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Card,
   CardBody,
+  Divider,
   Flex,
   Heading,
+  HStack,
   SimpleGrid,
   Text,
   VStack,
 } from '@chakra-ui/react'
-import useSWR, { mutate } from 'swr'
+import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai'
+import { GoVideo } from 'react-icons/go'
 
 import { Loader } from '../../../../../components/atoms/Loader'
 import { SectionType } from '../../../../../types'
@@ -24,6 +31,7 @@ import { VideoType } from '../../../../../types'
 export default function EditVideoPage() {
   const params = useParams()
   const courseId = Number(params.courseId) || NaN
+
   const courseFetcher = async () => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${courseId}`,
@@ -38,42 +46,87 @@ export default function EditVideoPage() {
     return data
   }
 
-  const { data: course, error } = useSWR(`course${courseId}`, courseFetcher)
+  const { data: courseData, error } = useSWR(`course${courseId}`, courseFetcher)
 
-  if (!course) {
+  if (!courseData) {
     return <Loader />
   }
 
   return (
-    <VStack w="full" maxW="600px" mx="auto" p={6}>
-      <Heading size="lg">動画編集画面</Heading>
-      <Text fontSize="24px">コース： {course.name}</Text>
-
-      {course.sections.map((section: SectionType) => (
-        <VStack key={section.id} w="600px" border="1px" bgColor="gray.200">
-          <Box>
-            Section {section.id} - {section.title}
-          </Box>
-
-          <VideoCreateModal courseId={courseId} sectionId={section.id} />
-
-          <Flex justify="space-evenly">
-            <SimpleGrid columns={3} spacing={2}>
-              {section.videos.map((video: VideoType) => (
-                <Card key={video.id} maxW="170px" my={1}>
-                  <CardBody>
-                    <Text>動画{video.order}</Text>
-                    <Text>{video.name}</Text>
-                    <Text isTruncated>{video.description}</Text>
-                    <Text>{video.published ? '公開' : '非公開'}</Text>
-                    <VideoEditModal videoId={video.id} />
-                    <VideoRemoveModal courseId={courseId} videoId={video.id} />
-                  </CardBody>
-                </Card>
-              ))}
-            </SimpleGrid>
-          </Flex>
-        </VStack>
+    <VStack w="full" maxW="600px" mx="auto" py={6}>
+      <Heading size="md" fontSize="24px">
+        動画管理画面
+      </Heading>
+      <Heading size="md" my={2}>
+        {courseData.name}
+      </Heading>
+      {courseData.sections.map((section: SectionType) => (
+        <Accordion allowToggle key={section.id}>
+          <AccordionItem>
+            <VStack p={5} bgColor="gray.200" minW="600px" borderRadius={9}>
+              <AccordionButton>
+                <AccordionIcon />
+                <Heading size="sm" ml={2}>
+                  Section {section.id} - {section.title}
+                </Heading>
+              </AccordionButton>
+              <AccordionPanel p={1}>
+                <Flex justify="space-evenly">
+                  <SimpleGrid columns={2} spacing={5} mb={4}>
+                    {section.videos
+                      .sort((a: VideoType, b: VideoType) => a.order - b.order)
+                      .map((video: VideoType) => (
+                        <Card
+                          key={video.id}
+                          w="250px"
+                          maxH="320px"
+                          borderRadius={9}
+                        >
+                          <CardBody>
+                            <HStack>
+                              <Text>No. {video.order}</Text>
+                              {video.published ? (
+                                <AiFillEye />
+                              ) : (
+                                <AiFillEyeInvisible />
+                              )}
+                            </HStack>
+                            <Flex justify="center">
+                              <GoVideo size="100px" />
+                            </Flex>
+                            <Text isTruncated>{video.name}</Text>
+                            <Divider
+                              mt={1}
+                              mb={2}
+                              size="3px"
+                              borderColor="gray"
+                            />
+                            <Flex justify="space-evenly">
+                              <VideoEditModal
+                                courseId={courseId}
+                                videoId={video.id}
+                                section={section}
+                              />
+                              <VideoRemoveModal
+                                courseId={courseId}
+                                videoId={video.id}
+                              />
+                            </Flex>
+                          </CardBody>
+                        </Card>
+                      ))}
+                  </SimpleGrid>
+                </Flex>
+                <Flex justify="right">
+                  <VideoCreateModal
+                    courseId={courseId}
+                    sectionId={section.id}
+                  />
+                </Flex>
+              </AccordionPanel>
+            </VStack>
+          </AccordionItem>
+        </Accordion>
       ))}
     </VStack>
   )
