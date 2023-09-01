@@ -1,6 +1,7 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
+  FormErrorMessage,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -12,32 +13,31 @@ import {
   FormLabel,
   Input,
   Textarea,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
   Select,
   Button,
   useDisclosure,
 } from '@chakra-ui/react'
-import useSWR, { mutate } from 'swr'
+import { mutate } from 'swr'
 
-import { SectionType } from '../../../types'
-import { VideoType } from '../../../types'
+import { SectionType, VideoType } from '../../../types'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
-export const VideoEditModal = ({ videoId }: { videoId: number }) => {
-  console.log('videoId:', videoId)
-
+export function VideoEditModal({
+  courseId,
+  videoId,
+  section,
+}: {
+  courseId: number
+  videoId: number
+  section: SectionType
+}) {
   const { showSuccessToast, showErrorToast } = useCustomToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [orderChanged, setOrderChanged] = useState(false)
 
   const [video, setVideo] = useState<Partial<VideoType>>({
     name: '',
     description: '',
-    order: 0,
+    order: 1,
     url: '',
     published: false,
   })
@@ -45,78 +45,120 @@ export const VideoEditModal = ({ videoId }: { videoId: number }) => {
   const [errors, setErrors] = useState({
     nameError: '',
     descError: '',
-    orderError: '',
     urlError: '',
   })
+
+  const [initialVideoData, setInitialVideoData] = useState<Partial<VideoType>>(
+    {},
+  )
+
+  const allOrders = section.videos.map((v: VideoType) => v.order)
 
   const fetchDataAndOpenModal = async () => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/video/${videoId}`,
       )
-      const fetchedVideoData = await response.json()
+      const videoData = await response.json()
       setVideo({
-        name: fetchedVideoData.name,
-        description: fetchedVideoData.description,
-        order: fetchedVideoData.order,
-        url: fetchedVideoData.url,
-        published: fetchedVideoData.published,
+        name: videoData.name,
+        description: videoData.description,
+        url: videoData.url,
+        order: videoData.order,
+        published: videoData.published,
+        sectionId: videoData.sectionId,
+      })
+      setInitialVideoData({
+        name: videoData.name,
+        description: videoData.description,
+        url: videoData.url,
+        order: videoData.order,
+        published: videoData.published,
+        sectionId: videoData.sectionId,
       })
       onOpen()
     } catch (error) {
-      console.error('Error fetching video data:', error)
+      showErrorToast('動画データの取得に失敗しました')
     }
+  }
+
+  const hasChanges = () => {
+    return JSON.stringify(initialVideoData) !== JSON.stringify(video)
   }
 
   const handleEdit = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/video/edit/${video.id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/video/edit/${videoId}`,
         {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            id: video.id,
+            id: videoId,
             name: video.name,
             description: video.description,
-            order: video.order,
             url: video.url,
+            order: video.order,
+            published: video.published,
+            sectionId: video.sectionId,
           }),
         },
       )
 
       const result = await response.json()
+      const urlRegx =
+        /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/
 
       if (response.status === 201) {
-        setVideo({
-          name: '',
-          description: '',
-          order: 1,
-          url: '',
-          published: false,
-        })
+        mutate(`course${courseId}`)
         setErrors({
           nameError: '',
           descError: '',
-          orderError: '',
           urlError: '',
         })
         onClose()
         showSuccessToast(result.message)
-        mutate(`video${videoId}`)
       } else if (response.status === 400) {
-        showErrorToast(result.message)
+        if (video.name && video.name.length >= 5) {
+          setErrors((prevErrors) => ({ ...prevErrors, nameError: '' }))
+        } else {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            nameError: result.errors.name,
+          }))
+        }
+
+        if (video.description && video.description.length >= 15) {
+          setErrors((prevErrors) => ({ ...prevErrors, descError: '' }))
+        } else {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            descError: result.errors.description,
+          }))
+        }
+
+        if (video.url && !urlRegx.test(video.url)) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            urlError: result.errors.url,
+          }))
+        } else {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            urlError: result.errors.url,
+          }))
+        }
       }
     } catch (error) {
-      showErrorToast('An error occurred while creating the video.')
+      showErrorToast('動画の更新に失敗しました')
     }
   }
 
   return (
     <>
-      <Button colorScheme="green" onClick={fetchDataAndOpenModal}>
+      <Button colorScheme="green" onClick={fetchDataAndOpenModal} ml={1}>
         編集
       </Button>
 
@@ -131,8 +173,13 @@ export const VideoEditModal = ({ videoId }: { videoId: number }) => {
           <ModalHeader>動画詳細入力</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl id="videoName">
-              <FormLabel htmlFor="videoName">タイトル</FormLabel>
+            <FormControl
+              id="videoName"
+              isRequired
+              isInvalid={!!errors.nameError}
+            >
+              <FormLabel htmlFor="videoName">タイトル (5文字以上)</FormLabel>
+              <FormErrorMessage>{errors.nameError}</FormErrorMessage>
               <Input
                 type="text"
                 value={video.name}
@@ -143,8 +190,15 @@ export const VideoEditModal = ({ videoId }: { videoId: number }) => {
                 autoFocus={true}
               />
             </FormControl>
-            <FormControl id="videoDescription">
-              <FormLabel htmlFor="videoDescription">説明文</FormLabel>
+            <FormControl
+              id="videoDescription"
+              isRequired
+              isInvalid={!!errors.descError}
+            >
+              <FormLabel htmlFor="videoDescription">
+                説明文(15文字以上)
+              </FormLabel>
+              <FormErrorMessage>{errors.descError}</FormErrorMessage>
               <Textarea
                 value={video.description}
                 onChange={(e) =>
@@ -156,25 +210,9 @@ export const VideoEditModal = ({ videoId }: { videoId: number }) => {
                 borderColor="gray.400"
               />
             </FormControl>
-            <FormControl>
-              セクション内での順番
-              <NumberInput
-                min={1}
-                max={30}
-                clampValueOnBlur={false}
-                onChange={(_, valueNumber) => {
-                  setVideo({ ...video, order: valueNumber })
-                }}
-              >
-                <NumberInputField border="1px" borderColor="gray.400" />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-            </FormControl>
-            <FormControl>
-              <FormLabel>URL</FormLabel>
+            <FormControl id="videoUrl" isRequired isInvalid={!!errors.urlError}>
+              <FormLabel htmlFor="videoUrl">URL</FormLabel>
+              <FormErrorMessage>{errors.urlError}</FormErrorMessage>
               <Input
                 type="text"
                 value={video.url}
@@ -183,6 +221,21 @@ export const VideoEditModal = ({ videoId }: { videoId: number }) => {
                 border="1px"
                 borderColor="gray.400"
               />
+            </FormControl>
+            <FormControl id="videoOrder">
+              <FormLabel htmlFor="videoOrder">再生順</FormLabel>
+              <Select
+                value={video.order}
+                onChange={(e) =>
+                  setVideo({ ...video, order: Number(e.target.value) })
+                }
+              >
+                {allOrders?.map((order) => (
+                  <option key={order} value={order}>
+                    {order}
+                  </option>
+                ))}
+              </Select>
             </FormControl>
             <FormControl id="coursePublished">
               <FormLabel htmlFor="CoursePublished">公開設定</FormLabel>
@@ -207,7 +260,16 @@ export const VideoEditModal = ({ videoId }: { videoId: number }) => {
             <Button mr={3} onClick={onClose}>
               閉じる
             </Button>
-            <Button colorScheme="green" onClick={handleEdit}>
+            <Button
+              isDisabled={
+                !hasChanges() ||
+                video.name === '' ||
+                video.description === '' ||
+                video.url === ''
+              }
+              colorScheme="green"
+              onClick={handleEdit}
+            >
               更新
             </Button>
           </ModalFooter>

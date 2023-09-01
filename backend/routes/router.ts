@@ -58,9 +58,13 @@ adminRouter.post(
   videoValidator.createVideo,
   videoController.createVideo,
 )
-adminRouter.get('/video/:id', readVideo)
+adminRouter.get('/video/:id', videoController.readVideo)
 adminRouter.get('/video', videoController.readFilteredVideos)
-adminRouter.put('/video/:id', videoController.updateVideo)
+adminRouter.put(
+  '/video/edit/:id',
+  videoValidator.updateVideo,
+  videoController.updateVideo,
+)
 adminRouter.delete('/video/delete/:id', videoController.deleteVideo)
 
 const courseRouter = express.Router()

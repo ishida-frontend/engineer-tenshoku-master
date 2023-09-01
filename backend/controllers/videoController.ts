@@ -1,4 +1,5 @@
 import express from 'express'
+import z from 'zod'
 
 import { createVideo } from '../scripts/createVideo'
 import { readVideo, readVideos, readFilteredVideos } from '../scripts/readVideo'
@@ -9,13 +10,19 @@ export class VideoController {
   createVideo = async function (req: express.Request, res: express.Response) {
     try {
       const videoData = req.body
-      console.log('videoData:', videoData)
-
       await createVideo(videoData)
-
-      res.status(201).json({ message: '動画が追加されました' })
+      res.status(201).json({ message: '正常に追加されました' })
     } catch (e: any) {
       res.status(500).json({ message: 'エラーが発生しました' })
+    }
+  }
+
+  readVideo = async function (req: express.Request, res: express.Response) {
+    try {
+      const video = await readVideo(Number(req.params.id))
+      res.status(200).json(video)
+    } catch (e: any) {
+      res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })
     }
   }
 
@@ -32,14 +39,16 @@ export class VideoController {
   }
 
   updateVideo = async function (req: express.Request, res: express.Response) {
+    console.log('req.body:', req.body)
     try {
       const { id, name, description, order, url, published } = req.body
 
       await updateVideo({ id, name, description, order, url, published })
-      res.status(200).json({ message: '変更が保存されました' })
+      res.status(201).json({ message: '正常に更新されました' })
     } catch (error) {
-      // if (error instanceof z.ZodError) {
-      //   return res.status(400).json({ error: error.issues[0].message })
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: error.issues[0].message })
+      }
     }
   }
 
@@ -49,7 +58,7 @@ export class VideoController {
 
       await deleteVideo(id)
       res.status(201).json({
-        message: '削除されました',
+        message: '正常に削除されました',
       })
     } catch (e: any) {
       res.status(500).json({ message: 'サーバー内部エラーが発生しました' })

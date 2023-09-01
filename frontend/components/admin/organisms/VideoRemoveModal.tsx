@@ -43,10 +43,10 @@ export function VideoRemoveModal({
 
       const result = await response.json()
       if (response.ok) {
+        mutate(`course${courseId}`)
         showSuccessToast(result.message)
         setShowModalContent(false)
         onClose()
-        mutate(`course${courseId}`)
       } else {
         showErrorToast(result.message)
       }

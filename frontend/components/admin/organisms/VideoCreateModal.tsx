@@ -1,6 +1,12 @@
 'use client'
 import React, { useState } from 'react'
+import useSWR, { mutate } from 'swr'
 import {
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -8,23 +14,17 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  FormControl,
-  FormLabel,
-  Input,
-  Textarea,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
   Select,
-  Button,
+  Textarea,
   useDisclosure,
 } from '@chakra-ui/react'
-import useSWR, { mutate } from 'swr'
 
-import { SectionType } from '../../../types'
-import { VideoType } from '../../../types'
+import { SectionType, VideoType } from '../../../types'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export const VideoCreateModal = ({
@@ -51,7 +51,6 @@ export const VideoCreateModal = ({
   const [errors, setErrors] = useState({
     nameError: '',
     descError: '',
-    orderError: '',
     urlError: '',
   })
 
@@ -59,21 +58,25 @@ export const VideoCreateModal = ({
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${courseId}`,
     )
-    const data = await response.json()
+    const courseData = await response.json()
 
-    data.sections.forEach((section: SectionType) => {
+    courseData.sections.forEach((section: SectionType) => {
       section.videos = section.videos.filter(
         (video: VideoType) => !video.deleted_at,
       )
     })
-    return data
+    return courseData
   }
 
-  const { data: course, error } = useSWR(`course${courseId}`, courseFetcher)
+  const { data: courseData, error } = useSWR(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${courseId}`,
+    courseFetcher,
+  )
 
+  // 既存動画の１番大きい再生順番に＋１
   const openModal = (sectionId: number) => {
     setCurrentSectionId(sectionId)
-    const currentSection = course?.sections.find(
+    const currentSection = courseData?.sections.find(
       (s: SectionType) => s.id === sectionId,
     )
     if (currentSection) {
@@ -98,16 +101,20 @@ export const VideoCreateModal = ({
           body: JSON.stringify({
             name: video.name,
             description: video.description,
-            order: orderChanged ? video.order : maxOrder,
             url: video.url,
+            order: orderChanged ? video.order : maxOrder,
+            published: video.published,
             sectionId: currentSectionId,
           }),
         },
       )
 
       const result = await response.json()
+      const urlRegx =
+        /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/
 
       if (response.status === 201) {
+        mutate(`course${courseId}`)
         setVideo({
           name: '',
           description: '',
@@ -118,24 +125,50 @@ export const VideoCreateModal = ({
         setErrors({
           nameError: '',
           descError: '',
-          orderError: '',
           urlError: '',
         })
         onClose()
         showSuccessToast(result.message)
-        mutate(`course${courseId}`)
       } else if (response.status === 400) {
-        showErrorToast(result.message)
+        if (video.name && video.name.length >= 5) {
+          setErrors((prevErrors) => ({ ...prevErrors, nameError: '' }))
+        } else {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            nameError: result.errors.name,
+          }))
+        }
+
+        if (video.description && video.description.length >= 15) {
+          setErrors((prevErrors) => ({ ...prevErrors, descError: '' }))
+        } else {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            descError: result.errors.description,
+          }))
+        }
+
+        if (video.url && !urlRegx.test(video.url)) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            urlError: result.errors.url,
+          }))
+        } else {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            urlError: result.errors.url,
+          }))
+        }
       }
     } catch (error) {
-      showErrorToast('An error occurred while creating the video.')
+      showErrorToast('動画の追加に失敗しました')
     }
   }
 
   return (
     <>
       <Button colorScheme="green" onClick={() => openModal(sectionId)}>
-        動画を追加
+        追加
       </Button>
 
       <Modal
@@ -149,8 +182,13 @@ export const VideoCreateModal = ({
           <ModalHeader>動画詳細入力</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl id="videoName">
-              <FormLabel htmlFor="videoName">タイトル</FormLabel>
+            <FormControl
+              id="videoName"
+              isRequired
+              isInvalid={!!errors.nameError}
+            >
+              <FormLabel htmlFor="videoName">タイトル (5文字以上)</FormLabel>
+              <FormErrorMessage>{errors.nameError}</FormErrorMessage>
               <Input
                 type="text"
                 value={video.name}
@@ -161,8 +199,15 @@ export const VideoCreateModal = ({
                 autoFocus={true}
               />
             </FormControl>
-            <FormControl id="videoDescription">
-              <FormLabel htmlFor="videoDescription">説明文</FormLabel>
+            <FormControl
+              id="videoDescription"
+              isRequired
+              isInvalid={!!errors.descError}
+            >
+              <FormLabel htmlFor="videoDescription">
+                説明文 (15文字以上)
+              </FormLabel>
+              <FormErrorMessage>{errors.descError}</FormErrorMessage>
               <Textarea
                 value={video.description}
                 onChange={(e) =>
@@ -174,26 +219,9 @@ export const VideoCreateModal = ({
                 borderColor="gray.400"
               />
             </FormControl>
-            <FormControl>
-              セクション内での順番
-              <NumberInput
-                defaultValue={maxOrder}
-                min={1}
-                max={30}
-                clampValueOnBlur={false}
-                onChange={(_, valueNumber) => {
-                  setVideo({ ...video, order: valueNumber })
-                }}
-              >
-                <NumberInputField border="1px" borderColor="gray.400" />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-            </FormControl>
-            <FormControl>
+            <FormControl id="videoUrl" isRequired isInvalid={!!errors.urlError}>
               <FormLabel>URL</FormLabel>
+              <FormErrorMessage>{errors.urlError}</FormErrorMessage>
               <Input
                 type="text"
                 value={video.url}
@@ -202,6 +230,27 @@ export const VideoCreateModal = ({
                 border="1px"
                 borderColor="gray.400"
               />
+            </FormControl>
+            <FormControl id="videoOrder">
+              <FormLabel htmlFor="videoOrder">
+                再生順 (追加時は変更不可)
+              </FormLabel>
+              <NumberInput
+                defaultValue={maxOrder}
+                min={1}
+                max={30}
+                clampValueOnBlur={false}
+                onChange={(_, valueNumber) => {
+                  setVideo({ ...video, order: valueNumber })
+                }}
+                isDisabled={true}
+              >
+                <NumberInputField border="1px" borderColor="gray.400" />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
             </FormControl>
             <FormControl id="coursePublished">
               <FormLabel htmlFor="CoursePublished">公開設定</FormLabel>
@@ -226,7 +275,15 @@ export const VideoCreateModal = ({
             <Button mr={3} onClick={onClose}>
               閉じる
             </Button>
-            <Button colorScheme="green" onClick={handleCreate}>
+            <Button
+              isDisabled={
+                video.name === '' ||
+                video.description === '' ||
+                video.url === ''
+              }
+              colorScheme="green"
+              onClick={handleCreate}
+            >
               追加
             </Button>
           </ModalFooter>
