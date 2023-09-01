@@ -7,7 +7,6 @@ export async function createSection(sectionData: {
   title: string
   published: boolean
 }) {
-  // console.log('create:sectionData', sectionData)
   try {
     const section = await prisma.section.create({
       data: {

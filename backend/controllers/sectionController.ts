@@ -9,7 +9,6 @@ export const sectionCreate = async function (
   res: express.Response,
 ) {
   try {
-    console.log('create:req.body', req.body)
     await createSection(req.body)
     res.status(201).json({ message: 'セクションが保存されました' })
   } catch (e: any) {
@@ -34,7 +33,6 @@ exports.sectionUpdate = async function (
   res: express.Response,
 ) {
   try {
-    console.log('update:req.body', req.body)
     await updateSections(req.body)
     res.status(201).json({ message: 'セクションが保存されました' })
   } catch (e: any) {

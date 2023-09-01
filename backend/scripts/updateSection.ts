@@ -20,7 +20,6 @@ export async function updateSections(sectionData: {
   title: string
   published: boolean
 }) {
-  // console.log('update:sectionData', sectionData)
   const sections = await prisma.section.updateMany({
     where: {
       course_id: Number(sectionData.course_id),
@@ -32,6 +31,5 @@ export async function updateSections(sectionData: {
       deleted_at: null,
     },
   })
-  // console.log('sections', sections)
   return sections
 }

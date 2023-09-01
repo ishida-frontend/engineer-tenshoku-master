@@ -35,6 +35,7 @@ export function SectionManage({
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [sections, setSections] = useState<SectionType[]>(initialSections)
+  const [results, setResults] = useState()
 
   const handleAddInput = () => {
     const orderMax = sections.reduce((a, b) => (a.order > b.order ? a : b))
@@ -82,17 +83,14 @@ export function SectionManage({
     setSections(newSections)
   }
 
-  const handleInputChange = (value: string, index: number) => {
-    const newSection = {
-      ...defaultCourseValues,
-      order: sections[index].order,
-      title: value,
-    }
-    const newSections = sections.filter((section) => {
-      return section.order !== sections[index].order
-    })
-    setSections([...newSections, newSection])
-    // setSections(sections.sort((a, b) => a.order - b.order))
+  const handleInputChange = (index: number, key: string, value: string) => {
+    setSections(
+      sections.map((section) =>
+        section.order === sections[index].order
+          ? { ...section, [key]: value }
+          : section,
+      ),
+    )
   }
 
   const createSection = async (sections: SectionType[]) => {
@@ -154,7 +152,7 @@ export function SectionManage({
             <FormControl maxW={'904px'}>
               {sections.map((section, index) => (
                 <Box
-                  key={index}
+                  key={section.order}
                   border={'2px solid gray'}
                   borderRadius={'2xl'}
                   p={'8px'}
@@ -168,7 +166,11 @@ export function SectionManage({
                         placeholder={'セクション名'}
                         value={section.title}
                         onChange={(e) =>
-                          handleInputChange(e.target.value, index)
+                          handleInputChange(
+                            section.order,
+                            'title',
+                            e.target.value,
+                          )
                         }
                       />
                       <Button
@@ -189,7 +191,7 @@ export function SectionManage({
               </HStack>
               <VStack>
                 <Button
-                  mt={'20'}
+                  mb={'10'}
                   colorScheme="teal"
                   type="submit"
                   onClick={(e) => onSubmit(e)}
