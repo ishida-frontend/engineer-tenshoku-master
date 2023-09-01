@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export async function updateSection(section_id: number) {
-  console.log('section_id', section_id)
   const section = await prisma.section.update({
     where: {
       id: section_id,
@@ -15,15 +14,24 @@ export async function updateSection(section_id: number) {
   return section
 }
 
-export async function updateSections() {
+export async function updateSections(sectionData: {
+  course_id: number
+  order: number
+  title: string
+  published: boolean
+}) {
+  // console.log('update:sectionData', sectionData)
   const sections = await prisma.section.updateMany({
     where: {
-      title: {
-        contains: 'Section 1',
-      },
+      course_id: Number(sectionData.course_id),
+      order: Number(sectionData.order),
     },
     data: {
-      title: 'インストール方法',
+      title: sectionData.title,
+      published: sectionData.published,
+      deleted_at: null,
     },
   })
+  // console.log('sections', sections)
+  return sections
 }

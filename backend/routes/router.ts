@@ -16,6 +16,7 @@ const {
   sectionRead,
   sectionUpdate,
   sectionDelete,
+  sectionUpsert,
 } = require('../controllers/sectionController')
 const {
   checkCreateVideo,
