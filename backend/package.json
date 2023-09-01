@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon app.ts",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "createVideo": "nodemon ./scripts/createVideo.ts",
     "readVideo": "nodemon ./scripts/readVideo.ts",

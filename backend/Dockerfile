@@ -49,14 +49,10 @@ ENV NODE_ENV=production
 WORKDIR /app
 
 COPY package*.json ./
-COPY prisma ./prisma/
 # ビルドステージでコンパイルされたJavaScriptファイルをコピー
 COPY --from=build /app/dist ./dist
 
 RUN npm install --only=production
-
-# Prismaマイグレーションの実行
-RUN npx prisma migrate deploy
 
 EXPOSE 8000
 
