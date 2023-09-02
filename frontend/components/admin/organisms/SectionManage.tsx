@@ -12,7 +12,9 @@ import {
   Box,
   HStack,
   Center,
+  useDisclosure,
 } from '@chakra-ui/react'
+import { useCustomToast } from '../../../hooks/useCustomToast'
 
 type SectionType = {
   course_id: string
@@ -21,9 +23,17 @@ type SectionType = {
   published: boolean
 }
 
+type InitialSectionType = {
+  id: number
+  course_id: string
+  order: number
+  title: string
+  published: boolean
+}
+
 type SectionManageProps = {
   course_id: string
-  initialSections: SectionType[]
+  initialSections: InitialSectionType[]
 }
 
 export function SectionManage({
@@ -36,6 +46,8 @@ export function SectionManage({
     title: '',
     published: false,
   }
+  const { showSuccessToast, showErrorToast } = useCustomToast()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [sections, setSections] = useState<SectionType[]>(initialSections)
 
@@ -51,8 +63,27 @@ export function SectionManage({
     setSections((prev) => [...prev, addSection])
   }
 
-  const handleRemoveInput = (e, index: number) => {
+  const handleRemoveInput = async (e, index: number) => {
     e.preventDefault()
+    try {
+      const deleteSection: InitialSectionType = initialSections.find(
+        (initialSection) => sections[index].order === initialSection.order,
+      )
+      const sectionId = deleteSection.id
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`,
+      )
+      const result = await res.json()
+      if (res.status === 201) {
+        onClose()
+        showSuccessToast(result.message)
+      } else if (res.status === 500) {
+        showErrorToast(result.message)
+      }
+    } catch (error) {
+      showErrorToast('エラーにより、セクションを保存することができません。')
+    }
+
     setSections((prev) => prev.filter((item) => item !== prev[index]))
     sections.splice(index, 1)
     const newSections = sections.map((section: SectionType) => {

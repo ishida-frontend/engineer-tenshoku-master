@@ -1,6 +1,7 @@
 import express from 'express'
 import { createSection } from '../scripts/createSection'
-import { readFilteredSections } from '../scripts/readSection'
+import { readOrderedSections } from '../scripts/readSection'
+import { deleteSection } from '../scripts/deleteSection'
 
 export const sectionCreate = async function (
   req: express.Request,
@@ -8,9 +9,9 @@ export const sectionCreate = async function (
 ) {
   try {
     await createSection(req.body)
-    res.send('新しいセクションが作成されました！')
+    res.status(201).json({ message: 'セクションが保存されました' })
   } catch (e: any) {
-    res.status(500).send('エラーが発生しました')
+    res.status(500).json({ message: 'セクション保存でエラーが発生しました' })
   }
 }
 exports.sectionRead = async function (
@@ -18,9 +19,20 @@ exports.sectionRead = async function (
   res: express.Response,
 ) {
   try {
-    const result = await readFilteredSections(req.params.course_id)
+    const result = await readOrderedSections(req.params.course_id)
     res.json(result)
   } catch (e: any) {
-    res.status(500).send('エラーが発生しました')
+    res.status(500).json({ message: '一覧読み込みにエラーが発生しました' })
+  }
+}
+exports.sectionDelete = async function (
+  req: express.Request,
+  res: express.Response,
+) {
+  try {
+    await deleteSection(req.params.id)
+    res.status(201).json({ message: '削除されました' })
+  } catch (e: any) {
+    res.status(500).json({ message: 'セクション削除でエラーが発生しました' })
   }
 }

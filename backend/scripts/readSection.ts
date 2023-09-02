@@ -15,7 +15,7 @@ export async function readSections() {
   return sections
 }
 
-export async function readFilteredSections(course_id: string) {
+export async function readOrderedSections(course_id: string) {
   const sections = await prisma.section.findMany({
     where: {
       course_id: Number(course_id),

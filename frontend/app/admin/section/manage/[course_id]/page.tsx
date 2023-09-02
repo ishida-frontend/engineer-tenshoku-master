@@ -8,6 +8,9 @@ export default async function AdminSectionManage({
 }) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/read/${params.course_id}`,
+    {
+      cache: 'no-cache',
+    },
   )
   const sections = await res.json()
   return (
