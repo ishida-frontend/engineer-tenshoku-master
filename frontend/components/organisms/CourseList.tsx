@@ -82,10 +82,12 @@ export function CourseList() {
               <Card key={course.id} w="288px" boxShadow="md" borderRadius="8px">
                 <CardHeader p={0}>
                   <Image
-                    src="/images/image_react.png"
+                    src={`/images/${course.name}.png`}
                     alt={`${course.name}のアイコン`}
+                    fallbackSrc="/images/fallback.image.png"
                     width="100%"
-                    height="auto"
+                    height="150px"
+                    objectFit={'cover'}
                   />
                 </CardHeader>
                 <CardBody px={3} py={4}>
