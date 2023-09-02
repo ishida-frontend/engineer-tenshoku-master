@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/react'
 
 import { TitleLogo } from '../atoms/TitleLogo'
-import { TitleText } from '../atoms/TitleText'
 
 export function HeaderLoggedOut() {
   return (
@@ -29,7 +28,7 @@ export function HeaderLoggedOut() {
               <TitleLogo boxSize="62px" />
             </Box>
             <Heading as="h1" fontSize="30px" fontWeight="400" pl="17px">
-              <TitleText />
+              JS学習プラットフォーム
             </Heading>
           </HStack>
           <Spacer />

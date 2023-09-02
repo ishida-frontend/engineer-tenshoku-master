@@ -11,7 +11,6 @@ import {
 import { AiOutlineUser } from 'react-icons/ai'
 
 import { TitleLogo } from '../atoms/TitleLogo'
-import { TitleText } from '../atoms/TitleText'
 
 export function HeaderLoggedIn() {
   return (
@@ -31,7 +30,7 @@ export function HeaderLoggedIn() {
                 <TitleLogo boxSize="62px" />
               </Box>
               <Heading as="h1" fontSize="30px" fontWeight="400" pl="17px">
-                <TitleText />
+                JS学習プラットフォーム
               </Heading>
             </HStack>
             <Spacer />
