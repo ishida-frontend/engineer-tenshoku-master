@@ -8,6 +8,7 @@ const {
   readCourse,
   readAllCourses,
   readFilteredCourses,
+  readPublishedCourse,
   updateCourse,
   deleteCourse,
 } = require('../controllers/courseController')
@@ -58,6 +59,7 @@ const courseRouter = express.Router()
 router.use('/course', courseRouter)
 courseRouter.get('/create', createCourse)
 courseRouter.get('/read', readCourse)
+courseRouter.get('/read/:id', readPublishedCourse)
 courseRouter.get('/all', readAllCourses)
 courseRouter.get('/update', updateCourse)
 
