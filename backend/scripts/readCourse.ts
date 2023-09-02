@@ -31,10 +31,7 @@ export async function readPublishedCourseContent(id: string) {
       published: true,
       deleted_at: null,
     },
-    select: {
-      id: true,
-      name: true,
-      description: true,
+    include: {
       sections: {
         where: {
           published: true,
@@ -45,11 +42,7 @@ export async function readPublishedCourseContent(id: string) {
             order: 'asc',
           },
         ],
-        select: {
-          id: true,
-          course_id: true,
-          title: true,
-          order: true,
+        include: {
           videos: {
             where: {
               published: true,
@@ -60,14 +53,6 @@ export async function readPublishedCourseContent(id: string) {
                 order: 'asc',
               },
             ],
-            select: {
-              id: true,
-              section_id: true,
-              order: true,
-              name: true,
-              description: true,
-              url: true,
-            },
           },
         },
       },
