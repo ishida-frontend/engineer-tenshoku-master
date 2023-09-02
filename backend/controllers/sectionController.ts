@@ -10,9 +10,11 @@ export const sectionCreate = async function (
 ) {
   try {
     await createSection(req.body)
-    res.status(201).json({ message: 'セクションが保存されました' })
+    return res.status(201).json({ message: 'セクションが保存されました' })
   } catch (e: any) {
-    res.status(500).json({ message: 'セクション保存でエラーが発生しました' })
+    return res
+      .status(500)
+      .json({ message: 'セクション保存でエラーが発生しました' })
   }
 }
 
@@ -34,9 +36,11 @@ exports.sectionUpdate = async function (
 ) {
   try {
     await updateSections(req.body)
-    res.status(201).json({ message: 'セクションが保存されました' })
+    return res.status(201).json({ message: 'セクションが保存されました' })
   } catch (e: any) {
-    res.status(500).json({ message: 'セクション保存でエラーが発生しました' })
+    return res
+      .status(500)
+      .json({ message: 'セクション保存でエラーが発生しました' })
   }
 }
 
