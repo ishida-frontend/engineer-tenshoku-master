@@ -82,9 +82,9 @@ export function CourseList() {
               <Card key={course.id} w="288px" boxShadow="md" borderRadius="8px">
                 <CardHeader p={0}>
                   <Image
-                    src={`/images/${course.name}.png`}
-                    alt={`${course.name}のアイコン`}
-                    fallbackSrc="/images/fallback.image.png"
+                    src={`/images/${course.image}.png`}
+                    alt={`${course.name}の画像`}
+                    fallbackSrc="/images/img_no_image.png"
                     width="100%"
                     height="150px"
                     objectFit={'cover'}

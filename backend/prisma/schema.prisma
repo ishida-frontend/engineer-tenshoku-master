@@ -16,6 +16,7 @@ model Course {
   sections    Section[]
   name        String?
   description String?
+  image       String?
   published   Boolean   @default(false) // コースが公開されているかどうか。
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
