@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { Box, Button, Spinner, Stack, Text } from '@chakra-ui/react'
 import { useAuth } from '../hooks/useAuth'
 
+import { HeaderLoggedIn } from '../components/organisms/HeaderLoggedIn'
+import { HeaderLoggedOut } from '../components/organisms/HeaderLoggedOut'
 import { Footer } from '../components/organisms/Footer'
 
 export default function Page() {
@@ -24,7 +26,6 @@ export default function Page() {
   return (
     <>
       <Box>{check.isAuthenticated ? '認証成功' : '未認証'}</Box>
-
       <Box>
         <Stack direction="row" spacing={4}>
           <Button bg="teal.300" color="white" onClick={increase}>
