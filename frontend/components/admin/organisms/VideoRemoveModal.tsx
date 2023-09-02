@@ -18,7 +18,7 @@ export function VideoRemoveModal({
   courseId,
   videoId,
 }: {
-  courseId: number
+  courseId: string | string[]
   videoId: number
 }) {
   const { showSuccessToast, showErrorToast } = useCustomToast()
