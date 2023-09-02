@@ -63,7 +63,7 @@ courseRouter.get('/update', updateCourse)
 const sectionRouter = express.Router()
 router.use('/section', sectionRouter)
 sectionRouter.post('/create', sectionCreate)
-sectionRouter.get('/read/:id', sectionRead)
+sectionRouter.get('/read/:course_id', sectionRead)
 
 const videoRouter = express.Router()
 router.use('/video', videoRouter)

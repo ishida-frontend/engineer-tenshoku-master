@@ -13,32 +13,31 @@ import {
   HStack,
   Center,
 } from '@chakra-ui/react'
-import { add } from 'date-fns'
 
 type SectionType = {
-  course_id: number
+  course_id: string
   order: number
   title: string
   published: boolean
 }
 
-const course_id = 1
+type SectionManageProps = {
+  course_id: string
+  initialSections: SectionType[]
+}
 
-export function SectionManage() {
+export function SectionManage({
+  course_id,
+  initialSections,
+}: SectionManageProps) {
   const defaultCourseValues = {
     course_id,
     order: 0,
     title: '',
     published: false,
   }
-  const [sections, setSections] = useState<SectionType[]>([
-    {
-      course_id,
-      order: 0,
-      title: '',
-      published: false,
-    },
-  ])
+
+  const [sections, setSections] = useState<SectionType[]>(initialSections)
 
   const handleAddInput = () => {
     const orderMax = sections.reduce((a, b) => (a.order > b.order ? a : b))
@@ -52,7 +51,7 @@ export function SectionManage() {
     setSections((prev) => [...prev, addSection])
   }
 
-  const handleRemoveInput = (e, index) => {
+  const handleRemoveInput = (e, index: number) => {
     e.preventDefault()
     setSections((prev) => prev.filter((item) => item !== prev[index]))
     sections.splice(index, 1)
@@ -66,24 +65,6 @@ export function SectionManage() {
     })
     setSections(newSections)
   }
-
-  useEffect(() => {
-    ;(async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/read/${course_id}`,
-      )
-      const sections = await res.json()
-      const newSections = sections.map((newSection: SectionType) => {
-        return {
-          course_id: newSection.course_id,
-          order: newSection.order,
-          title: newSection.title,
-          published: newSection.published,
-        }
-      })
-      setSections(newSections)
-    })()
-  }, [])
 
   const handleInputChange = (value: string, index: number) => {
     const newSection = {
