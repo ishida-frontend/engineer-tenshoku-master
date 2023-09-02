@@ -30,7 +30,7 @@ import { VideoType } from '../../../../../types'
 
 export default function EditVideoPage() {
   const params = useParams()
-  const courseId = Number(params.courseId) || NaN
+  const courseId = params.courseId || ''
 
   const courseFetcher = async () => {
     const response = await fetch(

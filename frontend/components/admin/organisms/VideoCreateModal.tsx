@@ -31,7 +31,7 @@ export const VideoCreateModal = ({
   courseId,
   sectionId,
 }: {
-  courseId: number
+  courseId: string | string[]
   sectionId: number
 }) => {
   const { showSuccessToast, showErrorToast } = useCustomToast()
@@ -87,6 +87,10 @@ export const VideoCreateModal = ({
       setMaxOrder(maxOrderInSection + 1)
     }
     onOpen()
+  }
+
+  const isButtonDisabled = () => {
+    return video.name === '' || video.description === '' || video.url === ''
   }
 
   const handleCreate = async () => {
@@ -276,11 +280,7 @@ export const VideoCreateModal = ({
               閉じる
             </Button>
             <Button
-              isDisabled={
-                video.name === '' ||
-                video.description === '' ||
-                video.url === ''
-              }
+              isDisabled={isButtonDisabled()}
               colorScheme="green"
               onClick={handleCreate}
             >

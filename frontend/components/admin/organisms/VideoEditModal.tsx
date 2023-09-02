@@ -27,7 +27,7 @@ export function VideoEditModal({
   videoId,
   section,
 }: {
-  courseId: number
+  courseId: string | string[]
   videoId: number
   section: SectionType
 }) {
@@ -84,6 +84,15 @@ export function VideoEditModal({
 
   const hasChanges = () => {
     return JSON.stringify(initialVideoData) !== JSON.stringify(video)
+  }
+
+  const isButtonDisabled = () => {
+    return (
+      !hasChanges() ||
+      video.name === '' ||
+      video.description === '' ||
+      video.url === ''
+    )
   }
 
   const handleEdit = async () => {
@@ -261,12 +270,7 @@ export function VideoEditModal({
               閉じる
             </Button>
             <Button
-              isDisabled={
-                !hasChanges() ||
-                video.name === '' ||
-                video.description === '' ||
-                video.url === ''
-              }
+              isDisabled={isButtonDisabled()}
               colorScheme="green"
               onClick={handleEdit}
             >
