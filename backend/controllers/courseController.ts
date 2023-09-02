@@ -68,7 +68,7 @@ exports.readFilteredCourses = async function (
   }
 }
 
-exports.readPublishedCourse = async function (
+exports.getPublishedCourse = async function (
   req: express.Request,
   res: express.Response,
 ) {
