@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Box, Button, Spinner, Stack, Text } from '@chakra-ui/react'
+import { Box, Button, Container, Spinner, Stack, Text } from '@chakra-ui/react'
 import { useAuth } from '../hooks/useAuth'
 
 import { HeaderLoggedIn } from '../components/organisms/HeaderLoggedIn'
@@ -25,21 +25,24 @@ export default function Page() {
 
   return (
     <>
-      <Box>{check.isAuthenticated ? '認証成功' : '未認証'}</Box>
-      <Box>
-        <Stack direction="row" spacing={4}>
-          <Button bg="teal.300" color="white" onClick={increase}>
-            拡大
-          </Button>
-          <Button bg="red.300" color="white" onClick={decrease}>
-            縮小
-          </Button>
-        </Stack>
-        <Text fontSize={fontSize + 'px'}>
-          上のボタンを押すと、このテキストのサイズが変わります(最小サイズ：10px・最大サイズ：50px)。
-        </Text>
+      <Box minH={'100vh'}>
+        <HeaderLoggedIn />
+        <Box>{check.isAuthenticated ? '認証成功' : '未認証'}</Box>
+        <Box>
+          <Stack direction="row" spacing={4}>
+            <Button bg="teal.300" color="white" onClick={increase}>
+              拡大
+            </Button>
+            <Button bg="red.300" color="white" onClick={decrease}>
+              縮小
+            </Button>
+          </Stack>
+          <Text fontSize={fontSize + 'px'}>
+            上のボタンを押すと、このテキストのサイズが変わります(最小サイズ：10px・最大サイズ：50px)。
+          </Text>
+        </Box>
+        <Footer />
       </Box>
-      <Footer />
     </>
   )
 }

@@ -15,8 +15,12 @@ import {
   HStack,
   Input,
   Textarea,
+  Box,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
+import { HeaderLoggedIn } from '../../components/organisms/HeaderLoggedIn'
+import { HeaderLoggedOut } from '../../components/organisms/HeaderLoggedOut'
+import { Footer } from '../../components/organisms/Footer'
 
 type Errors = {
   name?: string[]
@@ -109,8 +113,16 @@ export function UserContactForm() {
   }
 
   return (
-    <Container bg="gray.100" maxW={'1512px'}>
-      <Container bg="white" maxW={'1024px'} centerContent>
+    <Box minH={'100vh'} bg={'gray.200'}>
+      <HeaderLoggedIn />
+      <Container
+        bg="white"
+        maxW={'1024px'}
+        h={'1416px'}
+        minH={'1116px'}
+        pb={'200px'}
+        centerContent
+      >
         <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
           お問い合わせ
         </Heading>
@@ -202,6 +214,7 @@ export function UserContactForm() {
                 </Flex>
               </Container>
               <Textarea
+                h={'229px'}
                 name="お問い合わせ内容"
                 value={state.message}
                 onChange={onChangeHandler}
@@ -213,7 +226,7 @@ export function UserContactForm() {
             </FormControl>
           </Container>
 
-          <Container ml={'0px'} p={'0px'}>
+          <Container mt={'170px'} ml={'0px'} p={'0px'}>
             <HStack>
               <input
                 type="checkbox"
@@ -247,6 +260,7 @@ export function UserContactForm() {
           </VStack>
         </FormControl>
       </Container>
-    </Container>
+      <Footer />
+    </Box>
   )
 }

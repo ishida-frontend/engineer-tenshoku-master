@@ -18,6 +18,9 @@ import {
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { useCustomToast } from '../../../hooks/useCustomToast'
+import { HeaderLoggedIn } from '../../../components/organisms/HeaderLoggedIn'
+import { HeaderLoggedOut } from '../../../components/organisms/HeaderLoggedOut'
+import { Footer } from '../../../components/organisms/Footer'
 
 export default function Register() {
   const { showSuccessToast, showErrorToast } = useCustomToast()
@@ -60,8 +63,9 @@ export default function Register() {
   }
 
   return (
-    <Center minH={'100vh'} bg={'gray.200'}>
-      <Container padding="60px 96px" bg={'white'}>
+    <Box minH={'100vh'} bg={'gray.200'}>
+      <HeaderLoggedIn />
+      <Container mt={'60px'} padding="60px 96px" bg={'white'}>
         <Heading
           fontSize={'2xl'}
           mb={'42px'}
@@ -120,6 +124,7 @@ export default function Register() {
           <Container ml={'0px'} p={'0px'}>
             <HStack>
               <Checkbox
+                iconColor="gray.500"
                 colorScheme={'teal'}
                 size={'lg'}
                 onChange={() => setIsChecked(!isChecked)}
@@ -149,10 +154,13 @@ export default function Register() {
           登録する
         </Button>
         <Box border={'1px solid'} borderColor={'#C400'} />
-        <Box color={'teal'}>
-          <Link href={'/auth/login'}>ログインはこちら</Link>
+        <Box color={'teal'} borderTop={'1px solid #0000003d'}>
+          <Container pl={'0px'} pt={'25px'}>
+            <Link href={'/auth/login'}>ログインはこちら</Link>
+          </Container>
         </Box>{' '}
       </Container>
-    </Center>
+      <Footer />
+    </Box>
   )
 }

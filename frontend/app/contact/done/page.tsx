@@ -1,13 +1,23 @@
 'use client'
 import React from 'react'
-import { Container, Button, Text, Heading, Stack } from '@chakra-ui/react'
+import { Container, Button, Text, Heading, Stack, Box } from '@chakra-ui/react'
+import { HeaderLoggedIn } from '../../../components/organisms/HeaderLoggedIn'
+import { HeaderLoggedOut } from '../../../components/organisms/HeaderLoggedOut'
+import { Footer } from '../../../components/organisms/Footer'
 import Link from 'next/link'
 import { EmailIcon } from '@chakra-ui/icons'
 
 export default function UserContactDone() {
   return (
-    <Container bg="gray.100" maxW={'1512px'} py={'60px'}>
-      <Container bg="white" height={'723px'} maxW={'1024px'} centerContent>
+    <Box minH={'100vh'} bg={'gray.200'}>
+      <HeaderLoggedIn />
+      <Container
+        bg="white"
+        height={'723px'}
+        maxW={'1024px'}
+        mt={'60px'}
+        centerContent
+      >
         <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
           お問い合わせが送信されました
         </Heading>
@@ -24,6 +34,7 @@ export default function UserContactDone() {
           <Link href="/">トップに戻る</Link>
         </Button>
       </Container>
-    </Container>
+      <Footer />
+    </Box>
   )
 }

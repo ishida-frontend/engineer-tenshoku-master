@@ -48,7 +48,15 @@ export function Footer() {
   )
 
   return (
-    <Box as="footer" bgColor={'blackAlpha.900'} color="white">
+    <Box
+      as="footer"
+      bgColor={'blackAlpha.900'}
+      color="white"
+      position={'absolute'}
+      left={'0'}
+      bottom={'0'}
+      w={'100%'}
+    >
       <Container maxW="1069px">
         {/* 幅768px以上の場合 */}
         <VStack display={{ base: 'none', md: 'flex' }} align="left">
