@@ -56,7 +56,9 @@ export function SectionManage({
       const deleteSection: InitialSectionType = initialSections.find(
         (initialSection) => sections[index].order === initialSection.order,
       )
+      console.log('deleteSection', deleteSection)
       const sectionId = deleteSection.id
+      console.log('sectionId', sectionId)
       console.log(
         '`${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete`',
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete`,
@@ -69,7 +71,7 @@ export function SectionManage({
           headers: {
             'Content-Type': 'application/json',
           },
-          mode: 'cors',
+          mode: 'no-cors',
         },
       )
       const result = await res.json()

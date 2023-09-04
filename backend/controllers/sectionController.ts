@@ -50,7 +50,7 @@ exports.sectionDelete = async function (
 ) {
   try {
     console.log('req.body', req.body)
-    await deleteSection(req.body.id)
+    await deleteSection(req.body)
     res.status(201).json({ message: '削除されました' })
   } catch (e: any) {
     res.status(500).json({ message: 'セクション削除でエラーが発生しました' })
