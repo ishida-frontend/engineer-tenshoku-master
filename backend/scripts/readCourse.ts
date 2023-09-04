@@ -23,3 +23,40 @@ export async function readFilteredCourses() {
   })
   return filteredCourses
 }
+
+export async function readPublishedCourseContent(id: string) {
+  const publishedCourseContent = await prisma.course.findMany({
+    where: {
+      id: Number(id),
+      published: true,
+      deleted_at: null,
+    },
+    include: {
+      sections: {
+        where: {
+          published: true,
+          deleted_at: null,
+        },
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
+        include: {
+          videos: {
+            where: {
+              published: true,
+              deleted_at: null,
+            },
+            orderBy: [
+              {
+                order: 'asc',
+              },
+            ],
+          },
+        },
+      },
+    },
+  })
+  return publishedCourseContent
+}
