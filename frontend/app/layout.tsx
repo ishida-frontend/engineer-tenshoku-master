@@ -1,5 +1,6 @@
 import { AuthProviders } from '../providers/AuthProviders'
 import { ChakraProviders } from './chakraproviders'
+import { Header } from './header'
 
 export default function RootLayout({
   children,
@@ -10,10 +11,12 @@ export default function RootLayout({
     <html lang="ja">
       <body>
         <ChakraProviders>
-          <AuthProviders>{children}</AuthProviders>
+          <AuthProviders>
+            <Header />
+            {children}
+          </AuthProviders>
         </ChakraProviders>
       </body>
     </html>
   )
 }
-
