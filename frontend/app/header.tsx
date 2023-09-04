@@ -6,5 +6,5 @@ import { useAuth } from '../hooks/useAuth'
 export const Header = () => {
   const check = useAuth()
 
-  return check.isAuthenticated ? <HeaderLoggedOut /> : <HeaderLoggedIn />
+  return check.isAuthenticated ? <HeaderLoggedIn /> : <HeaderLoggedOut />
 }
