@@ -57,8 +57,20 @@ export function SectionManage({
         (initialSection) => sections[index].order === initialSection.order,
       )
       const sectionId = deleteSection.id
+      console.log(
+        '`${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete`',
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete`,
+      )
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete`,
+        {
+          method: 'POST',
+          body: JSON.stringify(sectionId),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: 'cors',
+        },
       )
       const result = await res.json()
       if (res.status === 201) {
