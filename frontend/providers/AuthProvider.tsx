@@ -19,7 +19,7 @@ export const TokenContext = createContext({
   setTokens: (tokens: TokenType) => {},
 })
 
-export function AuthProviders({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [tokens, setTokens] = useState({
     AccessToken: '',
     ExpiresIn: 0,
