@@ -22,8 +22,7 @@ export function CourseRemover() {
 
   const router = useRouter()
   const params = useParams()
-  const courseId = params.courseId
-  const id = typeof courseId === 'string' ? parseInt(courseId, 10) : NaN
+  const courseId = Number(params.courseId) || NaN
 
   const deleteCourse = async () => {
     try {
@@ -35,7 +34,7 @@ export function CourseRemover() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            id,
+            id: courseId,
           }),
         },
       )
