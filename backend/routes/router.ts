@@ -70,7 +70,7 @@ router.use('/section', sectionRouter)
 sectionRouter.post('/create', sectionCreate)
 sectionRouter.get('/read/:course_id', sectionRead)
 sectionRouter.post('/update', sectionUpdate)
-sectionRouter.get('/delete/:id', sectionDelete)
+sectionRouter.post('/delete', sectionDelete)
 
 const videoRouter = express.Router()
 router.use('/video', videoRouter)
