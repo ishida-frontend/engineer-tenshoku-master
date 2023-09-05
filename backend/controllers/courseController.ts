@@ -125,9 +125,9 @@ exports.deleteCourse = async function (
   res: express.Response,
 ) {
   try {
-    const { id } = req.body
+    const courseId = Number(req.body.courseId)
 
-    await deleteCourse(id)
+    await deleteCourse(courseId)
     res.status(201).json({
       message: '削除されました。自動的にコース一覧へ戻ります。',
     })
