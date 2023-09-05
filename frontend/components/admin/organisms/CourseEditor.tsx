@@ -15,6 +15,7 @@ import {
   Link,
 } from '@chakra-ui/react'
 
+import { CourseRemover } from './CourseRemover'
 import { CourseType } from '../../../types'
 import formatDate from '../../../utils/formatDate'
 import { Loader } from '../../../components/admin/atoms/Loader'
@@ -43,6 +44,7 @@ export function CourseEditor() {
     id,
     name: '',
     description: '',
+    image: '',
     published: false,
     created_at: '',
     updated_at: '',
@@ -135,87 +137,82 @@ export function CourseEditor() {
   if (!courseData) return <Loader />
 
   return (
-    <>
-      <Box w="full" maxW="600px" mx="auto" p={6}>
-        <Stack spacing={4}>
-          <Link href="/admin/course">
-            <Button colorScheme="green">一覧へ戻る</Button>
-          </Link>
-          <Box p={4} border="1px" borderColor="gray.400" borderRadius={9}>
-            <Text>コースID：{course.id}</Text>
-            <Text>
-              作成日時：
-              {courseData.created_at && formatDate(courseData.created_at)}
-            </Text>
-            <Text>
-              更新日時：
-              {courseData.updated_at && formatDate(courseData.updated_at)}
-            </Text>
-          </Box>
-          <FormControl
+    <Box w="full" maxW="600px" mx="auto" p={6}>
+      <Stack spacing={4}>
+        <Link href="/admin/course">
+          <Button colorScheme="green">一覧へ戻る</Button>
+        </Link>
+        <Box p={4} border="1px" borderColor="gray.400" borderRadius={9}>
+          <Text>コースID：{course.id}</Text>
+          <Text>
+            作成日時：
+            {courseData.created_at && formatDate(courseData.created_at)}
+          </Text>
+          <Text>
+            更新日時：
+            {courseData.updated_at && formatDate(courseData.updated_at)}
+          </Text>
+        </Box>
+        <FormControl id="courseName" isRequired isInvalid={!!errors.nameError}>
+          <FormLabel htmlFor="courseName">コース名（5文字以上）</FormLabel>
+          <Input
             id="courseName"
-            isRequired
-            isInvalid={!!errors.nameError}
-          >
-            <FormLabel htmlFor="courseName">コース名（5文字以上）</FormLabel>
-            <Input
-              id="courseName"
-              type="text"
-              value={course.name}
-              onChange={(e) => setCourse({ ...course, name: e.target.value })}
-              aria-required={true}
-              border="1px"
-              borderColor="gray.400"
-            />
-            <FormErrorMessage>{errors.nameError}</FormErrorMessage>
-          </FormControl>
-          <FormControl
+            type="text"
+            value={course.name}
+            onChange={(e) => setCourse({ ...course, name: e.target.value })}
+            aria-required={true}
+            border="1px"
+            borderColor="gray.400"
+          />
+          <FormErrorMessage>{errors.nameError}</FormErrorMessage>
+        </FormControl>
+        <FormControl
+          id="courseDescription"
+          isRequired
+          isInvalid={!!errors.descError}
+        >
+          <FormLabel htmlFor="courseDescription">
+            コース概要（15文字以上）
+          </FormLabel>
+          <Textarea
             id="courseDescription"
-            isRequired
-            isInvalid={!!errors.descError}
+            value={course.description}
+            onChange={(e) =>
+              setCourse({ ...course, description: e.target.value })
+            }
+            size="lg"
+            rows={10}
+            aria-required={true}
+            border="1px"
+            borderColor="gray.400"
+          ></Textarea>
+          <FormErrorMessage>{errors.descError}</FormErrorMessage>
+        </FormControl>
+        <FormControl id="coursePublished" isRequired>
+          <FormLabel htmlFor="CoursePublished">コースの公開設定</FormLabel>
+          <Select
+            id="coursePublished"
+            value={course.published ? 'public' : 'hidden'}
+            onChange={(e) =>
+              setCourse({ ...course, published: e.target.value === 'public' })
+            }
+            border="1px"
+            borderColor="gray.400"
           >
-            <FormLabel htmlFor="courseDescription">
-              コース概要（15文字以上）
-            </FormLabel>
-            <Textarea
-              id="courseDescription"
-              value={course.description}
-              onChange={(e) =>
-                setCourse({ ...course, description: e.target.value })
-              }
-              size="lg"
-              rows={10}
-              aria-required={true}
-              border="1px"
-              borderColor="gray.400"
-            ></Textarea>
-            <FormErrorMessage>{errors.descError}</FormErrorMessage>
-          </FormControl>
-          <FormControl id="coursePublished" isRequired>
-            <FormLabel htmlFor="CoursePublished">コースの公開設定</FormLabel>
-            <Select
-              id="coursePublished"
-              value={course.published ? 'public' : 'hidden'}
-              onChange={(e) =>
-                setCourse({ ...course, published: e.target.value === 'public' })
-              }
-              border="1px"
-              borderColor="gray.400"
-            >
-              <option value="hidden">非公開</option>
-              <option value="public">公開</option>
-            </Select>
-          </FormControl>
-          <Button
-            onClick={updateCourse}
-            isLoading={isSubmitting}
-            colorScheme="green"
-            variant="solid"
-          >
-            変更を保存
-          </Button>
-        </Stack>
-      </Box>
-    </>
+            <option value="hidden">非公開</option>
+            <option value="public">公開</option>
+          </Select>
+        </FormControl>
+        <Button
+          onClick={updateCourse}
+          isLoading={isSubmitting}
+          colorScheme="green"
+          variant="solid"
+        >
+          変更を保存
+        </Button>
+        <CourseRemover />
+      </Stack>
+    </Box>
   )
 }
