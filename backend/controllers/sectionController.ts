@@ -49,7 +49,6 @@ exports.sectionDelete = async function (
   res: express.Response,
 ) {
   try {
-    console.log('req.params.id', req.params.id)
     await deleteSection(req.params.id)
     res.status(201).json({ message: '削除されました' })
   } catch (e: any) {
