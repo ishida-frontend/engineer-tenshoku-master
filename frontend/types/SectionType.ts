@@ -13,7 +13,7 @@ export type InitialSectionType = {
   published: boolean
 }
 
-export type SectionManageProps = {
+export type SectionManagePropsType = {
   course_id: string
   initialSections: InitialSectionType[]
 }

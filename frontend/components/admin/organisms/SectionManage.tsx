@@ -20,13 +20,13 @@ import { useCustomToast } from '../../../hooks/useCustomToast'
 import {
   SectionType,
   InitialSectionType,
-  SectionManageProps,
+  SectionManagePropsType,
 } from '../../../types/SectionType'
 
 export function SectionManage({
   course_id,
   initialSections,
-}: SectionManageProps) {
+}: SectionManagePropsType) {
   const defaultCourseValues = {
     course_id,
     order: 0,
@@ -91,9 +91,7 @@ export function SectionManage({
   ) => {
     setSections(
       sections.map((section) =>
-        section.order === sections[index].order
-          ? { ...section, [key]: value }
-          : section,
+        section.order === index ? { ...section, [key]: value } : section,
       ),
     )
   }
@@ -108,7 +106,7 @@ export function SectionManage({
       )
 
       const createSections: SectionType[] = sections.filter(
-        (section) => updateSections.indexOf(section) == -1,
+        (section) => updateSections.indexOf(section) === -1,
       )
       updateSections.map(async (updateSection) => {
         const res = await fetch(
@@ -171,7 +169,7 @@ export function SectionManage({
                 >
                   <Flex>
                     <VStack w={'80%'} align={'start'}>
-                      <Text>セクション No.{index + 1}</Text>
+                      <Text>セクション No.{section.order}</Text>
                       <Input
                         type="text"
                         placeholder={'セクション名'}
@@ -182,32 +180,28 @@ export function SectionManage({
                       />
                     </VStack>
                     <HStack>
-                      <Box>
-                        <VStack>
-                          <FormLabel ml={'30px'} mb={'0px'}>
-                            <Text
-                              fontWeight={'bold'}
-                              fontSize={'lg'}
-                              w={'50px'}
-                            >
-                              公開
-                            </Text>
-                          </FormLabel>
-                          <Switch
-                            colorScheme="teal"
-                            size={'lg'}
-                            type="switch"
-                            isChecked={section.published}
-                            onChange={(e) =>
-                              handleOnChange(
-                                section.order,
-                                'published',
-                                !section.published,
-                              )
-                            }
-                          />
-                        </VStack>
-                      </Box>
+                      {/* <Box> */}
+                      <VStack>
+                        <FormLabel ml={'30px'} mb={'0px'}>
+                          <Text fontWeight={'bold'} fontSize={'lg'} w={'50px'}>
+                            公開
+                          </Text>
+                        </FormLabel>
+                        <Switch
+                          colorScheme="teal"
+                          size={'lg'}
+                          type="switch"
+                          isChecked={section.published}
+                          onChange={(e) =>
+                            handleOnChange(
+                              section.order,
+                              'published',
+                              !section.published,
+                            )
+                          }
+                        />
+                      </VStack>
+                      {/* </Box> */}
                       <Button
                         colorScheme="red"
                         ml={'8px'}
