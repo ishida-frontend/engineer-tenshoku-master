@@ -1,7 +1,18 @@
 import express from 'express'
+import cors from 'cors'
 import 'dotenv/config'
 import { contactValidationRules, contactValidate } from '../validation'
 import { validate, courseValidationRules } from '../validation/courseValidation'
+
+const app = express()
+const allowedOrigins = ['http://localhost:3000']
+const options: cors.CorsOptions = {
+  origin: allowedOrigins,
+  credentials: true,
+  optionsSuccessStatus: 200,
+}
+app.use(cors(options))
+app.use(express.json())
 
 const {
   createCourse,
@@ -70,7 +81,7 @@ router.use('/section', sectionRouter)
 sectionRouter.post('/create', sectionCreate)
 sectionRouter.get('/read/:course_id', sectionRead)
 sectionRouter.post('/update', sectionUpdate)
-sectionRouter.post('/delete', sectionDelete)
+sectionRouter.post('/delete/:id', sectionDelete)
 
 const videoRouter = express.Router()
 router.use('/video', videoRouter)

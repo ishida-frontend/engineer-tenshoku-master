@@ -52,38 +52,42 @@ export function SectionManage({
 
   const handleRemoveInput = async (e, index: number) => {
     e.preventDefault()
-    try {
-      const deleteSection: InitialSectionType = initialSections.find(
-        (initialSection) => sections[index].order === initialSection.order,
-      )
-      console.log('deleteSection', deleteSection)
-      const sectionId = deleteSection.id
-      console.log('sectionId', sectionId)
-      console.log(
-        '`${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete`',
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete`,
-      )
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete`,
-        {
-          method: 'POST',
-          body: JSON.stringify(sectionId),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          mode: 'no-cors',
+    // try {
+    const deleteSection: InitialSectionType = initialSections.find(
+      (initialSection) => sections[index].order === initialSection.order,
+    )
+    console.log('deleteSection', deleteSection)
+    const sectionId = deleteSection.id
+    console.log('sectionId', sectionId)
+    console.log(
+      '`${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`',
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`,
+    )
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`,
+      {
+        method: 'POST',
+        body: JSON.stringify(sectionId),
+        headers: {
+          'Content-Type': 'application/json',
         },
-      )
-      const result = await res.json()
-      if (res.status === 201) {
-        onClose()
-        showSuccessToast(result.message)
-      } else if (res.status === 500) {
-        showErrorToast(result.message)
-      }
-    } catch (error) {
-      showErrorToast('エラーにより、セクションを削除することができません。')
+        mode: 'no-cors',
+      },
+    )
+    console.log('res', res)
+    const result = await res.json()
+    console.log('res.json()', res.json())
+    console.log('result', result)
+    if (res.status === 201) {
+      onClose()
+      showSuccessToast(result.message)
+    } else if (res.status === 500) {
+      showErrorToast(result.message)
     }
+    // } catch (error) {
+    //   console.log('error', error)
+    //   showErrorToast('エラーにより、セクションを削除することができません。')
+    // }
 
     setSections((prev) => prev.filter((item) => item !== prev[index]))
     sections.splice(index, 1)
