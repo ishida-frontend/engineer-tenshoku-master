@@ -1,18 +1,7 @@
 import express from 'express'
-import cors from 'cors'
 import 'dotenv/config'
 import { contactValidationRules, contactValidate } from '../validation'
 import { validate, courseValidationRules } from '../validation/courseValidation'
-
-const app = express()
-const allowedOrigins = ['http://localhost:3000']
-const options: cors.CorsOptions = {
-  origin: allowedOrigins,
-  credentials: true,
-  optionsSuccessStatus: 200,
-}
-app.use(cors(options))
-app.use(express.json())
 
 const {
   createCourse,
