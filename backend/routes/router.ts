@@ -11,12 +11,16 @@ const {
   readCourse,
   readAllCourses,
   readFilteredCourses,
+  getPublishedCourse,
   updateCourse,
   deleteCourse,
 } = require('../controllers/courseController')
 const {
   sectionCreate,
   sectionRead,
+  sectionUpdate,
+  sectionDelete,
+  sectionUpsert,
 } = require('../controllers/sectionController')
 const {
   checkCreateContact,
@@ -72,11 +76,14 @@ courseRouter.get('/create', createCourse)
 courseRouter.get('/read', readCourse)
 courseRouter.get('/all', readAllCourses)
 courseRouter.get('/update', updateCourse)
+courseRouter.get('/:id', getPublishedCourse)
 
 const sectionRouter = express.Router()
 router.use('/section', sectionRouter)
 sectionRouter.post('/create', sectionCreate)
-sectionRouter.get('/read/:id', sectionRead)
+sectionRouter.get('/read/:course_id', sectionRead)
+sectionRouter.post('/update', sectionUpdate)
+sectionRouter.get('/delete/:id', sectionDelete)
 
 const contactRouter = express.Router()
 router.use('/contact', contactRouter)

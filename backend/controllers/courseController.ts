@@ -6,6 +6,7 @@ import {
   readCourse,
   readAllCourses,
   readFilteredCourses,
+  readPublishedCourseContent,
 } from '../scripts/readCourse'
 import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
@@ -67,6 +68,30 @@ exports.readFilteredCourses = async function (
   }
 }
 
+exports.getPublishedCourse = async function (
+  req: express.Request,
+  res: express.Response,
+) {
+  try {
+    const publishedCourse = await readPublishedCourseContent(req.params.id)
+    res.status(200).json(publishedCourse)
+  } catch (e: any) {
+    res.status(500).send('エラーが発生しました')
+  }
+}
+
+exports.readFilteredCourses = async function (
+  req: express.Request,
+  res: express.Response,
+) {
+  try {
+    const filteredCourses = await readFilteredCourses()
+    res.status(200).json(filteredCourses)
+  } catch (e: any) {
+    res.status(500).send('エラーが発生しました')
+  }
+}
+
 exports.updateCourse = async function (
   req: express.Request,
   res: express.Response,
@@ -100,9 +125,9 @@ exports.deleteCourse = async function (
   res: express.Response,
 ) {
   try {
-    const { id } = req.body
+    const courseId = Number(req.body.courseId)
 
-    await deleteCourse(id)
+    await deleteCourse(courseId)
     res.status(201).json({
       message: '削除されました。自動的にコース一覧へ戻ります。',
     })
