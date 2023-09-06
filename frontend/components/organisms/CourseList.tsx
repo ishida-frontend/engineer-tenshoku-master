@@ -56,7 +56,7 @@ export function CourseList() {
 
   return (
     <ChakraProvider theme={courseListTheme}>
-      <VStack mx="auto">
+      <VStack mx="auto" padding={'60px 90px'}>
         <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
           コース一覧
         </Heading>
