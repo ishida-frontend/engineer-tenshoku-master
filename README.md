@@ -29,7 +29,9 @@
 
 frontend フォルダと backend フォルダに.env,example ファイルがあることを確認してください。
 
-.env.example をコピーし、.env ファイルを作成してください。
+frontend にある.env.example をコピーし、.env ファイルを作成してください。
+
+backend 側も同様に行ってください。
 
 MYSQL_ROOT_PASSWORD, MYSQL_USER, MYSQL_PASSWORD の値を設定してください。
 
@@ -62,6 +64,50 @@ api  | Example app listening at http://localhost:8000
 ```bash
 Hello world !
 ```
+
+# Server
+
+サーバーの立ち上げ方です。
+
+```bash
+cd frontend
+```
+
+でフロントエンド側に移動してください。
+
+以下を実行してブラウザ側のサーバー立ち上げ。
+
+```bash
+yarn dev
+```
+
+event compiled client and server successfully
+
+が表示されたら OK。
+
+次に＋ボタンでターミナルを複製し
+
+```bash
+cd backend
+```
+
+でバックエンド側に移動してください。
+
+以下を実行して API 側のサーバー立ち上げ
+
+```bash
+docker-compose up build --no-cache
+```
+
+そして
+
+```bash
+docker-compose up
+```
+
+api | Example app listening at http://localhost:8000
+
+が表示されたら OK
 
 # Prisma Schema
 
