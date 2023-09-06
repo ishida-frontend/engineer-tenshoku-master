@@ -193,7 +193,7 @@ export function UserContactForm() {
               isInvalid={!!errors.message?.[0]}
               mb={'40px'}
               bg={'white'}
-              h={'120px'}
+              // h={'120px'}
             >
               <Container ml={'0px'} pb={'10px'} pl={'0px'}>
                 <Flex>
@@ -205,6 +205,7 @@ export function UserContactForm() {
                 name="お問い合わせ内容"
                 value={state.message}
                 onChange={onChangeHandler}
+                h={'229px'}
                 placeholder={'こちらお問い合わせ内容を記入してください'}
               />
               <FormErrorMessage>
@@ -239,7 +240,8 @@ export function UserContactForm() {
             <Button
               onClick={handleSubmit}
               disabled={!isChecked}
-              mt={'20'}
+              mt={'80px'}
+              mb={'80px'}
               colorScheme="teal"
             >
               送信する
