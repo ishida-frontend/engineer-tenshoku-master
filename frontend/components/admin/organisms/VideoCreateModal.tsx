@@ -96,7 +96,7 @@ export const VideoCreateModal = ({
   const handleCreate = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/video/create`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/video`,
         {
           method: 'POST',
           headers: {

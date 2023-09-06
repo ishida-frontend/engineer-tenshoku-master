@@ -16,6 +16,7 @@ export async function createVideo(videoData: VideoType) {
         section: { connect: { id: videoData.sectionId } },
       },
     })
+    return videoData
   } catch (e: any) {
     throw e
   } finally {
