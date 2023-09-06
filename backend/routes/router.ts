@@ -15,7 +15,9 @@ const {
 const {
   sectionCreate,
   sectionRead,
+  sectionUpdate,
   sectionDelete,
+  sectionUpsert,
 } = require('../controllers/sectionController')
 const {
   checkCreateVideo,
@@ -67,6 +69,7 @@ const sectionRouter = express.Router()
 router.use('/section', sectionRouter)
 sectionRouter.post('/create', sectionCreate)
 sectionRouter.get('/read/:course_id', sectionRead)
+sectionRouter.post('/update', sectionUpdate)
 sectionRouter.get('/delete/:id', sectionDelete)
 
 const videoRouter = express.Router()
