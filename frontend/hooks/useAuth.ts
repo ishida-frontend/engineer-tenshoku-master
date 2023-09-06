@@ -1,7 +1,7 @@
 'use client'
 import { useContext, useEffect, useState } from 'react'
 import { checkToken } from '../app/api'
-import { TokenContext } from '../providers/AuthProviders'
+import { TokenContext } from '../providers/AuthProvider'
 import { useRouter } from 'next/navigation'
 
 export const useAuth = () => {
