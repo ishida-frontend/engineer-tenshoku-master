@@ -39,7 +39,6 @@ export class VideoController {
   }
 
   updateVideo = async function (req: express.Request, res: express.Response) {
-    console.log('req.body:', req.body)
     try {
       const { id, name, description, order, url, published } = req.body
 

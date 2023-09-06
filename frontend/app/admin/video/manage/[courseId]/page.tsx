@@ -21,16 +21,19 @@ import {
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai'
 import { GoVideo } from 'react-icons/go'
 
-import { Loader } from '../../../../../components/atoms/Loader'
-import { SectionType } from '../../../../../types'
 import { VideoCreateModal } from '../../../../../components/admin/organisms/VideoCreateModal'
 import { VideoEditModal } from '../../../../../components/admin/organisms/VideoEditModal'
 import { VideoRemoveModal } from '../../../../../components/admin/organisms/VideoRemoveModal'
+import { Loader } from '../../../../../components/atoms/Loader'
+import { useCustomToast } from '../../../../../hooks/useCustomToast'
+import { SectionType } from '../../../../../types'
 import { VideoType } from '../../../../../types'
 
 export default function EditVideoPage() {
+  const { showErrorToast } = useCustomToast()
+
   const params = useParams()
-  const courseId = params.courseId || ''
+  const { courseId } = params as { courseId: string }
 
   const courseFetcher = async () => {
     const response = await fetch(
@@ -43,6 +46,7 @@ export default function EditVideoPage() {
         (video: VideoType) => !video.deleted_at,
       )
     })
+
     return data
   }
 
@@ -51,9 +55,12 @@ export default function EditVideoPage() {
   if (!courseData) {
     return <Loader />
   }
+  if (error) {
+    showErrorToast('データの取得に失敗しました')
+  }
 
   return (
-    <VStack w="full" maxW="600px" mx="auto" py={6}>
+    <VStack maxW="600px" mx="auto" py={6}>
       <Heading size="md" fontSize="24px">
         動画管理画面
       </Heading>

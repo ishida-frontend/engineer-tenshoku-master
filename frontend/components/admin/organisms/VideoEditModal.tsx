@@ -27,7 +27,7 @@ export function VideoEditModal({
   videoId,
   section,
 }: {
-  courseId: string | string[]
+  courseId: string
   videoId: number
   section: SectionType
 }) {
@@ -98,7 +98,7 @@ export function VideoEditModal({
   const handleEdit = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/video/edit/${videoId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/video/${videoId}`,
         {
           method: 'PUT',
           headers: {

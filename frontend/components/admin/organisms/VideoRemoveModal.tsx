@@ -18,7 +18,7 @@ export function VideoRemoveModal({
   courseId,
   videoId,
 }: {
-  courseId: string | string[]
+  courseId: string
   videoId: number
 }) {
   const { showSuccessToast, showErrorToast } = useCustomToast()
@@ -29,7 +29,7 @@ export function VideoRemoveModal({
   const deleteVideo = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/video/delete/${videoId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/video/${videoId}`,
         {
           method: 'DELETE',
           headers: {

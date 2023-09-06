@@ -53,18 +53,18 @@ adminRouter.put(
 adminRouter.delete('/course/delete/:id', deleteCourse)
 adminRouter.get('/contacts', checkReadContact)
 adminRouter.post(
-  '/video/create',
+  '/video',
   videoValidator.createVideo,
   videoController.createVideo,
 )
 adminRouter.get('/video/:id', videoController.readVideo)
 adminRouter.get('/video', videoController.readFilteredVideos)
 adminRouter.put(
-  '/video/edit/:id',
+  '/video/:id',
   videoValidator.updateVideo,
   videoController.updateVideo,
 )
-adminRouter.delete('/video/delete/:id', videoController.deleteVideo)
+adminRouter.delete('/video/:id', videoController.deleteVideo)
 
 const courseRouter = express.Router()
 router.use('/course', courseRouter)
