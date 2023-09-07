@@ -124,12 +124,10 @@ cd backend
 以下を実行で schema を更新
 
 ```bash
-npx prisma migrate dev --name init
+npx prisma migrate dev --name {ファイル名}
 ```
 
-backend/prisma/migrations にできている。
-
-init から変更内容を表す名称に編集し完了。
+backend/prisma/migrations 配下にファイルが新規で作成されている。
 
 # Usage
 
