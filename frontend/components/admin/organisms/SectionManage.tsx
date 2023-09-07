@@ -59,6 +59,12 @@ export function SectionManage({
       const sectionId = deleteSection.id
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        },
       )
       const result = await res.json()
       if (res.status === 201) {
