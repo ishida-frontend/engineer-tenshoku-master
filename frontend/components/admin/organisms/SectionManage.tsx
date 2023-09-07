@@ -52,26 +52,30 @@ export function SectionManage({
 
   const handleRemoveInput = async (e, index: number) => {
     e.preventDefault()
-    const deleteSection: InitialSectionType = initialSections.find(
-      (initialSection) => sections[index].order === initialSection.order,
-    )
-    const sectionId = deleteSection.id
-    console.log('sectionId', sectionId)
-    console.log(
-      '`${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`',
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`,
-    )
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`,
-      {
-        method: 'DELETE',
-        body: JSON.stringify(sectionId),
-        headers: {
-          'Content-Type': 'application/json',
+    try {
+      const deleteSection: InitialSectionType = initialSections.find(
+        (initialSection) => sections[index].order === initialSection.order,
+      )
+      const sectionId = deleteSection.id
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
         },
-        // mode: 'no-cors',
-      },
-    )
+      )
+      const result = await res.json()
+      if (res.status === 201) {
+        onClose()
+        showSuccessToast(result.message)
+      } else if (res.status === 500) {
+        showErrorToast(result.message)
+      }
+    } catch (error) {
+      showErrorToast('エラーにより、セクションを削除することができません。')
+    }
 
     setSections((prev) => prev.filter((item) => item !== prev[index]))
     sections.splice(index, 1)
