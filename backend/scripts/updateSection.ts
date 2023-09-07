@@ -22,8 +22,8 @@ export async function updateSections(sectionData: {
 }) {
   const sections = await prisma.section.updateMany({
     where: {
-      course_id: Number(sectionData.course_id),
-      order: Number(sectionData.order),
+      course_id: sectionData.course_id,
+      order: sectionData.order,
     },
     data: {
       title: sectionData.title,
