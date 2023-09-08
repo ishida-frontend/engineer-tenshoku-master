@@ -50,12 +50,17 @@ export function SectionManage({
     setSections((prev) => [...prev, addSection])
   }
 
-  const handleRemoveInput = async (e, index: number) => {
+  const handleRemoveInput = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
     e.preventDefault()
     try {
-      const deleteSection: InitialSectionType = initialSections.find(
-        (initialSection) => sections[index].order === initialSection.order,
-      )
+      const deleteSection: InitialSectionType | undefined =
+        initialSections.find(
+          (initialSection) => sections[index].order === initialSection.order,
+        )
+      if (!deleteSection) throw new Error('セクションが見つかりません。')
       const sectionId = deleteSection.id
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`,
@@ -147,7 +152,7 @@ export function SectionManage({
     }
   }
 
-  const onSubmit = async (event: Event) => {
+  const onSubmit = async (event: any) => {
     event.preventDefault()
     try {
       const res = await createSection(sections)
@@ -211,7 +216,7 @@ export function SectionManage({
                       <Button
                         colorScheme="red"
                         ml={'8px'}
-                        onClick={(e) => handleRemoveInput(e, index)}
+                        onClick={(e: any) => handleRemoveInput(e, index)}
                       >
                         削除
                       </Button>
@@ -230,7 +235,7 @@ export function SectionManage({
                   mb={'10'}
                   colorScheme="teal"
                   type="submit"
-                  onClick={(e) => onSubmit(e)}
+                  onClick={(e: any) => onSubmit(e)}
                 >
                   保存する
                 </Button>
