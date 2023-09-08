@@ -20,8 +20,13 @@ prisma.$use(async (params, next) => {
   return next(params)
 })
 
-export async function deleteSection(sectionId: number) {
-  await prisma.section.delete({ where: { id: sectionId } })
+export async function deleteSection(id: string) {
+  const section = await prisma.section.delete({
+    where: {
+      id: Number(id),
+    },
+  })
+  return section
 }
 
 export async function deleteSections(sectionId1: number, sectionId2: number) {
@@ -33,4 +38,3 @@ export async function deleteSections(sectionId1: number, sectionId2: number) {
     },
   })
 }
-deleteSection(2), deleteSections(5, 7)

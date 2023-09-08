@@ -8,12 +8,16 @@ const {
   readCourse,
   readAllCourses,
   readFilteredCourses,
+  getPublishedCourse,
   updateCourse,
   deleteCourse,
 } = require('../controllers/courseController')
 const {
   sectionCreate,
   sectionRead,
+  sectionUpdate,
+  sectionDelete,
+  sectionUpsert,
 } = require('../controllers/sectionController')
 const {
   checkCreateVideo,
@@ -30,7 +34,7 @@ const router = express.Router()
 
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
+    res.setHeader('Access-Control-Allow-Origin', process.env.CORS_ORIGIN || '*')
     res.setHeader(
       'Access-Control-Allow-Methods',
       'GET, POST, PUT, PATCH, DELETE, OPTION',
@@ -59,11 +63,14 @@ courseRouter.get('/create', createCourse)
 courseRouter.get('/read', readCourse)
 courseRouter.get('/all', readAllCourses)
 courseRouter.get('/update', updateCourse)
+courseRouter.get('/:id', getPublishedCourse)
 
 const sectionRouter = express.Router()
 router.use('/section', sectionRouter)
 sectionRouter.post('/create', sectionCreate)
-sectionRouter.get('/read/:id', sectionRead)
+sectionRouter.get('/read/:course_id', sectionRead)
+sectionRouter.post('/update', sectionUpdate)
+sectionRouter.delete('/delete/:id', sectionDelete)
 
 const videoRouter = express.Router()
 router.use('/video', videoRouter)
