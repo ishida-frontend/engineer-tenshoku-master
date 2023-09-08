@@ -15,6 +15,7 @@ import {
   HStack,
   Input,
   Textarea,
+  Center,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 
@@ -109,7 +110,7 @@ export function UserContactForm() {
   }
 
   return (
-    <Container bg="gray.100" maxW={'1512px'} padding={'60px 90px'}>
+    <Center padding="60px 96px" bg={'gray.100'}>
       <Container bg="white" maxW={'1024px'} centerContent>
         <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
           お問い合わせ
@@ -248,6 +249,6 @@ export function UserContactForm() {
           </VStack>
         </FormControl>
       </Container>
-    </Container>
+    </Center>
   )
 }
