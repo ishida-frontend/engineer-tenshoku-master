@@ -12,33 +12,31 @@ import {
   Box,
   HStack,
   Center,
+  useDisclosure,
+  FormLabel,
+  Switch,
 } from '@chakra-ui/react'
-import { add } from 'date-fns'
+import { useCustomToast } from '../../../hooks/useCustomToast'
+import {
+  SectionType,
+  InitialSectionType,
+  SectionManagePropsType,
+} from '../../../types/SectionType'
 
-type SectionType = {
-  course_id: number
-  order: number
-  title: string
-  published: boolean
-}
-
-const course_id = 1
-
-export function SectionManage() {
+export function SectionManage({
+  course_id,
+  initialSections,
+}: SectionManagePropsType) {
   const defaultCourseValues = {
     course_id,
     order: 0,
     title: '',
     published: false,
   }
-  const [sections, setSections] = useState<SectionType[]>([
-    {
-      course_id,
-      order: 0,
-      title: '',
-      published: false,
-    },
-  ])
+  const { showSuccessToast, showErrorToast } = useCustomToast()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const [sections, setSections] = useState<SectionType[]>(initialSections)
 
   const handleAddInput = () => {
     const orderMax = sections.reduce((a, b) => (a.order > b.order ? a : b))
@@ -52,11 +50,41 @@ export function SectionManage() {
     setSections((prev) => [...prev, addSection])
   }
 
-  const handleRemoveInput = (e, index) => {
+  const handleRemoveInput = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
     e.preventDefault()
+    try {
+      const deleteSection: InitialSectionType | undefined =
+        initialSections.find(
+          (initialSection) => sections[index].order === initialSection.order,
+        )
+      if (!deleteSection) throw new Error('セクションが見つかりません。')
+      const sectionId = deleteSection.id
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/delete/${sectionId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        },
+      )
+      const result = await res.json()
+      if (res.status === 201) {
+        onClose()
+        showSuccessToast(result.message)
+      } else if (res.status === 500) {
+        showErrorToast(result.message)
+      }
+    } catch (error) {
+      showErrorToast('エラーにより、セクションを削除することができません。')
+    }
+
     setSections((prev) => prev.filter((item) => item !== prev[index]))
     sections.splice(index, 1)
-    const newSections = sections.map((section: SectionType) => {
+    const newSection = sections.map((section: SectionType) => {
       return {
         course_id: section.course_id,
         order: section.order,
@@ -64,56 +92,67 @@ export function SectionManage() {
         published: section.published,
       }
     })
-    setSections(newSections)
+    setSections(newSection)
   }
 
-  useEffect(() => {
-    ;(async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/read/${course_id}`,
-      )
-      const sections = await res.json()
-      const newSections = sections.map((newSection: SectionType) => {
-        return {
-          course_id: newSection.course_id,
-          order: newSection.order,
-          title: newSection.title,
-          published: newSection.published,
-        }
-      })
-      setSections(newSections)
-    })()
-  }, [])
-
-  const handleInputChange = (value: string, index: number) => {
-    const newSection = {
-      ...defaultCourseValues,
-      order: sections[index].order,
-      title: value,
-    }
-    const newSections = sections.filter((t) => {
-      return t.order !== sections[index].order
-    })
-    setSections([...newSections, newSection])
+  const handleOnChange = (
+    index: number,
+    key: string,
+    value: string | boolean,
+  ) => {
+    setSections(
+      sections.map((section) =>
+        section.order === index ? { ...section, [key]: value } : section,
+      ),
+    )
   }
 
   const createSection = async (sections: SectionType[]) => {
-    sections.map(async (sectionData) => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
-        {
-          method: 'POST',
-          body: JSON.stringify(sectionData),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
+    try {
+      const updateSections: SectionType[] = sections.filter(
+        (section) =>
+          initialSections.filter(
+            (initialSection) => initialSection.order === section.order,
+          ).length > 0,
       )
-      return res.json()
-    })
+
+      const createSections: SectionType[] = sections.filter(
+        (section) => updateSections.indexOf(section) === -1,
+      )
+      updateSections.map(async (updateSection) => {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/update`,
+          {
+            method: 'POST',
+            body: JSON.stringify(updateSection),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+        await res.json()
+      })
+      createSections.map(async (createSection) => {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
+          {
+            method: 'POST',
+            body: JSON.stringify(createSection),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+        await res.json()
+      })
+      onClose()
+      showSuccessToast('保存しました。')
+    } catch {
+      showErrorToast('エラーにより、セクションを保存することができません。')
+    }
   }
 
-  const onSubmit = async (event: Event) => {
+  const onSubmit = async (event: any) => {
     event.preventDefault()
     try {
       const res = await createSection(sections)
@@ -133,31 +172,56 @@ export function SectionManage() {
             <FormControl maxW={'904px'}>
               {sections.map((section, index) => (
                 <Box
-                  key={index}
+                  key={section.order}
                   border={'2px solid gray'}
                   borderRadius={'2xl'}
                   p={'8px'}
                   mb={'10px'}
                 >
-                  <label>
-                    セクション No.{index}
-                    <Flex>
+                  <Flex>
+                    <VStack w={'80%'} align={'start'}>
+                      <Text>セクション No.{section.order}</Text>
                       <Input
                         type="text"
                         placeholder={'セクション名'}
                         value={section.title}
                         onChange={(e) =>
-                          handleInputChange(e.target.value, index)
+                          handleOnChange(section.order, 'title', e.target.value)
                         }
                       />
+                    </VStack>
+                    <HStack>
+                      {/* <Box> */}
+                      <VStack>
+                        <FormLabel ml={'30px'} mb={'0px'}>
+                          <Text fontWeight={'bold'} fontSize={'lg'} w={'50px'}>
+                            公開
+                          </Text>
+                        </FormLabel>
+                        <Switch
+                          colorScheme="teal"
+                          size={'lg'}
+                          type="switch"
+                          isChecked={section.published}
+                          onChange={(e) =>
+                            handleOnChange(
+                              section.order,
+                              'published',
+                              !section.published,
+                            )
+                          }
+                        />
+                      </VStack>
+                      {/* </Box> */}
                       <Button
+                        colorScheme="red"
                         ml={'8px'}
-                        onClick={(e) => handleRemoveInput(e, index)}
+                        onClick={(e: any) => handleRemoveInput(e, index)}
                       >
                         削除
                       </Button>
-                    </Flex>
-                  </label>
+                    </HStack>
+                  </Flex>
                 </Box>
               ))}
 
@@ -168,10 +232,10 @@ export function SectionManage() {
               </HStack>
               <VStack>
                 <Button
-                  mt={'20'}
+                  mb={'10'}
                   colorScheme="teal"
                   type="submit"
-                  onClick={(e) => onSubmit(e)}
+                  onClick={(e: any) => onSubmit(e)}
                 >
                   保存する
                 </Button>
