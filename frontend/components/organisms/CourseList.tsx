@@ -23,28 +23,10 @@ import { RiReactjsLine, RiJavascriptLine } from 'react-icons/ri'
 import { CourseType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
-import { groupBy } from '../atoms/GroupBy'
 
 export function CourseList({ courses }: { courses: CourseType[] }) {
   // コースデータ読み込みアニメーション
   if (!courses) return <Loader />
-
-  console.log('courses', courses)
-
-  // const reactCourses = courses.filter((course) => {
-  //   return course.icon === 'react'
-  // })
-  // console.log('reactCourses', reactCourses)
-
-  // const jsCourses = courses.filter((course) => {
-  //   return course.icon === 'javascript'
-  // })
-  // console.log('jsCourses', jsCourses)
-
-  // const otherCourses = courses.filter((course) => {
-  //   return course.icon === 'javascript'
-  // })
-  // console.log('otherCourses', otherCourses)
 
   return (
     <Center minH={'100vh'} bg={'gray.200'}>
@@ -60,18 +42,18 @@ export function CourseList({ courses }: { courses: CourseType[] }) {
               borderBottom="1px"
               borderColor={'blackAlpha.500'}
             >
-              <Icon as={RiReactjsLine} fontSize={20} />
+              {/* <Icon as={RiReactjsLine} fontSize={20} />
               <Text ml={2} fontSize={16} fontWeight="bold">
                 React
-              </Text>
+              </Text> */}
             </Flex>
-            {courses.map((course: CourseType) => (
-              <SimpleGrid
-                columns={{ base: 1, md: 2, lg: 3 }}
-                mt="40px"
-                spacingX={[0, 10, 20]}
-                spacingY="10"
-              >
+            <SimpleGrid
+              columns={{ base: 1, md: 2, lg: 3 }}
+              mt="40px"
+              spacingX={[0, 10, 20]}
+              spacingY="10"
+            >
+              {courses.map((course: CourseType) => (
                 <Card
                   key={course.id}
                   w="288px"
@@ -116,8 +98,8 @@ export function CourseList({ courses }: { courses: CourseType[] }) {
                     </Flex>
                   </CardBody>
                 </Card>
-              </SimpleGrid>
-            ))}
+              ))}
+            </SimpleGrid>
           </Box>
         </VStack>
       </ChakraProvider>
