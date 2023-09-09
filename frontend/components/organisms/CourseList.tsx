@@ -18,15 +18,20 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { BsChevronRight } from 'react-icons/bs'
-import { RiReactjsLine,RiJavascriptLine } from 'react-icons/ri'
+import { RiReactjsLine, RiJavascriptLine } from 'react-icons/ri'
 
 import { CourseType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
+import { groupBy } from '../atoms/GroupBy'
 
 export function CourseList(courses: CourseType[]) {
   // コースデータ読み込みアニメーション
   if (!courses) return <Loader />
+
+  console.log('courses', courses)
+  const groupByCourses = groupBy(courses, 'icon')
+  console.log('groupByCourses', groupByCourses)
 
   return (
     <Center minH={'100vh'} bg={'gray.200'}>
@@ -35,15 +40,15 @@ export function CourseList(courses: CourseType[]) {
           <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
             コース一覧
           </Heading>
-            {courses.map((course: CourseType) => (
-          <Box mb={10}>
-            <Flex
-              alignItems="center"
-              pb={2}
-              borderBottom="1px"
-              borderColor={'blackAlpha.500'}
-            >
-              {switch (course.icon) {
+          {courses.map((course: CourseType) => (
+            <Box mb={10}>
+              <Flex
+                alignItems="center"
+                pb={2}
+                borderBottom="1px"
+                borderColor={'blackAlpha.500'}
+              >
+                {/* {switch (course.icon) {
                 case 'react'
                   <Icon as={RiReactjsLine} fontSize={20} />
                   <Text ml={2} fontSize={16} fontWeight="bold">
@@ -57,8 +62,8 @@ export function CourseList(courses: CourseType[]) {
                   </Text>
                   break;
 
-              }}
-            </Flex>
+              }} */}
+              </Flex>
               <SimpleGrid
                 columns={{ base: 1, md: 2, lg: 3 }}
                 mt="40px"
@@ -110,8 +115,8 @@ export function CourseList(courses: CourseType[]) {
                   </CardBody>
                 </Card>
               </SimpleGrid>
-          </Box>
-            ))}
+            </Box>
+          ))}
         </VStack>
       </ChakraProvider>
     </Center>
