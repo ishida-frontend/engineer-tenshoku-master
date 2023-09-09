@@ -34,7 +34,7 @@ const router = express.Router()
 
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
+    res.setHeader('Access-Control-Allow-Origin', process.env.CORS_ORIGIN || '*')
     res.setHeader(
       'Access-Control-Allow-Methods',
       'GET, POST, PUT, PATCH, DELETE, OPTION',
@@ -70,7 +70,7 @@ router.use('/section', sectionRouter)
 sectionRouter.post('/create', sectionCreate)
 sectionRouter.get('/read/:course_id', sectionRead)
 sectionRouter.post('/update', sectionUpdate)
-sectionRouter.get('/delete/:id', sectionDelete)
+sectionRouter.delete('/delete/:id', sectionDelete)
 
 const videoRouter = express.Router()
 router.use('/video', videoRouter)

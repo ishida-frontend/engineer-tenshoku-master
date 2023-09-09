@@ -64,19 +64,22 @@ export function UserContactForm() {
   }
 
   const fetcher = async () => {
-    const res = await fetch('http://localhost:8000/contact/create', {
-      method: 'POST',
-      body: JSON.stringify({
-        name: state.name,
-        email: state.email,
-        subject: state.subject,
-        message: state.message,
-        status: 0,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/contact/create`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          name: state.name,
+          email: state.email,
+          subject: state.subject,
+          message: state.message,
+          status: 0,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    })
+    )
     return res.json()
   }
 
