@@ -7,6 +7,7 @@ export default async function Course() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/course/all`, {
     // cache: 'no-cache',
   })
-  const getCourses = await res.json()
-  return <CourseList courses={getCourses} />
+  const courses: CourseType[] = await res.json()
+  console.log('courses', courses)
+  return <CourseList courses={courses} />
 }
