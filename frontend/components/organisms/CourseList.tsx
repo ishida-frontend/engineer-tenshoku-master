@@ -18,7 +18,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { BsChevronRight } from 'react-icons/bs'
-import { RiReactjsLine } from 'react-icons/ri'
+import { RiReactjsLine,RiJavascriptLine } from 'react-icons/ri'
 
 import { CourseType } from '../../types'
 import { Loader } from '../atoms/Loader'
@@ -35,6 +35,7 @@ export function CourseList(courses: CourseType[]) {
           <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
             コース一覧
           </Heading>
+            {courses.map((course: CourseType) => (
           <Box mb={10}>
             <Flex
               alignItems="center"
@@ -42,12 +43,22 @@ export function CourseList(courses: CourseType[]) {
               borderBottom="1px"
               borderColor={'blackAlpha.500'}
             >
-              <Icon as={RiReactjsLine} fontSize={20} />
-              <Text ml={2} fontSize={16} fontWeight="bold">
-                React
-              </Text>
+              {switch (course.icon) {
+                case 'react'
+                  <Icon as={RiReactjsLine} fontSize={20} />
+                  <Text ml={2} fontSize={16} fontWeight="bold">
+                    React
+                  </Text>
+                  break;
+                case 'javascript'
+                  <Icon as={RiJavascriptLine} fontSize={20} />
+                  <Text ml={2} fontSize={16} fontWeight="bold">
+                    React
+                  </Text>
+                  break;
+
+              }}
             </Flex>
-            {courses.map((course: CourseType) => (
               <SimpleGrid
                 columns={{ base: 1, md: 2, lg: 3 }}
                 mt="40px"
@@ -99,8 +110,8 @@ export function CourseList(courses: CourseType[]) {
                   </CardBody>
                 </Card>
               </SimpleGrid>
-            ))}
           </Box>
+            ))}
         </VStack>
       </ChakraProvider>
     </Center>
