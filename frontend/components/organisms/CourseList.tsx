@@ -25,13 +25,26 @@ import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { groupBy } from '../atoms/GroupBy'
 
-export function CourseList(courses: CourseType[]) {
+export function CourseList({ courses }: { courses: CourseType[] }) {
   // コースデータ読み込みアニメーション
   if (!courses) return <Loader />
 
   console.log('courses', courses)
-  const groupByCourses = groupBy(courses, 'icon')
-  console.log('groupByCourses', groupByCourses)
+
+  // const reactCourses = courses.filter((course) => {
+  //   return course.icon === 'react'
+  // })
+  // console.log('reactCourses', reactCourses)
+
+  // const jsCourses = courses.filter((course) => {
+  //   return course.icon === 'javascript'
+  // })
+  // console.log('jsCourses', jsCourses)
+
+  // const otherCourses = courses.filter((course) => {
+  //   return course.icon === 'javascript'
+  // })
+  // console.log('otherCourses', otherCourses)
 
   return (
     <Center minH={'100vh'} bg={'gray.200'}>
@@ -40,30 +53,19 @@ export function CourseList(courses: CourseType[]) {
           <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
             コース一覧
           </Heading>
-          {courses.map((course: CourseType) => (
-            <Box mb={10}>
-              <Flex
-                alignItems="center"
-                pb={2}
-                borderBottom="1px"
-                borderColor={'blackAlpha.500'}
-              >
-                {/* {switch (course.icon) {
-                case 'react'
-                  <Icon as={RiReactjsLine} fontSize={20} />
-                  <Text ml={2} fontSize={16} fontWeight="bold">
-                    React
-                  </Text>
-                  break;
-                case 'javascript'
-                  <Icon as={RiJavascriptLine} fontSize={20} />
-                  <Text ml={2} fontSize={16} fontWeight="bold">
-                    React
-                  </Text>
-                  break;
-
-              }} */}
-              </Flex>
+          <Box mb={10}>
+            <Flex
+              alignItems="center"
+              pb={2}
+              borderBottom="1px"
+              borderColor={'blackAlpha.500'}
+            >
+              <Icon as={RiReactjsLine} fontSize={20} />
+              <Text ml={2} fontSize={16} fontWeight="bold">
+                React
+              </Text>
+            </Flex>
+            {courses.map((course: CourseType) => (
               <SimpleGrid
                 columns={{ base: 1, md: 2, lg: 3 }}
                 mt="40px"
@@ -115,8 +117,8 @@ export function CourseList(courses: CourseType[]) {
                   </CardBody>
                 </Card>
               </SimpleGrid>
-            </Box>
-          ))}
+            ))}
+          </Box>
         </VStack>
       </ChakraProvider>
     </Center>
