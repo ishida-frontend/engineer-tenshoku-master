@@ -29,7 +29,7 @@ export function CourseList({ courses }: { courses: CourseType[] }) {
   if (!courses) return <Loader />
 
   return (
-    <Center minH={'100vh'} bg={'gray.200'}>
+    <Center bg={'gray.200'}>
       <ChakraProvider>
         <VStack mx="auto" padding={'60px 96px'}>
           <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
@@ -41,12 +41,7 @@ export function CourseList({ courses }: { courses: CourseType[] }) {
               pb={2}
               borderBottom="1px"
               borderColor={'blackAlpha.500'}
-            >
-              {/* <Icon as={RiReactjsLine} fontSize={20} />
-              <Text ml={2} fontSize={16} fontWeight="bold">
-                React
-              </Text> */}
-            </Flex>
+            ></Flex>
             <SimpleGrid
               columns={{ base: 1, md: 2, lg: 3 }}
               mt="40px"
