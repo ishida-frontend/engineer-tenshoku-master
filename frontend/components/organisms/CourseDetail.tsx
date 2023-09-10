@@ -30,7 +30,7 @@ export function CourseDetail({
   courseData: CourseDetailPropsType
 }) {
   console.log('courseData', courseData)
-  console.log('courseData.sections', courseData.sections)
+  console.log('courseData?.sections[0]', courseData?.sections[0])
   return (
     <Center minH={'100vh'} bg={'gray.200'}>
       <Container padding={'60px 96px'} bg={'white'}>
@@ -38,7 +38,7 @@ export function CourseDetail({
           <Box bg={'teal'} w={'427px'} float={'right'}>
             <Text color={'white'}>accordion</Text>
             <Accordion allowToggle>
-              {courseData.sections.map((section) => (
+              {courseData?.sections.map((section) => (
                 <AccordionItem>
                   <h2>
                     <AccordionButton>
