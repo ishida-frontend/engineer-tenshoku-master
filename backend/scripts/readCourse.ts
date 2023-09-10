@@ -25,7 +25,7 @@ export async function readFilteredCourses() {
 }
 
 export async function readPublishedCourseContent(id: string) {
-  const publishedCourseContent = await prisma.course.findMany({
+  const publishedCourseContent = await prisma.course.findUnique({
     where: {
       id: Number(id),
       published: true,
