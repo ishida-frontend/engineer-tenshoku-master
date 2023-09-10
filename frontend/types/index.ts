@@ -1,4 +1,4 @@
 export * from './CourseType'
 export * from './Contact'
 export * from './SectionType'
-export * from './VideoType'
+export * from './CourseDetail'
