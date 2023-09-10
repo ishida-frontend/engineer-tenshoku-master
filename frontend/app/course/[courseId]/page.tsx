@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams } from 'next/navigation'
 
-import { CourseDetailPropsType } from '../../../types/CourseType'
+import { CourseDetailPropsType } from '../../../types/CourseDetail'
 import { CourseDetail } from '../../../components/organisms/CourseDetail'
 
 export default async function CourseDetailPage({
