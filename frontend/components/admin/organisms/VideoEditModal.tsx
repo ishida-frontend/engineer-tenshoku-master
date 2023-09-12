@@ -26,14 +26,12 @@ export function VideoEditModal({
   courseId,
   videoId,
   section,
-  sectionId,
   isOpen,
   onClose,
 }: {
   courseId: string
   videoId: number | null
-  section: SectionType
-  sectionId: number
+  section: SectionType | null
   isOpen: boolean
   onClose: () => void
 }) {
@@ -64,16 +62,7 @@ export function VideoEditModal({
     }
   }, [isOpen, videoId])
 
-  // const [allOrders, setAllOrders] = useState<number[]>([])
-  // useEffect(() => {
-  //   if (section && sectionId !== null && section.id === sectionId) {
-  //     const videoOrders = section.videos.map((video) => video.order)
-  //     setAllOrders(videoOrders)
-  //   }
-  // }, [section, sectionId])
-
-  const allOrders = section.videos.map((v: VideoType) => v.order)
-  console.log('allOrders:', allOrders)
+  const allOrders = section?.videos.map((v: VideoType) => v.order)
 
   const fetchVideoData = async () => {
     try {
@@ -242,22 +231,17 @@ export function VideoEditModal({
           </FormControl>
           <FormControl id="videoOrder">
             <FormLabel htmlFor="videoOrder">再生順</FormLabel>
-            {/* <Select
+            <Select
               value={video.order}
               onChange={(e) =>
                 setVideo({ ...video, order: Number(e.target.value) })
               }
             >
-              {allOrders.map((order) => (
+              {allOrders?.map((order) => (
                 <option key={order} value={order}>
-                  {console.log('mapped order:', order)}
                   {order}
                 </option>
               ))}
-            </Select> */}
-            <Select>
-              <option value="1">1</option>
-              <option value="2">2</option>
             </Select>
           </FormControl>
           <FormControl id="coursePublished">

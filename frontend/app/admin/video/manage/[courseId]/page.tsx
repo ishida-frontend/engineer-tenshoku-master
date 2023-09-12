@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import useSWR from 'swr'
 import { useParams } from 'next/navigation'
 import {
@@ -36,7 +36,7 @@ export default function EditVideoPage() {
 
   const [currentSectionId, setCurrentSectionId] = useState<number | null>(null)
 
-  // 動画追加モーダル関連
+  // 動画カード追加モーダル関連
   const [maxOrder, setMaxOrder] = useState<number>(1)
   const {
     isOpen: isCreateModalOpen,
@@ -44,7 +44,8 @@ export default function EditVideoPage() {
     onClose: closeCreateModal,
   } = useDisclosure()
 
-  // 動画編集モーダル関連
+  // 動画カード編集モーダル関連
+  const [sectionToEdit, setSectionToEdit] = useState<SectionType | null>(null)
   const [videoToEdit, setVideoToEdit] = useState<number | null>(null)
   const {
     isOpen: isEditModalOpen,
@@ -52,7 +53,7 @@ export default function EditVideoPage() {
     onClose: closeEditModal,
   } = useDisclosure()
 
-  // 動画削除モーダル関連
+  // 動画カード削除モーダル関連
   const [videoToRemove, setVideoToRemove] = useState<number | null>(null)
   const {
     isOpen: isRemoveModalOpen,
@@ -108,7 +109,8 @@ export default function EditVideoPage() {
     openCreateModal()
   }
 
-  const handleEditVideo = (videoId: number) => {
+  const handleEditVideo = (videoId: number, section: SectionType) => {
+    setSectionToEdit(section)
     setVideoToEdit(videoId)
     openEditModal()
   }
@@ -165,16 +167,13 @@ export default function EditVideoPage() {
                             <Flex justify="space-evenly">
                               <Button
                                 colorScheme="green"
-                                onClick={() => handleEditVideo(video.id)}
+                                onClick={() =>
+                                  handleEditVideo(video.id, section)
+                                }
                                 ml={1}
                               >
                                 編集
                               </Button>
-                              {/* <VideoEditModal
-                                courseId={courseId}
-                                videoId={video.id}
-                                section={section}
-                              /> */}
                               <Button
                                 colorScheme="red"
                                 onClick={() => {
@@ -207,8 +206,7 @@ export default function EditVideoPage() {
                   />
                   <VideoEditModal
                     courseId={courseId}
-                    section={section}
-                    sectionId={section.id}
+                    section={sectionToEdit}
                     videoId={videoToEdit}
                     isOpen={isEditModalOpen}
                     onClose={() => {

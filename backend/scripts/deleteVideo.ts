@@ -26,13 +26,10 @@ export async function deleteVideo(videoId: number) {
       where: { id: videoId },
       select: { order: true },
     })
-
     if (!videoToDelete) {
       throw new Error('該当の動画が見つかりません')
     }
-
     const currentOrder = videoToDelete.order
-
     // currentOrderより値が大きい全てのorderに-1
     await prisma.video.updateMany({
       where: {
@@ -46,7 +43,6 @@ export async function deleteVideo(videoId: number) {
         },
       },
     })
-
     await prisma.video.delete({ where: { id: videoId } })
   } catch (error) {
     throw error
