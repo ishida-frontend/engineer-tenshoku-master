@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState, useMemo } from 'react'
 import useSWR from 'swr'
 import { useParams } from 'next/navigation'
 import {
@@ -8,6 +8,7 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  Button,
   Card,
   CardBody,
   Divider,
@@ -17,6 +18,7 @@ import {
   SimpleGrid,
   Text,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai'
 import { GoVideo } from 'react-icons/go'
@@ -32,31 +34,83 @@ import { VideoType } from '../../../../../types'
 export default function EditVideoPage() {
   const { showErrorToast } = useCustomToast()
 
+  const [currentSectionId, setCurrentSectionId] = useState<number | null>(null)
+
+  // 動画追加モーダル関連
+  const [maxOrder, setMaxOrder] = useState<number>(1)
+  const {
+    isOpen: isCreateModalOpen,
+    onOpen: openCreateModal,
+    onClose: closeCreateModal,
+  } = useDisclosure()
+
+  // 動画編集モーダル関連
+  const [videoToEdit, setVideoToEdit] = useState<number | null>(null)
+  const {
+    isOpen: isEditModalOpen,
+    onOpen: openEditModal,
+    onClose: closeEditModal,
+  } = useDisclosure()
+
+  // 動画削除モーダル関連
+  const [videoToRemove, setVideoToRemove] = useState<number | null>(null)
+  const {
+    isOpen: isRemoveModalOpen,
+    onOpen: openRemoveModal,
+    onClose: closeRemoveModal,
+  } = useDisclosure()
+
+  // courseIdをもとにコースデータを取得
   const params = useParams()
   const { courseId } = params as { courseId: string }
 
-  const courseFetcher = async () => {
+  const fetchCourseData = async () => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${courseId}`,
     )
-    const data = await response.json()
+    const originalData = await response.json()
 
-    data.sections.forEach((section: SectionType) => {
-      section.videos = section.videos.filter(
-        (video: VideoType) => !video.deleted_at,
-      )
-    })
+    const mappedSections = originalData.sections.map(
+      (section: SectionType) => ({
+        ...section,
+        videos: section.videos.filter((video: VideoType) => !video.deleted_at),
+      }),
+    )
 
-    return data
+    return { ...originalData, sections: mappedSections }
   }
 
-  const { data: courseData, error } = useSWR(`course${courseId}`, courseFetcher)
+  const { data: courseData, error } = useSWR(
+    `course${courseId}`,
+    fetchCourseData,
+  )
 
   if (!courseData) {
     return <Loader />
   }
   if (error) {
     showErrorToast('データの取得に失敗しました')
+  }
+
+  const handleCreateVideo = (sectionId: number) => {
+    setCurrentSectionId(sectionId)
+    const currentSection = courseData?.sections.find(
+      (s: SectionType) => s.id === sectionId,
+    )
+    if (currentSection) {
+      // 動画追加時ボタン押下時に、セクション内の既存動画で１番大きい再生順番に＋１
+      const maxOrderInSection = Math.max(
+        ...currentSection.videos.map((v: VideoType) => v.order),
+        0,
+      )
+      setMaxOrder(maxOrderInSection + 1)
+    }
+    openCreateModal()
+  }
+
+  const handleEditVideo = (videoId: number) => {
+    setVideoToEdit(videoId)
+    openEditModal()
   }
 
   return (
@@ -69,7 +123,7 @@ export default function EditVideoPage() {
       </Heading>
       {courseData.sections.map((section: SectionType) => (
         <Accordion allowToggle key={section.id}>
-          <AccordionItem>
+          <AccordionItem border="none">
             <VStack p={5} bgColor="gray.200" minW="600px" borderRadius={9}>
               <AccordionButton>
                 <AccordionIcon />
@@ -93,9 +147,9 @@ export default function EditVideoPage() {
                             <HStack>
                               <Text>No. {video.order}</Text>
                               {video.published ? (
-                                <AiFillEye />
+                                <AiFillEye size="20px" />
                               ) : (
-                                <AiFillEyeInvisible />
+                                <AiFillEyeInvisible size="20px" />
                               )}
                             </HStack>
                             <Flex justify="center">
@@ -109,25 +163,67 @@ export default function EditVideoPage() {
                               borderColor="gray"
                             />
                             <Flex justify="space-evenly">
-                              <VideoEditModal
+                              <Button
+                                colorScheme="green"
+                                onClick={() => handleEditVideo(video.id)}
+                                ml={1}
+                              >
+                                編集
+                              </Button>
+                              {/* <VideoEditModal
                                 courseId={courseId}
                                 videoId={video.id}
                                 section={section}
-                              />
-                              <VideoRemoveModal
-                                courseId={courseId}
-                                videoId={video.id}
-                              />
+                              /> */}
+                              <Button
+                                colorScheme="red"
+                                onClick={() => {
+                                  setVideoToRemove(video.id)
+                                  openRemoveModal()
+                                }}
+                              >
+                                削除
+                              </Button>
                             </Flex>
                           </CardBody>
                         </Card>
                       ))}
                   </SimpleGrid>
                 </Flex>
-                <Flex justify="right">
+                <Flex justify="center">
+                  <Button
+                    colorScheme="green"
+                    onClick={() => handleCreateVideo(section.id)}
+                  >
+                    追加
+                  </Button>
                   <VideoCreateModal
                     courseId={courseId}
                     sectionId={section.id}
+                    currentSectionId={currentSectionId}
+                    maxOrder={maxOrder}
+                    isOpen={isCreateModalOpen}
+                    onClose={closeCreateModal}
+                  />
+                  <VideoEditModal
+                    courseId={courseId}
+                    section={section}
+                    sectionId={section.id}
+                    videoId={videoToEdit}
+                    isOpen={isEditModalOpen}
+                    onClose={() => {
+                      setVideoToEdit(videoToEdit)
+                      closeEditModal()
+                    }}
+                  />
+                  <VideoRemoveModal
+                    courseId={courseId}
+                    videoId={videoToRemove}
+                    isOpen={isRemoveModalOpen}
+                    onClose={() => {
+                      setVideoToRemove(null)
+                      closeRemoveModal()
+                    }}
                   />
                 </Flex>
               </AccordionPanel>
