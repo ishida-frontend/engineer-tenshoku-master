@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import useSWR, { mutate } from 'swr'
+import { mutate } from 'swr'
 import {
   Button,
   FormControl,
@@ -21,24 +21,29 @@ import {
   NumberDecrementStepper,
   Select,
   Textarea,
-  useDisclosure,
 } from '@chakra-ui/react'
 
+import { urlRegExp } from '../../../utils/regExp'
 import { SectionType, VideoType } from '../../../types'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export const VideoCreateModal = ({
   courseId,
-  sectionId,
+  currentSectionId,
+  maxOrder,
+  isOpen,
+  onClose,
 }: {
-  courseId: string | string[]
+  courseId: string
   sectionId: number
+  currentSectionId: number | null
+  maxOrder: number
+  isOpen: boolean
+  onClose: () => void
 }) => {
   const { showSuccessToast, showErrorToast } = useCustomToast()
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const [maxOrder, setMaxOrder] = useState<number>(1)
+
   const [orderChanged, setOrderChanged] = useState(false)
-  const [currentSectionId, setCurrentSectionId] = useState<number | null>(null)
 
   const [video, setVideo] = useState<Partial<VideoType>>({
     name: '',
@@ -54,7 +59,7 @@ export const VideoCreateModal = ({
     urlError: '',
   })
 
-  const courseFetcher = async () => {
+  const fetchCourseData = async () => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${courseId}`,
     )
@@ -66,27 +71,6 @@ export const VideoCreateModal = ({
       )
     })
     return courseData
-  }
-
-  const { data: courseData, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${courseId}`,
-    courseFetcher,
-  )
-
-  // 既存動画の１番大きい再生順番に＋１
-  const openModal = (sectionId: number) => {
-    setCurrentSectionId(sectionId)
-    const currentSection = courseData?.sections.find(
-      (s: SectionType) => s.id === sectionId,
-    )
-    if (currentSection) {
-      const maxOrderInSection = Math.max(
-        ...currentSection.videos.map((v: VideoType) => v.order),
-        0,
-      )
-      setMaxOrder(maxOrderInSection + 1)
-    }
-    onOpen()
   }
 
   const isButtonDisabled = () => {
@@ -114,8 +98,6 @@ export const VideoCreateModal = ({
       )
 
       const result = await response.json()
-      const urlRegx =
-        /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/
 
       if (response.status === 201) {
         mutate(`course${courseId}`)
@@ -152,7 +134,7 @@ export const VideoCreateModal = ({
           }))
         }
 
-        if (video.url && !urlRegx.test(video.url)) {
+        if (video.url && !urlRegExp.test(video.url)) {
           setErrors((prevErrors) => ({
             ...prevErrors,
             urlError: result.errors.url,
@@ -170,125 +152,115 @@ export const VideoCreateModal = ({
   }
 
   return (
-    <>
-      <Button colorScheme="green" onClick={() => openModal(sectionId)}>
-        追加
-      </Button>
-
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        scrollBehavior="inside"
-        blockScrollOnMount={false}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>動画詳細入力</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl
-              id="videoName"
-              isRequired
-              isInvalid={!!errors.nameError}
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      scrollBehavior="inside"
+      blockScrollOnMount={false}
+    >
+      <ModalOverlay bg="rgba(0, 0, 0, 0.1)" />
+      <ModalContent>
+        <ModalHeader>動画詳細入力</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <FormControl id="videoName" isRequired isInvalid={!!errors.nameError}>
+            <FormLabel htmlFor="videoName">タイトル (5文字以上)</FormLabel>
+            <FormErrorMessage>{errors.nameError}</FormErrorMessage>
+            <Input
+              type="text"
+              value={video.name}
+              onChange={(e) => setVideo({ ...video, name: e.target.value })}
+              aria-required={true}
+              border="1px"
+              borderColor="gray.400"
+              autoFocus={true}
+            />
+          </FormControl>
+          <FormControl
+            id="videoDescription"
+            isRequired
+            isInvalid={!!errors.descError}
+          >
+            <FormLabel htmlFor="videoDescription">
+              説明文 (15文字以上)
+            </FormLabel>
+            <FormErrorMessage>{errors.descError}</FormErrorMessage>
+            <Textarea
+              value={video.description}
+              onChange={(e) =>
+                setVideo({ ...video, description: e.target.value })
+              }
+              aria-required={true}
+              rows={5}
+              border="1px"
+              borderColor="gray.400"
+            />
+          </FormControl>
+          <FormControl id="videoUrl" isRequired isInvalid={!!errors.urlError}>
+            <FormLabel>URL</FormLabel>
+            <FormErrorMessage>{errors.urlError}</FormErrorMessage>
+            <Input
+              type="text"
+              value={video.url}
+              onChange={(e) => setVideo({ ...video, url: e.target.value })}
+              aria-required={true}
+              border="1px"
+              borderColor="gray.400"
+            />
+          </FormControl>
+          <FormControl id="videoOrder">
+            <FormLabel htmlFor="videoOrder">
+              再生順 (追加時は変更不可)
+            </FormLabel>
+            <NumberInput
+              defaultValue={maxOrder}
+              min={1}
+              max={30}
+              clampValueOnBlur={false}
+              onChange={(_, valueNumber) => {
+                setVideo({ ...video, order: valueNumber })
+              }}
+              isDisabled={true}
             >
-              <FormLabel htmlFor="videoName">タイトル (5文字以上)</FormLabel>
-              <FormErrorMessage>{errors.nameError}</FormErrorMessage>
-              <Input
-                type="text"
-                value={video.name}
-                onChange={(e) => setVideo({ ...video, name: e.target.value })}
-                aria-required={true}
-                border="1px"
-                borderColor="gray.400"
-                autoFocus={true}
-              />
-            </FormControl>
-            <FormControl
-              id="videoDescription"
-              isRequired
-              isInvalid={!!errors.descError}
+              <NumberInputField border="1px" borderColor="gray.400" />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+          </FormControl>
+          <FormControl id="coursePublished">
+            <FormLabel htmlFor="CoursePublished">公開設定</FormLabel>
+            <Select
+              id="coursePublished"
+              value={video.published ? 'public' : 'hidden'}
+              onChange={(e) =>
+                setVideo({
+                  ...video,
+                  published: e.target.value === 'public',
+                })
+              }
+              border="1px"
+              borderColor="gray.400"
             >
-              <FormLabel htmlFor="videoDescription">
-                説明文 (15文字以上)
-              </FormLabel>
-              <FormErrorMessage>{errors.descError}</FormErrorMessage>
-              <Textarea
-                value={video.description}
-                onChange={(e) =>
-                  setVideo({ ...video, description: e.target.value })
-                }
-                aria-required={true}
-                rows={5}
-                border="1px"
-                borderColor="gray.400"
-              />
-            </FormControl>
-            <FormControl id="videoUrl" isRequired isInvalid={!!errors.urlError}>
-              <FormLabel>URL</FormLabel>
-              <FormErrorMessage>{errors.urlError}</FormErrorMessage>
-              <Input
-                type="text"
-                value={video.url}
-                onChange={(e) => setVideo({ ...video, url: e.target.value })}
-                aria-required={true}
-                border="1px"
-                borderColor="gray.400"
-              />
-            </FormControl>
-            <FormControl id="videoOrder">
-              <FormLabel htmlFor="videoOrder">
-                再生順 (追加時は変更不可)
-              </FormLabel>
-              <NumberInput
-                defaultValue={maxOrder}
-                min={1}
-                max={30}
-                clampValueOnBlur={false}
-                onChange={(_, valueNumber) => {
-                  setVideo({ ...video, order: valueNumber })
-                }}
-                isDisabled={true}
-              >
-                <NumberInputField border="1px" borderColor="gray.400" />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-            </FormControl>
-            <FormControl id="coursePublished">
-              <FormLabel htmlFor="CoursePublished">公開設定</FormLabel>
-              <Select
-                id="coursePublished"
-                value={video.published ? 'public' : 'hidden'}
-                onChange={(e) =>
-                  setVideo({
-                    ...video,
-                    published: e.target.value === 'public',
-                  })
-                }
-                border="1px"
-                borderColor="gray.400"
-              >
-                <option value="hidden">非公開</option>
-                <option value="public">公開</option>
-              </Select>
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button mr={3} onClick={onClose}>
-              閉じる
-            </Button>
-            <Button
-              isDisabled={isButtonDisabled()}
-              colorScheme="green"
-              onClick={handleCreate}
-            >
-              追加
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+              <option value="hidden">非公開</option>
+              <option value="public">公開</option>
+            </Select>
+          </FormControl>
+        </ModalBody>
+        <ModalFooter>
+          <Button mr={3} onClick={onClose}>
+            閉じる
+          </Button>
+          <Button
+            isDisabled={isButtonDisabled()}
+            colorScheme="green"
+            onClick={handleCreate}
+          >
+            追加
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   )
 }

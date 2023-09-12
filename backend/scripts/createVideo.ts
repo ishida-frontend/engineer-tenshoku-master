@@ -18,7 +18,7 @@ export async function createVideo(videoData: VideoType) {
     })
     return videoData
   } catch (e: any) {
-    throw e
+    throw new Error(e)
   } finally {
     await prisma.$disconnect()
   }

@@ -1,5 +1,4 @@
 'use client'
-import { useState } from 'react'
 import {
   Button,
   Modal,
@@ -8,23 +7,24 @@ import {
   ModalHeader,
   ModalFooter,
   ModalCloseButton,
-  useDisclosure,
 } from '@chakra-ui/react'
 import { mutate } from 'swr'
 
 import { useCustomToast } from '../../../hooks/useCustomToast'
+import { SectionType } from '../../../types'
 
 export function VideoRemoveModal({
   courseId,
   videoId,
+  isOpen,
+  onClose,
 }: {
   courseId: string
-  videoId: number
+  videoId: number | null
+  isOpen: boolean
+  onClose: () => void
 }) {
   const { showSuccessToast, showErrorToast } = useCustomToast()
-
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const [showModalContent, setShowModalContent] = useState(true)
 
   const deleteVideo = async () => {
     try {
@@ -43,41 +43,47 @@ export function VideoRemoveModal({
 
       const result = await response.json()
       if (response.ok) {
-        mutate(`course${courseId}`)
+        mutate(`course${courseId}`, (currentData) => {
+          const updatedSections = currentData.sections.map(
+            (section: SectionType) => {
+              if (section.videos.some((video) => video.id === videoId)) {
+                return {
+                  ...section,
+                  videos: section.videos.filter(
+                    (video) => video.id !== videoId,
+                  ),
+                }
+              }
+              return section
+            },
+          )
+          return { ...currentData, sections: updatedSections }
+        })
         showSuccessToast(result.message)
-        setShowModalContent(false)
         onClose()
       } else {
         showErrorToast(result.message)
       }
     } catch (error) {
-      showErrorToast('動画の削除に失敗しました')
+      showErrorToast('削除に失敗しました')
     }
   }
 
   return (
-    <>
-      <Button colorScheme="red" onClick={onOpen}>
-        削除
-      </Button>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        {showModalContent && (
-          <ModalContent>
-            <ModalHeader>この動画を削除しますか？</ModalHeader>
-            <ModalCloseButton />
-            <ModalFooter>
-              <Button variant="ghost" onClick={onClose}>
-                いいえ
-              </Button>
-              <Button colorScheme="red" mr={3} onClick={deleteVideo}>
-                はい
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        )}
-      </Modal>
-    </>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay bg="rgba(0, 0, 0, 0.1)" />
+      <ModalContent>
+        <ModalHeader>この動画を削除しますか？</ModalHeader>
+        <ModalCloseButton />
+        <ModalFooter>
+          <Button variant="ghost" onClick={onClose}>
+            いいえ
+          </Button>
+          <Button colorScheme="red" mr={3} onClick={deleteVideo}>
+            はい
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   )
 }
