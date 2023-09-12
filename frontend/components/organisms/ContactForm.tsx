@@ -243,8 +243,7 @@ export function UserContactForm() {
             <Button
               onClick={handleSubmit}
               disabled={!isChecked}
-              mt={'80px'}
-              mb={'80px'}
+              m={'80px 0'}
               colorScheme="teal"
             >
               送信する
