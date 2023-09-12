@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
 
-RUN npm install
+RUN yarn install
 
 EXPOSE 8000
 
@@ -31,12 +31,12 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
 
-RUN npm install --only=production
+RUN yarn install --only=production
 
 COPY . .
 
 # TypeScriptをJavaScriptにコンパイル
-RUN npm run build
+RUN yarn run build
 
 ###############
 #    prod     #
