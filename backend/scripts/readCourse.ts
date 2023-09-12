@@ -11,7 +11,12 @@ export async function readCourse(id: number) {
 }
 
 export async function readAllCourses() {
-  const courses = await prisma.course.findMany()
+  const courses = await prisma.course.findMany({
+    where: {
+      deleted_at: null,
+      published: true,
+    },
+  })
   return courses
 }
 
