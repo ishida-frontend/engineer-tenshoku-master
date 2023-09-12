@@ -1,8 +1,13 @@
 import React from 'react'
-import { useParams } from 'next/navigation'
 
-import { CourseDetailPropsType } from '../../../types/CourseDetail'
 import { CourseDetail } from '../../../components/organisms/CourseDetail'
+import { CourseType } from '../../../types/CourseType'
+import { SectionType } from '../../../types/SectionType'
+import { VideoType } from '../../../types/VideoType'
+
+type CourseDetailPropsType = CourseType & {
+  sections: (SectionType & { videos: VideoType[] })[]
+}
 
 export default async function CourseDetailPage({
   params,
