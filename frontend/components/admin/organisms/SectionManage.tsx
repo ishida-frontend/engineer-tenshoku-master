@@ -38,6 +38,10 @@ export function SectionManage({
 
   const [sections, setSections] = useState<SectionType[]>(initialSections)
 
+  if (sections[0] === undefined) {
+    setSections([defaultCourseValues])
+  }
+
   const handleAddInput = () => {
     const orderMax = sections.reduce((a, b) => (a.order > b.order ? a : b))
     const nextOrder = orderMax.order + 1
@@ -160,6 +164,7 @@ export function SectionManage({
       console.log(e)
     }
   }
+  console.log('sections', sections)
 
   return (
     <Center minH={'100vh'} bg={'gray.200'}>
