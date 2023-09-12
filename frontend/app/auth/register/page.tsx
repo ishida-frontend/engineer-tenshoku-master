@@ -60,7 +60,7 @@ export default function Register() {
   }
 
   return (
-    <Center minH={'100vh'} bg={'gray.200'}>
+    <Center padding="60px 96px" bg={'gray.200'}>
       <Container padding="60px 96px" bg={'white'}>
         <Heading
           fontSize={'2xl'}

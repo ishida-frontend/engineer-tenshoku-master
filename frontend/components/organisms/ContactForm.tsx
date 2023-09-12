@@ -15,6 +15,7 @@ import {
   HStack,
   Input,
   Textarea,
+  Center,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 
@@ -112,7 +113,7 @@ export function UserContactForm() {
   }
 
   return (
-    <Container bg="gray.100" maxW={'1512px'}>
+    <Center padding="60px 96px" bg={'gray.100'}>
       <Container bg="white" maxW={'1024px'} centerContent>
         <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
           お問い合わせ
@@ -196,7 +197,6 @@ export function UserContactForm() {
               isInvalid={!!errors.message?.[0]}
               mb={'40px'}
               bg={'white'}
-              h={'120px'}
             >
               <Container ml={'0px'} pb={'10px'} pl={'0px'}>
                 <Flex>
@@ -208,6 +208,7 @@ export function UserContactForm() {
                 name="お問い合わせ内容"
                 value={state.message}
                 onChange={onChangeHandler}
+                pb={'229px'}
                 placeholder={'こちらお問い合わせ内容を記入してください'}
               />
               <FormErrorMessage>
@@ -242,7 +243,7 @@ export function UserContactForm() {
             <Button
               onClick={handleSubmit}
               disabled={!isChecked}
-              mt={'20'}
+              m={'80px 0'}
               colorScheme="teal"
             >
               送信する
@@ -250,6 +251,6 @@ export function UserContactForm() {
           </VStack>
         </FormControl>
       </Container>
-    </Container>
+    </Center>
   )
 }
