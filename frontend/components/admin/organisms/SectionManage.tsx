@@ -164,7 +164,6 @@ export function SectionManage({
       console.log(e)
     }
   }
-  console.log('sections', sections)
 
   return (
     <Center minH={'100vh'} bg={'gray.200'}>
