@@ -6,6 +6,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+      target: development # Dockerfileがマルチビルド仕様のためdevelopmentを指定
     depends_on:
       - db
     ports:

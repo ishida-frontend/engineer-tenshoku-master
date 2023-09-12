@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon app.ts",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "createVideo": "nodemon ./scripts/createVideo.ts",
     "readVideo": "nodemon ./scripts/readVideo.ts",
@@ -26,6 +27,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/mysql": "^2.15.21",
     "@types/node": "^20.4.5",
+    "@types/cors": "^2.8.13",
     "aws-jwt-verify": "^4.0.0",
     "axios": "^1.4.0",
     "cookie-parser": "^1.4.6",
