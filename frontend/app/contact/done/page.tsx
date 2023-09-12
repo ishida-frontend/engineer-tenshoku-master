@@ -1,12 +1,19 @@
 'use client'
 import React from 'react'
-import { Container, Button, Text, Heading, Stack } from '@chakra-ui/react'
+import {
+  Container,
+  Button,
+  Text,
+  Heading,
+  Stack,
+  Center,
+} from '@chakra-ui/react'
 import Link from 'next/link'
 import { EmailIcon } from '@chakra-ui/icons'
 
 export default function UserContactDone() {
   return (
-    <Container bg="gray.100" maxW={'1512px'} py={'60px'}>
+    <Center padding={'60px 96px'} bg={'gray.100'}>
       <Container bg="white" height={'723px'} maxW={'1024px'} centerContent>
         <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
           お問い合わせが送信されました
@@ -24,6 +31,6 @@ export default function UserContactDone() {
           <Link href="/">トップに戻る</Link>
         </Button>
       </Container>
-    </Container>
+    </Center>
   )
 }
