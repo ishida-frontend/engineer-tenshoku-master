@@ -18,13 +18,26 @@ import {
   StackDivider,
   VStack,
 } from '@chakra-ui/react'
-import { SelectedVideo } from '../../types/CourseDetail'
 import { CourseType } from '../../types/CourseType'
 import { SectionType } from '../../types/SectionType'
 import { VideoType } from '../../types/VideoType'
 
 type CourseDetailPropsType = CourseType & {
   sections: (SectionType & { videos: VideoType[] })[]
+}
+
+type SelectedVideo = {
+  id: number
+  sections: {
+    id: number
+    order: number
+    videos: {
+      id: number
+      order: number
+      name: string
+      url: string
+    }
+  }
 }
 
 export function CourseDetail({
