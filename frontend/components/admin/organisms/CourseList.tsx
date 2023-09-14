@@ -40,38 +40,40 @@ export function CourseList() {
 
   return (
     <>
-      <VStack spacing={5} p={4} maxW="800px" mx="auto">
-        <Heading size="lg">コース一覧</Heading>
-        <SimpleGrid columns={2} spacing={5}>
-          {courses.map((course: CourseType) => (
-            <Box key={course.id} p="4" boxShadow="lg" rounded="md">
-              <Text>
-                <strong>コースID</strong>：{course.id}
-              </Text>
-              <Text>
-                <strong>コース名</strong>：{course.name}
-              </Text>
-              <Text isTruncated>
-                <strong>概要</strong>：{course.description}
-              </Text>
-              <Text>
-                <strong>状態</strong>：{course.published ? '公開' : '非公開'}
-              </Text>
-              <Text>
-                <strong>作成日</strong>：{formatDate(course.created_at)}
-              </Text>
-              <Text>
-                <strong>更新日</strong>：{formatDate(course.updated_at)}
-              </Text>
-              <Link href={`/admin/course/edit/${course.id}`}>
-                <Button mt="2" colorScheme="green" variant="solid">
-                  編集
-                </Button>
-              </Link>
-            </Box>
-          ))}
-        </SimpleGrid>
-      </VStack>
+      <Box padding={'60px 96px'}>
+        <VStack spacing={5} p={4} maxW="800px" mx="auto">
+          <Heading size="lg">コース一覧</Heading>
+          <SimpleGrid columns={2} spacing={5}>
+            {courses.map((course: CourseType) => (
+              <Box key={course.id} p="4" boxShadow="lg" rounded="md">
+                <Text>
+                  <strong>コースID</strong>：{course.id}
+                </Text>
+                <Text>
+                  <strong>コース名</strong>：{course.name}
+                </Text>
+                <Text isTruncated>
+                  <strong>概要</strong>：{course.description}
+                </Text>
+                <Text>
+                  <strong>状態</strong>：{course.published ? '公開' : '非公開'}
+                </Text>
+                <Text>
+                  <strong>作成日</strong>：{formatDate(course.created_at)}
+                </Text>
+                <Text>
+                  <strong>更新日</strong>：{formatDate(course.updated_at)}
+                </Text>
+                <Link href={`/admin/course/edit/${course.id}`}>
+                  <Button mt="2" colorScheme="green" variant="solid">
+                    編集
+                  </Button>
+                </Link>
+              </Box>
+            ))}
+          </SimpleGrid>
+        </VStack>
+      </Box>
     </>
   )
 }
