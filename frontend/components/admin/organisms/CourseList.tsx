@@ -40,7 +40,7 @@ export function CourseList() {
 
   return (
     <>
-      <Box padding={'60px 96px'}>
+      <Box minH={'100vh'} padding={'60px 96px'}>
         <VStack spacing={5} p={4} maxW="800px" mx="auto">
           <Heading size="lg">コース一覧</Heading>
           <SimpleGrid columns={2} spacing={5}>
