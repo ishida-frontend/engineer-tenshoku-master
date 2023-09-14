@@ -1,4 +1,5 @@
 export type SectionType = {
+  id: number
   course_id: string
   order: number
   title: string
