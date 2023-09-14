@@ -1,9 +1,15 @@
+import { SectionType } from './SectionType'
+
 export type VideoType = {
   id: number
-  sectionId: string
+  sections: SectionType[]
+  sectionId: number
   order: number
+  url: string
   name: string
   description: string
-  url: string
   published: boolean
+  created_at: string
+  updated_at: string
+  deleted_at: string
 }
