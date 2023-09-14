@@ -18,7 +18,12 @@ export async function readCourse(id: number) {
 }
 
 export async function readAllCourses() {
-  const courses = await prisma.course.findMany()
+  const courses = await prisma.course.findMany({
+    where: {
+      deleted_at: null,
+      published: true,
+    },
+  })
   return courses
 }
 
@@ -32,7 +37,7 @@ export async function readFilteredCourses() {
 }
 
 export async function readPublishedCourseContent(id: string) {
-  const publishedCourseContent = await prisma.course.findMany({
+  const publishedCourseContent = await prisma.course.findUnique({
     where: {
       id: Number(id),
       published: true,

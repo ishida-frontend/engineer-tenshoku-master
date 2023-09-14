@@ -1,6 +1,7 @@
 import { Loader } from '../components/atoms/Loader'
 import { useAuth } from '../hooks/useAuth'
 import { Header } from './header'
+import { Footer } from '../components/organisms/Footer'
 
 export const Main = ({ children }: { children: React.ReactNode }) => {
   const check = useAuth()
@@ -13,6 +14,7 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
       <>
         <Header />
         {children}
+        <Footer />
       </>
     )
   )

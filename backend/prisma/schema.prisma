@@ -14,7 +14,7 @@ datasource db {
 model Course {
   id          Int       @id @default(autoincrement())
   sections    Section[]
-  name        String?
+  name        String
   description String?
   image       String?
   published   Boolean   @default(false) // コースが公開されているかどうか。

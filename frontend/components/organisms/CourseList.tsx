@@ -1,11 +1,11 @@
 'use client'
 import React, { useEffect } from 'react'
-import useSWR from 'swr'
 import {
   Box,
   Card,
   CardBody,
   CardHeader,
+  Center,
   ChakraProvider,
   extendTheme,
   Flex,
@@ -18,45 +18,19 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { BsChevronRight } from 'react-icons/bs'
-import { RiReactjsLine } from 'react-icons/ri'
+import { RiReactjsLine, RiJavascriptLine } from 'react-icons/ri'
 
 import { CourseType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
-import { useCustomToast } from '../../hooks/useCustomToast'
 
-export function CourseList() {
-  // カスタムフック準備
-  const { showErrorToast } = useCustomToast()
-
-  const courseListTheme = extendTheme({
-    breakpoints: {
-      md: '700px',
-      lg: '1050px',
-    },
-  })
-
-  const fetcher = async () =>
-    (await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/course/all`)).json()
-
-  const { data: courses, error } = useSWR('courseList', fetcher)
-
-  // ページを開いて１０秒でデータ取得ができなかった場合のエラートースト
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (error) {
-        showErrorToast('コースの取得に失敗しました。')
-      }
-    }, 10000)
-    return () => clearTimeout(timeout)
-  }, [courses])
-
+export function CourseList({ courses }: { courses: CourseType[] }) {
   // コースデータ読み込みアニメーション
   if (!courses) return <Loader />
 
   return (
-    <ChakraProvider theme={courseListTheme}>
-      <VStack mx="auto">
+    <Center bg={'gray.200'}>
+      <VStack mx="auto" padding={'60px 96px'}>
         <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
           コース一覧
         </Heading>
@@ -66,12 +40,7 @@ export function CourseList() {
             pb={2}
             borderBottom="1px"
             borderColor={'blackAlpha.500'}
-          >
-            <Icon as={RiReactjsLine} fontSize={20} />
-            <Text ml={2} fontSize={16} fontWeight="bold">
-              React
-            </Text>
-          </Flex>
+          ></Flex>
           <SimpleGrid
             columns={{ base: 1, md: 2, lg: 3 }}
             mt="40px"
@@ -122,6 +91,6 @@ export function CourseList() {
           </SimpleGrid>
         </Box>
       </VStack>
-    </ChakraProvider>
+    </Center>
   )
 }
