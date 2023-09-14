@@ -1,28 +1,24 @@
 import { PrismaClient } from '@prisma/client'
+
+import { VideoType } from '../types'
+
 const prisma = new PrismaClient()
 
-export async function createVideo(videoData: {
-  name: string
-  description: string
-  url: string
-  published: boolean
-  order: number
-  sectionId: number
-}) {
+export async function createVideo(videoData: VideoType) {
   try {
-    const video = await prisma.video.create({
+    await prisma.video.create({
       data: {
         name: videoData.name,
         description: videoData.description,
         url: videoData.url,
-        published: videoData.published,
         order: videoData.order,
+        published: videoData.published,
         section: { connect: { id: videoData.sectionId } },
       },
     })
-    return video
+    return videoData
   } catch (e: any) {
-    console.log(e.message)
+    throw new Error(e)
   } finally {
     await prisma.$disconnect()
   }
