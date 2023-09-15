@@ -73,7 +73,7 @@ export function CourseEditor({
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/edit/${course_id}`,
         {
-          method: 'POST',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
