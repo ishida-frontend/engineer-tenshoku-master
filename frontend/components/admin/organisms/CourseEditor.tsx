@@ -49,7 +49,6 @@ export function CourseEditor({
 
   const [isSubmitting, SetIsSubmitting] = useState(false)
 
-  // ページを開いて１０秒でデータ取得ができなかった場合のエラートースト
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (!courseData) {
@@ -59,14 +58,12 @@ export function CourseEditor({
     return () => clearTimeout(timeout)
   }, [courseData])
 
-  // 取得したコースデータを適用
   useEffect(() => {
     if (courseData) {
       setCourse(courseData)
     }
   }, [courseData])
 
-  // PUTリクエストイベントハンドラ
   const updateCourse = async (event: FormEvent) => {
     event.preventDefault()
 
@@ -76,7 +73,7 @@ export function CourseEditor({
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/edit/${course_id}`,
         {
-          method: 'PUT',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -123,7 +120,6 @@ export function CourseEditor({
     }
   }
 
-  // コースデータ読み込みアニメーション
   if (!courseData) return <Loader />
 
   return (
