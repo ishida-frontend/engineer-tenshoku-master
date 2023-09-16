@@ -21,6 +21,7 @@ import {
 import { CourseType } from '../../types/CourseType'
 import { SectionType } from '../../types/SectionType'
 import { VideoType } from '../../types/VideoType'
+import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
 
 type CourseDetailPropsType = CourseType & {
   sections: (SectionType & { videos: VideoType[] })[]
@@ -35,6 +36,7 @@ type SelectedVideo = {
       id: number
       order: number
       name: string
+      description: string
       url: string
     }
   }
@@ -54,6 +56,7 @@ export function CourseDetail({
         id: courseData.sections[0].videos[0].id,
         order: courseData.sections[0].videos[0].order,
         name: courseData.sections[0].videos[0].name,
+        description: courseData.sections[0].videos[0].description,
         url: courseData.sections[0].videos[0].url,
       },
     },
@@ -69,6 +72,8 @@ export function CourseDetail({
           id: courseData.sections[sectionIndex].videos[videoIndex].id,
           order: courseData.sections[sectionIndex].videos[videoIndex].order,
           name: courseData.sections[sectionIndex].videos[videoIndex].name,
+          description:
+            courseData.sections[sectionIndex].videos[videoIndex].description,
           url: courseData.sections[sectionIndex].videos[videoIndex].url,
         },
       },
@@ -167,6 +172,9 @@ export function CourseDetail({
                 </CardHeader>
               </Card>
             </Box>
+            <VideoDetailAndQAndA
+              videoDescription={selectedVideo.sections.videos.description}
+            />
           </Box>
         </Container>
       </Container>
