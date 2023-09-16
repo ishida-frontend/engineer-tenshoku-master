@@ -43,7 +43,7 @@ model Video {
   order       Int
   url         String?
   name        String?
-  description String?
+  description String?   @db.LongText
   published   Boolean   @default(false) // 動画が公開されているかどうか。
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
