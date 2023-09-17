@@ -5,11 +5,14 @@
   "repository": "git@github.com:issiyda/engineer-tenshoku-master.git",
   "author": "issiyda",
   "license": "MIT",
-  "lint-staged": {
-    "*.{ts,tsx}": "pre-commit"
-  },
   "devDependencies": {
-    "husky": "^8.0.3",
+    "husky": "^8.0.0",
     "lint-staged": "^14.0.1"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*": " cd frontend && yarn lint"
   }
 }
