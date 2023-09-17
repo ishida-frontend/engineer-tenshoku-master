@@ -47,8 +47,18 @@
   },
   "husky": {
     "hooks": {
-      "pre-add":"git add -u",
-      "pre-push": "eslint --fix ."
+      "pre-push": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "linters": {
+      "*.js": [
+        "eslint --fix",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "dist/**/*"
+    ]
   }
 }
