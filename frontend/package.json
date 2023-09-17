@@ -47,18 +47,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "yarn lint"
+      "pre-commit": "yarn lint"
     }
-  },
-  "lint-staged": {
-    "linters": {
-      "*.js": [
-        "eslint --fix",
-        "git add -u"
-      ]
-    },
-    "ignore": [
-      "dist/**/*"
-    ]
   }
 }
