@@ -47,7 +47,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "git add -u && eslint --fix ."
+      "pre-add":"git add -u",
+      "pre-push": "eslint --fix ."
     }
   }
 }
