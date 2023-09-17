@@ -1,16 +1,13 @@
 'use client'
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   Box,
   Card,
   CardBody,
   CardHeader,
   Center,
-  ChakraProvider,
-  extendTheme,
   Flex,
   Heading,
-  Icon,
   Image,
   Link,
   SimpleGrid,
@@ -18,7 +15,6 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { BsChevronRight } from 'react-icons/bs'
-import { RiReactjsLine, RiJavascriptLine } from 'react-icons/ri'
 
 import { CourseType } from '../../types'
 import { Loader } from '../atoms/Loader'

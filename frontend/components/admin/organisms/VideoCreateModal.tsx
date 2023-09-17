@@ -43,7 +43,7 @@ export const VideoCreateModal = ({
 }) => {
   const { showSuccessToast, showErrorToast } = useCustomToast()
 
-  const [orderChanged, setOrderChanged] = useState(false)
+  const [orderChanged] = useState(false)
 
   const [video, setVideo] = useState<Partial<VideoType>>({
     name: '',
