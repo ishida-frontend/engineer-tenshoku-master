@@ -28,7 +28,7 @@ type Errors = {
 
 export function UserContactForm() {
   const router = useRouter()
-  const Day = 1
+  const Dammy = 1
 
   const [state, setState] = useState({
     name: '',
