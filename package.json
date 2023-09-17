@@ -5,10 +5,8 @@
   "repository": "git@github.com:issiyda/engineer-tenshoku-master.git",
   "author": "issiyda",
   "license": "MIT",
-  "husky": {
-    "hooks": {
-      "pre-commit": "pre-commit"
-    }
+  "lint-staged": {
+    "*.{ts,tsx}": "pre-commit"
   },
   "devDependencies": {
     "husky": "^8.0.3",
