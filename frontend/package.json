@@ -47,15 +47,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged --allow-empty"
+      "pre-push": "eslint --fix ."
     }
-  },
-  "lint-staged": {
-    "**/*.{css,html,js}": [
-      "prettier --write"
-    ],
-    "**/*.{js,ts,tsx}": [
-      "eslint --fix"
-    ]
   }
 }
