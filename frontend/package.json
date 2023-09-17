@@ -54,7 +54,7 @@
     "linters": {
       "*.js": [
         "eslint --fix",
-        "git add"
+        "git add -u"
       ]
     },
     "ignore": [
