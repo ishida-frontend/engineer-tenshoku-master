@@ -1,0 +1,13 @@
+{
+  "name": "engineer-tenshoku-master",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:issiyda/engineer-tenshoku-master.git",
+  "author": "issiyda",
+  "license": "MIT",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}
