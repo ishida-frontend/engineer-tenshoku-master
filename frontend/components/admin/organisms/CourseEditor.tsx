@@ -49,6 +49,7 @@ export function CourseEditor() {
     created_at: '',
     updated_at: '',
     deleted_at: '',
+    icon: '',
   }
   const [course, setCourse] = useState<CourseType>(initialCourseState)
 
