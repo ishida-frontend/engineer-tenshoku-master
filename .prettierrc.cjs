@@ -2,14 +2,14 @@ module.exports = {
   semi: false,
   singleQuote: true,
   tabWidth: 2,
-  trailingComma: "all",
+  trailingComma: 'all',
   printWidth: 80,
   overrides: [
     {
-      files: ["*.ts", "*.tsx"],
+      files: ['*.ts', '*.tsx'],
       options: {
-        parser: "typescript",
+        parser: 'typescript',
       },
     },
   ],
-};
+}
