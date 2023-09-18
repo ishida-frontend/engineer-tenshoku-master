@@ -9,7 +9,10 @@
     "husky": "^8.0.0",
     "lint-staged": "^14.0.1"
   },
+  "scripts": {
+    "prepare": "husky install"
+  },
   "lint-staged": {
-    "*.{ts,tsx}": "lint-staged"
+    "*": "lint-staged"
   }
 }
