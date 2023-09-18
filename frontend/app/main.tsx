@@ -2,6 +2,7 @@ import { Loader } from '../components/atoms/Loader'
 import { useAuth } from '../hooks/useAuth'
 import { Header } from './header'
 import { Footer } from '../components/organisms/Footer'
+import { Container } from '@chakra-ui/react'
 
 export const Main = ({ children }: { children: React.ReactNode }) => {
   const check = useAuth()
@@ -13,7 +14,15 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
     check.checked && (
       <>
         <Header />
-        {children}
+        <Container
+          minW={'100%'}
+          minH={'65vh'}
+          padding={'0px'}
+          margin={'0px'}
+          bg={'gray.50'}
+        >
+          {children}
+        </Container>
         <Footer />
       </>
     )

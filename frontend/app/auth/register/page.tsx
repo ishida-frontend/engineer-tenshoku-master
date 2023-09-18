@@ -81,6 +81,7 @@ export default function Register() {
             <Input
               id="email"
               type="text"
+              placeholder="sample@engineer.com"
               value={formState.email}
               onChange={(e) =>
                 setFormState({
@@ -104,6 +105,7 @@ export default function Register() {
             <Input
               id="password"
               type="password"
+              placeholder="password"
               value={formState.password}
               onChange={(e) =>
                 setFormState({
@@ -126,11 +128,19 @@ export default function Register() {
               />
               <Wrap>
                 <Text>
-                  <ChakraLink color="teal.500" href="#">
+                  <ChakraLink
+                    color="teal.500"
+                    href="#"
+                    borderBottom={'1px solid teal'}
+                  >
                     利用規約
                   </ChakraLink>
                   および
-                  <ChakraLink color="teal.500" href="#">
+                  <ChakraLink
+                    color="teal.500"
+                    href="#"
+                    borderBottom={'1px solid teal'}
+                  >
                     プライバシーポリシー
                   </ChakraLink>
                   に同意する
@@ -144,14 +154,19 @@ export default function Register() {
           mt={'42px'}
           mb={'24px'}
           colorScheme="teal"
+          fontSize={'18px'}
+          lineHeight={'28px'}
+          fontWeight={'semibold'}
           onClick={handleSubmit}
         >
           登録する
         </Button>
         <Box border={'1px solid'} borderColor={'#C400'} />
-        <Box color={'teal'}>
-          <Link href={'/auth/login'}>ログインはこちら</Link>
-        </Box>{' '}
+        <Box color={'teal'} borderTop={'1px solid gray'}>
+          <Box mt={'25px'}>
+            <Link href={'/auth/login'}>ログインはこちら</Link>
+          </Box>
+        </Box>
       </Container>
     </Center>
   )

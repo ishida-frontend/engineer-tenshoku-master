@@ -1,7 +1,13 @@
 'use client'
 import React from 'react'
 import useSWR from 'swr'
-import { Container, VStack, StackDivider } from '@chakra-ui/react'
+import {
+  Container,
+  VStack,
+  StackDivider,
+  Heading,
+  Center,
+} from '@chakra-ui/react'
 import { ContactType } from '../../../types'
 
 export function ContactList() {
@@ -18,36 +24,33 @@ export function ContactList() {
   })
 
   return (
-    <div>
-      <h1>お問い合わせ一覧</h1>
-      {dataDesc &&
-        dataDesc.map((d: ContactType) => {
-          return (
-            <VStack
-              key={d.id}
-              divider={<StackDivider borderColor="gray.200" />}
-              spacing={4}
-              align="stretch"
-            >
-              <Container
-                maxW="container.sm"
-                bg="blue.600"
-                h="auto"
-                color="white"
-                border="1px"
-                p="3"
+    <Center padding="60px 96px" bg={'gray.200'}>
+      <Container padding="60px 96px" bg={'white'} borderRadius={'4px'}>
+        <Heading mb={'40px'} textAlign={'center'}>
+          お問い合わせ一覧
+        </Heading>
+        {dataDesc &&
+          dataDesc.map((d: ContactType) => {
+            return (
+              <VStack
+                key={d.id}
+                divider={<StackDivider borderColor="gray.200" />}
+                spacing={4}
+                align="stretch"
               >
-                <div key={d.id}>
-                  <p>ID: {d.id}</p>
-                  <p>名前: {d.name}</p>
-                  <p>メール: {d.email}</p>
-                  <p>タイトル: {d.subject}</p>
-                  <p>内容: {d.message}</p>
-                </div>
-              </Container>
-            </VStack>
-          )
-        })}
-    </div>
+                <Container bg="gray.200" mb={'10px'} p="3" borderRadius={'4px'}>
+                  <div key={d.id}>
+                    <p>ID: {d.id}</p>
+                    <p>名前: {d.name}</p>
+                    <p>メール: {d.email}</p>
+                    <p>タイトル: {d.subject}</p>
+                    <p>内容: {d.message}</p>
+                  </div>
+                </Container>
+              </VStack>
+            )
+          })}
+      </Container>
+    </Center>
   )
 }

@@ -115,12 +115,14 @@ export default function Login() {
           ログイン
         </Button>
 
-        <Box border={'1px solid #C400'} />
-
-        {/* // TODO パスワードを忘れた場合       */}
-        {/* <Text>パスワードを忘れた場合はこちら</Text> */}
-        <Box color={'teal'}>
-          <Link href={'/auth/register'}>新規登録はこちら</Link>
+        <Box mt={'100px'} borderTop={'1px solid gray'}>
+          {/* // TODO パスワードを忘れた場合       */}
+          <Box color={'teal'} mt={'24px'}>
+            <Link href={'#'}>パスワードを忘れた場合はこちら</Link>
+          </Box>
+          <Box color={'teal'} mt={'24px'}>
+            <Link href={'/auth/register'}>新規登録はこちら</Link>
+          </Box>
         </Box>
       </Container>
     </Center>

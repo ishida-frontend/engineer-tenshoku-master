@@ -81,7 +81,7 @@ export function CourseDetail({
   }
 
   return (
-    <VStack minH={'100vh'} bg={'gray.100'}>
+    <VStack bg={'gray.100'}>
       <Container minWidth={'100%'} padding={'0px'} bg={'white'}>
         <Container
           minWidth={'100%'}

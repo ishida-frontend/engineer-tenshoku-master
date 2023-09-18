@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import {
   Container,
   Button,
-  Flex,
   Text,
   FormControl,
   Heading,
@@ -174,66 +173,87 @@ export function SectionManage({
   }
 
   return (
-    <Center minH={'100vh'} bg={'gray.200'}>
-      <Container bg="white" minW={'100vh'} centerContent>
-        <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
+    <Center padding="60px 96px" bg={'gray.200'}>
+      <Container
+        margin={'0px'}
+        padding="60px 96px"
+        bg={'white'}
+        centerContent
+        borderRadius={'4px'}
+        minW={'1000px'}
+      >
+        <Heading fontSize={'2xl'} fontWeight={'bold'}>
           コース内容
         </Heading>
-        <Container mt="109px" maxW={'100%'} bg={'white'} p={'0px'}>
+        <Container mt="59px" bg={'white'} p={'0px'}>
           <VStack>
-            <FormControl maxW={'904px'}>
+            <FormControl minW={'100%'} overflow={'hidden'}>
               {sections.map((section, index) => (
                 <Box
                   key={section.order}
-                  border={'2px solid gray'}
-                  borderRadius={'2xl'}
+                  border={'1px solid gray'}
+                  borderRadius={'4px'}
                   p={'8px'}
                   mb={'10px'}
                 >
-                  <Flex>
-                    <VStack w={'80%'} align={'start'}>
-                      <Text>セクション No.{section.order}</Text>
-                      <Input
-                        type="text"
-                        placeholder={'セクション名'}
-                        value={section.title}
-                        onChange={(e) =>
-                          handleOnChange(section.order, 'title', e.target.value)
-                        }
-                      />
-                    </VStack>
+                  <Container overflow={'hidden'}>
                     <HStack>
-                      {/* <Box> */}
-                      <VStack>
-                        <FormLabel ml={'30px'} mb={'0px'}>
-                          <Text fontWeight={'bold'} fontSize={'lg'} w={'50px'}>
-                            公開
-                          </Text>
-                        </FormLabel>
-                        <Switch
-                          colorScheme="teal"
-                          size={'lg'}
-                          type="switch"
-                          isChecked={section.published}
-                          onChange={() =>
-                            handleOnChange(
-                              section.order,
-                              'published',
-                              !section.published,
-                            )
-                          }
-                        />
-                      </VStack>
-                      {/* </Box> */}
-                      <Button
-                        colorScheme="red"
-                        ml={'8px'}
-                        onClick={() => handleRemoveInput(index)}
-                      >
-                        削除
-                      </Button>
+                      <Box minW={'350px'} overflow={'hidden'}>
+                        <VStack align={'start'}>
+                          <Text>セクション No.{section.order}</Text>
+                          <Input
+                            type="text"
+                            placeholder={'セクション名'}
+                            value={section.title}
+                            onChange={(e) =>
+                              handleOnChange(
+                                section.order,
+                                'title',
+                                e.target.value,
+                              )
+                            }
+                          />
+                        </VStack>
+                      </Box>
+                      <Box w={'190px'} float={'right'}>
+                        <HStack>
+                          {/* <Box> */}
+                          <VStack>
+                            <FormLabel ml={'30px'} mb={'0px'}>
+                              <Text
+                                fontWeight={'bold'}
+                                fontSize={'lg'}
+                                w={'50px'}
+                              >
+                                公開
+                              </Text>
+                            </FormLabel>
+                            <Switch
+                              colorScheme="teal"
+                              size={'lg'}
+                              type="switch"
+                              isChecked={section.published}
+                              onChange={() =>
+                                handleOnChange(
+                                  section.order,
+                                  'published',
+                                  !section.published,
+                                )
+                              }
+                            />
+                          </VStack>
+                          {/* </Box> */}
+                          <Button
+                            colorScheme="red"
+                            ml={'8px'}
+                            onClick={() => handleRemoveInput(index)}
+                          >
+                            削除
+                          </Button>
+                        </HStack>
+                      </Box>
                     </HStack>
-                  </Flex>
+                  </Container>
                 </Box>
               ))}
 
@@ -244,6 +264,7 @@ export function SectionManage({
               </HStack>
               <VStack>
                 <Button
+                  mt={'15px'}
                   mb={'10'}
                   colorScheme="teal"
                   type="submit"

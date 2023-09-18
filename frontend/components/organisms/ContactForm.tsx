@@ -114,7 +114,7 @@ export function UserContactForm() {
 
   return (
     <Center padding="60px 96px" bg={'gray.100'}>
-      <Container bg="white" maxW={'1024px'} centerContent>
+      <Container bg="white" maxW={'1024px'} centerContent borderRadius={'4px'}>
         <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
           お問い合わせ
         </Heading>
