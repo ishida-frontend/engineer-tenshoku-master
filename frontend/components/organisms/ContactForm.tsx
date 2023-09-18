@@ -1,6 +1,6 @@
-"use client";
-import React, { useState } from "react";
-import { ZodError } from "zod";
+'use client'
+import React, { useState } from 'react'
+import { ZodError } from 'zod'
 import {
   Container,
   Button,
@@ -16,59 +16,59 @@ import {
   Input,
   Textarea,
   Center,
-} from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
+} from '@chakra-ui/react'
+import { useRouter } from 'next/navigation'
 
 type Errors = {
-  name?: string[];
-  email?: string[];
-  subject?: string[];
-  message?: string[];
-};
+  name?: string[]
+  email?: string[]
+  subject?: string[]
+  message?: string[]
+}
 
 export function UserContactForm() {
-  const router = useRouter();
-  const Dammy = 1;
+  const router = useRouter()
+  const Dammys = 1
 
   const [state, setState] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  })
   const [errors, setErrors] = useState<Errors>({
-    name: [""],
-    email: [""],
-    subject: [""],
-    message: [""],
-  });
+    name: [''],
+    email: [''],
+    subject: [''],
+    message: [''],
+  })
 
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(false)
   const toggleCheckbox = () => {
-    setIsChecked(!isChecked);
-  };
+    setIsChecked(!isChecked)
+  }
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.persist();
+    e.persist()
     setState((prevState) => {
-      return { ...prevState, message: e.target.value };
-    });
-  };
+      return { ...prevState, message: e.target.value }
+    })
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.persist();
-    const target = e.target;
-    const name = target.name;
+    e.persist()
+    const target = e.target
+    const name = target.name
     setState(() => {
-      return { ...state, [name]: target.value };
-    });
-  };
+      return { ...state, [name]: target.value }
+    })
+  }
 
   const fetcher = async () => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/contact/create`,
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({
           name: state.name,
           email: state.email,
@@ -77,58 +77,58 @@ export function UserContactForm() {
           status: 0,
         }),
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-      }
-    );
-    return res.json();
-  };
+      },
+    )
+    return res.json()
+  }
 
   const handleSubmit = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
       if (isChecked) {
-        const res = await fetcher();
+        const res = await fetcher()
         const items = res.error.reduce(
           (accumulator: any, value: { path: string; message: string }) => {
-            return { ...accumulator, [value.path]: [value.message] };
+            return { ...accumulator, [value.path]: [value.message] }
           },
           {
             [res.error[0].path]: res.error[0].message,
-          }
-        );
-        setErrors(items as Errors);
+          },
+        )
+        setErrors(items as Errors)
       } else {
-        alert("利用規約に同意してください");
+        alert('利用規約に同意してください')
       }
     } catch (e) {
       if (e instanceof ZodError) {
-        setErrors(e.flatten().fieldErrors as Errors);
+        setErrors(e.flatten().fieldErrors as Errors)
       } else {
-        router.push("/contact/done");
-        console.log(e);
+        router.push('/contact/done')
+        console.log(e)
       }
     }
-  };
+  }
 
   return (
-    <Center padding="60px 96px" bg={"gray.100"}>
-      <Container bg="white" maxW={"1024px"} centerContent>
-        <Heading fontSize={"2xl"} fontWeight={"bold"} mt={"80px"}>
+    <Center padding="60px 96px" bg={'gray.100'}>
+      <Container bg="white" maxW={'1024px'} centerContent>
+        <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
           お問い合わせ
         </Heading>
-        <FormControl maxW={"904px"}>
-          <Container mt="109px" maxW={"100%"} bg={"white"} p={"0px"}>
+        <FormControl maxW={'904px'}>
+          <Container mt="109px" maxW={'100%'} bg={'white'} p={'0px'}>
             <FormControl
               isInvalid={!!errors.name?.[0]}
-              mt={"80px"}
-              mb={"40px"}
-              bg={"white"}
-              h={"80px"}
+              mt={'80px'}
+              mb={'40px'}
+              bg={'white'}
+              h={'80px'}
             >
-              <Container ml={"0px"} pb={"10px"} pl={"0px"}>
+              <Container ml={'0px'} pb={'10px'} pl={'0px'}>
                 <Flex>
                   <Text>お名前</Text>
                   <Text color="teal">(必須)</Text>
@@ -139,7 +139,7 @@ export function UserContactForm() {
                 name="name"
                 value={state.name}
                 onChange={handleInputChange}
-                placeholder={"田中　太郎"}
+                placeholder={'田中　太郎'}
               />
               <FormErrorMessage>
                 {errors.name && errors.name[0]}
@@ -148,11 +148,11 @@ export function UserContactForm() {
 
             <FormControl
               isInvalid={!!errors.email?.[0]}
-              mb={"40px"}
-              bg={"white"}
-              h={"80px"}
+              mb={'40px'}
+              bg={'white'}
+              h={'80px'}
             >
-              <Container ml={"0px"} pb={"10px"} pl={"0px"}>
+              <Container ml={'0px'} pb={'10px'} pl={'0px'}>
                 <Flex>
                   <Text>メールアドレス</Text>
                   <Text color="teal">(必須)</Text>
@@ -163,7 +163,7 @@ export function UserContactForm() {
                 name="email"
                 value={state.email}
                 onChange={handleInputChange}
-                placeholder={"sample@hoge.com"}
+                placeholder={'sample@hoge.com'}
               />
               <FormErrorMessage>
                 {errors.email && errors.email[0]}
@@ -172,11 +172,11 @@ export function UserContactForm() {
 
             <FormControl
               isInvalid={!!errors.subject?.[0]}
-              mb={"40px"}
-              bg={"white"}
-              h={"80px"}
+              mb={'40px'}
+              bg={'white'}
+              h={'80px'}
             >
-              <Container ml={"0px"} pb={"10px"} pl={"0px"}>
+              <Container ml={'0px'} pb={'10px'} pl={'0px'}>
                 <Flex>
                   <Text>お問い合わせ概要</Text>
                   <Text color="teal">(必須)</Text>
@@ -187,7 +187,7 @@ export function UserContactForm() {
                 name="subject"
                 value={state.subject}
                 onChange={handleInputChange}
-                placeholder={"お問い合わせ概要を記入してください"}
+                placeholder={'お問い合わせ概要を記入してください'}
               />
               <FormErrorMessage>
                 {errors.subject && errors.subject[0]}
@@ -196,10 +196,10 @@ export function UserContactForm() {
 
             <FormControl
               isInvalid={!!errors.message?.[0]}
-              mb={"40px"}
-              bg={"white"}
+              mb={'40px'}
+              bg={'white'}
             >
-              <Container ml={"0px"} pb={"10px"} pl={"0px"}>
+              <Container ml={'0px'} pb={'10px'} pl={'0px'}>
                 <Flex>
                   <Text>お問い合わせ内容</Text>
                   <Text color="teal">(必須)</Text>
@@ -209,8 +209,8 @@ export function UserContactForm() {
                 name="お問い合わせ内容"
                 value={state.message}
                 onChange={onChangeHandler}
-                pb={"229px"}
-                placeholder={"こちらお問い合わせ内容を記入してください"}
+                pb={'229px'}
+                placeholder={'こちらお問い合わせ内容を記入してください'}
               />
               <FormErrorMessage>
                 {errors.message && errors.message[0]}
@@ -218,7 +218,7 @@ export function UserContactForm() {
             </FormControl>
           </Container>
 
-          <Container ml={"0px"} p={"0px"}>
+          <Container ml={'0px'} p={'0px'}>
             <HStack>
               <input
                 type="checkbox"
@@ -244,7 +244,7 @@ export function UserContactForm() {
             <Button
               onClick={handleSubmit}
               disabled={!isChecked}
-              m={"80px 0"}
+              m={'80px 0'}
               colorScheme="teal"
             >
               送信する
@@ -253,5 +253,5 @@ export function UserContactForm() {
         </FormControl>
       </Container>
     </Center>
-  );
+  )
 }
