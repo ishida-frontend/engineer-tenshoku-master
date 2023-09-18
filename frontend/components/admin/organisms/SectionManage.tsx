@@ -17,7 +17,6 @@ import {
   Switch,
 } from '@chakra-ui/react'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-import { SectionType } from '../../../types/SectionType'
 import { VideoType } from '../../../types'
 
 type SectionManagePropsType = {
@@ -66,11 +65,7 @@ export function SectionManage({
     setSections((prev) => [...prev, addSection])
   }
 
-  const handleRemoveInput = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number,
-  ) => {
-    e.preventDefault()
+  const handleRemoveInput = async (index: number) => {
     try {
       const deleteSection: SaveSectionType | undefined = initialSections.find(
         (initialSection) => sections[index].order === initialSection.order,
@@ -122,7 +117,7 @@ export function SectionManage({
     )
   }
 
-  const createSection = async (sections: SaveSectionType[]) => {
+  const createSection = async () => {
     try {
       const updateSections: SaveSectionType[] = sections.filter(
         (section) =>
@@ -147,12 +142,12 @@ export function SectionManage({
         )
         await res.json()
       })
-      createSections.map(async (createSection) => {
+      createSections.map(async (newCreateSection) => {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
           {
             method: 'POST',
-            body: JSON.stringify(createSection),
+            body: JSON.stringify(newCreateSection),
             headers: {
               'Content-Type': 'application/json',
             },
@@ -167,10 +162,12 @@ export function SectionManage({
     }
   }
 
-  const onSubmit = async (event: any) => {
+  const onSubmit = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     event.preventDefault()
     try {
-      await createSection(sections)
+      await createSection()
     } catch (e) {
       console.log(e)
     }
@@ -218,7 +215,7 @@ export function SectionManage({
                           size={'lg'}
                           type="switch"
                           isChecked={section.published}
-                          onChange={(e) =>
+                          onChange={() =>
                             handleOnChange(
                               section.order,
                               'published',
@@ -231,7 +228,7 @@ export function SectionManage({
                       <Button
                         colorScheme="red"
                         ml={'8px'}
-                        onClick={(e: any) => handleRemoveInput(e, index)}
+                        onClick={() => handleRemoveInput(index)}
                       >
                         削除
                       </Button>
@@ -250,7 +247,7 @@ export function SectionManage({
                   mb={'10'}
                   colorScheme="teal"
                   type="submit"
-                  onClick={(e: any) => onSubmit(e)}
+                  onClick={(e) => onSubmit(e)}
                 >
                   保存する
                 </Button>

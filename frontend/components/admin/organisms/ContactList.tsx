@@ -24,6 +24,7 @@ export function ContactList() {
         dataDesc.map((d: ContactType) => {
           return (
             <VStack
+              key={d.id}
               divider={<StackDivider borderColor="gray.200" />}
               spacing={4}
               align="stretch"

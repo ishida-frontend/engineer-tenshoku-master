@@ -68,6 +68,7 @@ export function CourseEditor() {
       }
     }, 10000)
     return () => clearTimeout(timeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseData])
 
   // 取得したコースデータを適用
