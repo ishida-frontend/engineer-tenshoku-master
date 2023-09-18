@@ -109,13 +109,13 @@ api | Example app listening at http://localhost:8000
 
 が表示されたら OK
 
-# haskyの設定
+# hasky の設定
 
-自動でdeployする設定方法
+自動で deploy する設定方法
 
-VSCode上でなく、PCのターミナル(Windowsならコマンドプロンプト)を開く。
+VSCode 上でなく、PC のターミナル(Windows ならコマンドプロンプト)を開く。
 
-以下を実行
+ターミナル開いたディレクトリ上で以下を実行
 
 ```bash
 echo "export PATH=\"$(dirname $(which node)):\$PATH\"" > ~/.huskyrc
@@ -123,7 +123,7 @@ echo "export PATH=\"$(dirname $(which node)):\$PATH\"" > ~/.huskyrc
 
 <img width="1110" alt="スクリーンショット 2023-09-18 14 33 20" src="https://github.com/ishida-frontend/engineer-tenshoku-master/assets/61638997/93c16c59-98a8-4162-9a7b-1115ee3083e7">
 
-次に、VSCodeのhomeで以下を実行
+次に、project のルートディレクトリで以下を実行
 
 ```bash
 yarn
@@ -131,17 +131,9 @@ yarn
 
 <img width="961" alt="スクリーンショット 2023-09-18 14 33 52" src="https://github.com/ishida-frontend/engineer-tenshoku-master/assets/61638997/e34e1de9-4ecb-40bf-b92b-be02940795e1">
 
+以上で husky の設定は終わりです。
 
-次に.husky/pre-commitを開いて
-
-```bash
-cd frontend && yarn lint
-```
-がコメントアウトになっていたら解除して、実行できるようにしてください。
-
-以上でhuskyの設定は終わりです。
-
-SourceTreeでコミットする際にエラーがあるか自動で検出してくれます。
+git コマンドおよび SourceTree でコミットする際にエラーがあるか自動で検出してくれます。
 
 # Prisma Schema
 
