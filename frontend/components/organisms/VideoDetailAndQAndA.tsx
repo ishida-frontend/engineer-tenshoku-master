@@ -1,14 +1,5 @@
-'use client'
 import React from 'react'
-import {
-  Box,
-  Text,
-  Tab,
-  Tabs,
-  TabList,
-  TabPanel,
-  TabPanels,
-} from '@chakra-ui/react'
+import { Text, Tab, Tabs, TabList, TabPanel, TabPanels } from '@chakra-ui/react'
 
 export function VideoDetailAndQAndA({
   videoDescription,
