@@ -1,4 +1,4 @@
-import { Center, Spinner, VStack } from '@chakra-ui/react'
+import { Center, Spinner, VStack, Box } from '@chakra-ui/react'
 
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 
