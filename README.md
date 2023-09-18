@@ -109,11 +109,11 @@ api | Example app listening at http://localhost:8000
 
 が表示されたら OK
 
-# hasky の設定
+# husky の設定
 
 自動で deploy する設定方法
 
-VSCode 上でなく、PC のターミナル(Windows ならコマンドプロンプト)を開く。
+VSCode 上でなく、Macのターミナル(Windows ならコマンドプロンプト)を開く。
 
 ターミナル開いたディレクトリ上で以下を実行
 
