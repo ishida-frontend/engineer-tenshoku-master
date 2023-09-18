@@ -94,7 +94,7 @@ export function CourseDetail({
               {courseData.sections &&
                 courseData.sections.map((section, sectionIndex) => {
                   return (
-                    <AccordionItem borderTopWidth={'1px'}>
+                    <AccordionItem key={section.id} borderTopWidth={'1px'}>
                       <h2>
                         <AccordionButton borderBottomWidth={'2px'}>
                           <Box
@@ -125,12 +125,13 @@ export function CourseDetail({
                             section.videos.map((video, videoIndex) => {
                               return (
                                 <Card
+                                  key={video.id}
                                   boxShadow={'rgba(0, 0, 0, 0.24) 0px 3px 3px;'}
                                   cursor={'pointer'}
                                   _hover={{
                                     bg: 'transparent',
                                   }}
-                                  onClick={(e: any) =>
+                                  onClick={() =>
                                     handleChangeVideo(sectionIndex, videoIndex)
                                   }
                                 >
