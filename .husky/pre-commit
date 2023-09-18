@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+$ echo "export PATH=\"$(dirname $(which node)):\$PATH\"" > ~/.huskyrc
 . "$(dirname -- "$0")/_/husky.sh"
 
 # ここにコミット前に走らせたい処理を入れる
