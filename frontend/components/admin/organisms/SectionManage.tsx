@@ -142,12 +142,12 @@ export function SectionManage({
         )
         await res.json()
       })
-      createSections.map(async () => {
+      createSections.map(async (newCreateSection) => {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
           {
             method: 'POST',
-            body: JSON.stringify(createSection),
+            body: JSON.stringify(newCreateSection),
             headers: {
               'Content-Type': 'application/json',
             },
