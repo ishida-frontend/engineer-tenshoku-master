@@ -1,4 +1,4 @@
-export const checkToken = async (accessToken: string): Promise<boolean> => {
+export const checkToken = async (): Promise<boolean> => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/tokenVerification`,
     {
