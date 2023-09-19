@@ -6,6 +6,7 @@ export default async function AdminEditCourse({
 }: {
   params: { course_id: string }
 }) {
+  console.log('params.course_id', params.course_id)
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${params.course_id}`,
     {
@@ -13,6 +14,8 @@ export default async function AdminEditCourse({
     },
   )
   const courseData = await res.json()
+
+  console.log('courseData', courseData)
 
   return <CourseEditor course_id={params.course_id} courseData={courseData} />
 }

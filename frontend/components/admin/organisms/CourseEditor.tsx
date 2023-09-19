@@ -28,6 +28,8 @@ export function CourseEditor({
   courseData: CourseType
 }) {
   const { showSuccessToast, showErrorToast } = useCustomToast()
+  console.log('course_id', course_id)
+  console.log('courseData', courseData)
 
   const selectedCourseState: CourseType = {
     id: courseData.id,
@@ -56,6 +58,7 @@ export function CourseEditor({
       }
     }, 10000)
     return () => clearTimeout(timeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseData])
 
   useEffect(() => {
@@ -63,6 +66,14 @@ export function CourseEditor({
       setCourse(courseData)
     }
   }, [courseData])
+
+  const hasChanges = () => {
+    return JSON.stringify(selectedCourseState) !== JSON.stringify(course)
+  }
+
+  const isButtonDisabled = () => {
+    return !hasChanges()
+  }
 
   const updateCourse = async (event: FormEvent) => {
     event.preventDefault()
@@ -192,6 +203,7 @@ export function CourseEditor({
         <Button
           onClick={updateCourse}
           isLoading={isSubmitting}
+          isDisabled={isButtonDisabled()}
           colorScheme="green"
           variant="solid"
         >
