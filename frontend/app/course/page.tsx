@@ -9,6 +9,9 @@ export default async function Course() {
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/al`,
       {
         cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
     )
     const courses: CourseType[] = await res.json()
