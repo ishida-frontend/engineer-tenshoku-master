@@ -16,7 +16,7 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
         <Header />
         <Container
           minW={'100%'}
-          minH={'65vh'}
+          minH={'80vh'}
           padding={'0px'}
           margin={'0px'}
           bg={'gray.50'}
