@@ -19,7 +19,7 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
           minH={'80vh'}
           padding={'0px'}
           margin={'0px'}
-          bg={'gray.50'}
+          bg={'gray.200'}
         >
           {children}
         </Container>
