@@ -24,7 +24,7 @@ import {
 } from '@chakra-ui/react'
 
 import { urlRegExp } from '../../../utils/regExp'
-import { SectionType, VideoType } from '../../../types'
+import { VideoType } from '../../../types'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export const VideoCreateModal = ({
@@ -43,7 +43,7 @@ export const VideoCreateModal = ({
 }) => {
   const { showSuccessToast, showErrorToast } = useCustomToast()
 
-  const [orderChanged, setOrderChanged] = useState(false)
+  const [orderChanged] = useState(false)
 
   const [video, setVideo] = useState<Partial<VideoType>>({
     name: '',
@@ -58,20 +58,6 @@ export const VideoCreateModal = ({
     descError: '',
     urlError: '',
   })
-
-  const fetchCourseData = async () => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${courseId}`,
-    )
-    const courseData = await response.json()
-
-    courseData.sections.forEach((section: SectionType) => {
-      section.videos = section.videos.filter(
-        (video: VideoType) => !video.deleted_at,
-      )
-    })
-    return courseData
-  }
 
   const isButtonDisabled = () => {
     return video.name === '' || video.description === '' || video.url === ''

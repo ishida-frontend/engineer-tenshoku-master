@@ -109,6 +109,32 @@ api | Example app listening at http://localhost:8000
 
 が表示されたら OK
 
+# husky の設定
+
+自動で deploy する設定方法
+
+VSCode 上でなく、Macのターミナル(Windows ならコマンドプロンプト)を開く。
+
+ターミナル開いたディレクトリ上で以下を実行
+
+```bash
+echo "export PATH=\"$(dirname $(which node)):\$PATH\"" > ~/.huskyrc
+```
+
+<img width="1110" alt="スクリーンショット 2023-09-18 14 33 20" src="https://github.com/ishida-frontend/engineer-tenshoku-master/assets/61638997/93c16c59-98a8-4162-9a7b-1115ee3083e7">
+
+次に、project のルートディレクトリで以下を実行
+
+```bash
+yarn
+```
+
+<img width="961" alt="スクリーンショット 2023-09-18 14 33 52" src="https://github.com/ishida-frontend/engineer-tenshoku-master/assets/61638997/e34e1de9-4ecb-40bf-b92b-be02940795e1">
+
+以上で husky の設定は終わりです。
+
+git コマンドおよび SourceTree でコミットする際にエラーがあるか自動で検出してくれます。
+
 # Prisma Schema
 
 Prisma のスキームを変更・追加する方法。

@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# ここにコミット前に走らせたい処理を入れる
+cd frontend && yarn lint
