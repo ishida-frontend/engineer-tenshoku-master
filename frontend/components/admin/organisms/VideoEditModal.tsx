@@ -56,14 +56,6 @@ export function VideoEditModal({
     {},
   )
 
-  useEffect(() => {
-    if (isOpen && videoId !== null) {
-      fetchVideoData()
-    }
-  }, [isOpen, videoId])
-
-  const allOrders = section?.videos.map((v: VideoType) => v.order)
-
   const fetchVideoData = async () => {
     try {
       const response = await fetch(
@@ -91,6 +83,15 @@ export function VideoEditModal({
       showErrorToast('動画データの取得に失敗しました')
     }
   }
+
+  useEffect(() => {
+    if (isOpen && videoId !== null) {
+      fetchVideoData()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, videoId])
+
+  const allOrders = section?.videos.map((v: VideoType) => v.order)
 
   const hasChanges = () => {
     return JSON.stringify(initialVideoData) !== JSON.stringify(video)

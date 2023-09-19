@@ -8,6 +8,7 @@ export default function Page() {
 
   useEffect(() => {
     router.push('/course')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return <></>

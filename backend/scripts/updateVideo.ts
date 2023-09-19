@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
+import { convertVideoUrl } from '../utils/convertVideoUrl'
 import { VideoType } from '../types'
 
 const prisma = new PrismaClient()
@@ -60,7 +61,7 @@ export async function updateVideo({
         name,
         description,
         order: newOrder !== undefined ? newOrder : currentOrder,
-        url,
+        url: convertVideoUrl(url),
         published,
       },
     })

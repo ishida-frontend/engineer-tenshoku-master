@@ -1,5 +1,6 @@
 import React from 'react'
 import { SectionManage } from '../../../../../components/admin/organisms/SectionManage'
+import { SectionType } from '../../../../../types'
 
 export default async function AdminSectionManage({
   params,
@@ -13,7 +14,16 @@ export default async function AdminSectionManage({
     },
   )
   const sections = await res.json()
+  const customSections = sections.map((section: SectionType) => {
+    return {
+      ...section,
+      id: String(section.id),
+    }
+  })
   return (
-    <SectionManage course_id={params.course_id} initialSections={sections} />
+    <SectionManage
+      course_id={params.course_id}
+      initialSections={customSections}
+    />
   )
 }

@@ -49,6 +49,7 @@ export function CourseEditor() {
     created_at: '',
     updated_at: '',
     deleted_at: '',
+    icon: '',
   }
   const [course, setCourse] = useState<CourseType>(initialCourseState)
 
@@ -67,6 +68,7 @@ export function CourseEditor() {
       }
     }, 10000)
     return () => clearTimeout(timeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseData])
 
   // 取得したコースデータを適用
