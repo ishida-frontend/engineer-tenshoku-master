@@ -11,6 +11,8 @@ import {
   Button,
   Card,
   CardBody,
+  Center,
+  Container,
   Divider,
   Flex,
   Heading,
@@ -116,119 +118,132 @@ export default function EditVideoPage() {
   }
 
   return (
-    <VStack maxW="600px" mx="auto" py={6}>
-      <Heading size="md" fontSize="24px">
-        動画管理画面
-      </Heading>
-      <Heading size="md" my={2}>
-        {courseData.name}
-      </Heading>
-      {courseData.sections.map((section: SectionType) => (
-        <Accordion allowToggle key={section.id}>
-          <AccordionItem border="none">
-            <VStack p={5} bgColor="gray.200" minW="600px" borderRadius={9}>
-              <AccordionButton>
-                <AccordionIcon />
-                <Heading size="sm" ml={2}>
-                  Section {section.id} - {section.title}
-                </Heading>
-              </AccordionButton>
-              <AccordionPanel p={1}>
-                <Flex justify="space-evenly">
-                  <SimpleGrid columns={2} spacing={5} mb={4}>
-                    {section.videos
-                      .sort((a: VideoType, b: VideoType) => a.order - b.order)
-                      .map((video: VideoType) => (
-                        <Card
-                          key={video.id}
-                          w="250px"
-                          maxH="320px"
-                          borderRadius={9}
-                        >
-                          <CardBody>
-                            <HStack>
-                              <Text>No. {video.order}</Text>
-                              {video.published ? (
-                                <AiFillEye size="20px" />
-                              ) : (
-                                <AiFillEyeInvisible size="20px" />
-                              )}
-                            </HStack>
-                            <Flex justify="center">
-                              <GoVideo size="100px" />
-                            </Flex>
-                            <Text isTruncated>{video.name}</Text>
-                            <Divider
-                              mt={1}
-                              mb={2}
-                              size="3px"
-                              borderColor="gray"
-                            />
-                            <Flex justify="space-evenly">
-                              <Button
-                                colorScheme="green"
-                                onClick={() =>
-                                  handleEditVideo(video.id, section)
-                                }
-                                ml={1}
-                              >
-                                編集
-                              </Button>
-                              <Button
-                                colorScheme="red"
-                                onClick={() => {
-                                  setVideoToRemove(video.id)
-                                  openRemoveModal()
-                                }}
-                              >
-                                削除
-                              </Button>
-                            </Flex>
-                          </CardBody>
-                        </Card>
-                      ))}
-                  </SimpleGrid>
-                </Flex>
-                <Flex justify="center">
-                  <Button
-                    colorScheme="green"
-                    onClick={() => handleCreateVideo(section.id)}
-                  >
-                    追加
-                  </Button>
-                  <VideoCreateModal
-                    courseId={courseId}
-                    sectionId={section.id}
-                    currentSectionId={currentSectionId}
-                    maxOrder={maxOrder}
-                    isOpen={isCreateModalOpen}
-                    onClose={closeCreateModal}
-                  />
-                  <VideoEditModal
-                    courseId={courseId}
-                    section={sectionToEdit}
-                    videoId={videoToEdit}
-                    isOpen={isEditModalOpen}
-                    onClose={() => {
-                      setVideoToEdit(videoToEdit)
-                      closeEditModal()
-                    }}
-                  />
-                  <VideoRemoveModal
-                    courseId={courseId}
-                    videoId={videoToRemove}
-                    isOpen={isRemoveModalOpen}
-                    onClose={() => {
-                      setVideoToRemove(null)
-                      closeRemoveModal()
-                    }}
-                  />
-                </Flex>
-              </AccordionPanel>
-            </VStack>
-          </AccordionItem>
-        </Accordion>
-      ))}
-    </VStack>
+    <Center padding="60px 96px" bg={'gray.200'}>
+      <Container
+        margin={'0px'}
+        padding="60px 96px"
+        bg={'white'}
+        centerContent
+        borderRadius={'4px'}
+        minW={'1000px'}
+      >
+        <VStack maxW="600px" mx="auto" py={6}>
+          <Heading size="md" fontSize="24px">
+            動画管理画面
+          </Heading>
+          <Heading size="md" my={2}>
+            {courseData.name}
+          </Heading>
+          {courseData.sections.map((section: SectionType) => (
+            <Accordion allowToggle key={section.id}>
+              <AccordionItem border="none">
+                <VStack p={5} bgColor="gray.200" minW="600px" borderRadius={9}>
+                  <AccordionButton>
+                    <AccordionIcon />
+                    <Heading size="sm" ml={2}>
+                      Section {section.id} - {section.title}
+                    </Heading>
+                  </AccordionButton>
+                  <AccordionPanel p={1}>
+                    <Flex justify="space-evenly">
+                      <SimpleGrid columns={2} spacing={5} mb={4}>
+                        {section.videos
+                          .sort(
+                            (a: VideoType, b: VideoType) => a.order - b.order,
+                          )
+                          .map((video: VideoType) => (
+                            <Card
+                              key={video.id}
+                              w="250px"
+                              maxH="320px"
+                              borderRadius={9}
+                            >
+                              <CardBody>
+                                <HStack>
+                                  <Text>No. {video.order}</Text>
+                                  {video.published ? (
+                                    <AiFillEye size="20px" />
+                                  ) : (
+                                    <AiFillEyeInvisible size="20px" />
+                                  )}
+                                </HStack>
+                                <Flex justify="center">
+                                  <GoVideo size="100px" />
+                                </Flex>
+                                <Text isTruncated>{video.name}</Text>
+                                <Divider
+                                  mt={1}
+                                  mb={2}
+                                  size="3px"
+                                  borderColor="gray"
+                                />
+                                <Flex justify="space-evenly">
+                                  <Button
+                                    colorScheme="green"
+                                    onClick={() =>
+                                      handleEditVideo(video.id, section)
+                                    }
+                                    ml={1}
+                                  >
+                                    編集
+                                  </Button>
+                                  <Button
+                                    colorScheme="red"
+                                    onClick={() => {
+                                      setVideoToRemove(video.id)
+                                      openRemoveModal()
+                                    }}
+                                  >
+                                    削除
+                                  </Button>
+                                </Flex>
+                              </CardBody>
+                            </Card>
+                          ))}
+                      </SimpleGrid>
+                    </Flex>
+                    <Flex justify="center">
+                      <Button
+                        colorScheme="green"
+                        onClick={() => handleCreateVideo(section.id)}
+                      >
+                        追加
+                      </Button>
+                      <VideoCreateModal
+                        courseId={courseId}
+                        sectionId={section.id}
+                        currentSectionId={currentSectionId}
+                        maxOrder={maxOrder}
+                        isOpen={isCreateModalOpen}
+                        onClose={closeCreateModal}
+                      />
+                      <VideoEditModal
+                        courseId={courseId}
+                        section={sectionToEdit}
+                        videoId={videoToEdit}
+                        isOpen={isEditModalOpen}
+                        onClose={() => {
+                          setVideoToEdit(videoToEdit)
+                          closeEditModal()
+                        }}
+                      />
+                      <VideoRemoveModal
+                        courseId={courseId}
+                        videoId={videoToRemove}
+                        isOpen={isRemoveModalOpen}
+                        onClose={() => {
+                          setVideoToRemove(null)
+                          closeRemoveModal()
+                        }}
+                      />
+                    </Flex>
+                  </AccordionPanel>
+                </VStack>
+              </AccordionItem>
+            </Accordion>
+          ))}
+        </VStack>
+      </Container>
+    </Center>
   )
 }
