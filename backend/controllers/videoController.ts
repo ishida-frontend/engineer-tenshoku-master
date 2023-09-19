@@ -1,66 +1,66 @@
 import express from 'express'
+import z from 'zod'
+
 import { createVideo } from '../scripts/createVideo'
 import { readVideo, readVideos, readFilteredVideos } from '../scripts/readVideo'
 import { updateVideo, updateVideos } from '../scripts/updateVideo'
 import { deleteVideo, deleteVideos } from '../scripts/deleteVideo'
 
-export const checkCreateVideo = async function (
-  req: express.Request,
-  res: express.Response,
-) {
-  try {
-    await createVideo({
-      name: 'jsインストール',
-      description: 'インストール方法',
-      url: 'http://js.install',
-      published: true,
-      order: 1,
-      sectionId: 1,
-    })
-    res.send('新しいビデオが作成されました！')
-  } catch (e: any) {
-    res.status(500).send('エラーが発生しました')
+export class VideoController {
+  createVideo = async function (req: express.Request, res: express.Response) {
+    try {
+      const videoData = req.body
+      await createVideo(videoData)
+      res.status(201).json({ message: '正常に追加されました' })
+    } catch (e: any) {
+      res.status(500).json({ message: 'エラーが発生しました' })
+    }
   }
-}
 
-exports.checkReadVideo = async function (
-  req: express.Request,
-  res: express.Response,
-) {
-  try {
-    await readVideo(2)
-    await readVideos()
-    await readFilteredVideos(4)
-    res.send(
-      '１件のビデオを読み込みました！<br>全てのビデオを読み込みました！<br>条件指定のビデオを読み込みました！',
-    )
-  } catch (e: any) {
-    res.status(500).send('エラーが発生しました')
+  readVideo = async function (req: express.Request, res: express.Response) {
+    try {
+      const video = await readVideo(Number(req.params.id))
+      res.status(200).json(video)
+    } catch (e: any) {
+      res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })
+    }
   }
-}
 
-exports.checkUpdateVideo = async function (
-  req: express.Request,
-  res: express.Response,
-) {
-  try {
-    await updateVideo(7)
-    await updateVideos()
-    res.send('１件のビデオを更新しました！<br>複数のビデオを更新しました！')
-  } catch (e: any) {
-    res.status(500).send('エラーが発生しました')
+  readFilteredVideos = async function (
+    req: express.Request,
+    res: express.Response,
+  ) {
+    try {
+      const filteredVideos = await readFilteredVideos()
+      res.status(200).json(filteredVideos)
+    } catch (e: any) {
+      res.status(500).send('エラーが発生しました')
+    }
   }
-}
 
-exports.checkDeleteVideo = async function (
-  req: express.Request,
-  res: express.Response,
-) {
-  try {
-    await deleteVideo(3)
-    await deleteVideos(13, 15)
-    res.send('１件のビデオを削除しました！<br>複数のビデオを削除しました！')
-  } catch (e: any) {
-    res.status(500).send('エラーが発生しました')
+  updateVideo = async function (req: express.Request, res: express.Response) {
+    try {
+      const { id, name, description, order, url, published } = req.body
+
+      await updateVideo({ id, name, description, order, url, published })
+      res.status(201).json({ message: '正常に更新されました' })
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: error.issues[0].message })
+      }
+    }
+  }
+
+  deleteVideo = async function (req: express.Request, res: express.Response) {
+    try {
+      const { id } = req.body
+
+      await deleteVideo(id)
+      res.status(201).json({
+        message: '正常に削除されました',
+      })
+    } catch (e: any) {
+      res.status(500).json({ message: 'サーバー内部エラーが発生しました' })
+    }
   }
 }

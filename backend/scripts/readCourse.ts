@@ -6,6 +6,13 @@ export async function readCourse(id: number) {
     where: {
       id,
     },
+    include: {
+      sections: {
+        include: {
+          videos: true,
+        },
+      },
+    },
   })
   return course
 }
@@ -30,7 +37,7 @@ export async function readFilteredCourses() {
 }
 
 export async function readPublishedCourseContent(id: string) {
-  const publishedCourseContent = await prisma.course.findMany({
+  const publishedCourseContent = await prisma.course.findUnique({
     where: {
       id: Number(id),
       published: true,

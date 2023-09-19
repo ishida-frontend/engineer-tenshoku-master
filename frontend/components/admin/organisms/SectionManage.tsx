@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   Container,
   Button,
@@ -17,26 +17,37 @@ import {
   Switch,
 } from '@chakra-ui/react'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-import {
-  SectionType,
-  InitialSectionType,
-  SectionManagePropsType,
-} from '../../../types/SectionType'
+import { VideoType } from '../../../types'
 
+type SectionManagePropsType = {
+  course_id: string
+  initialSections: SaveSectionType[]
+}
+
+type SaveSectionType = {
+  id?: string
+  course_id: string
+  order: number
+  title: string
+  published: boolean
+  videos?: VideoType[]
+}
 export function SectionManage({
   course_id,
   initialSections,
 }: SectionManagePropsType) {
   const defaultCourseValues = {
+    id: '',
+    sectionType: '',
     course_id,
     order: 0,
     title: '',
     published: false,
   }
   const { showSuccessToast, showErrorToast } = useCustomToast()
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { onClose } = useDisclosure()
 
-  const [sections, setSections] = useState<SectionType[]>(initialSections)
+  const [sections, setSections] = useState<SaveSectionType[]>(initialSections)
 
   if (sections[0] === undefined) {
     setSections([defaultCourseValues])
@@ -45,7 +56,7 @@ export function SectionManage({
   const handleAddInput = () => {
     const orderMax = sections.reduce((a, b) => (a.order > b.order ? a : b))
     const nextOrder = orderMax.order + 1
-    const addSection: SectionType = {
+    const addSection: SaveSectionType = {
       course_id: course_id,
       order: nextOrder,
       title: '',
@@ -54,16 +65,11 @@ export function SectionManage({
     setSections((prev) => [...prev, addSection])
   }
 
-  const handleRemoveInput = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number,
-  ) => {
-    e.preventDefault()
+  const handleRemoveInput = async (index: number) => {
     try {
-      const deleteSection: InitialSectionType | undefined =
-        initialSections.find(
-          (initialSection) => sections[index].order === initialSection.order,
-        )
+      const deleteSection: SaveSectionType | undefined = initialSections.find(
+        (initialSection) => sections[index].order === initialSection.order,
+      )
       if (!deleteSection) throw new Error('セクションが見つかりません。')
       const sectionId = deleteSection.id
       const res = await fetch(
@@ -88,7 +94,7 @@ export function SectionManage({
 
     setSections((prev) => prev.filter((item) => item !== prev[index]))
     sections.splice(index, 1)
-    const newSection = sections.map((section: SectionType) => {
+    const newSection = sections.map((section: SaveSectionType) => {
       return {
         course_id: section.course_id,
         order: section.order,
@@ -111,16 +117,16 @@ export function SectionManage({
     )
   }
 
-  const createSection = async (sections: SectionType[]) => {
+  const createSection = async () => {
     try {
-      const updateSections: SectionType[] = sections.filter(
+      const updateSections: SaveSectionType[] = sections.filter(
         (section) =>
           initialSections.filter(
             (initialSection) => initialSection.order === section.order,
           ).length > 0,
       )
 
-      const createSections: SectionType[] = sections.filter(
+      const createSections: SaveSectionType[] = sections.filter(
         (section) => updateSections.indexOf(section) === -1,
       )
       updateSections.map(async (updateSection) => {
@@ -136,12 +142,12 @@ export function SectionManage({
         )
         await res.json()
       })
-      createSections.map(async (createSection) => {
+      createSections.map(async (newCreateSection) => {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/create`,
           {
             method: 'POST',
-            body: JSON.stringify(createSection),
+            body: JSON.stringify(newCreateSection),
             headers: {
               'Content-Type': 'application/json',
             },
@@ -156,10 +162,12 @@ export function SectionManage({
     }
   }
 
-  const onSubmit = async (event: any) => {
+  const onSubmit = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     event.preventDefault()
     try {
-      const res = await createSection(sections)
+      await createSection()
     } catch (e) {
       console.log(e)
     }
@@ -207,7 +215,7 @@ export function SectionManage({
                           size={'lg'}
                           type="switch"
                           isChecked={section.published}
-                          onChange={(e) =>
+                          onChange={() =>
                             handleOnChange(
                               section.order,
                               'published',
@@ -220,7 +228,7 @@ export function SectionManage({
                       <Button
                         colorScheme="red"
                         ml={'8px'}
-                        onClick={(e: any) => handleRemoveInput(e, index)}
+                        onClick={() => handleRemoveInput(index)}
                       >
                         削除
                       </Button>
@@ -239,7 +247,7 @@ export function SectionManage({
                   mb={'10'}
                   colorScheme="teal"
                   type="submit"
-                  onClick={(e: any) => onSubmit(e)}
+                  onClick={(e) => onSubmit(e)}
                 >
                   保存する
                 </Button>

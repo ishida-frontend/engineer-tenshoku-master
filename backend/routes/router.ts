@@ -1,7 +1,10 @@
 import express from 'express'
 import 'dotenv/config'
+
 import { contactValidationRules, contactValidate } from '../validation'
 import { validate, courseValidationRules } from '../validation/courseValidation'
+import { VideoValidator } from '../validation/videoValidator'
+import { VideoController } from '../controllers/videoController'
 
 const {
   createCourse,
@@ -20,17 +23,14 @@ const {
   sectionUpsert,
 } = require('../controllers/sectionController')
 const {
-  checkCreateVideo,
-  checkReadVideo,
-  checkUpdateVideo,
-  checkDeleteVideo,
-} = require('../controllers/videoController')
-const {
   checkCreateContact,
   checkReadContact,
 } = require('../controllers/contactController')
 
 const router = express.Router()
+
+const videoValidator = new VideoValidator()
+const videoController = new VideoController()
 
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -56,6 +56,19 @@ adminRouter.put(
 )
 adminRouter.delete('/course/delete/:id', deleteCourse)
 adminRouter.get('/contacts', checkReadContact)
+adminRouter.post(
+  '/video',
+  videoValidator.createVideo,
+  videoController.createVideo,
+)
+adminRouter.get('/video/:id', videoController.readVideo)
+adminRouter.get('/video', videoController.readFilteredVideos)
+adminRouter.put(
+  '/video/:id',
+  videoValidator.updateVideo,
+  videoController.updateVideo,
+)
+adminRouter.delete('/video/:id', videoController.deleteVideo)
 
 const courseRouter = express.Router()
 router.use('/course', courseRouter)
@@ -71,13 +84,6 @@ sectionRouter.post('/create', sectionCreate)
 sectionRouter.get('/read/:course_id', sectionRead)
 sectionRouter.post('/update', sectionUpdate)
 sectionRouter.delete('/delete/:id', sectionDelete)
-
-const videoRouter = express.Router()
-router.use('/video', videoRouter)
-// videoRouter.get('/create', checkCreateVideo)
-videoRouter.get('/read', checkReadVideo)
-videoRouter.get('/update', checkUpdateVideo)
-videoRouter.get('/delete', checkDeleteVideo)
 
 const contactRouter = express.Router()
 router.use('/contact', contactRouter)

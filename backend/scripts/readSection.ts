@@ -6,6 +6,9 @@ export async function readSection(sectionId: number) {
     where: {
       id: sectionId,
     },
+    include: {
+      videos: true,
+    },
   })
   return section
 }

@@ -1,0 +1,13 @@
+{
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "airbnb-typescript",
+    "next/core-web-vitals"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "@typescript-eslint/semi": ["off"]
+  }
+ }

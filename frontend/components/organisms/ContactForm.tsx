@@ -91,7 +91,7 @@ export function UserContactForm() {
       if (isChecked) {
         const res = await fetcher()
         const items = res.error.reduce(
-          (accumulator: any, value: { path: string; message: string }) => {
+          (accumulator: string[], value: { path: string; message: string }) => {
             return { ...accumulator, [value.path]: [value.message] }
           },
           {
