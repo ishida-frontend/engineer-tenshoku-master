@@ -20,6 +20,9 @@ export default async function CourseDetailPage({
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/${params.courseId}`,
       {
         cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
     )
     const courseData: CourseDetailPropsType = await res.json()
