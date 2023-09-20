@@ -130,7 +130,7 @@ export default function EditVideoPage() {
               <AccordionButton>
                 <AccordionIcon />
                 <Heading size="sm" ml={2}>
-                  Section {section.id} - {section.title}
+                  Section {section.order} - {section.title}
                 </Heading>
               </AccordionButton>
               <AccordionPanel p={1}>
@@ -194,7 +194,7 @@ export default function EditVideoPage() {
                     colorScheme="green"
                     onClick={() => handleCreateVideo(section.id)}
                   >
-                    追加
+                    動画を追加
                   </Button>
                   <VideoCreateModal
                     courseId={courseId}
