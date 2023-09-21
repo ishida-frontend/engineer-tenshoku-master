@@ -1,12 +1,8 @@
 'use client'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { checkToken } from '../app/api'
-import { TokenContext } from '../providers/AuthProvider'
-import { useRouter } from 'next/navigation'
 
 export const useAuth = () => {
-  const router = useRouter()
-  const { tokens } = useContext(TokenContext)
   //認証を許可するかどうかを状態管理
   const [check, setCheck] = useState<{
     checked: boolean
@@ -15,7 +11,7 @@ export const useAuth = () => {
   useEffect(() => {
     const handleCheckToken = async () => {
       try {
-        const result: boolean = await checkToken(tokens.AccessToken)
+        const result: boolean = await checkToken()
         setCheck({
           checked: true,
           isAuthenticated: result,
