@@ -28,9 +28,9 @@ export function HeaderLoggedOut() {
           <HStack spacing="40px" pr="40px">
             <Link href="/auth/login">
               <Button
-                w="144px"
-                h="64px"
-                fontSize="24px"
+                w="120"
+                h="48px"
+                fontSize="18px"
                 bg="green.500"
                 color="white"
                 borderRadius="12px"
@@ -40,9 +40,9 @@ export function HeaderLoggedOut() {
             </Link>
             <Link href="/auth/register">
               <Button
-                w="144px"
-                h="64px"
-                fontSize="24px"
+                w="120"
+                h="48px"
+                fontSize="18px"
                 bg="white"
                 border="1px"
                 borderColor="blackAlpha.400"
