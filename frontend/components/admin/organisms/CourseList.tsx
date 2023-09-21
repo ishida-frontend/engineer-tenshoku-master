@@ -8,7 +8,6 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import useSWR from 'swr'
 
 import formatDate from '../../../utils/formatDate'
 import { Loader } from '../../../components/admin/atoms/Loader'
@@ -24,15 +23,10 @@ type CourseType = {
   deleted_at?: string
 }
 
-export function CourseList() {
+export function CourseList(courses: CourseType[]) {
   const { showErrorToast } = useCustomToast()
 
-  const fetcher = async () =>
-    (await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course`)).json()
-
-  const { data: courses, error } = useSWR('courseList', fetcher)
-
-  if (error) {
+  if (!courses) {
     showErrorToast('コースの取得に失敗しました。')
   }
 

@@ -56,10 +56,7 @@ exports.readAllCourses = async function (
   }
 }
 
-exports.readFilteredCourses = async function (
-  req: express.Request,
-  res: express.Response,
-) {
+exports.readFilteredCourses = async function (res: express.Response) {
   try {
     const filteredCourses = await readFilteredCourses()
     res.status(200).json(filteredCourses)
