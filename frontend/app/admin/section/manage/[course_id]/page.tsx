@@ -17,7 +17,7 @@ export default async function AdminSectionManage({
   const customSections = sections.map((section: SectionType) => {
     return {
       ...section,
-      id: String(section.id),
+      id: section.id,
     }
   })
   return (
