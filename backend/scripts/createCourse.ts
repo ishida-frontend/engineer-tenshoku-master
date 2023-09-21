@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
+const crypto = require('crypto')
 
 export async function createCourse(
   name: string,
@@ -9,6 +10,7 @@ export async function createCourse(
   try {
     const createdCourse = await prisma.course.create({
       data: {
+        id: crypto.randomUUID(),
         name: name,
         description: description,
         published: published,

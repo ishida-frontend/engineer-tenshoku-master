@@ -15,7 +15,7 @@ import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 type CourseType = {
-  id: number
+  id: string
   name: string
   description: string
   published: boolean

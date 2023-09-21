@@ -37,7 +37,7 @@ exports.readCourse = async function (
   res: express.Response,
 ) {
   try {
-    const course = await readCourse(Number(req.params.id))
+    const course = await readCourse(req.params.id)
     res.status(200).json(course)
   } catch (e: any) {
     res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })
@@ -125,9 +125,7 @@ exports.deleteCourse = async function (
   res: express.Response,
 ) {
   try {
-    const courseId = Number(req.body.courseId)
-
-    await deleteCourse(courseId)
+    await deleteCourse(req.body.courseId)
     res.status(201).json({
       message: '削除されました。自動的にコース一覧へ戻ります。',
     })
@@ -141,7 +139,7 @@ exports.deleteCourses = async function (
   res: express.Response,
 ) {
   try {
-    await deleteCourses(5, 8)
+    await deleteCourses('5', '8')
     res.send('複数のコースを削除しました！')
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')

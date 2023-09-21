@@ -1,15 +1,16 @@
 import { PrismaClient } from '@prisma/client'
-
 import { convertVideoUrl } from '../utils/convertVideoUrl'
 import { VideoType } from '../types'
 
 const prisma = new PrismaClient()
+const crypto = require('crypto')
 
 export async function createVideo(videoData: VideoType) {
   try {
     const videoUrl = convertVideoUrl(videoData.url)
     await prisma.video.create({
       data: {
+        id: crypto.randomUUID(),
         name: videoData.name,
         description: videoData.description,
         url: videoUrl,

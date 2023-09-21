@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Course {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
   sections    Section[]
   name        String
   description String?
@@ -24,9 +24,9 @@ model Course {
 }
 
 model Section {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
   course      Course    @relation(fields: [course_id], references: [id])
-  course_id   Int
+  course_id   String
   videos      Video[]
   title       String?
   order       Int?
@@ -37,9 +37,9 @@ model Section {
 }
 
 model Video {
-  id          Int       @id @default(autoincrement())
-  section     Section    @relation(fields: [section_id], references: [id])
-  section_id  Int
+  id          String    @id @default(uuid())
+  section     Section   @relation(fields: [section_id], references: [id])
+  section_id  String
   order       Int
   url         String?
   name        String?
@@ -51,7 +51,7 @@ model Video {
 }
 
 model Contact {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(uuid())
   name       String
   email      String
   subject    String

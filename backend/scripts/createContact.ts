@@ -1,8 +1,8 @@
-import express from 'express'
 import axios from 'axios'
 import { PrismaClient } from '@prisma/client'
 import { ContactType } from '../types/index'
 const prisma = new PrismaClient()
+const crypto = require('crypto')
 
 type createContactParamsType = {
   name: string
@@ -23,6 +23,7 @@ export async function createContact(req: createContactParamsType) {
     }
     const createdContact = await prisma.contact.create({
       data: {
+        id: crypto.randomUUID(),
         name: contactData.name,
         email: contactData.email,
         subject: contactData.subject,
