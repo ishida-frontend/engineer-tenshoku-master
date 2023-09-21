@@ -28,8 +28,6 @@ export function CourseEditor({
   courseData: CourseType
 }) {
   const { showSuccessToast, showErrorToast } = useCustomToast()
-  console.log('course_id', course_id)
-  console.log('courseData', courseData)
 
   const selectedCourseState: CourseType = {
     id: courseData.id,
