@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-export async function readSection(sectionId: number) {
+export async function readSection(sectionId: string) {
   const section = await prisma.section.findUnique({
     where: {
       id: sectionId,
@@ -21,7 +21,7 @@ export async function readSections() {
 export async function readOrderedSections(course_id: string) {
   const sections = await prisma.section.findMany({
     where: {
-      course_id: Number(course_id),
+      course_id,
       deleted_at: null,
     },
     orderBy: [

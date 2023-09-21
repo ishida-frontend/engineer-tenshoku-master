@@ -1,8 +1,9 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
+const crypto = require('crypto')
 
 export async function createSection(sectionData: {
-  course_id: number
+  course_id: string
   order: number
   title: string
   published: boolean
@@ -10,7 +11,8 @@ export async function createSection(sectionData: {
   try {
     const section = await prisma.section.create({
       data: {
-        course: { connect: { id: Number(sectionData.course_id) } },
+        id: crypto.randomUUID(),
+        course: { connect: { id: sectionData.course_id } },
         order: sectionData.order,
         title: sectionData.title,
         published: sectionData.published,

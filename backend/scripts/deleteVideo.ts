@@ -20,7 +20,7 @@ prisma.$use(async (params, next) => {
   return next(params)
 })
 
-export async function deleteVideo(videoId: number) {
+export async function deleteVideo(videoId: string) {
   try {
     const videoToDelete = await prisma.video.findUnique({
       where: { id: videoId },
@@ -49,7 +49,7 @@ export async function deleteVideo(videoId: number) {
   }
 }
 
-export async function deleteVideos(videoId1: number, videoId2: number) {
+export async function deleteVideos(videoId1: string, videoId2: string) {
   await prisma.video.deleteMany({
     where: {
       id: {
