@@ -14,13 +14,7 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
     check.checked && (
       <>
         <Header />
-        <Container
-          minW={'100%'}
-          minH={'80vh'}
-          padding={'0px'}
-          margin={'0px'}
-          bg={'gray.200'}
-        >
+        <Container minW={'100%'} minH={'80vh'} padding={'0px'} bg={'gray.200'}>
           {children}
         </Container>
         <Footer />
