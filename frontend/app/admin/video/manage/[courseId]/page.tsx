@@ -124,7 +124,7 @@ export default function EditVideoPage() {
         {courseData.name}
       </Heading>
       {courseData.sections.map((section: SectionType) => (
-        <Accordion allowToggle key={section.id}>
+        <Accordion allowToggle key={section.order}>
           <AccordionItem border="none">
             <VStack p={5} bgColor="gray.200" minW="600px" borderRadius={9}>
               <AccordionButton>
