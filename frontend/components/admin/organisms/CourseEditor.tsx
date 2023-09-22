@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, FormEvent, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import useSWR from 'swr'
@@ -22,7 +23,6 @@ import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export function CourseEditor() {
-  // カスタムフック準備
   const { showSuccessToast, showErrorToast } = useCustomToast()
 
   // URLパラメータからコースIDを取得し、int型に変換
@@ -60,7 +60,6 @@ export function CourseEditor() {
 
   const [isSubmitting, SetIsSubmitting] = useState(false)
 
-  // ページを開いて１０秒でデータ取得ができなかった場合のエラートースト
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (!courseData) {
@@ -71,14 +70,12 @@ export function CourseEditor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseData])
 
-  // 取得したコースデータを適用
   useEffect(() => {
     if (courseData) {
       setCourse(courseData)
     }
   }, [courseData])
 
-  // PUTリクエストイベントハンドラ
   const updateCourse = async (event: FormEvent) => {
     event.preventDefault()
 
@@ -93,7 +90,7 @@ export function CourseEditor() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            id,
+            id: course.id,
             name: course.name,
             description: course.description,
             published: course.published,
@@ -135,7 +132,6 @@ export function CourseEditor() {
     }
   }
 
-  // コースデータ読み込みアニメーション
   if (!courseData) return <Loader />
 
   return (
