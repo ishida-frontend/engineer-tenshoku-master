@@ -187,7 +187,7 @@ export function SectionManage({
         </Heading>
         <Container mt="59px" bg={'white'} p={'0px'}>
           <VStack>
-            <FormControl minW={'100%'} overflow={'hidden'}>
+            <FormControl w={'100%'} overflow={'hidden'}>
               {sections.map((section, index) => (
                 <Box
                   key={section.order}

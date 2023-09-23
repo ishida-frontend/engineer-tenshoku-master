@@ -1,6 +1,5 @@
+'use client'
 import React, { useState, FormEvent, useEffect } from 'react'
-import { useParams } from 'next/navigation'
-import useSWR from 'swr'
 import {
   Box,
   Button,
@@ -21,37 +20,27 @@ import formatDate from '../../../utils/formatDate'
 import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
-export function CourseEditor() {
-  // カスタムフック準備
+export function CourseEditor({
+  course_id,
+  courseData,
+}: {
+  course_id: string
+  courseData: CourseType
+}) {
   const { showSuccessToast, showErrorToast } = useCustomToast()
 
-  // URLパラメータからコースIDを取得し、int型に変換
-  const params = useParams()
-  const courseId = params.courseId
-  const id = typeof courseId === 'string' ? parseInt(courseId, 10) : NaN
-
-  // コースデータ取得
-  const fetcher = async () =>
-    (
-      await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${courseId}`,
-      )
-    ).json()
-  const { data: courseData } = useSWR<CourseType>('courseData', fetcher)
-
-  // 初期状態を定義し、useStateで初期化
-  const initialCourseState: CourseType = {
-    id,
-    name: '',
-    description: '',
-    image: '',
-    published: false,
-    created_at: '',
-    updated_at: '',
-    deleted_at: '',
-    icon: '',
+  const selectedCourseState: CourseType = {
+    id: courseData.id,
+    name: courseData.name,
+    description: courseData.description,
+    image: courseData.image,
+    icon: courseData.icon,
+    published: courseData.published,
+    created_at: courseData.created_at,
+    updated_at: courseData.updated_at,
+    deleted_at: courseData.deleted_at,
   }
-  const [course, setCourse] = useState<CourseType>(initialCourseState)
+  const [course, setCourse] = useState<CourseType>(selectedCourseState)
 
   const [errors, setErrors] = useState({
     nameError: '',
@@ -60,7 +49,6 @@ export function CourseEditor() {
 
   const [isSubmitting, SetIsSubmitting] = useState(false)
 
-  // ページを開いて１０秒でデータ取得ができなかった場合のエラートースト
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (!courseData) {
@@ -71,14 +59,20 @@ export function CourseEditor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseData])
 
-  // 取得したコースデータを適用
   useEffect(() => {
     if (courseData) {
       setCourse(courseData)
     }
   }, [courseData])
 
-  // PUTリクエストイベントハンドラ
+  const hasChanges = () => {
+    return JSON.stringify(selectedCourseState) !== JSON.stringify(course)
+  }
+
+  const isButtonDisabled = () => {
+    return !hasChanges()
+  }
+
   const updateCourse = async (event: FormEvent) => {
     event.preventDefault()
 
@@ -86,14 +80,14 @@ export function CourseEditor() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/edit/${courseId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/edit/${course_id}`,
         {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            id,
+            id: course.id,
             name: course.name,
             description: course.description,
             published: course.published,
@@ -135,7 +129,6 @@ export function CourseEditor() {
     }
   }
 
-  // コースデータ読み込みアニメーション
   if (!courseData) return <Loader />
 
   return (
@@ -208,6 +201,7 @@ export function CourseEditor() {
         <Button
           onClick={updateCourse}
           isLoading={isSubmitting}
+          isDisabled={isButtonDisabled()}
           colorScheme="green"
           variant="solid"
         >
