@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
+import crypto from 'crypto'
 
 const prisma = new PrismaClient()
-const crypto = require('crypto')
 
 async function main() {
   for (let i: number = 1; i <= 5; i++) {
