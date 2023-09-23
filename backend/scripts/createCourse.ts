@@ -16,7 +16,6 @@ export async function createCourse(
         published: published,
       },
     })
-    console.log(createdCourse)
   } catch (e: any) {
     console.log(e.message)
   } finally {

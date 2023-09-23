@@ -33,7 +33,6 @@ export async function readFilteredCourses() {
       deleted_at: null,
     },
   })
-  console.log('filteredCourses', filteredCourses)
   return filteredCourses
 }
 
