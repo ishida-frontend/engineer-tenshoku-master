@@ -21,19 +21,19 @@ ALTER TABLE `Contact` DROP PRIMARY KEY,
 -- AlterTable
 ALTER TABLE `Course` DROP PRIMARY KEY,
     MODIFY `id` VARCHAR(255) NOT NULL,
-    ADD PRIMARY KEY (`id`(100));
+    ADD PRIMARY KEY (`id`);
 
 -- AlterTable
 ALTER TABLE `Section` DROP PRIMARY KEY,
     MODIFY `id` VARCHAR(255) NOT NULL,
     MODIFY `course_id` VARCHAR(255) NOT NULL,
-    ADD PRIMARY KEY (`id`(100));
+    ADD PRIMARY KEY (`id`);
 
 -- AlterTable
 ALTER TABLE `Video` DROP PRIMARY KEY,
     MODIFY `id` VARCHAR(255) NOT NULL,
     MODIFY `section_id` VARCHAR(255) NOT NULL,
-    ADD PRIMARY KEY (`id`(100));
+    ADD PRIMARY KEY (`id`);
 
 -- AddForeignKey
 ALTER TABLE `Section` ADD CONSTRAINT `Section_course_id_fkey` FOREIGN KEY (`course_id`) REFERENCES `Course`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
