@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
+import crypto from 'crypto'
 const prisma = new PrismaClient()
-const crypto = require('crypto')
 
 export async function createCourse(
   name: string,
