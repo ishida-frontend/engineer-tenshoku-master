@@ -30,7 +30,7 @@ export function VideoEditModal({
   onClose,
 }: {
   courseId: string
-  videoId: number | null
+  videoId: string | null
   section: SectionType | null
   isOpen: boolean
   onClose: () => void

@@ -23,13 +23,13 @@ prisma.$use(async (params, next) => {
 export async function deleteSection(id: string) {
   const section = await prisma.section.delete({
     where: {
-      id: Number(id),
+      id,
     },
   })
   return section
 }
 
-export async function deleteSections(sectionId1: number, sectionId2: number) {
+export async function deleteSections(sectionId1: string, sectionId2: string) {
   await prisma.section.deleteMany({
     where: {
       id: {

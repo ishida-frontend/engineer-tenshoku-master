@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-
 import { convertVideoUrl } from '../utils/convertVideoUrl'
 import { VideoType } from '../types'
 
@@ -15,7 +14,9 @@ export async function updateVideo({
 }: Partial<VideoType>) {
   try {
     const currentVideo = await prisma.video.findUnique({
-      where: { id },
+      where: {
+        id,
+      },
       select: { order: true },
     })
     const currentOrder = currentVideo?.order
@@ -56,7 +57,9 @@ export async function updateVideo({
       }
     }
     await prisma.video.update({
-      where: { id },
+      where: {
+        id,
+      },
       data: {
         name,
         description,

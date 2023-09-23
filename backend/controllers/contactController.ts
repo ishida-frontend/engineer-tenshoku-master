@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from 'express'
-import axios from 'axios'
 import { PrismaClient } from '@prisma/client'
 import { readAllContacts } from '../scripts/readContact'
 import { createContact } from '../scripts/createContact'
