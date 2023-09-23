@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Course {
-  id          String    @id @default(uuid())
+  id          String    @id(length: 100) @default(uuid()) @db.VarChar(255) @unique
   sections    Section[]
   name        String
   description String?
@@ -24,9 +24,9 @@ model Course {
 }
 
 model Section {
-  id          String    @id @default(uuid())
+  id          String    @id(length: 100) @default(uuid()) @db.VarChar(255) @unique
   course      Course    @relation(fields: [course_id], references: [id])
-  course_id   String
+  course_id   String    @id @db.VarChar(255)
   videos      Video[]
   title       String?
   order       Int?
@@ -37,9 +37,9 @@ model Section {
 }
 
 model Video {
-  id          String    @id @default(uuid())
+  id          String    @id(length: 100) @default(uuid()) @db.VarChar(255) @unique
   section     Section   @relation(fields: [section_id], references: [id])
-  section_id  String
+  section_id  String    @id @db.VarChar(255)
   order       Int
   url         String?
   name        String?
@@ -51,7 +51,7 @@ model Video {
 }
 
 model Contact {
-  id         String   @id @default(uuid())
+  id         String   @id(length: 100) @default(uuid()) @db.VarChar(255)
   name       String
   email      String
   subject    String
