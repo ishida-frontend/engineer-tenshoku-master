@@ -1,9 +1,9 @@
 export type VideoType = {
-  id: number
+  id: string
   name?: string
   description?: string
   url?: string
   published: boolean
   order: number
-  sectionId: number
+  sectionId: string
 }

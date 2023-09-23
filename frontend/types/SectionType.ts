@@ -1,7 +1,7 @@
 import { VideoType } from './VideoType'
 
 export type SectionType = {
-  id: number
+  id: string
   course_id: string
   order: number
   title: string

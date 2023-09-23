@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-export async function readCourse(id: number) {
+export async function readCourse(id: string) {
   const course = await prisma.course.findUnique({
     where: {
       id,
@@ -39,7 +39,7 @@ export async function readFilteredCourses() {
 export async function readPublishedCourseContent(id: string) {
   const publishedCourseContent = await prisma.course.findUnique({
     where: {
-      id: Number(id),
+      id,
       published: true,
       deleted_at: null,
     },

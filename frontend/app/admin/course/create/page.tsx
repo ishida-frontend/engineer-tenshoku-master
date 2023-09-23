@@ -23,7 +23,6 @@ export default function CreateCoursePage() {
     setIsSubmitting(true)
 
     event.preventDefault()
-    console.log(published)
 
     const response = await fetch('http://localhost:8000/admin/course/create', {
       method: 'POST',
