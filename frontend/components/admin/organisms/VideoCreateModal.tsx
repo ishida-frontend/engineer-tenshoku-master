@@ -35,8 +35,8 @@ export const VideoCreateModal = ({
   onClose,
 }: {
   courseId: string
-  sectionId: number
-  currentSectionId: number | null
+  sectionId: string
+  currentSectionId: string | null
   maxOrder: number
   isOpen: boolean
   onClose: () => void

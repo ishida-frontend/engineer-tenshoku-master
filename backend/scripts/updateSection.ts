@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-export async function updateSection(section_id: number) {
+export async function updateSection(section_id: string) {
   const section = await prisma.section.update({
     where: {
       id: section_id,
@@ -15,7 +15,7 @@ export async function updateSection(section_id: number) {
 }
 
 export async function updateSections(sectionData: {
-  course_id: number
+  course_id: string
   order: number
   title: string
   published: boolean
