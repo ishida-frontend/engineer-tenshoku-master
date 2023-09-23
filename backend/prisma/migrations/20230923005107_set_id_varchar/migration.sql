@@ -19,24 +19,24 @@ ALTER TABLE `Video` DROP FOREIGN KEY `Video_section_id_fkey`;
 -- AlterTable
 ALTER TABLE `Contact` DROP PRIMARY KEY,
     MODIFY `id` VARCHAR(255) NOT NULL,
-    ADD PRIMARY KEY (`id`(100));
+    ADD PRIMARY KEY (`id`);
 
 -- AlterTable
 ALTER TABLE `Course` DROP PRIMARY KEY,
     MODIFY `id` VARCHAR(255) NOT NULL,
-    ADD PRIMARY KEY (`id`(100));
+    ADD PRIMARY KEY (`id`);
 
 -- AlterTable
 ALTER TABLE `Section` DROP PRIMARY KEY,
     MODIFY `id` VARCHAR(255) NOT NULL,
     MODIFY `course_id` VARCHAR(255) NOT NULL,
-    ADD PRIMARY KEY (`id`(100));
+    ADD PRIMARY KEY (`id`);
 
 -- AlterTable
 ALTER TABLE `Video` DROP PRIMARY KEY,
     MODIFY `id` VARCHAR(255) NOT NULL,
     MODIFY `section_id` VARCHAR(255) NOT NULL,
-    ADD PRIMARY KEY (`id`(100));
+    ADD PRIMARY KEY (`id`);
 
 -- CreateIndex
 CREATE UNIQUE INDEX `Course_id_key` ON `Course`(`id`);
