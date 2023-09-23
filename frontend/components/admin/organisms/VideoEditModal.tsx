@@ -181,7 +181,7 @@ export function VideoEditModal({
       scrollBehavior="inside"
       blockScrollOnMount={false}
     >
-      <ModalOverlay />
+      <ModalOverlay bg="rgba(0, 0, 0, 0.1)" />
       <ModalContent>
         <ModalHeader>動画詳細入力</ModalHeader>
         <ModalCloseButton />
