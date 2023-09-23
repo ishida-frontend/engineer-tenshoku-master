@@ -23,7 +23,6 @@ export async function createContact(req: createContactParamsType) {
     }
     const createdContact = await prisma.contact.create({
       data: {
-        id: crypto.randomUUID(),
         name: contactData.name,
         email: contactData.email,
         subject: contactData.subject,
