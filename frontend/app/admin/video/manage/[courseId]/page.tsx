@@ -124,13 +124,13 @@ export default function EditVideoPage() {
         {courseData.name}
       </Heading>
       {courseData.sections.map((section: SectionType) => (
-        <Accordion allowToggle key={section.id}>
+        <Accordion allowToggle key={section.order}>
           <AccordionItem border="none">
             <VStack p={5} bgColor="gray.200" minW="600px" borderRadius={9}>
               <AccordionButton>
                 <AccordionIcon />
                 <Heading size="sm" ml={2}>
-                  Section {section.id} - {section.title}
+                  Section {section.order} - {section.title}
                 </Heading>
               </AccordionButton>
               <AccordionPanel p={1}>
@@ -194,7 +194,7 @@ export default function EditVideoPage() {
                     colorScheme="green"
                     onClick={() => handleCreateVideo(section.id)}
                   >
-                    追加
+                    動画を追加
                   </Button>
                   <VideoCreateModal
                     courseId={courseId}

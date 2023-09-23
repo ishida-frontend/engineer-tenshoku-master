@@ -1,7 +1,5 @@
 'use client'
 import React, { useState, FormEvent, useEffect } from 'react'
-import { useParams } from 'next/navigation'
-import useSWR from 'swr'
 import {
   Box,
   Button,
@@ -22,36 +20,27 @@ import formatDate from '../../../utils/formatDate'
 import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
-export function CourseEditor() {
+export function CourseEditor({
+  course_id,
+  courseData,
+}: {
+  course_id: string
+  courseData: CourseType
+}) {
   const { showSuccessToast, showErrorToast } = useCustomToast()
 
-  // URLパラメータからコースIDを取得し、int型に変換
-  const params = useParams()
-  const courseId = params.courseId
-  const id = typeof courseId === 'string' ? parseInt(courseId, 10) : NaN
-
-  // コースデータ取得
-  const fetcher = async () =>
-    (
-      await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${courseId}`,
-      )
-    ).json()
-  const { data: courseData } = useSWR<CourseType>('courseData', fetcher)
-
-  // 初期状態を定義し、useStateで初期化
-  const initialCourseState: CourseType = {
-    id,
-    name: '',
-    description: '',
-    image: '',
-    published: false,
-    created_at: '',
-    updated_at: '',
-    deleted_at: '',
-    icon: '',
+  const selectedCourseState: CourseType = {
+    id: courseData.id,
+    name: courseData.name,
+    description: courseData.description,
+    image: courseData.image,
+    icon: courseData.icon,
+    published: courseData.published,
+    created_at: courseData.created_at,
+    updated_at: courseData.updated_at,
+    deleted_at: courseData.deleted_at,
   }
-  const [course, setCourse] = useState<CourseType>(initialCourseState)
+  const [course, setCourse] = useState<CourseType>(selectedCourseState)
 
   const [errors, setErrors] = useState({
     nameError: '',
@@ -76,6 +65,14 @@ export function CourseEditor() {
     }
   }, [courseData])
 
+  const hasChanges = () => {
+    return JSON.stringify(selectedCourseState) !== JSON.stringify(course)
+  }
+
+  const isButtonDisabled = () => {
+    return !hasChanges()
+  }
+
   const updateCourse = async (event: FormEvent) => {
     event.preventDefault()
 
@@ -83,7 +80,7 @@ export function CourseEditor() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/edit/${courseId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/edit/${course_id}`,
         {
           method: 'PUT',
           headers: {
@@ -204,6 +201,7 @@ export function CourseEditor() {
         <Button
           onClick={updateCourse}
           isLoading={isSubmitting}
+          isDisabled={isButtonDisabled()}
           colorScheme="green"
           variant="solid"
         >
