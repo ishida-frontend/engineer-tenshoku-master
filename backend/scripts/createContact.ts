@@ -2,7 +2,6 @@ import axios from 'axios'
 import { PrismaClient } from '@prisma/client'
 import { ContactType } from '../types/index'
 const prisma = new PrismaClient()
-const crypto = require('crypto')
 
 type createContactParamsType = {
   name: string

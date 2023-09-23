@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 export async function readVideo(id: string) {
   const video = await prisma.video.findUnique({
     where: {
-      id: id,
+      id,
     },
   })
   return video
