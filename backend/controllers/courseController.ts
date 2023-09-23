@@ -7,6 +7,7 @@ import {
   readAllCourses,
   readFilteredCourses,
   readPublishedCourseContent,
+  searchCourses,
 } from '../scripts/readCourse'
 import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
@@ -87,6 +88,18 @@ exports.readFilteredCourses = async function (
   try {
     const filteredCourses = await readFilteredCourses()
     res.status(200).json(filteredCourses)
+  } catch (e: any) {
+    res.status(500).send('エラーが発生しました')
+  }
+}
+
+exports.getSearchedCourses = async function (
+  req: express.Request,
+  res: express.Response,
+) {
+  try {
+    await searchCourses(req.body.words)
+    res.send(searchCourses)
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
   }

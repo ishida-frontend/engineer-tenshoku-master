@@ -12,6 +12,7 @@ const {
   readAllCourses,
   readFilteredCourses,
   getPublishedCourse,
+  getSearchedCourses,
   updateCourse,
   deleteCourse,
 } = require('../controllers/courseController')

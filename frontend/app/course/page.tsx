@@ -1,5 +1,4 @@
 import React from 'react'
-
 import { CourseList } from '../../components/organisms/CourseList'
 import { CourseType } from '../../types/CourseType'
 import Error from '../error'

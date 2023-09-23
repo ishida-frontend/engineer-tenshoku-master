@@ -72,3 +72,18 @@ export async function readPublishedCourseContent(id: string) {
   })
   return publishedCourseContent
 }
+
+export async function searchCourses(words: string) {
+  const courses = await prisma.course.findMany({
+    where: {
+      deleted_at: null,
+      published: true,
+      AND: {
+        name: {
+          contains: words,
+        },
+      },
+    },
+  })
+  return courses
+}
