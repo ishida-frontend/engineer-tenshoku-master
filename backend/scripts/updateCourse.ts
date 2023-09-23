@@ -2,7 +2,7 @@ import { Prisma, PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-type CourseUpdateInput = Prisma.CourseUpdateInput & { id: number }
+type CourseUpdateInput = Prisma.CourseUpdateInput & { id: string }
 
 export async function updateCourse({
   id,

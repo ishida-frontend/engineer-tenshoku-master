@@ -1,9 +1,9 @@
 import { SectionType } from './SectionType'
 
 export type VideoType = {
-  id: number
+  id: string
   sections: SectionType[]
-  sectionId: number
+  sectionId: string
   order: number
   url: string
   name: string

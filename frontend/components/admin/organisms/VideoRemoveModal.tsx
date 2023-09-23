@@ -20,7 +20,7 @@ export function VideoRemoveModal({
   onClose,
 }: {
   courseId: string
-  videoId: number | null
+  videoId: string | null
   isOpen: boolean
   onClose: () => void
 }) {

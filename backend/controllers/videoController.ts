@@ -2,9 +2,9 @@ import express from 'express'
 import z from 'zod'
 
 import { createVideo } from '../scripts/createVideo'
-import { readVideo, readVideos, readFilteredVideos } from '../scripts/readVideo'
-import { updateVideo, updateVideos } from '../scripts/updateVideo'
-import { deleteVideo, deleteVideos } from '../scripts/deleteVideo'
+import { readVideo, readFilteredVideos } from '../scripts/readVideo'
+import { updateVideo } from '../scripts/updateVideo'
+import { deleteVideo } from '../scripts/deleteVideo'
 
 export class VideoController {
   createVideo = async function (req: express.Request, res: express.Response) {
@@ -19,7 +19,7 @@ export class VideoController {
 
   readVideo = async function (req: express.Request, res: express.Response) {
     try {
-      const video = await readVideo(Number(req.params.id))
+      const video = await readVideo(req.params.id)
       res.status(200).json(video)
     } catch (e: any) {
       res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })
