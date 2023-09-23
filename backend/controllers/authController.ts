@@ -133,4 +133,18 @@ router.post('/refresh', async (req, res) => {
   }
 })
 
+router.post('/logout', async (req, res) => {
+  try {
+    res.cookie('accessToken', {
+      httpOnly: true,
+    })
+
+    res.status(200).json(true)
+  } catch (err) {
+    console.error(err)
+    const errorMessage = (err as Error).message
+    res.status(400).json({ error: errorMessage })
+  }
+})
+
 export default router

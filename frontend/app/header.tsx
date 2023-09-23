@@ -1,10 +1,7 @@
 'use client'
 import { HeaderLoggedIn } from '../components/organisms/HeaderLoggedIn'
 import { HeaderLoggedOut } from '../components/organisms/HeaderLoggedOut'
-import { useAuth } from '../hooks/useAuth'
 
-export const Header = () => {
-  const check = useAuth()
-
-  return check.isAuthenticated ? <HeaderLoggedIn /> : <HeaderLoggedOut />
+export const Header = ({ isLogin }: { isLogin: boolean }) => {
+  return isLogin ? <HeaderLoggedIn /> : <HeaderLoggedOut />
 }
