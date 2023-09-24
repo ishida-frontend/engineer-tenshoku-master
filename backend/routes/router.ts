@@ -4,6 +4,7 @@ import 'dotenv/config'
 import { contactValidationRules, contactValidate } from '../validation'
 import { validate, courseValidationRules } from '../validation/courseValidation'
 import { VideoValidator } from '../validation/videoValidator'
+import { UserController } from '../controllers/userController'
 import { VideoController } from '../controllers/videoController'
 
 const {
@@ -20,7 +21,6 @@ const {
   sectionRead,
   sectionUpdate,
   sectionDelete,
-  sectionUpsert,
 } = require('../controllers/sectionController')
 const {
   checkCreateContact,
@@ -29,6 +29,7 @@ const {
 
 const router = express.Router()
 
+const userController = new UserController()
 const videoValidator = new VideoValidator()
 const videoController = new VideoController()
 
@@ -69,6 +70,12 @@ adminRouter.put(
   videoController.updateVideo,
 )
 adminRouter.delete('/video/:id', videoController.deleteVideo)
+
+const userRouter = express.Router()
+router.use('/user', userRouter)
+userRouter.get('/:id', (req, res) => {
+  userController.get(req, res)
+})
 
 const courseRouter = express.Router()
 router.use('/course', courseRouter)

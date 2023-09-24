@@ -34,6 +34,7 @@ export default function Register() {
     e.preventDefault()
     if (!isChecked) {
       showErrorToast('利用規約とプライバシーポリシーに同意してください')
+      return
     }
     try {
       const res = await fetch(

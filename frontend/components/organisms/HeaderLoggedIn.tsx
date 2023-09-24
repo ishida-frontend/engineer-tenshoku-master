@@ -18,7 +18,7 @@ import { useRouter } from 'next/navigation'
 import { AuthContext } from '../../providers/AuthProvider'
 
 export function HeaderLoggedIn() {
-  const { handleCheckToken } = useContext(AuthContext)
+  const { handleCheckToken, user } = useContext(AuthContext)
   const [show, setShow] = useState(false)
   const router = useRouter()
 
@@ -51,6 +51,9 @@ export function HeaderLoggedIn() {
               position={'relative'}
             >
               {/* TODO:プロフィールページへのリンクを貼る */}
+              <Box fontSize={'20px'} marginRight={'8px'}>
+                {user.name}
+              </Box>
               <Avatar
                 bg="blue.300"
                 color="black"

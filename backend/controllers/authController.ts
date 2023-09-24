@@ -9,6 +9,7 @@ import {
 import { jwtHelper } from '../utils/jwt'
 import { signupValidationRules } from '../validation/auth'
 import { validate } from '../validation/index'
+import { UserApplicationService } from '../application/user'
 
 const router = Router()
 
@@ -33,6 +34,20 @@ router.post(
 
     try {
       const data = await CognitoClient.send(signUpCommand)
+      console.log('data', data.UserSub)
+
+      if (!data.UserSub) {
+        throw new Error(
+          'ユーザー登録に失敗しました。時間をおいてお試しください',
+        )
+      }
+
+      const user = UserApplicationService.create({
+        id: data.UserSub,
+        // 仮の名前を設定
+        name: Math.random().toString().slice(2, 8),
+      })
+
       res.status(200).json({
         success: true,
       })
@@ -89,16 +104,7 @@ router.get('/tokenVerification', async (req, res, next) => {
     }
     //  リクエストされたjwtトークンを検証
     const decode = await jwtHelper.verifyToken(token)
-    if (decode) {
-      //検証がOKであれば、処理継続
-      res.status(200).json({
-        check: true,
-      })
-    } else {
-      res.status(200).json({
-        check: false,
-      })
-    }
+    return res.status(200).json(decode)
   } catch (e: any) {
     throw new Error(e)
   }
