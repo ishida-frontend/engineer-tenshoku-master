@@ -55,7 +55,6 @@ export default function Register() {
         )
       }
     } catch (err) {
-      console.log('err', err)
       throw new Error('エラーが発生しました')
     }
   }

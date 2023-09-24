@@ -34,7 +34,6 @@ router.post(
 
     try {
       const data = await CognitoClient.send(signUpCommand)
-      console.log('data', data.UserSub)
 
       if (!data.UserSub) {
         throw new Error(

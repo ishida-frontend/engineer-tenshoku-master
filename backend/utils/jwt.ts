@@ -8,9 +8,7 @@ const verifier = CognitoJwtVerifier.create({
 export class jwtHelper {
   static async verifyToken(token: string) {
     try {
-      // userIdも取得
       const payload = await verifier.verify(token, verifier)
-      console.log('payload', payload)
       return payload
         ? {
             userId: payload.username,
