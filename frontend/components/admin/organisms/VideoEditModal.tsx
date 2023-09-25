@@ -23,9 +23,9 @@ import { mutate } from 'swr'
 import { SectionType, VideoType } from '../../../types'
 import { urlRegExp } from '../../../utils/regExp'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-import ReactMde from '../../../node_modules/react-mde'
-import '../../../node_modules/react-mde/lib/styles/css/react-mde-all.css'
-import ReactMarkdown from '../../../node_modules/react-markdown'
+import ReactMde from 'react-mde'
+import 'react-mde/lib/styles/css/react-mde-all.css'
+import ReactMarkdown from 'react-markdown'
 
 export function VideoEditModal({
   courseId,
@@ -61,6 +61,8 @@ export function VideoEditModal({
     {},
   )
 
+  const [descValue, setDescValue] = useState<string>()
+
   const fetchVideoData = async () => {
     try {
       const response = await fetch(
@@ -83,6 +85,7 @@ export function VideoEditModal({
         published: videoData.published,
         sectionId: videoData.sectionId,
       })
+      setDescValue(videoData.description)
       onOpen()
     } catch (error) {
       showErrorToast('動画データの取得に失敗しました')
@@ -95,12 +98,6 @@ export function VideoEditModal({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, videoId])
-
-  const [descValue, setDescValue] = useState(initialVideoData.description)
-  const descChange = (value: string) => {
-    setDescValue(value)
-    setVideo({ ...video, description: value })
-  }
 
   const allOrders = section?.videos.map((v: VideoType) => v.order)
 
@@ -115,6 +112,11 @@ export function VideoEditModal({
       video.description === '' ||
       video.url === ''
     )
+  }
+
+  const descChange = (value: string) => {
+    setDescValue(value)
+    setVideo({ ...video, description: value })
   }
 
   const handleEdit = async () => {
@@ -217,7 +219,7 @@ export function VideoEditModal({
                       w={'50%'}
                       bg={'gray.100'}
                       borderRadius={'4px'}
-                      padding={'8px'}
+                      paddingLeft={'28px'}
                     >
                       <ReactMarkdown>{descValue}</ReactMarkdown>
                     </Box>
