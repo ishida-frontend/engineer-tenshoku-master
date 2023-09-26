@@ -237,7 +237,8 @@ export function VideoEditModal({
                     </Box>
                     <Box
                       w={'50%'}
-                      bg={'gray.100'}
+                      bg={'white'}
+                      border={'1px solid gray'}
                       borderRadius={'4px'}
                       paddingLeft={'28px'}
                     >
