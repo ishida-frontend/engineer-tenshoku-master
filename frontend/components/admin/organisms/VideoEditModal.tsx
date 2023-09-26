@@ -26,6 +26,9 @@ import { useCustomToast } from '../../../hooks/useCustomToast'
 import ReactMde from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import ReactMarkdown from 'react-markdown'
+import * as Showdown from 'showdown'
+// import { getDefaultToolbarCommands } from 'react-mde'
+// console.log('commands:', getDefaultToolbarCommands())
 
 export function VideoEditModal({
   courseId,
@@ -63,6 +66,10 @@ export function VideoEditModal({
 
   const [descValue, setDescValue] = useState<string>()
 
+  const [selectedEditorTab, setSelectedEditorTab] = useState<
+    'write' | 'preview'
+  >('write')
+
   const fetchVideoData = async () => {
     try {
       const response = await fetch(
@@ -98,6 +105,13 @@ export function VideoEditModal({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, videoId])
+
+  const converter = new Showdown.Converter({
+    tables: true,
+    simplifiedAutoLink: true,
+    strikethrough: true,
+    tasklists: true,
+  })
 
   const allOrders = section?.videos.map((v: VideoType) => v.order)
 
@@ -213,7 +227,15 @@ export function VideoEditModal({
                   <FormErrorMessage>{errors.descError}</FormErrorMessage>
                   <Box display={'flex'} justifyContent={'space-between'}>
                     <Box w={'50%'} mr={'5'}>
-                      <ReactMde value={descValue} onChange={descChange} />
+                      <ReactMde
+                        value={descValue}
+                        onChange={descChange}
+                        selectedTab={selectedEditorTab}
+                        onTabChange={setSelectedEditorTab}
+                        generateMarkdownPreview={(markdown) =>
+                          Promise.resolve(converter.makeHtml(markdown))
+                        }
+                      />
                     </Box>
                     <Box
                       w={'50%'}
