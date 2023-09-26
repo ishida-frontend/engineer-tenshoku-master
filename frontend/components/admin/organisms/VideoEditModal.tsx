@@ -27,8 +27,6 @@ import ReactMde from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import ReactMarkdown from 'react-markdown'
 import * as Showdown from 'showdown'
-// import { getDefaultToolbarCommands } from 'react-mde'
-// console.log('commands:', getDefaultToolbarCommands())
 
 export function VideoEditModal({
   courseId,
