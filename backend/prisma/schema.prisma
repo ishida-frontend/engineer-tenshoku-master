@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Course {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid()) @db.VarChar(255)
   sections    Section[]
   name        String
   description String?
@@ -24,26 +24,26 @@ model Course {
 }
 
 model Section {
-  id          Int       @id @default(autoincrement())
-  course      Course    @relation(fields: [course_id], references: [id])
-  course_id   Int
-  videos      Video[]
-  title       String?
-  order       Int?
-  published   Boolean   @default(false) // セクションが公開されているかどうか。
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  deleted_at  DateTime?
+  id         String    @id @default(uuid()) @db.VarChar(255)
+  course     Course    @relation(fields: [course_id], references: [id])
+  course_id  String    @db.VarChar(255)
+  videos     Video[]
+  title      String?
+  order      Int?
+  published  Boolean   @default(false) // セクションが公開されているかどうか。
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
 }
 
 model Video {
-  id          Int       @id @default(autoincrement())
-  section     Section    @relation(fields: [section_id], references: [id])
-  section_id  Int
+  id          String    @id @default(uuid()) @db.VarChar(255)
+  section     Section   @relation(fields: [section_id], references: [id])
+  section_id  String    @db.VarChar(255)
   order       Int
   url         String?
   name        String?
-  description String?
+  description String?   @db.LongText
   published   Boolean   @default(false) // 動画が公開されているかどうか。
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt

@@ -22,11 +22,11 @@ prisma.$use(async (params, next) => {
   return next(params)
 })
 
-export async function deleteCourse(courseId: number) {
+export async function deleteCourse(courseId: string) {
   await prisma.course.delete({ where: { id: courseId } })
 }
 
-export async function deleteCourses(courseId1: number, courseId2: number) {
+export async function deleteCourses(courseId1: string, courseId2: string) {
   await prisma.course.deleteMany({
     where: {
       id: {

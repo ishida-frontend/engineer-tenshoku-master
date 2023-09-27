@@ -12,15 +12,21 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Textarea,
   Select,
   Button,
   useDisclosure,
+  Box,
+  Container,
+  Flex,
 } from '@chakra-ui/react'
 import { mutate } from 'swr'
 import { SectionType, VideoType } from '../../../types'
 import { urlRegExp } from '../../../utils/regExp'
 import { useCustomToast } from '../../../hooks/useCustomToast'
+import ReactMde from 'react-mde'
+import 'react-mde/lib/styles/css/react-mde-all.css'
+import ReactMarkdown from 'react-markdown'
+import * as Showdown from 'showdown'
 
 export function VideoEditModal({
   courseId,
@@ -30,7 +36,7 @@ export function VideoEditModal({
   onClose,
 }: {
   courseId: string
-  videoId: number | null
+  videoId: string | null
   section: SectionType | null
   isOpen: boolean
   onClose: () => void
@@ -56,6 +62,12 @@ export function VideoEditModal({
     {},
   )
 
+  const [descValue, setDescValue] = useState<string>()
+
+  const [selectedEditorTab, setSelectedEditorTab] = useState<
+    'write' | 'preview'
+  >('write')
+
   const fetchVideoData = async () => {
     try {
       const response = await fetch(
@@ -78,6 +90,7 @@ export function VideoEditModal({
         published: videoData.published,
         sectionId: videoData.sectionId,
       })
+      setDescValue(videoData.description)
       onOpen()
     } catch (error) {
       showErrorToast('動画データの取得に失敗しました')
@@ -90,6 +103,13 @@ export function VideoEditModal({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, videoId])
+
+  const converter = new Showdown.Converter({
+    tables: true,
+    simplifiedAutoLink: true,
+    strikethrough: true,
+    tasklists: true,
+  })
 
   const allOrders = section?.videos.map((v: VideoType) => v.order)
 
@@ -104,6 +124,11 @@ export function VideoEditModal({
       video.description === '' ||
       video.url === ''
     )
+  }
+
+  const descChange = (value: string) => {
+    setDescValue(value)
+    setVideo({ ...video, description: value })
   }
 
   const handleEdit = async () => {
@@ -181,88 +206,122 @@ export function VideoEditModal({
       scrollBehavior="inside"
       blockScrollOnMount={false}
     >
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>動画詳細入力</ModalHeader>
+      <ModalOverlay bg="rgba(0, 0, 0, 0.1)" />
+      <ModalContent minW={'90%'}>
+        <ModalHeader alignContent={'center'}>動画詳細入力</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <FormControl id="videoName" isRequired isInvalid={!!errors.nameError}>
-            <FormLabel htmlFor="videoName">タイトル (5文字以上)</FormLabel>
-            <FormErrorMessage>{errors.nameError}</FormErrorMessage>
-            <Input
-              type="text"
-              value={video.name}
-              onChange={(e) => {
-                setVideo({ ...video, name: e.target.value })
-              }}
-              border="1px"
-              borderColor="gray.400"
-              autoFocus={true}
-            />
-          </FormControl>
-          <FormControl
-            id="videoDescription"
-            isRequired
-            isInvalid={!!errors.descError}
-          >
-            <FormLabel htmlFor="videoDescription">説明文(15文字以上)</FormLabel>
-            <FormErrorMessage>{errors.descError}</FormErrorMessage>
-            <Textarea
-              value={video.description}
-              onChange={(e) =>
-                setVideo({ ...video, description: e.target.value })
-              }
-              aria-required={true}
-              rows={5}
-              border="1px"
-              borderColor="gray.400"
-            />
-          </FormControl>
-          <FormControl id="videoUrl" isRequired isInvalid={!!errors.urlError}>
-            <FormLabel htmlFor="videoUrl">URL</FormLabel>
-            <FormErrorMessage>{errors.urlError}</FormErrorMessage>
-            <Input
-              type="text"
-              value={video.url}
-              onChange={(e) => setVideo({ ...video, url: e.target.value })}
-              aria-required={true}
-              border="1px"
-              borderColor="gray.400"
-            />
-          </FormControl>
-          <FormControl id="videoOrder">
-            <FormLabel htmlFor="videoOrder">再生順</FormLabel>
-            <Select
-              value={video.order}
-              onChange={(e) =>
-                setVideo({ ...video, order: Number(e.target.value) })
-              }
-            >
-              {allOrders?.map((order) => (
-                <option key={order} value={order}>
-                  {order}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl id="coursePublished">
-            <FormLabel htmlFor="CoursePublished">公開設定</FormLabel>
-            <Select
-              id="coursePublished"
-              value={video.published ? 'public' : 'hidden'}
-              onChange={(e) =>
-                setVideo({
-                  ...video,
-                  published: e.target.value === 'public',
-                })
-              }
-              border="1px"
-              borderColor="gray.400"
-            >
-              <option value="hidden">非公開</option>
-              <option value="public">公開</option>
-            </Select>
-          </FormControl>
+          <Container minW={'90%'}>
+            <Flex>
+              <Box flex={'1'} mr={'18px'}>
+                <FormControl
+                  id="videoDescription"
+                  isRequired
+                  isInvalid={!!errors.descError}
+                >
+                  <FormLabel htmlFor="videoDescription">
+                    説明文(15文字以上)
+                  </FormLabel>
+                  <FormErrorMessage>{errors.descError}</FormErrorMessage>
+                  <Box display={'flex'} justifyContent={'space-between'}>
+                    <Box w={'50%'} mr={'5'}>
+                      <ReactMde
+                        value={descValue}
+                        onChange={descChange}
+                        selectedTab={selectedEditorTab}
+                        onTabChange={setSelectedEditorTab}
+                        generateMarkdownPreview={(markdown) =>
+                          Promise.resolve(converter.makeHtml(markdown))
+                        }
+                      />
+                    </Box>
+                    <Box
+                      w={'50%'}
+                      bg={'white'}
+                      border={'1px solid gray'}
+                      borderRadius={'4px'}
+                      paddingLeft={'28px'}
+                    >
+                      <ReactMarkdown>{descValue}</ReactMarkdown>
+                    </Box>
+                  </Box>
+                </FormControl>
+              </Box>
+              <Box w={'300px'}>
+                <FormControl
+                  id="videoName"
+                  isRequired
+                  isInvalid={!!errors.nameError}
+                >
+                  <FormLabel htmlFor="videoName">
+                    タイトル (5文字以上)
+                  </FormLabel>
+                  <FormErrorMessage>{errors.nameError}</FormErrorMessage>
+                  <Input
+                    type="text"
+                    value={video.name}
+                    onChange={(e) => {
+                      setVideo({ ...video, name: e.target.value })
+                    }}
+                    border="1px"
+                    borderColor="gray.400"
+                    autoFocus={true}
+                  />
+                </FormControl>
+                <FormControl
+                  id="videoUrl"
+                  isRequired
+                  isInvalid={!!errors.urlError}
+                >
+                  <FormLabel htmlFor="videoUrl">URL</FormLabel>
+                  <FormErrorMessage>{errors.urlError}</FormErrorMessage>
+                  <Input
+                    type="text"
+                    value={video.url}
+                    onChange={(e) =>
+                      setVideo({ ...video, url: e.target.value })
+                    }
+                    aria-required={true}
+                    border="1px"
+                    borderColor="gray.400"
+                  />
+                </FormControl>
+                <FormControl id="videoOrder">
+                  <FormLabel htmlFor="videoOrder">再生順</FormLabel>
+                  <Select
+                    value={video.order}
+                    onChange={(e) =>
+                      setVideo({ ...video, order: Number(e.target.value) })
+                    }
+                  >
+                    {allOrders?.map((order) => (
+                      <option key={order} value={order}>
+                        {order}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl id="coursePublished">
+                  <FormLabel htmlFor="CoursePublished">公開設定</FormLabel>
+                  <Select
+                    id="coursePublished"
+                    value={video.published ? 'public' : 'hidden'}
+                    onChange={(e) =>
+                      setVideo({
+                        ...video,
+                        published: e.target.value === 'public',
+                      })
+                    }
+                    border="1px"
+                    borderColor="gray.400"
+                  >
+                    <option value="hidden">非公開</option>
+                    <option value="public">公開</option>
+                  </Select>
+                </FormControl>
+              </Box>
+            </Flex>
+          </Container>
         </ModalBody>
         <ModalFooter>
           <Button mr={3} onClick={onClose}>
