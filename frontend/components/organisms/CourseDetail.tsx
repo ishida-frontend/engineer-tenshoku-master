@@ -21,8 +21,9 @@ import {
 import { CourseType } from '../../types/CourseType'
 import { SectionType } from '../../types/SectionType'
 import { VideoType } from '../../types/VideoType'
-import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
 import ReactMarkdown from 'react-markdown'
+import remarkBreaks from 'remark-breaks'
+import '../../styles/markdown.css'
 
 type CourseDetailPropsType = CourseType & {
   sections: (SectionType & { videos: VideoType[] })[]
@@ -174,8 +175,19 @@ export function CourseDetail({
                 </CardHeader>
               </Card>
             </Box>
-            <Box paddingLeft={'30px'}>
-              <ReactMarkdown>
+            <Box
+              className="markdown"
+              paddingLeft={'30px'}
+              paddingRight={'30px'}
+            >
+              <ReactMarkdown
+                remarkPlugins={[remarkBreaks]}
+                components={{
+                  p: ({ children }) => (
+                    <p style={{ marginBottom: '1em' }}>{children}</p>
+                  ),
+                }}
+              >
                 {selectedVideo.sections.videos.description}
               </ReactMarkdown>
             </Box>
