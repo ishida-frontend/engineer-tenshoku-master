@@ -1,8 +1,11 @@
 
 
-.markdown p {
-  margin-top: 15px;
+.markdown {
   white-space: pre-wrap;
+}
+
+.markdown p {
+  margin-bottom: 15px;
 }
 
 .markdown p:has(strong) {

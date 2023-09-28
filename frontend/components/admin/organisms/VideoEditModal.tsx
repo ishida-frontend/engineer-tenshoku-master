@@ -129,11 +129,7 @@ export function VideoEditModal({
   }
 
   const descChange = (value: string) => {
-    const description: string = value?.split(/(\n)/).map((item) => {
-      return item.match(/(\n)/) ? <br /> : item
-    })
-
-    setDescValue(description)
+    setDescValue(value)
     setVideo({ ...video, description: value })
   }
 
