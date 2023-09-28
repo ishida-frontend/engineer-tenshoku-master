@@ -46,6 +46,13 @@
   background-color: black;
 }
 
+.markdown pre {
+  padding-top: 12px;
+  padding-left: 20px;
+  padding-bottom: 9px;
+  background-color: black;
+}
+
 .markdown code {
   color: white;
 }
