@@ -27,6 +27,7 @@ import ReactMde from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import ReactMarkdown from 'react-markdown'
 import * as Showdown from 'showdown'
+import remarkBreaks from 'remark-breaks'
 import '../../../styles/markdown.css'
 
 export function VideoEditModal({
@@ -128,7 +129,11 @@ export function VideoEditModal({
   }
 
   const descChange = (value: string) => {
-    setDescValue(value)
+    const description: string = value?.split(/(\n)/).map((item) => {
+      return item.match(/(\n)/) ? <br /> : item
+    })
+
+    setDescValue(description)
     setVideo({ ...video, description: value })
   }
 
@@ -249,7 +254,16 @@ export function VideoEditModal({
                       paddingRight={'20px'}
                       className="markdown"
                     >
-                      <ReactMarkdown>{descValue}</ReactMarkdown>
+                      <ReactMarkdown
+                        remarkPlugins={[remarkBreaks]}
+                        components={{
+                          p: ({ children }) => (
+                            <p style={{ marginBottom: '15px' }}>{children}</p>
+                          ),
+                        }}
+                      >
+                        {descValue}
+                      </ReactMarkdown>
                     </Box>
                   </Box>
                 </FormControl>

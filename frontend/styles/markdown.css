@@ -2,6 +2,7 @@
 
 .markdown p {
   margin-top: 15px;
+  white-space: pre-wrap;
 }
 
 .markdown p:has(strong) {
