@@ -22,7 +22,6 @@ import { CourseType } from '../../types/CourseType'
 import { SectionType } from '../../types/SectionType'
 import { VideoType } from '../../types/VideoType'
 import ReactMarkdown from 'react-markdown'
-import remarkBreaks from 'remark-breaks'
 import '../../styles/markdown.css'
 
 type CourseDetailPropsType = CourseType & {
@@ -180,14 +179,7 @@ export function CourseDetail({
               paddingLeft={'30px'}
               paddingRight={'30px'}
             >
-              <ReactMarkdown
-                remarkPlugins={[remarkBreaks]}
-                components={{
-                  p: ({ children }) => (
-                    <p style={{ marginBottom: '15px' }}>{children}</p>
-                  ),
-                }}
-              >
+              <ReactMarkdown>
                 {selectedVideo.sections.videos.description}
               </ReactMarkdown>
             </Box>
