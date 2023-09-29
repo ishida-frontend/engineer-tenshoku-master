@@ -1,10 +1,35 @@
 'use client'
-import { Avatar, Box, Flex, Heading, HStack, Spacer } from '@chakra-ui/react'
+import {
+  Avatar,
+  Box,
+  Card,
+  Flex,
+  Heading,
+  HStack,
+  Spacer,
+  Text,
+} from '@chakra-ui/react'
 import { AiOutlineUser } from 'react-icons/ai'
 
 import { TitleLogo } from '../atoms/TitleLogo'
+import { useContext, useState } from 'react'
+import { logout } from '../../app/api'
+import { useRouter } from 'next/navigation'
+import { AuthContext } from '../../providers/AuthProvider'
 
 export function HeaderLoggedIn() {
+  const { handleCheckToken, user } = useContext(AuthContext)
+  const [show, setShow] = useState(false)
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    const result = await logout()
+    if (result) {
+      handleCheckToken()
+      router.push('/auth/login')
+    }
+  }
+
   return (
     <Box boxShadow="0 1px 3px rgba(0, 0, 0, 0.1)">
       <Box as="header" bgColor={'white'}>
@@ -19,13 +44,32 @@ export function HeaderLoggedIn() {
               </Heading>
             </HStack>
             <Spacer />
-            <HStack pr="36px">
+            <HStack
+              pr="36px"
+              onMouseEnter={() => setShow(true)}
+              onMouseLeave={() => setShow(false)}
+              position={'relative'}
+            >
               {/* TODO:プロフィールページへのリンクを貼る */}
+              <Box fontSize={'20px'} marginRight={'8px'}>
+                {user.name}
+              </Box>
               <Avatar
                 bg="blue.300"
                 color="black"
                 icon={<AiOutlineUser fontSize="2rem" />}
               />
+              {show && (
+                <Card
+                  position={'absolute'}
+                  top={'40px'}
+                  right={'0'}
+                  width={'200px'}
+                >
+                  表示されるメニュー
+                  <Text onClick={handleLogout}>ログアウト</Text>
+                </Card>
+              )}
             </HStack>
           </HStack>
         </Flex>

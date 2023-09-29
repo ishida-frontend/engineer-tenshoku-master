@@ -34,6 +34,7 @@ export default function Register() {
     e.preventDefault()
     if (!isChecked) {
       showErrorToast('利用規約とプライバシーポリシーに同意してください')
+      return
     }
     try {
       const res = await fetch(
@@ -54,7 +55,6 @@ export default function Register() {
         )
       }
     } catch (err) {
-      console.log('err', err)
       throw new Error('エラーが発生しました')
     }
   }
