@@ -1,10 +1,11 @@
 import { Loader } from '../components/atoms/Loader'
-import { useAuth } from '../hooks/useAuth'
 import { Header } from './header'
 import { Footer } from '../components/organisms/Footer'
+import { AuthContext } from '../providers/AuthProvider'
+import { useContext } from 'react'
 
 export const Main = ({ children }: { children: React.ReactNode }) => {
-  const check = useAuth()
+  const { check } = useContext(AuthContext)
 
   if (!check.checked) {
     return <Loader />
@@ -12,7 +13,7 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
   return (
     check.checked && (
       <>
-        <Header />
+        <Header isLogin={check.isAuthenticated} />
         {children}
         <Footer />
       </>

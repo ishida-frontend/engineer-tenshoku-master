@@ -11,11 +11,14 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { AuthContext } from '../../../providers/AuthProvider'
+import { login } from '../../api'
 
 export default function Login() {
+  const { handleCheckToken } = useContext(AuthContext)
   const router = useRouter()
   const [formState, setFormState] = useState({
     email: '',
@@ -26,16 +29,9 @@ export default function Login() {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault()
-    console.log(formState)
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signin`, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formState),
-      })
+      await login(formState)
+      handleCheckToken()
       router.push('/')
     } catch (err) {
       console.log('err', err)

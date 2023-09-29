@@ -11,6 +11,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id         String    @id @db.VarChar(255)
+  name       String?
+  oneWord    String?
+  goal       String?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+}
+
 model Course {
   id          String    @id @default(uuid()) @db.VarChar(255)
   sections    Section[]
