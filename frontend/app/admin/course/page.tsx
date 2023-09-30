@@ -1,5 +1,6 @@
 import React from 'react'
 import { CourseList } from '../../../components/admin/organisms/CourseList'
+import { CourseType } from '../../../types'
 
 export default async function AdminCourse() {
   const res = await fetch(
@@ -8,6 +9,6 @@ export default async function AdminCourse() {
       cache: 'no-cache',
     },
   )
-  const getCourses = await res.json()
+  const getCourses: CourseType[] = await res.json()
   return <CourseList courses={getCourses} />
 }

@@ -24,7 +24,7 @@ async function main() {
                     id: crypto.randomUUID(),
                     name: `Video ${i}`,
                     order: i,
-                    url: `https://youtu.be/1SnOhALvS5c`,
+                    url: `https://www.youtube.com/embed/1SnOhALvS5c`,
                     description: `Description ${i}`,
                     published: true,
                   },
