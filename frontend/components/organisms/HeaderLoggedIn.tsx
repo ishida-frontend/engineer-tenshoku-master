@@ -16,6 +16,7 @@ import { useContext, useState } from 'react'
 import { logout } from '../../app/api'
 import { useRouter } from 'next/navigation'
 import { AuthContext } from '../../providers/AuthProvider'
+import { PATHS } from '../../constants/paths'
 
 export function HeaderLoggedIn() {
   const { handleCheckToken, user } = useContext(AuthContext)
@@ -26,7 +27,7 @@ export function HeaderLoggedIn() {
     const result = await logout()
     if (result) {
       handleCheckToken()
-      router.push('/auth/login')
+      router.push(PATHS.LOGIN.path)
     }
   }
 

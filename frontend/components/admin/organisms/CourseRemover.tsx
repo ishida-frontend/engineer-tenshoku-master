@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react'
 
 import { useCustomToast } from '../../../hooks/useCustomToast'
+import { PATHS } from '../../../constants/paths'
 
 export function CourseRemover() {
   const { showSuccessToast, showErrorToast } = useCustomToast()
@@ -44,7 +45,7 @@ export function CourseRemover() {
         showSuccessToast(result.message)
         setShowModalContent(false)
         setTimeout(() => {
-          router.push('/admin/course')
+          router.push(PATHS.ADMIN.COURSE.LIST.path)
         }, 4000)
       } else {
         showErrorToast(result.message)
