@@ -15,7 +15,6 @@ export default async function Course() {
       },
     )
     const courses: CourseType[] = await res.json()
-    console.log('courses', courses)
 
     return <CourseList courses={courses} />
   } catch (e) {

@@ -14,13 +14,18 @@ import {
   Heading,
   HStack,
   Text,
+  Spacer,
   Stack,
   StackDivider,
   VStack,
 } from '@chakra-ui/react'
+import { GoCheckCircleFill, GoCircle } from 'react-icons/go'
+
 import { CourseType } from '../../types/CourseType'
 import { SectionType } from '../../types/SectionType'
 import { VideoType } from '../../types/VideoType'
+import { WatchedButton } from 'components/atoms/WatchedButton'
+import { WatchedCheckCircle } from 'components/atoms/WatchedCheckCircle'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
 
 type CourseDetailPropsType = CourseType & {
@@ -28,12 +33,12 @@ type CourseDetailPropsType = CourseType & {
 }
 
 type SelectedVideo = {
-  id: number
+  id: string
   sections: {
-    id: number
+    id: string
     order: number
     videos: {
-      id: number
+      id: string
       order: number
       name: string
       description: string
@@ -43,9 +48,13 @@ type SelectedVideo = {
 }
 
 export function CourseDetail({
+  isLogin,
   courseData,
+  userId,
 }: {
+  isLogin: boolean
   courseData: CourseDetailPropsType
+  userId: string
 }) {
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo>({
     id: courseData.id,
@@ -136,9 +145,19 @@ export function CourseDetail({
                                   }
                                 >
                                   <CardHeader>
-                                    <Text size="sm">
-                                      {video.order}. {video.name}
-                                    </Text>
+                                    <HStack>
+                                      {isLogin && (
+                                        <WatchedCheckCircle
+                                          userId={userId}
+                                          videoId={
+                                            selectedVideo.sections.videos.id
+                                          }
+                                        />
+                                      )}
+                                      <Text size="sm">
+                                        {video.order}. {video.name}
+                                      </Text>
+                                    </HStack>
                                   </CardHeader>
                                 </Card>
                               )
@@ -169,6 +188,16 @@ export function CourseDetail({
                       {selectedVideo.sections.videos.order}.
                     </Text>
                     <Text pl={'3px'}>{selectedVideo.sections.videos.name}</Text>
+                    <Spacer />
+                    {/* {console.log('isLogin:', isLogin)}
+                    {console.log('userId:', userId)}
+                    {console.log('videoId:', selectedVideo.sections.videos.id)} */}
+                    {isLogin && (
+                      <WatchedButton
+                        userId={userId}
+                        videoId={selectedVideo.sections.videos.id}
+                      />
+                    )}
                   </HStack>
                 </CardHeader>
               </Card>

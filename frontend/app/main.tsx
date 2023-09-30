@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { Loader } from '../components/atoms/Loader'
 import { Header } from './header'
 import { Footer } from '../components/organisms/Footer'
@@ -14,7 +16,12 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
     check.checked && (
       <>
         <Header isLogin={check.isAuthenticated} />
-        {children}
+        {/* 全てのページログイン状態を参照可能にするロジック */}
+        {React.Children.map(children, (child) =>
+          React.cloneElement(child as React.ReactElement, {
+            isLogin: check.isAuthenticated,
+          }),
+        )}
         <Footer />
       </>
     )
