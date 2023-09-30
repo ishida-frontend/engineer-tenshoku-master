@@ -9,10 +9,18 @@ export class jwtHelper {
   static async verifyToken(token: string) {
     try {
       const payload = await verifier.verify(token, verifier)
-      return payload ? true : false
+      return payload
+        ? {
+            userId: payload.username,
+            check: true,
+          }
+        : {
+            userId: '',
+            check: false,
+          }
     } catch (err) {
       console.log('err', err)
-      return false
+      return
     }
   }
 }
