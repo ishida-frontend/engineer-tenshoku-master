@@ -15,9 +15,8 @@ export default async function Course() {
       },
     )
     const courses: CourseType[] = await res.json()
-    console.log('courses', courses)
 
-    return <CourseList courses={courses} />
+    return <CourseList initialCourses={courses} />
   } catch (e) {
     console.log(e)
     return <Error />

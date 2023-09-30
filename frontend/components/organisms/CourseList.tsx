@@ -1,7 +1,8 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Box,
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -9,6 +10,9 @@ import {
   Flex,
   Heading,
   Image,
+  Input,
+  InputGroup,
+  InputRightElement,
   Link,
   SimpleGrid,
   Text,
@@ -19,10 +23,65 @@ import { BsChevronRight } from 'react-icons/bs'
 import { CourseType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
+import { SearchIcon } from '@chakra-ui/icons'
 
-export function CourseList({ courses }: { courses: CourseType[] }) {
-  // コースデータ読み込みアニメーション
-  if (!courses) return <Loader />
+export function CourseList({
+  initialCourses,
+}: {
+  initialCourses: CourseType[]
+}) {
+  if (!initialCourses) return <Loader />
+  const [coursesValue, setCoursesValue] = useState(initialCourses)
+  const [textValue, setTextValue] = useState<string>()
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTextValue(event.target.value)
+  }
+
+  const handleSubmit = async (
+    event:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    console.log('event.target.value', event.target.value)
+    const textParam: string = event.target.value || ''
+    console.log('textParam', textParam)
+    if (!textParam) {
+      console.log('all:textParam', textParam)
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/all`,
+        {
+          cache: 'no-cache',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      const allCourses: CourseType[] = await res.json()
+      console.log('allCourses', allCourses)
+      setCoursesValue(allCourses)
+    } else if (!!textParam) {
+      console.log('search:textParam', textParam)
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/search`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            text: textParam,
+          },
+        },
+      )
+      const searchedCourses: CourseType[] = await res.json()
+      console.log('searchedCourses', searchedCourses)
+      setCoursesValue(searchedCourses)
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.nativeEvent.isComposing || e.key !== 'Enter') return
+    handleSubmit(e)
+  }
 
   return (
     <Center bg={'gray.200'}>
@@ -30,6 +89,21 @@ export function CourseList({ courses }: { courses: CourseType[] }) {
         <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
           コース一覧
         </Heading>
+        <Box marginLeft={'auto'}>
+          <InputGroup>
+            <Input
+              value={textValue}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+              variant="outline"
+              placeholder="javaScript"
+              background={'white'}
+            />
+            <InputRightElement onSubmit={() => handleSubmit}>
+              <SearchIcon color="gray.500" />
+            </InputRightElement>
+          </InputGroup>
+        </Box>
         <Box mb={10}>
           <Flex
             alignItems="center"
@@ -43,7 +117,7 @@ export function CourseList({ courses }: { courses: CourseType[] }) {
             spacingX={[0, 10, 20]}
             spacingY="10"
           >
-            {courses.map((course: CourseType) => (
+            {coursesValue.map((course: CourseType) => (
               <Card key={course.id} w="288px" boxShadow="md" borderRadius="8px">
                 <CardHeader p={0}>
                   <Image
