@@ -179,7 +179,11 @@ export function CourseDetail({
                     </Text>
                     <Text pl={'3px'}>{selectedVideo.sections.videos.name}</Text>
                     <Spacer />
-                    <Button onClick={handleBookmarkToggle}>
+                    <Button
+                      onClick={handleBookmarkToggle}
+                      size="24px"
+                      variant="unstyled"
+                    >
                       <VideoBookmark isBookmarked={isBookmarked} />
                     </Button>
                   </HStack>
