@@ -1,0 +1,73 @@
+name: Build, Push and Deploy
+
+on:
+  push:
+    branches:
+      - feature/create_CICD
+    paths:
+      - 'backend/**'
+
+jobs:
+  build-push-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Echo checkout message
+        run: |
+          echo "Checked out the repository."
+
+      # AWSの認証情報を設定
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # ECRへのログイン
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # DockerイメージをビルドしてECRにプッシュ
+      - name: Build and Push Image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_NAME: ${{ secrets.ECR_IMAGE_NAME }}$
+        run: |
+          echo "Building Docker image..."
+          docker build --platform linux/arm64 -t $ECR_REGISTRY/$IMAGE_NAME:${{ github.sha }} -f backend/Dockerfile ./backend
+          echo "Pushing Docker image to ECR..."
+          docker push $ECR_REGISTRY/$IMAGE_NAME:${{ github.sha }}
+
+      # ECSのタスク定義を出力
+      - name: Download task definition
+        env:
+          TASK_DEFINITION: ${{ secrets.ECR_TASK_DEFINITION_NAME }}
+        run: |
+          echo "Fetching current task definition..."
+          aws ecs describe-task-definition --task-definition $TASK_DEFINITION --query taskDefinition > task-definition.json
+
+      # ECSのタスク定義にコンテナイメージを紐づけ
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ secrets.CONTAINER_NAME }}
+          image: ${{ steps.login-ecr-sample.outputs.registry }}/${{ env.ECR_IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Echo Updated task definition message
+        run: |
+          echo "Updated the task definition with the new image."
+
+      # ECSサービスを更新して新しいタスク定義をデプロイ
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ secrets.ECS_SERVICE_NAME }}
+          cluster: ${{ secrets.ECS_CLUSTER_NAME }}
+          force-new-deployment: true
