@@ -27,6 +27,7 @@ import ReactMde from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import ReactMarkdown from 'react-markdown'
 import * as Showdown from 'showdown'
+import '../../../styles/markdown.css'
 
 export function VideoEditModal({
   courseId,
@@ -207,7 +208,7 @@ export function VideoEditModal({
       blockScrollOnMount={false}
     >
       <ModalOverlay bg="rgba(0, 0, 0, 0.1)" />
-      <ModalContent minW={'90%'}>
+      <ModalContent minW={'90%'} h={'70%'}>
         <ModalHeader alignContent={'center'}>動画詳細入力</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
@@ -224,8 +225,10 @@ export function VideoEditModal({
                   </FormLabel>
                   <FormErrorMessage>{errors.descError}</FormErrorMessage>
                   <Box display={'flex'} justifyContent={'space-between'}>
-                    <Box w={'50%'} mr={'5'}>
+                    <Box w={'50%'} mr={'5'} h={'350px'}>
                       <ReactMde
+                        heightUnits="vh"
+                        minEditorHeight={40}
                         value={descValue}
                         onChange={descChange}
                         selectedTab={selectedEditorTab}
@@ -237,10 +240,14 @@ export function VideoEditModal({
                     </Box>
                     <Box
                       w={'50%'}
+                      h={'48vh'}
+                      overflow={'scroll'}
                       bg={'white'}
                       border={'1px solid gray'}
                       borderRadius={'4px'}
                       paddingLeft={'28px'}
+                      paddingRight={'20px'}
+                      className="markdown"
                     >
                       <ReactMarkdown>{descValue}</ReactMarkdown>
                     </Box>
