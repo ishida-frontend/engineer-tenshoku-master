@@ -1,11 +1,11 @@
 'use client'
 import { ChakraProvider } from '@chakra-ui/react'
-import { AuthProvider } from './AuthProvider'
+import { NextAuthProvider } from './NextAuthProvider'
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <ChakraProvider>
-      <AuthProvider>{children}</AuthProvider>
+      <NextAuthProvider>{children}</NextAuthProvider>
     </ChakraProvider>
   )
 }

@@ -15,7 +15,7 @@ import React, { useContext, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { AuthContext } from '../../../providers/AuthProvider'
-import { login } from '../../api'
+import { signIn } from 'next-auth/react'
 
 export default function Login() {
   const { handleCheckToken } = useContext(AuthContext)
@@ -30,7 +30,13 @@ export default function Login() {
   ) => {
     e.preventDefault()
     try {
-      await login(formState)
+      await signIn('credentials', {
+        email: formState.email,
+        password: formState.password,
+        redirect: false,
+        callbackUrl: '/',
+      })
+
       handleCheckToken()
       router.push('/')
     } catch (err) {
