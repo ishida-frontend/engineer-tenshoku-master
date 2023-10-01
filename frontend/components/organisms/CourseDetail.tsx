@@ -1,5 +1,6 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { AuthContext } from 'providers/AuthProvider'
 import {
   Accordion,
   AccordionItem,
@@ -19,7 +20,6 @@ import {
   StackDivider,
   VStack,
 } from '@chakra-ui/react'
-import { GoCheckCircleFill, GoCircle } from 'react-icons/go'
 
 import { CourseType } from '../../types/CourseType'
 import { SectionType } from '../../types/SectionType'
@@ -48,13 +48,9 @@ type SelectedVideo = {
 }
 
 export function CourseDetail({
-  isLogin,
   courseData,
-  userId,
 }: {
-  isLogin: boolean
   courseData: CourseDetailPropsType
-  userId: string
 }) {
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo>({
     id: courseData.id,
@@ -88,6 +84,53 @@ export function CourseDetail({
       },
     })
   }
+
+  const { check, user } = useContext(AuthContext)
+  // const [viewingStatus, setViewingStatus] = useState<string | null>(null)
+  // const [viewingStatuses, setViewingStatuses] = useState<
+  //   Record<string, string | null>
+  // >({})
+
+  // useEffect(() => {
+  //   const fetchViewingStatus = async () => {
+  //     if (check.isAuthenticated && selectedVideo.sections.videos.id) {
+  //       try {
+  //         const res = await fetch(
+  //           `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${user.id}/${selectedVideo.sections.videos.id}`,
+  //         )
+  //         const data = await res.json()
+  //         setViewingStatus(data?.status)
+  //       } catch (error) {
+  //         throw error
+  //       }
+  //     }
+  //   }
+  //   if (
+  //     selectedVideo &&
+  //     selectedVideo.sections &&
+  //     selectedVideo.sections.videos &&
+  //     selectedVideo.sections.videos.id
+  //   ) {
+  //     fetchViewingStatus()
+  //   }
+  // }, [check.isAuthenticated, user.id, selectedVideo])
+
+  // useEffect(() => {
+  //   const fetchAllViewingStatuses = async () => {
+  //     if (check.isAuthenticated && user.id) {
+  //       try {
+  //         const res = await fetch(
+  //           `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/all/${user.id}`,
+  //         )
+  //         const data = await res.json()
+  //         setViewingStatuses(data?.statuses || {})
+  //       } catch (error) {
+  //         throw error
+  //       }
+  //     }
+  //   }
+  //   fetchAllViewingStatuses()
+  // }, [check.isAuthenticated, user.id, courseData.id])
 
   return (
     <VStack minH={'100vh'} bg={'gray.100'}>
@@ -146,14 +189,8 @@ export function CourseDetail({
                                 >
                                   <CardHeader>
                                     <HStack>
-                                      {isLogin && (
-                                        <WatchedCheckCircle
-                                          userId={userId}
-                                          videoId={
-                                            selectedVideo.sections.videos.id
-                                          }
-                                        />
-                                      )}
+                                      <WatchedCheckCircle />
+
                                       <Text size="sm">
                                         {video.order}. {video.name}
                                       </Text>
@@ -189,13 +226,12 @@ export function CourseDetail({
                     </Text>
                     <Text pl={'3px'}>{selectedVideo.sections.videos.name}</Text>
                     <Spacer />
-                    {/* {console.log('isLogin:', isLogin)}
-                    {console.log('userId:', userId)}
-                    {console.log('videoId:', selectedVideo.sections.videos.id)} */}
-                    {isLogin && (
+                    {check.isAuthenticated && (
                       <WatchedButton
-                        userId={userId}
+                        userId={user.id}
                         videoId={selectedVideo.sections.videos.id}
+                        // viewingStatus={viewingStatus}
+                        // setViewingStatus={setViewingStatus}
                       />
                     )}
                   </HStack>

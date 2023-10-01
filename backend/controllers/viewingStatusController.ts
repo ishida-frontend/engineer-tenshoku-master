@@ -1,31 +1,65 @@
+import { PrismaClient } from '@prisma/client'
+import crypto from 'crypto'
 import express from 'express'
-import {
-  fetchViewingStatus,
-  updateViewingStatus,
-} from '../application/viewingStatusService'
+
+const prisma = new PrismaClient()
+
+import { ViewingStatusApplicationService } from '../application/viewingStatus'
 
 export class ViewingStatusController {
-  getViewingStatus = async (req: express.Request, res: express.Response) => {
+  static createViewingStatus = async (
+    req: express.Request,
+    res: express.Request,
+  ) => {
     try {
-      const viewingStatus = await fetchViewingStatus(
-        req.params.userId,
-        req.params.videoId,
-      )
-      res.json({ viewingStatus })
+      const statusData = req.body
+      await ViewingStatusApplicationService.create(statusData)
     } catch (error: any) {
       throw error()
+    } finally {
+      await prisma.$disconnect()
     }
   }
 
-  changeViewingStatus = async (req: express.Request, res: express.Response) => {
+  getViewingStatus = async (req: express.Request, res: express.Response) => {
     try {
-      console.log('req:', req.body)
-      const { userId, videoId, newStatus } = req.body
-
-      await updateViewingStatus({ userId, videoId, newStatus })
-      res.status(201)
-    } catch (error: any) {
+      const { userId, videoId } = req.params
+      const viewingStatus = await ViewingStatusApplicationService.get({
+        userId,
+        videoId,
+      })
+      res.status(200).json(viewingStatus)
+    } catch (error) {
       res.status(500)
+      throw error
+    }
+  }
+
+  getViewingStatuses = async (req: express.Request, res: express.Response) => {
+    try {
+      const { userId } = req.params
+      const viewingStatuses = await ViewingStatusApplicationService.getAll(
+        userId,
+      )
+      res.status(200).json(viewingStatuses)
+    } catch (error) {
+      res.status(500)
+      throw error
+    }
+  }
+
+  updateViewingStatus = async (req: express.Request, res: express.Response) => {
+    try {
+      const { newStatus, userId, videoId } = req.body
+      await ViewingStatusApplicationService.update({
+        newStatus,
+        userId,
+        videoId,
+      })
+      res.status(200)
+    } catch (error) {
+      res.status(500)
+      throw error
     }
   }
 }

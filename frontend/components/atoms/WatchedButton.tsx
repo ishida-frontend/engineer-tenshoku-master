@@ -10,53 +10,72 @@ export const WatchedButton = ({
   userId: string
   videoId: string
 }) => {
+  const [isLoading, setIsLoading] = useState(false)
   const [viewingStatus, setViewingStatus] = useState<string | null>(null)
 
-  const toggleViewingStatus = () => {
-    const newStatus = viewingStatus === 'WATCHED' ? 'NOT_WATCHED' : 'WATCHED'
-    setViewingStatus(newStatus)
-    updateViewingStatus({ userId, videoId, newStatus })
-  }
-
   useEffect(() => {
-    fetchViewingStatus()
-  }, [])
+    const fetchInitialStatus = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
+        )
+        const data = await response.json()
+        setViewingStatus(data.status)
+      } catch (error) {
+        console.error('Failed to fetch initial status', error)
+      }
+    }
 
-  const fetchViewingStatus = async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
-    )
-    const data = await res.json()
-
-    setViewingStatus(data.status)
-  }
+    fetchInitialStatus()
+  }, [userId, videoId])
 
   const updateViewingStatus = async ({
+    newStatus,
     userId,
     videoId,
-    newStatus,
   }: {
+    newStatus: string
     userId: string
     videoId: string
-    newStatus: string
   }) => {
     try {
-      const res = await fetch(
+      const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
         {
-          method: 'put',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ userId, videoId, newStatus }),
         },
       )
-    } catch (e: any) {
-      console.error(e)
-      throw e
+
+      if (response.status === 404) {
+        // statusデータが見つからない場合は、postでデータを新規作成
+        await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId, videoId, newStatus }),
+          },
+        )
+      }
+    } catch (error) {
       setViewingStatus(viewingStatus === 'WATCHED' ? 'NOT_WATCHED' : 'WATCHED')
+      throw error
     }
   }
+
+  const toggleViewingStatus = async () => {
+    const newStatus = viewingStatus === 'WATCHED' ? 'NOT_WATCHED' : 'WATCHED'
+    setViewingStatus(newStatus)
+
+    await updateViewingStatus({ newStatus, userId, videoId })
+  }
+
   return (
     <Button
       onClick={toggleViewingStatus}

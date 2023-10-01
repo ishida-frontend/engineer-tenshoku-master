@@ -104,13 +104,21 @@ contactRouter.post(
 
 const viewingStatusRouter = express.Router()
 router.use('/viewingstatus', viewingStatusRouter)
+viewingStatusRouter.post(
+  '/:userId/:videoId',
+  viewingStatusController.updateViewingStatus,
+)
 viewingStatusRouter.get(
   '/:userId/:videoId',
   viewingStatusController.getViewingStatus,
 )
+viewingStatusRouter.get(
+  '/all/:userId',
+  viewingStatusController.getViewingStatuses,
+)
 viewingStatusRouter.put(
   '/:userId/:videoId',
-  viewingStatusController.changeViewingStatus,
+  viewingStatusController.updateViewingStatus,
 )
 
 export default router
