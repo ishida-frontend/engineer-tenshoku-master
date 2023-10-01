@@ -18,6 +18,7 @@ import {
   Center,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
+import { PATHS } from '../../constants/paths'
 
 type Errors = {
   name?: string[]
@@ -106,7 +107,7 @@ export function UserContactForm() {
       if (e instanceof ZodError) {
         setErrors(e.flatten().fieldErrors as Errors)
       } else {
-        router.push('/contact/done')
+        router.push(PATHS.CONTACT.DONE.path)
         console.log(e)
       }
     }

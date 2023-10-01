@@ -5,6 +5,7 @@ import { UserType } from '../types'
 import { USER_ROLE } from '../constants/user'
 import { useRouter } from 'next/navigation'
 import { useCustomToast } from '../hooks/useCustomToast'
+import { PATHS } from '../constants/paths'
 
 const initialUser = {
   id: '',
@@ -56,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const adminAuth = (isAdmin: boolean) => {
     if (location.pathname.includes('admin') && !isAdmin) {
-      router.push('/auth/login')
+      router.push(PATHS.LOGIN.path)
       showErrorToast('管理者権限でログインしてください。')
     }
   }
