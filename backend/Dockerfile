@@ -9,6 +9,7 @@ FROM node:18.16.0 AS development
 WORKDIR /app
 
 COPY package*.json ./
+COPY yarn.lock ./
 COPY prisma ./prisma/
 
 RUN yarn install
@@ -17,7 +18,6 @@ EXPOSE 8000
 
 # DBコンテナでDBユーザー権限付与するまで待つ
 CMD sleep 45s; ./startup.sh
-
 
 ###############
 #    build    #
@@ -29,6 +29,7 @@ FROM node:18.16.0 AS build
 WORKDIR /app
 
 COPY package*.json ./
+COPY yarn.lock ./
 COPY prisma ./prisma/
 
 RUN yarn install --only=production
