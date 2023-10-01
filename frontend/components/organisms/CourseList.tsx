@@ -43,11 +43,8 @@ export function CourseList({
       | React.MouseEvent<HTMLButtonElement>
       | React.KeyboardEvent<HTMLInputElement>,
   ) => {
-    console.log('event.target.value', event.target.value)
     const textParam: string = event.target.value || ''
-    console.log('textParam', textParam)
     if (!textParam) {
-      console.log('all:textParam', textParam)
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/all`,
         {
@@ -58,22 +55,18 @@ export function CourseList({
         },
       )
       const allCourses: CourseType[] = await res.json()
-      console.log('allCourses', allCourses)
       setCoursesValue(allCourses)
     } else if (!!textParam) {
-      console.log('search:textParam', textParam)
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/search`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/search/${textParam}`,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            text: textParam,
           },
         },
       )
       const searchedCourses: CourseType[] = await res.json()
-      console.log('searchedCourses', searchedCourses)
       setCoursesValue(searchedCourses)
     }
   }
