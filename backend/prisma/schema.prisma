@@ -13,6 +13,8 @@ datasource db {
 
 model User {
   id         String    @id @db.VarChar(255)
+  question   Question[]
+  answer     Answer[]
   role       UserRole  @default(USER)
   name       String?
   oneWord    String?
@@ -54,6 +56,7 @@ model Section {
 
 model Video {
   id          String    @id @default(uuid()) @db.VarChar(255)
+  question    Question[]
   section     Section   @relation(fields: [section_id], references: [id])
   section_id  String    @db.VarChar(255)
   order       Int
@@ -75,4 +78,26 @@ model Contact {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   status     Int //対応ステータス(0:未対応, 1:対応中, 2:対応済み)
+}
+
+model Question {
+  id         String   @id @default(uuid()) @db.VarChar(255)
+  answer     Answer[]
+  video      Video    @relation(fields: [video_id], references: [id])
+  video_id   String   @db.VarChar(255)
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    String   @db.VarChar(255)
+  title      String   @db.VarChar(255)
+  content    String   @db.LongText
+  created_at DateTime @default(now())
+}
+
+model Answer {
+  id          String   @id @default(uuid()) @db.VarChar(255)
+  question    Question @relation(fields: [question_id], references: [id])
+  question_id String   @db.VarChar(255)
+  user        User     @relation(fields: [user_id], references: [id])
+  user_id     String   @db.VarChar(255)
+  comment     String   @db.LongText
+  created_at  DateTime @default(now())
 }
