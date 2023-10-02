@@ -17,10 +17,17 @@ import {
   Stack,
   StackDivider,
   VStack,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  Tabs,
+  CardBody,
 } from '@chakra-ui/react'
 import { CourseType } from '../../types/CourseType'
 import { SectionType } from '../../types/SectionType'
 import { VideoType } from '../../types/VideoType'
+import { QuestionType } from 'types/QuestionType'
 import ReactMarkdown from 'react-markdown'
 import '../../styles/markdown.css'
 
@@ -63,6 +70,8 @@ export function CourseDetail({
     },
   })
 
+  const [questions, setQuestions] = useState<QuestionType[]>()
+
   const handleChangeVideo = (sectionIndex: number, videoIndex: number) => {
     setSelectedVideo({
       id: courseData.id,
@@ -79,6 +88,20 @@ export function CourseDetail({
         },
       },
     })
+  }
+
+  const handleGetQuestions = async (videoId: string) => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${videoId}`,
+      {
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    const getQuestions: QuestionType[] = await res.json()
+    setQuestions(getQuestions)
   }
 
   return (
@@ -160,8 +183,8 @@ export function CourseDetail({
               />
             </AspectRatio>
             <Box bg={'white'} padding={'20px'}>
-              <Card bg={'gray.100'}>
-                <CardHeader>
+              <Card>
+                <CardHeader bg={'gray.100'}>
                   <HStack fontSize={'xl'}>
                     <Text color={'teal.400'} fontWeight={'bold'}>
                       SECTION {selectedVideo.sections.order}
@@ -172,16 +195,74 @@ export function CourseDetail({
                     <Text pl={'3px'}>{selectedVideo.sections.videos.name}</Text>
                   </HStack>
                 </CardHeader>
+                <CardBody bg={'white'} pl={'0px'} pr={'0px'}>
+                  <Tabs isFitted colorScheme={'green'}>
+                    <TabList>
+                      <Tab>レッスン内容</Tab>
+                      <Tab
+                        onClick={() =>
+                          handleGetQuestions(selectedVideo.sections.videos.id)
+                        }
+                      >
+                        質問と回答
+                      </Tab>
+                    </TabList>
+                    <TabPanels>
+                      <TabPanel>
+                        <Box
+                          className="markdown"
+                          paddingLeft={'30px'}
+                          paddingRight={'30px'}
+                        >
+                          <ReactMarkdown>
+                            {selectedVideo.sections.videos.description}
+                          </ReactMarkdown>
+                        </Box>
+                      </TabPanel>
+                      <TabPanel
+                        ml={'20px'}
+                        mr={'20px'}
+                        mt={'20px'}
+                        borderTop={'1px solid gray'}
+                      >
+                        <Heading size="md">この動画の全ての質問</Heading>
+                        <Stack divider={<StackDivider />} spacing="4">
+                          {questions &&
+                            questions.map((question) => {
+                              return (
+                                <Card
+                                  key={question.id}
+                                  boxShadow={'rgba(0, 0, 0, 0.24) 0px 3px 3px;'}
+                                  cursor={'pointer'}
+                                  _hover={{
+                                    bg: 'transparent',
+                                  }}
+                                  // onClick={() =>
+                                  //   handleViewAnswer(questionId,userId)
+                                  // }
+                                >
+                                  <CardHeader>
+                                    <Heading
+                                      size="xs"
+                                      textTransform="uppercase"
+                                    >
+                                      {question.title}
+                                    </Heading>
+                                  </CardHeader>
+                                  <CardBody>
+                                    <Text pt="2" fontSize="sm">
+                                      {question.content}
+                                    </Text>
+                                  </CardBody>
+                                </Card>
+                              )
+                            })}
+                        </Stack>
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </CardBody>
               </Card>
-            </Box>
-            <Box
-              className="markdown"
-              paddingLeft={'30px'}
-              paddingRight={'30px'}
-            >
-              <ReactMarkdown>
-                {selectedVideo.sections.videos.description}
-              </ReactMarkdown>
             </Box>
           </Box>
         </Container>
