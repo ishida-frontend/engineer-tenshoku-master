@@ -26,7 +26,8 @@ import { SectionType } from '../../types/SectionType'
 import { VideoType } from '../../types/VideoType'
 import { WatchedButton } from 'components/atoms/WatchedButton'
 import { WatchedCheckCircle } from 'components/atoms/WatchedCheckCircle'
-import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
+import ReactMarkdown from 'react-markdown'
+import '../../styles/markdown.css'
 
 type CourseDetailPropsType = CourseType & {
   sections: (SectionType & { videos: VideoType[] })[]
@@ -238,9 +239,15 @@ export function CourseDetail({
                 </CardHeader>
               </Card>
             </Box>
-            <VideoDetailAndQAndA
-              videoDescription={selectedVideo.sections.videos.description}
-            />
+            <Box
+              className="markdown"
+              paddingLeft={'30px'}
+              paddingRight={'30px'}
+            >
+              <ReactMarkdown>
+                {selectedVideo.sections.videos.description}
+              </ReactMarkdown>
+            </Box>
           </Box>
         </Container>
       </Container>

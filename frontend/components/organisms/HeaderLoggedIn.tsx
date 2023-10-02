@@ -12,23 +12,25 @@ import {
 import { AiOutlineUser } from 'react-icons/ai'
 
 import { TitleLogo } from '../atoms/TitleLogo'
-import { useContext, useState } from 'react'
-import { logout } from '../../app/api'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AuthContext } from '../../providers/AuthProvider'
 import { PATHS } from '../../constants/paths'
 
-export function HeaderLoggedIn() {
-  const { handleCheckToken, user } = useContext(AuthContext)
+type HeaderLoggedInType = {
+  user: {
+    id: string
+    isAdmin: boolean
+    name: string
+  }
+  signOut: () => Promise<void>
+}
+export function HeaderLoggedIn({ user, signOut }: HeaderLoggedInType) {
   const [show, setShow] = useState(false)
   const router = useRouter()
 
   const handleLogout = async () => {
-    const result = await logout()
-    if (result) {
-      handleCheckToken()
-      router.push(PATHS.LOGIN.path)
-    }
+    await signOut()
+    router.push(PATHS.LOGIN.path)
   }
 
   return (

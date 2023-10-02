@@ -17,9 +17,8 @@ export default async function CourseDetailPage({
 }) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/${params.courseId}`,
+      `${process.env.NEXT_PUBLIC_FRONT_API_URL}/course/${params.courseId}`,
       {
-        cache: 'no-cache',
         headers: {
           'Content-Type': 'application/json',
         },
