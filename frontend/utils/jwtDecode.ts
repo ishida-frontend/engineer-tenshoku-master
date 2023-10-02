@@ -6,6 +6,5 @@ export const getJwtDecoded = (
   [name: string]: string
 } => {
   const decoded = jwt_decode<{ [name: string]: string }>(token)
-  console.log(decoded) //デバッグ用
   return decoded
 }
