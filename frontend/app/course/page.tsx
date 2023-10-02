@@ -6,8 +6,8 @@ import Error from '../error'
 import { authOptions } from '../api/auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth'
 export default async function Course() {
+  // TODO ユーザ情報を渡してデータ取得できるようにする
   const session = await getServerSession(authOptions)
-  console.log('getServerSession', session)
 
   try {
     const res = await fetch(

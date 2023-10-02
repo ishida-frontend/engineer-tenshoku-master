@@ -11,14 +11,12 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { AuthContext } from '../../../providers/AuthProvider'
 import { signIn } from 'next-auth/react'
 
 export default function Login() {
-  const { handleCheckToken } = useContext(AuthContext)
   const router = useRouter()
   const [formState, setFormState] = useState({
     email: '',
@@ -36,8 +34,6 @@ export default function Login() {
         redirect: false,
         callbackUrl: '/',
       })
-
-      handleCheckToken()
       router.push('/')
     } catch (err) {
       console.log('err', err)

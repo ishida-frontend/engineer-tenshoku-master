@@ -1,9 +1,10 @@
 import NextAuth from 'next-auth'
 import type { AuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { checkToken, login } from '../../auth'
+import { login } from '../../auth'
 import { getJwtDecoded } from '../../../../utils/jwtDecode'
 import { getUser } from '../../user'
+import { USER_ROLE } from '../../../../constants/user'
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -43,13 +44,14 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    session: ({ session, token, ...other }) => {
-      console.log('session', session, token, other)
+    session: async ({ session, token, ...other }) => {
+      const user = await getUser(token.sub || '')
       return {
         ...session,
         user: {
           ...session.user,
           id: token.sub,
+          isAdmin: user.role === USER_ROLE.ADMIN,
         },
       }
     },
