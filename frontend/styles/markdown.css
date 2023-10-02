@@ -1,0 +1,71 @@
+.markdown {
+  white-space: pre-wrap;
+}
+
+.markdown p {
+  margin-bottom: 15px;
+}
+
+.markdown strong {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16.94px;
+  color: black;
+}
+
+.markdown h3 {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 29.05px;
+}
+
+.markdown a {
+  color: #38A169;
+}
+
+.markdown blockquote {
+  display: flex;
+}
+.markdown blockquote:has(p):before,
+.markdown blockquote:has(p):after {
+  content:'';
+}
+.markdown blockquote {
+  padding-top: 12px;
+  padding-left: 20px;
+  padding-bottom: 9px;
+  background:  rgba(0, 0, 0, 0.04);
+  border-left: 4px solid rgba(0, 0, 0, 0.16);
+}
+
+.markdown blockquote p {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.94px;
+  padding-left: 20px;
+  color: black;
+}
+
+.markdown p:has(code) {
+  padding-top: 12px;
+  padding-left: 20px;
+  padding-bottom: 9px;
+  background-color: black;
+}
+
+.markdown pre {
+  padding-top: 12px;
+  padding-left: 20px;
+  padding-bottom: 9px;
+  background-color: black;
+}
+
+.markdown code {
+  color: white;
+}
+.markdown ul:has(li) {
+  padding-left: 20px;
+}
+.markdown ol:has(li) {
+  padding-left: 20px;
+}
