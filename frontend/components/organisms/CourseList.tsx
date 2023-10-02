@@ -24,17 +24,17 @@ import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { SearchIcon } from '@chakra-ui/icons'
 
-export function CourseList({
-  initialCourses,
-}: {
-  initialCourses: CourseType[]
-}) {
-  if (!initialCourses) return <Loader />
-  const [coursesValue, setCoursesValue] = useState(initialCourses)
-  const [textValue, setTextValue] = useState<string>()
+type CourseListProps = {
+  courses: CourseType[]
+  handleTextChange: (event: any) => void
+}
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTextValue(event.target.value)
+export function CourseList({ courses, handleTextChange }: CourseListProps) {
+  if (!courses) return <Loader />
+  const [text, setText] = useState<string>()
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setText(event.target.value)
   }
 
   const handleSubmit = async (
@@ -43,36 +43,11 @@ export function CourseList({
       | React.KeyboardEvent<HTMLInputElement>,
   ) => {
     const textParam: string = event.target.value || ''
-    if (!textParam) {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/all`,
-        {
-          cache: 'no-cache',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      )
-      const allCourses: CourseType[] = await res.json()
-      setCoursesValue(allCourses)
-    } else if (!!textParam) {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/search/${textParam}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      )
-      const searchedCourses: CourseType[] = await res.json()
-      setCoursesValue(searchedCourses)
-    }
+    handleTextChange(textParam)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.nativeEvent.isComposing || e.key !== 'Enter') return
-    handleSubmit(e)
+    if (e.nativeEvent.isComposing || e.key !== 'Enter') return handleSubmit(e)
   }
 
   return (
@@ -84,8 +59,8 @@ export function CourseList({
         <Box marginLeft={'auto'}>
           <InputGroup>
             <Input
-              value={textValue}
-              onChange={handleChange}
+              value={text}
+              onChange={handleInputChange}
               onKeyDown={handleKeyDown}
               variant="outline"
               placeholder="javaScript"
@@ -109,7 +84,7 @@ export function CourseList({
             spacingX={[0, 10, 20]}
             spacingY="10"
           >
-            {coursesValue.map((course: CourseType) => (
+            {courses.map((course: CourseType) => (
               <Card key={course.id} w="288px" boxShadow="md" borderRadius="8px">
                 <CardHeader p={0}>
                   <Image
