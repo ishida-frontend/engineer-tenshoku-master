@@ -21,19 +21,20 @@ import {
 import { CourseType } from '../../types/CourseType'
 import { SectionType } from '../../types/SectionType'
 import { VideoType } from '../../types/VideoType'
-import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
+import ReactMarkdown from 'react-markdown'
+import '../../styles/markdown.css'
 
 type CourseDetailPropsType = CourseType & {
   sections: (SectionType & { videos: VideoType[] })[]
 }
 
 type SelectedVideo = {
-  id: number
+  id: string
   sections: {
-    id: number
+    id: string
     order: number
     videos: {
-      id: number
+      id: string
       order: number
       name: string
       description: string
@@ -173,9 +174,15 @@ export function CourseDetail({
                 </CardHeader>
               </Card>
             </Box>
-            <VideoDetailAndQAndA
-              videoDescription={selectedVideo.sections.videos.description}
-            />
+            <Box
+              className="markdown"
+              paddingLeft={'30px'}
+              paddingRight={'30px'}
+            >
+              <ReactMarkdown>
+                {selectedVideo.sections.videos.description}
+              </ReactMarkdown>
+            </Box>
           </Box>
         </Container>
       </Container>
