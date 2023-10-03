@@ -1,22 +1,26 @@
 import { Loader } from '../components/atoms/Loader'
 import { Header } from './header'
 import { Footer } from '../components/organisms/Footer'
-import { AuthContext } from '../providers/AuthProvider'
-import { useContext } from 'react'
+import { useSession, signOut } from 'next-auth/react'
 
 export const Main = ({ children }: { children: React.ReactNode }) => {
-  const { check } = useContext(AuthContext)
+  const { data: session, status } = useSession()
 
-  if (!check.checked) {
+  if (status === 'loading') {
     return <Loader />
   }
+
+  const user = session?.user as {
+    id: string
+    isAdmin: boolean
+    name: string
+  }
+
   return (
-    check.checked && (
-      <>
-        <Header isLogin={check.isAuthenticated} />
-        {children}
-        <Footer />
-      </>
-    )
+    <>
+      <Header user={user} signOut={signOut} />
+      {children}
+      <Footer />
+    </>
   )
 }
