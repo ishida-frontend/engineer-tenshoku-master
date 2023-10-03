@@ -17,9 +17,12 @@ export default async function CourseDetailPage({
 }: {
   params: { courseId: string }
 }) {
+  const session = await getServerSession(authOptions)
+  console.log('session in CourseDetailPage:', session)
+
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/${params.courseId}`,
+      `${process.env.NEXT_PUBLIC_FRONT_API_URL}/course/${params.courseId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -28,10 +31,7 @@ export default async function CourseDetailPage({
     )
     const courseData: CourseDetailPropsType = await res.json()
 
-    const session = await getServerSession(authOptions)
-    console.log('session in CourseDetailPage:', session)
-
-    return <CourseDetail courseData={courseData} />
+    return <CourseDetail courseData={courseData} session={session} />
   } catch (e) {
     console.log(e)
     return <Error />
