@@ -20,6 +20,7 @@ export default async function Course() {
       },
     )
     const initialCourses: CourseType[] = await res.json()
+    console.log('initialCourses:', initialCourses)
 
     return <CourseListWrapper initialCourses={initialCourses} />
   } catch (e) {

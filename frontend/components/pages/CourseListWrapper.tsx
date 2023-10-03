@@ -1,18 +1,22 @@
 'use client'
 import React, { useState } from 'react'
 
-import {CourseList} from '../organisms/CourseList'
+import { CourseList } from '../organisms/CourseList'
 import { CourseType } from '../../types/CourseType'
 import Error from '../../app/error'
 
-export function CourseListWrapper({initialCourses}:{initialCourses:CourseType[]}) {
-
+export function CourseListWrapper({
+  initialCourses,
+}: {
+  initialCourses: CourseType[]
+}) {
   try {
     const [text, setText] = useState<string>('')
     const [courses, setCourses] = useState<CourseType[]>(initialCourses)
 
     const handleTextChange = async (newText: string) => {
       setText(newText)
+      console.log('newText:', newText)
       if (!!text) {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/search/${text}`,
@@ -38,9 +42,10 @@ export function CourseListWrapper({initialCourses}:{initialCourses:CourseType[]}
         const allCourses: CourseType[] = await res.json()
         setCourses(allCourses)
       }
+      console.log('courses:', courses)
     }
 
-    return  <CourseList handleTextChange={handleTextChange} courses={courses} />
+    return <CourseList courses={courses} handleTextChange={handleTextChange} />
   } catch (e) {
     console.log(e)
     return <Error />

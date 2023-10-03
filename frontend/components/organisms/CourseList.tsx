@@ -41,7 +41,10 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
       | React.MouseEvent<HTMLButtonElement>
       | React.KeyboardEvent<HTMLInputElement>,
   ) => {
+    console.log('handleSubmit Start:')
+    console.log('event.target:', event.target)
     const textParam: string = event.target.value || ''
+    console.log('textParam:', textParam)
     handleTextChange(textParam)
   }
 
