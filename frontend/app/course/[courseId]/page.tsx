@@ -1,6 +1,8 @@
 import React from 'react'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 
-import { CourseDetail } from '../../../components/organisms/CourseDetail'
+import { CourseDetail } from '../../../components/pages/CourseDetail'
 import { CourseType } from '../../../types/CourseType'
 import { SectionType } from '../../../types/SectionType'
 import { VideoType } from '../../../types/VideoType'
@@ -17,7 +19,7 @@ export default async function CourseDetailPage({
 }) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_FRONT_API_URL}/course/${params.courseId}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/${params.courseId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -25,6 +27,9 @@ export default async function CourseDetailPage({
       },
     )
     const courseData: CourseDetailPropsType = await res.json()
+
+    const session = await getServerSession(authOptions)
+    console.log('session in CourseDetailPage:', session)
 
     return <CourseDetail courseData={courseData} />
   } catch (e) {
