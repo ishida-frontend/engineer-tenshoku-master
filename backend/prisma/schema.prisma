@@ -81,7 +81,7 @@ model Contact {
 }
 
 model Question {
-  id         String   @id @default(uuid()) @db.VarChar(255)
+  id         String   @id @db.VarChar(255)
   answer     Answer[]
   video      Video    @relation(fields: [video_id], references: [id])
   video_id   String   @db.VarChar(255)
@@ -90,14 +90,16 @@ model Question {
   title      String   @db.VarChar(255)
   content    String   @db.LongText
   created_at DateTime @default(now())
+  updated_at  DateTime  @updatedAt
 }
 
 model Answer {
-  id          String   @id @default(uuid()) @db.VarChar(255)
+  id          String   @id @db.VarChar(255)
   question    Question @relation(fields: [question_id], references: [id])
   question_id String   @db.VarChar(255)
   user        User     @relation(fields: [user_id], references: [id])
   user_id     String   @db.VarChar(255)
   comment     String   @db.LongText
   created_at  DateTime @default(now())
+  updated_at  DateTime  @updatedAt
 }
