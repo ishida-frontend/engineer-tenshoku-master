@@ -1,6 +1,6 @@
 import React from 'react'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from '../../api/auth/[...nextauth]/route'
 
 import { CourseDetail } from '../../../components/pages/CourseDetail'
 import { CourseType } from '../../../types/CourseType'
@@ -18,7 +18,6 @@ export default async function CourseDetailPage({
   params: { courseId: string }
 }) {
   const session = await getServerSession(authOptions)
-  console.log('session in CourseDetailPage:', session)
 
   try {
     const res = await fetch(
