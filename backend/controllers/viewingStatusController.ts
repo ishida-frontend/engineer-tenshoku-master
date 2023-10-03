@@ -1,23 +1,23 @@
-import { PrismaClient } from '@prisma/client'
-import crypto from 'crypto'
 import express from 'express'
-
-const prisma = new PrismaClient()
 
 import { ViewingStatusApplicationService } from '../application/viewingStatus'
 
 export class ViewingStatusController {
-  static createViewingStatus = async (
-    req: express.Request,
-    res: express.Request,
-  ) => {
+  updateViewingStatus = async (req: express.Request, res: express.Response) => {
     try {
-      const statusData = req.body
-      await ViewingStatusApplicationService.create(statusData)
-    } catch (error: any) {
-      throw error()
-    } finally {
-      await prisma.$disconnect()
+      const { isWatched, userId, videoId } = req.body
+      console.log('isWatched:', isWatched)
+      console.log('userId:', userId)
+      console.log('videoId:', videoId)
+      await ViewingStatusApplicationService.update({
+        isWatched,
+        userId,
+        videoId,
+      })
+      res.status(200)
+    } catch (error) {
+      res.status(500)
+      throw error
     }
   }
 
@@ -42,21 +42,6 @@ export class ViewingStatusController {
         userId,
       )
       res.status(200).json(viewingStatuses)
-    } catch (error) {
-      res.status(500)
-      throw error
-    }
-  }
-
-  updateViewingStatus = async (req: express.Request, res: express.Response) => {
-    try {
-      const { newStatus, userId, videoId } = req.body
-      await ViewingStatusApplicationService.update({
-        newStatus,
-        userId,
-        videoId,
-      })
-      res.status(200)
     } catch (error) {
       res.status(500)
       throw error

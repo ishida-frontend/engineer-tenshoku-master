@@ -1,22 +1,35 @@
-import { PrismaClient, ViewingStatusType } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 export class ViewingStatusApplicationService {
-  static async create(statusData: { userId: string; videoId: string }) {
+  static async update({
+    isWatched,
+    userId,
+    videoId,
+  }: {
+    isWatched: boolean
+    userId: string
+    videoId: string
+  }) {
     try {
-      const { userId, videoId } = statusData
-      const newStatus = await prisma.viewingStatus.create({
-        data: {
+      return prisma.viewingStatus.upsert({
+        where: {
+          user_id_video_id: {
+            user_id: userId,
+            video_id: videoId,
+          },
+        },
+        create: {
+          status: isWatched,
           user_id: userId,
           video_id: videoId,
         },
+        update: { status: isWatched },
       })
-      return newStatus
-    } catch (e: any) {
-      throw new Error(e)
-    } finally {
-      await prisma.$disconnect()
+    } catch (error: any) {
+      console.error('Error updating viewing status:', error)
+      throw error
     }
   }
 
@@ -47,36 +60,6 @@ export class ViewingStatusApplicationService {
       })
       return viewingStatuses
     } catch (error) {
-      throw error
-    }
-  }
-
-  static async update({
-    newStatus,
-    userId,
-    videoId,
-  }: {
-    newStatus: string
-    userId: string
-    videoId: string
-  }) {
-    try {
-      return prisma.viewingStatus.upsert({
-        where: {
-          user_id_video_id: {
-            user_id: userId,
-            video_id: videoId,
-          },
-        },
-        update: { status: newStatus as ViewingStatusType },
-        create: {
-          user_id: userId,
-          video_id: videoId,
-          status: newStatus as ViewingStatusType,
-        },
-      })
-    } catch (error: any) {
-      console.error('Error updating viewing status:', error)
       throw error
     }
   }

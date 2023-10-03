@@ -1,38 +1,30 @@
 import React from 'react'
 import {
   AspectRatio,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
   Box,
   Card,
   CardHeader,
-  Heading,
   HStack,
   Text,
   Spacer,
-  Stack,
-  StackDivider,
 } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown'
 
-import { WatchedCheckCircle } from 'components/atoms/WatchedCheckCircle'
-import { CourseDetailPropsType } from '../pages/CourseDetail'
+import { WatchedButton } from 'components/atoms/WatchedButton'
 import { SelectedVideo } from '../pages/CourseDetail'
-import { HandleChangeVideo } from '../pages/CourseDetail'
 
 export function CourseDetailVideoSection({
+  userId,
   isWatched,
   setIsWatched,
   selectedVideo,
-  setSelectedVideo,
+  handleViewingStatus,
 }: {
+  userId: string | undefined
   isWatched: boolean
   setIsWatched: React.Dispatch<React.SetStateAction<boolean>>
   selectedVideo: SelectedVideo
-  setSelectedVideo: React.Dispatch<React.SetStateAction<SelectedVideo>>
+  handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -53,12 +45,13 @@ export function CourseDetailVideoSection({
               <Text pl={'40px'}>{selectedVideo.sections.videos.order}.</Text>
               <Text pl={'3px'}>{selectedVideo.sections.videos.name}</Text>
               <Spacer />
-              {/* {status.isAuthenticated &&
-                        <WatchedButton
-                          viewingStatus={viewingStatus}
-                          toggleViewingStatus={toggleViewingStatus}
-                        />,
-                      )} */}
+              {userId && (
+                <WatchedButton
+                  isWatched={isWatched}
+                  setIsWatched={setIsWatched}
+                  handleViewingStatus={handleViewingStatus}
+                />
+              )}
             </HStack>
           </CardHeader>
         </Card>

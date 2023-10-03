@@ -108,6 +108,10 @@ viewingStatusRouter.post(
   '/:userId/:videoId',
   viewingStatusController.updateViewingStatus,
 )
+viewingStatusRouter.put(
+  '/:userId/:videoId',
+  viewingStatusController.updateViewingStatus,
+)
 viewingStatusRouter.get(
   '/:userId/:videoId',
   viewingStatusController.getViewingStatus,
@@ -115,10 +119,6 @@ viewingStatusRouter.get(
 viewingStatusRouter.get(
   '/all/:userId',
   viewingStatusController.getViewingStatuses,
-)
-viewingStatusRouter.put(
-  '/:userId/:videoId',
-  viewingStatusController.updateViewingStatus,
 )
 
 export default router
