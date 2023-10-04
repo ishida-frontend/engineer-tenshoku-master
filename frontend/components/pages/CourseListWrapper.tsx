@@ -17,9 +17,10 @@ export function CourseListWrapper({
     const handleTextChange = async (newText: string) => {
       setText(newText)
       console.log('newText:', newText)
-      if (!!text) {
+      console.log('textセットできてない', text)
+      if (!!newText) {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/search/${text}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/search/${newText}`,
           {
             method: 'GET',
             headers: {
@@ -28,6 +29,7 @@ export function CourseListWrapper({
           },
         )
         const searchedCourses: CourseType[] = await res.json()
+        console.log('searchedCourses', searchedCourses)
         setCourses(searchedCourses)
       } else {
         const res = await fetch(
@@ -42,9 +44,8 @@ export function CourseListWrapper({
         const allCourses: CourseType[] = await res.json()
         setCourses(allCourses)
       }
-      console.log('courses:', courses)
     }
-
+    console.log('textセットできてる', text)
     return <CourseList courses={courses} handleTextChange={handleTextChange} />
   } catch (e) {
     console.log(e)
