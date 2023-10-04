@@ -52,7 +52,7 @@ jobs:
       # ECSのタスク定義を出力
       - name: Download task definition
         env:
-          TASK_DEFINITION: ${{ secrets.ECR_TASK_DEFINITION_NAME }}
+          TASK_DEFINITION: ${{ secrets.ECS_TASK_DEFINITION_NAME }}
         run: |
           echo "Fetching current task definition..."
           aws ecs describe-task-definition --task-definition $TASK_DEFINITION --query taskDefinition > task-definition.json
@@ -66,15 +66,6 @@ jobs:
           container-name: ${{ secrets.CONTAINER_NAME }}
           image: ${{ secrets.ECR_REGISTRY_NAME }}/${{ secrets.ECR_REPOSITORY_NAME }}:${{ github.sha }}
 
-      # - name: Fill in the new image ID in the Amazon ECS task definition
-      #   id: task-def
-      #   uses: aws-actions/amazon-ecs-render-task-definition@v1
-      #   with:
-      #     task-definition: task-definition.json
-      #     container-name: ${{ secrets.CONTAINER_NAME }}
-      #     image: ${{ steps.build-image.outputs.image }}
-          # image: ${{ steps.login-ecr-sample.outputs.registry }}/${{ env.SAMPLE_IMAGE_NAME }}:${{ github.sha }}
-
       - name: Echo Updated task definition message
         run: |
           echo "Updated the task definition with the new image."
@@ -87,3 +78,18 @@ jobs:
           service: ${{ secrets.ECS_SERVICE_NAME }}
           cluster: ${{ secrets.ECS_CLUSTER_NAME }}
           force-new-deployment: true
+
+      # ECSタスクでmigrationを実行
+      - name: Run Prisma migration
+        uses: noelzubin/aws-ecs-run-task@v1.0
+        with:
+          cluster: ${{ secrets.ECS_CLUSTER_NAME }}
+          task-definition: ${{ secrets.ECS_TASK_DEFINITION_NAME }}
+          subnets: subnet-094c33ebb31f93a6c
+          security-groups: sg-069156259e7cc13f5
+          assign-public-ip: ENABLED
+          override-container: express
+          override-container-command: |
+            sh
+            -c
+            yarn prisma migrate deploy

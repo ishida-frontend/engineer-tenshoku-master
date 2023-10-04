@@ -52,6 +52,9 @@ WORKDIR /app
 COPY --from=build /app/node_modules ./node_modules
 # ビルドステージでコンパイルされたJavaScriptファイルをコピー
 COPY --from=build /app/dist ./dist
+# ECSタスクでDBマイグレーションを行うために必要
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/prisma ./prisma/
 
 EXPOSE 8000
 
