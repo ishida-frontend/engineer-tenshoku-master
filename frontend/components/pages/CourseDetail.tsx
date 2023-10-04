@@ -43,9 +43,13 @@ export function CourseDetail({
   session: Session | null
 }) {
   const userId = session?.user?.id
-  const [isWatched, setIsWatched] = useState<boolean>(false)
   const { showErrorToast } = useCustomToast()
 
+  const [isWatched, setIsWatched] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [videoId, setVideoId] = useState<string>(
+    courseData.sections[0].videos[0].id,
+  )
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo>({
     id: courseData.id,
     sections: {
@@ -60,9 +64,7 @@ export function CourseDetail({
       },
     },
   })
-  const [videoId, setVideoId] = useState<string>(
-    courseData.sections[0].videos[0].id,
-  )
+
   const handleChangeVideo = (sectionIndex: number, videoIndex: number) => {
     const currentlySelectedVideo = {
       id: courseData.id,
@@ -79,19 +81,35 @@ export function CourseDetail({
         },
       },
     }
-
     setSelectedVideo(currentlySelectedVideo)
     setVideoId(currentlySelectedVideo.sections.videos.id)
   }
 
-  const toggleViewingStatus = () => {
-    console.log('isWatched', isWatched)
-    if (isWatched === null || isWatched === false) {
-      setIsWatched(true)
-    } else {
-      setIsWatched(false)
+  const fetchViewingStatus = async () => {
+    if (!userId || !videoId) return
+    setIsLoading(true)
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
+      )
+      const viewingStatus = await res.json()
+
+      if (viewingStatus === null) {
+        setIsWatched(viewingStatus)
+      } else {
+        setIsWatched(viewingStatus.status)
+      }
+    } catch (error) {
+      showErrorToast('視聴ステータスの取得に失敗しました')
+    } finally {
+      setIsLoading(false)
     }
   }
+  useEffect(() => {
+    fetchViewingStatus()
+  }, [videoId])
+
   const updateViewingStatus = async ({
     isWatched,
     userId,
@@ -101,9 +119,7 @@ export function CourseDetail({
     userId: string | undefined
     videoId: string
   }) => {
-    console.log('isWatched:', isWatched)
-    console.log('userId:', userId)
-    console.log('videoId:', videoId)
+    setIsLoading(true)
 
     // DBにステータス情報がある場合は更新
     try {
@@ -121,9 +137,8 @@ export function CourseDetail({
           }),
         },
       )
-      const result = await res.json()
 
-      if (result.status !== 201) {
+      if (!res.ok) {
         // DBにステータス情報がない場合は作成
         await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
@@ -136,33 +151,19 @@ export function CourseDetail({
         )
       }
       const viewingStatus = await res.json()
-      setIsWatched(viewingStatus)
+      setIsWatched(viewingStatus.status)
     } catch (error) {
       showErrorToast('視聴ステータスの変更に失敗しました')
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const handleViewingStatus = async () => {
-    toggleViewingStatus()
-    await updateViewingStatus({ isWatched, userId, videoId })
+    const newWatchedStatus = !isWatched
+    setIsWatched(newWatchedStatus)
+    await updateViewingStatus({ isWatched: newWatchedStatus, userId, videoId })
   }
-
-  const fetchViewingStatus = async () => {
-    if (!userId || !videoId) return
-
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
-      )
-      const viewingStatus = await res.json()
-      setIsWatched(viewingStatus || false)
-    } catch (error) {
-      showErrorToast('視聴ステータスの取得に失敗しました')
-    }
-  }
-  useEffect(() => {
-    fetchViewingStatus()
-  }, [videoId])
 
   return (
     <VStack minH={'100vh'} bg={'gray.100'}>
@@ -185,8 +186,8 @@ export function CourseDetail({
             userId={userId}
             selectedVideo={selectedVideo}
             isWatched={isWatched}
-            setIsWatched={setIsWatched}
             handleViewingStatus={handleViewingStatus}
+            isLoading={isLoading}
           />
         </Container>
       </Container>

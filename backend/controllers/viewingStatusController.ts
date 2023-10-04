@@ -6,15 +6,12 @@ export class ViewingStatusController {
   updateViewingStatus = async (req: express.Request, res: express.Response) => {
     try {
       const { isWatched, userId, videoId } = req.body
-      console.log('isWatched:', isWatched)
-      console.log('userId:', userId)
-      console.log('videoId:', videoId)
-      await ViewingStatusApplicationService.update({
+      const viewingStatus = await ViewingStatusApplicationService.update({
         isWatched,
         userId,
         videoId,
       })
-      res.status(200)
+      res.status(201).json(viewingStatus)
     } catch (error) {
       res.status(500)
       throw error

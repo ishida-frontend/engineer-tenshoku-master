@@ -13,7 +13,7 @@ export class ViewingStatusApplicationService {
     videoId: string
   }) {
     try {
-      return prisma.viewingStatus.upsert({
+      const viewingStatus = await prisma.viewingStatus.upsert({
         where: {
           user_id_video_id: {
             user_id: userId,
@@ -27,8 +27,9 @@ export class ViewingStatusApplicationService {
         },
         update: { status: isWatched },
       })
+
+      return viewingStatus
     } catch (error: any) {
-      console.error('Error updating viewing status:', error)
       throw error
     }
   }

@@ -1,6 +1,5 @@
 'use client'
-import React, { useContext, useEffect, useState } from 'react'
-import { AuthContext } from 'providers/AuthProvider'
+import React, { useState } from 'react'
 import {
   Accordion,
   AccordionItem,
@@ -20,14 +19,19 @@ import {
   StackDivider,
   VStack,
 } from '@chakra-ui/react'
+import ReactMarkdown from 'react-markdown'
+import useSWR from 'swr'
+import { useSession } from 'next-auth/react'
 
 import { CourseType } from '../../types/CourseType'
 import { SectionType } from '../../types/SectionType'
 import { VideoType } from '../../types/VideoType'
+import { UserType } from 'types'
 import { WatchedButton } from 'components/atoms/WatchedButton'
 import { WatchedCheckCircle } from 'components/atoms/WatchedCheckCircle'
-import ReactMarkdown from 'react-markdown'
 import '../../styles/markdown.css'
+import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
+import { Session } from 'next-auth'
 
 type CourseDetailPropsType = CourseType & {
   sections: (SectionType & { videos: VideoType[] })[]
@@ -45,6 +49,15 @@ type SelectedVideo = {
       description: string
       url: string
     }
+  }
+}
+
+interface ExtendedSession extends Session {
+  user: {
+    id: string
+    name?: string
+    email?: string
+    image?: string
   }
 }
 
@@ -85,53 +98,6 @@ export function CourseDetail({
       },
     })
   }
-
-  const { check, user } = useContext(AuthContext)
-  // const [viewingStatus, setViewingStatus] = useState<string | null>(null)
-  // const [viewingStatuses, setViewingStatuses] = useState<
-  //   Record<string, string | null>
-  // >({})
-
-  // useEffect(() => {
-  //   const fetchViewingStatus = async () => {
-  //     if (check.isAuthenticated && selectedVideo.sections.videos.id) {
-  //       try {
-  //         const res = await fetch(
-  //           `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${user.id}/${selectedVideo.sections.videos.id}`,
-  //         )
-  //         const data = await res.json()
-  //         setViewingStatus(data?.status)
-  //       } catch (error) {
-  //         throw error
-  //       }
-  //     }
-  //   }
-  //   if (
-  //     selectedVideo &&
-  //     selectedVideo.sections &&
-  //     selectedVideo.sections.videos &&
-  //     selectedVideo.sections.videos.id
-  //   ) {
-  //     fetchViewingStatus()
-  //   }
-  // }, [check.isAuthenticated, user.id, selectedVideo])
-
-  // useEffect(() => {
-  //   const fetchAllViewingStatuses = async () => {
-  //     if (check.isAuthenticated && user.id) {
-  //       try {
-  //         const res = await fetch(
-  //           `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/all/${user.id}`,
-  //         )
-  //         const data = await res.json()
-  //         setViewingStatuses(data?.statuses || {})
-  //       } catch (error) {
-  //         throw error
-  //       }
-  //     }
-  //   }
-  //   fetchAllViewingStatuses()
-  // }, [check.isAuthenticated, user.id, courseData.id])
 
   return (
     <VStack minH={'100vh'} bg={'gray.100'}>
@@ -226,15 +192,6 @@ export function CourseDetail({
                       {selectedVideo.sections.videos.order}.
                     </Text>
                     <Text pl={'3px'}>{selectedVideo.sections.videos.name}</Text>
-                    <Spacer />
-                    {check.isAuthenticated && (
-                      <WatchedButton
-                        userId={user.id}
-                        videoId={selectedVideo.sections.videos.id}
-                        // viewingStatus={viewingStatus}
-                        // setViewingStatus={setViewingStatus}
-                      />
-                    )}
                   </HStack>
                 </CardHeader>
               </Card>
