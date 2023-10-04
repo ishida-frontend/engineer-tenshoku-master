@@ -13,7 +13,11 @@ export const WatchedButton = ({
 }) => {
   return (
     <Button
-      onClick={handleViewingStatus}
+      onClick={(e) => {
+        console.log('Button clicked. Current isWatched status:', isWatched)
+        handleViewingStatus(e)
+      }}
+      // onClick={handleViewingStatus}
       isLoading={isLoading}
       color="teal.500"
       backgroundColor="white"

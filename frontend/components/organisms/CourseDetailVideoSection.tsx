@@ -21,7 +21,7 @@ export function CourseDetailVideoSection({
   isLoading,
 }: {
   userId: string | undefined
-  isWatched: boolean
+  isWatched: { [videoId: string]: boolean }
   selectedVideo: SelectedVideo
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
   isLoading: boolean
@@ -47,7 +47,9 @@ export function CourseDetailVideoSection({
               <Spacer />
               {userId && (
                 <WatchedButton
-                  isWatched={isWatched}
+                  isWatched={
+                    isWatched[selectedVideo.sections.videos.id] || false
+                  }
                   handleViewingStatus={handleViewingStatus}
                   isLoading={isLoading}
                 />

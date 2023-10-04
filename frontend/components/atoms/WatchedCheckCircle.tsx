@@ -3,14 +3,10 @@ import React from 'react'
 import { Text } from '@chakra-ui/react'
 import { GoCheckCircleFill, GoCircle } from 'react-icons/go'
 
-export const WatchedCheckCircle = ({} // viewingStatus,
-: {
-  // viewingStatus: string | null
-}) => {
+export const WatchedCheckCircle = ({ isWatched }: { isWatched: boolean }) => {
   return (
     <Text color="teal.500">
-      {/* {viewingStatus === 'WATCHED' ? <GoCheckCircleFill /> : <GoCircle />} */}
-      <GoCheckCircleFill />
+      {isWatched ? <GoCheckCircleFill /> : <GoCircle />}
     </Text>
   )
 }

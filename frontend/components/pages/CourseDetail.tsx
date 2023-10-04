@@ -45,7 +45,7 @@ export function CourseDetail({
   const userId = session?.user?.id
   const { showErrorToast } = useCustomToast()
 
-  const [isWatched, setIsWatched] = useState<boolean>(false)
+  const [isWatched, setIsWatched] = useState<{ [key: string]: boolean }>({})
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [videoId, setVideoId] = useState<string>(
     courseData.sections[0].videos[0].id,
@@ -98,7 +98,10 @@ export function CourseDetail({
       if (viewingStatus === null) {
         setIsWatched(viewingStatus)
       } else {
-        setIsWatched(viewingStatus.status)
+        setIsWatched((prevStatus) => ({
+          ...prevStatus,
+          [videoId]: viewingStatus.status,
+        }))
       }
     } catch (error) {
       showErrorToast('視聴ステータスの取得に失敗しました')
@@ -151,7 +154,10 @@ export function CourseDetail({
         )
       }
       const viewingStatus = await res.json()
-      setIsWatched(viewingStatus.status)
+      setIsWatched((prevStatus) => ({
+        ...prevStatus,
+        [videoId]: viewingStatus.status,
+      }))
     } catch (error) {
       showErrorToast('視聴ステータスの変更に失敗しました')
     } finally {
@@ -160,8 +166,11 @@ export function CourseDetail({
   }
 
   const handleViewingStatus = async () => {
-    const newWatchedStatus = !isWatched
-    setIsWatched(newWatchedStatus)
+    const newWatchedStatus = !(isWatched[videoId] || false)
+    setIsWatched((prevStatus) => ({
+      ...prevStatus,
+      [videoId]: newWatchedStatus,
+    }))
     await updateViewingStatus({ isWatched: newWatchedStatus, userId, videoId })
   }
 
@@ -176,10 +185,7 @@ export function CourseDetail({
         >
           <CourseDetailAccordionMenu
             isWatched={isWatched}
-            setIsWatched={setIsWatched}
             courseData={courseData}
-            selectedVideo={selectedVideo}
-            setSelectedVideo={setSelectedVideo}
             handleChangeVideo={handleChangeVideo}
           />
           <CourseDetailVideoSection

@@ -17,22 +17,15 @@ import {
 
 import { WatchedCheckCircle } from 'components/atoms/WatchedCheckCircle'
 import { CourseDetailPropsType } from '../pages/CourseDetail'
-import { SelectedVideo } from '../pages/CourseDetail'
 import { HandleChangeVideo } from '../pages/CourseDetail'
 
 export function CourseDetailAccordionMenu({
   isWatched,
-  setIsWatched,
   courseData,
-  selectedVideo,
-  setSelectedVideo,
   handleChangeVideo,
 }: {
-  isWatched: boolean
-  setIsWatched: React.Dispatch<React.SetStateAction<boolean>>
+  isWatched: { [videoId: string]: boolean }
   courseData: CourseDetailPropsType
-  selectedVideo: SelectedVideo
-  setSelectedVideo: React.Dispatch<React.SetStateAction<SelectedVideo>>
   handleChangeVideo: HandleChangeVideo
 }) {
   return (
@@ -75,8 +68,9 @@ export function CourseDetailAccordionMenu({
                           >
                             <CardHeader>
                               <HStack>
-                                <WatchedCheckCircle />
-
+                                <WatchedCheckCircle
+                                  isWatched={isWatched[video.id] || false}
+                                />
                                 <Text size="sm">
                                   {video.order}. {video.name}
                                 </Text>
