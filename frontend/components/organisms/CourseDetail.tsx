@@ -14,18 +14,21 @@ import {
   Heading,
   HStack,
   Text,
+  Spacer,
   Stack,
   StackDivider,
   VStack,
   Spacer,
   Button,
 } from '@chakra-ui/react'
+import ReactMarkdown from 'react-markdown'
+
 import { CourseType } from '../../types/CourseType'
 import { SectionType } from '../../types/SectionType'
 import { VideoType } from '../../types/VideoType'
-import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
 import { VideoBookmark } from 'components/atoms/VideoBookmark'
-import ReactMarkdown from 'react-markdown'
+import { WatchedButton } from 'components/atoms/WatchedButton'
+import { WatchedCheckCircle } from 'components/atoms/WatchedCheckCircle'
 import '../../styles/markdown.css'
 
 type CourseDetailPropsType = CourseType & {
@@ -44,6 +47,15 @@ type SelectedVideo = {
       description: string
       url: string
     }
+  }
+}
+
+interface ExtendedSession extends Session {
+  user: {
+    id: string
+    name?: string
+    email?: string
+    image?: string
   }
 }
 
@@ -147,9 +159,13 @@ export function CourseDetail({
                                   }
                                 >
                                   <CardHeader>
-                                    <Text size="sm">
-                                      {video.order}. {video.name}
-                                    </Text>
+                                    <HStack>
+                                      <WatchedCheckCircle />
+
+                                      <Text size="sm">
+                                        {video.order}. {video.name}
+                                      </Text>
+                                    </HStack>
                                   </CardHeader>
                                 </Card>
                               )
