@@ -117,7 +117,7 @@ viewingStatusRouter.get(
   viewingStatusController.getViewingStatus,
 )
 viewingStatusRouter.get(
-  '/all/:userId',
+  '/all/:courseId/:userId',
   viewingStatusController.getViewingStatuses,
 )
 

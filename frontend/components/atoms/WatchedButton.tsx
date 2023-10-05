@@ -4,21 +4,19 @@ import { GoCheckCircleFill, GoCircle } from 'react-icons/go'
 
 export const WatchedButton = ({
   isWatched,
-  handleViewingStatus,
   isLoading,
+  handleViewingStatus,
 }: {
   isWatched: boolean
-  handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
   isLoading: boolean
+  handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) => {
   return (
     <Button
       onClick={(e) => {
-        console.log('Button clicked. Current isWatched status:', isWatched)
         handleViewingStatus(e)
       }}
-      // onClick={handleViewingStatus}
-      isLoading={isLoading}
+      isDisabled={isLoading}
       color="teal.500"
       backgroundColor="white"
       border="1px"

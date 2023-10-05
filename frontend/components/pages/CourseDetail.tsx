@@ -2,6 +2,11 @@
 import React, { useEffect, useState } from 'react'
 import { Container, VStack } from '@chakra-ui/react'
 
+import {
+  fetchButtonStatus,
+  fetchCheckMarkStatuses,
+  updateViewingStatus,
+} from '../../app/api/course/[courseId]/viewingStatus'
 import { CourseDetailVideoSection } from '../organisms/CourseDetailVideoSection'
 import { CourseDetailAccordionMenu } from '../organisms/CourseDetailAccordionMenu'
 import { CourseType } from '../../types/CourseType'
@@ -42,11 +47,12 @@ export function CourseDetail({
   courseData: CourseDetailPropsType
   session: Session | null
 }) {
-  const userId = session?.user?.id
   const { showErrorToast } = useCustomToast()
+  const userId = session?.user?.id
 
   const [isWatched, setIsWatched] = useState<{ [key: string]: boolean }>({})
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isChecked, setIsChecked] = useState<{ [key: string]: boolean }>({})
+  const [isLoading, setIsLoading] = useState(false)
   const [videoId, setVideoId] = useState<string>(
     courseData.sections[0].videos[0].id,
   )
@@ -64,6 +70,29 @@ export function CourseDetail({
       },
     },
   })
+
+  useEffect(() => {
+    setIsLoading(true)
+
+    const fetchData = async () => {
+      try {
+        const buttonStatus = await fetchButtonStatus({ userId, videoId })
+        setIsWatched(buttonStatus as { [key: string]: boolean })
+
+        const checkMarkStatuses = await fetchCheckMarkStatuses({
+          courseId: courseData.id,
+          userId: session?.user?.id,
+        })
+        setIsChecked(checkMarkStatuses)
+      } catch (error) {
+        showErrorToast(`${error}`)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [courseData, session, videoId])
 
   const handleChangeVideo = (sectionIndex: number, videoIndex: number) => {
     const currentlySelectedVideo = {
@@ -85,88 +114,8 @@ export function CourseDetail({
     setVideoId(currentlySelectedVideo.sections.videos.id)
   }
 
-  const fetchViewingStatus = async () => {
-    if (!userId || !videoId) return
-    setIsLoading(true)
-
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
-      )
-      const viewingStatus = await res.json()
-
-      if (viewingStatus === null) {
-        setIsWatched(viewingStatus)
-      } else {
-        setIsWatched((prevStatus) => ({
-          ...prevStatus,
-          [videoId]: viewingStatus.status,
-        }))
-      }
-    } catch (error) {
-      showErrorToast('視聴ステータスの取得に失敗しました')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-  useEffect(() => {
-    fetchViewingStatus()
-  }, [videoId])
-
-  const updateViewingStatus = async ({
-    isWatched,
-    userId,
-    videoId,
-  }: {
-    isWatched: boolean
-    userId: string | undefined
-    videoId: string
-  }) => {
-    setIsLoading(true)
-
-    // DBにステータス情報がある場合は更新
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            isWatched,
-            userId,
-            videoId,
-          }),
-        },
-      )
-
-      if (!res.ok) {
-        // DBにステータス情報がない場合は作成
-        await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
-        )
-      }
-      const viewingStatus = await res.json()
-      setIsWatched((prevStatus) => ({
-        ...prevStatus,
-        [videoId]: viewingStatus.status,
-      }))
-    } catch (error) {
-      showErrorToast('視聴ステータスの変更に失敗しました')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   const handleViewingStatus = async () => {
-    const newWatchedStatus = !(isWatched[videoId] || false)
+    const newWatchedStatus = !(isWatched?.[videoId] || false)
     setIsWatched((prevStatus) => ({
       ...prevStatus,
       [videoId]: newWatchedStatus,
@@ -184,7 +133,7 @@ export function CourseDetail({
           bg={'gray.100'}
         >
           <CourseDetailAccordionMenu
-            isWatched={isWatched}
+            isChecked={isChecked}
             courseData={courseData}
             handleChangeVideo={handleChangeVideo}
           />
@@ -192,8 +141,8 @@ export function CourseDetail({
             userId={userId}
             selectedVideo={selectedVideo}
             isWatched={isWatched}
-            handleViewingStatus={handleViewingStatus}
             isLoading={isLoading}
+            handleViewingStatus={handleViewingStatus}
           />
         </Container>
       </Container>

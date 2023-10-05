@@ -34,13 +34,16 @@ export class ViewingStatusController {
 
   getViewingStatuses = async (req: express.Request, res: express.Response) => {
     try {
-      const { userId } = req.params
+      const { userId, courseId } = req.params
       const viewingStatuses = await ViewingStatusApplicationService.getAll(
         userId,
+        courseId,
       )
       res.status(200).json(viewingStatuses)
     } catch (error) {
-      res.status(500)
+      res
+        .status(500)
+        .send({ message: 'Failed to fetch viewing statuses.', error })
       throw error
     }
   }

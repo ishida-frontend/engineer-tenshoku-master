@@ -2,6 +2,11 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+type ViewingStatusesType = {
+  video_id: string
+  status: boolean
+}
+
 export class ViewingStatusApplicationService {
   static async update({
     isWatched,
@@ -51,15 +56,30 @@ export class ViewingStatusApplicationService {
     }
   }
 
-  static async getAll(userId: string) {
+  static async getAll(userId: string, courseId: string) {
     try {
-      const viewingStatuses = await prisma.viewingStatus.findMany({
-        where: {
-          user_id: userId,
-        },
-        select: { status: true, video_id: true },
+      const statuses: ViewingStatusesType[] =
+        await prisma.viewingStatus.findMany({
+          where: {
+            user_id: userId,
+            video: {
+              section: {
+                course_id: courseId,
+              },
+            },
+          },
+          select: {
+            video_id: true,
+            status: true,
+          },
+        })
+
+      const statusMap: { [videoId: string]: boolean } = {}
+      statuses.forEach((s) => {
+        statusMap[s.video_id] = s.status
       })
-      return viewingStatuses
+
+      return statusMap
     } catch (error) {
       throw error
     }

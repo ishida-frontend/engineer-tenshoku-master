@@ -32,7 +32,6 @@ export default async function CourseDetailPage({
 
     return <CourseDetail courseData={courseData} session={session} />
   } catch (e) {
-    console.log(e)
     return <Error />
   }
 }

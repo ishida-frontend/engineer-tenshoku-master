@@ -15,16 +15,16 @@ import { SelectedVideo } from '../pages/CourseDetail'
 
 export function CourseDetailVideoSection({
   userId,
-  isWatched,
   selectedVideo,
-  handleViewingStatus,
+  isWatched,
   isLoading,
+  handleViewingStatus,
 }: {
   userId: string | undefined
-  isWatched: { [videoId: string]: boolean }
   selectedVideo: SelectedVideo
-  handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
+  isWatched: { [videoId: string]: boolean }
   isLoading: boolean
+  handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -48,10 +48,10 @@ export function CourseDetailVideoSection({
               {userId && (
                 <WatchedButton
                   isWatched={
-                    isWatched[selectedVideo.sections.videos.id] || false
+                    isWatched?.[selectedVideo.sections.videos.id] || false
                   }
-                  handleViewingStatus={handleViewingStatus}
                   isLoading={isLoading}
+                  handleViewingStatus={handleViewingStatus}
                 />
               )}
             </HStack>
