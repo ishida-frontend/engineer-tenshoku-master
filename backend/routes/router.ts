@@ -85,7 +85,7 @@ router.use('/course', courseRouter)
 courseRouter.get('/create', createCourse)
 courseRouter.get('/read', readCourse)
 courseRouter.get('/all', readAllCourses)
-courseRouter.get('/search/:text', getSearchedCourses)
+courseRouter.post('/search', getSearchedCourses)
 courseRouter.get('/update', updateCourse)
 courseRouter.get('/:id', getPublishedCourse)
 

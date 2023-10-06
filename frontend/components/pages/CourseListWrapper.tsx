@@ -11,16 +11,17 @@ export function CourseListWrapper({
   initialCourses: CourseType[]
 }) {
   try {
-    const [text, setText] = useState<string>('')
     const [courses, setCourses] = useState<CourseType[]>(initialCourses)
 
     const handleTextChange = async (newText: string) => {
-      setText(newText)
       if (newText) {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/search/${newText}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/search`,
           {
-            method: 'GET',
+            method: 'POST',
+            body: JSON.stringify({
+              text: newText,
+            }),
             headers: {
               'Content-Type': 'application/json',
             },

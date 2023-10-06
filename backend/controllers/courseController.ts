@@ -83,7 +83,8 @@ exports.getSearchedCourses = async function (
   res: express.Response,
 ) {
   try {
-    const searchCourses = await getSearchedCourses(req.params.text)
+    const { text } = req.body
+    const searchCourses = await getSearchedCourses({ text })
     res.status(200).json(searchCourses)
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
