@@ -53,6 +53,7 @@ export function CourseDetail({
   const [isWatched, setIsWatched] = useState<{ [key: string]: boolean }>({})
   const [isChecked, setIsChecked] = useState<{ [key: string]: boolean }>({})
   const [isLoading, setIsLoading] = useState(false)
+  const [isFavorited, setIsFavorited] = useState(false)
   const [videoId, setVideoId] = useState<string>(
     courseData.sections[0].videos[0].id,
   )
@@ -123,6 +124,10 @@ export function CourseDetail({
     await updateViewingStatus({ isWatched: newWatchedStatus, userId, videoId })
   }
 
+  const handleFavIconToggle = () => {
+    setIsFavorited((prevState) => !prevState)
+  }
+
   return (
     <VStack minH={'100vh'} bg={'gray.100'}>
       <Container minWidth={'100%'} padding={'0px'} bg={'white'}>
@@ -141,8 +146,10 @@ export function CourseDetail({
             userId={userId}
             selectedVideo={selectedVideo}
             isWatched={isWatched}
+            isFavorited={isFavorited}
             isLoading={isLoading}
             handleViewingStatus={handleViewingStatus}
+            handleFavIconToggle={handleFavIconToggle}
           />
         </Container>
       </Container>
