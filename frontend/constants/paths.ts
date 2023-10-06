@@ -39,6 +39,11 @@ export const PATHS = {
 
 export const APIS = {
   VIEWING_STATUS: {
+    STATUS: {
+      upsert: (userId: string | undefined, videoId: string) =>
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
+      title: '視聴ステータスの作成と更新',
+    },
     BUTTON: {
       get: (userId: string | undefined, videoId: string) =>
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
@@ -46,13 +51,8 @@ export const APIS = {
     },
     CHECKMARKS: {
       get: (courseId: string, userId: string | undefined) =>
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/all/${courseId}/${userId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/all/${courseId}/${userId}`,
       title: 'コース全体のチェックマークのステータスフェッチ',
-    },
-    STATUS: {
-      upsert: (userId: string | undefined, videoId: string) =>
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/${userId}/${videoId}`,
-      title: '視聴ステータスの作成と更新',
     },
   },
 }

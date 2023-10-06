@@ -43,7 +43,7 @@ export const fetchCheckMarkStatuses = async ({
   }
 }
 
-export const updateViewingStatus = async ({
+export const upsertViewingStatus = async ({
   isWatched,
   userId,
   videoId,

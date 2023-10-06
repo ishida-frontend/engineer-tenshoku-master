@@ -5,7 +5,7 @@ import { Container, VStack } from '@chakra-ui/react'
 import {
   fetchButtonStatus,
   fetchCheckMarkStatuses,
-  updateViewingStatus,
+  upsertViewingStatus,
 } from '../../app/api/course/[courseId]/viewingStatus'
 import { CourseDetailVideoSection } from '../organisms/CourseDetailVideoSection'
 import { CourseDetailAccordionMenu } from '../organisms/CourseDetailAccordionMenu'
@@ -122,7 +122,7 @@ export function CourseDetail({
     }))
 
     try {
-      await updateViewingStatus({
+      await upsertViewingStatus({
         isWatched: newWatchedStatus,
         userId,
         videoId,
