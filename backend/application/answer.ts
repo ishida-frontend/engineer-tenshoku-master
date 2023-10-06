@@ -4,9 +4,9 @@ const prisma = new PrismaClient()
 
 export class AnswerApplication {
   static async create(params: {
-    comment: string
     question_id: string
     user_id: string
+    comment: string
   }) {
     try {
       const { comment, question_id, user_id } = params

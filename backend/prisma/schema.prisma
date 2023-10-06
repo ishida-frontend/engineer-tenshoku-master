@@ -90,6 +90,7 @@ model Question {
   title      String   @db.VarChar(255)
   content    String   @db.LongText
   created_at DateTime @default(now())
+  updated_at  DateTime  @updatedAt
 }
 
 model Answer {
@@ -100,4 +101,5 @@ model Answer {
   user_id     String   @db.VarChar(255)
   comment     String   @db.LongText
   created_at  DateTime @default(now())
+  updated_at  DateTime  @updatedAt
 }
