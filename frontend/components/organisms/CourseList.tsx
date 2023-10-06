@@ -73,6 +73,13 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
             borderBottom="1px"
             borderColor={'blackAlpha.500'}
           ></Flex>
+          {courses.length === 0 && (
+            <VStack>
+              <Heading color={PRIMARY_FONT_COLOR} fontSize="36px">
+                検索に一致するコースはありませんでした
+              </Heading>
+            </VStack>
+          )}
           <SimpleGrid
             columns={3}
             mt="40px"
@@ -128,13 +135,6 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                 </Card>
               ))}
           </SimpleGrid>
-          {courses.length === 0 && (
-            <VStack>
-              <Heading color={PRIMARY_FONT_COLOR} fontSize="36px">
-                検索に一致するコースはありませんでした
-              </Heading>
-            </VStack>
-          )}
         </Box>
       </VStack>
     </Center>
