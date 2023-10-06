@@ -3,7 +3,7 @@ import express from 'express'
 import { ViewingStatusApplicationService } from '../application/viewingStatus'
 
 export class ViewingStatusController {
-  updateViewingStatus = async (req: express.Request, res: express.Response) => {
+  upsertViewingStatus = async (req: express.Request, res: express.Response) => {
     try {
       const { isWatched, userId, videoId } = req.body
       const viewingStatus = await ViewingStatusApplicationService.update({
@@ -11,7 +11,7 @@ export class ViewingStatusController {
         userId,
         videoId,
       })
-      res.status(201).json(viewingStatus)
+      res.status(200).json(viewingStatus)
     } catch (error) {
       res.status(500)
       throw error
@@ -41,9 +41,7 @@ export class ViewingStatusController {
       )
       res.status(200).json(viewingStatuses)
     } catch (error) {
-      res
-        .status(500)
-        .send({ message: 'Failed to fetch viewing statuses.', error })
+      res.status(500)
       throw error
     }
   }

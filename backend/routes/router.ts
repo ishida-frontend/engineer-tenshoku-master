@@ -106,11 +106,11 @@ const viewingStatusRouter = express.Router()
 router.use('/viewingstatus', viewingStatusRouter)
 viewingStatusRouter.post(
   '/:userId/:videoId',
-  viewingStatusController.updateViewingStatus,
+  viewingStatusController.upsertViewingStatus,
 )
 viewingStatusRouter.put(
   '/:userId/:videoId',
-  viewingStatusController.updateViewingStatus,
+  viewingStatusController.upsertViewingStatus,
 )
 viewingStatusRouter.get(
   '/:userId/:videoId',

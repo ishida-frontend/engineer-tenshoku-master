@@ -1,4 +1,4 @@
-const BACKEND_API_BASE = `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus`
+import { APIS } from 'constants/paths'
 
 export const fetchButtonStatus = async ({
   userId,
@@ -10,7 +10,7 @@ export const fetchButtonStatus = async ({
   if (!userId || !videoId) return null
 
   try {
-    const res = await fetch(`${BACKEND_API_BASE}/${userId}/${videoId}`)
+    const res = await fetch(APIS.VIEWING_STATUS.BUTTON.get(userId, videoId))
     if (!res.ok) {
       throw new Error(`ボタンのステータス取得に失敗しました: ${res.statusText}`)
     }
@@ -30,7 +30,7 @@ export const fetchCheckMarkStatuses = async ({
 }) => {
   try {
     const response = await fetch(
-      `${BACKEND_API_BASE}/all/${courseId}/${userId}`,
+      APIS.VIEWING_STATUS.CHECKMARKS.get(courseId, userId),
     )
     if (!response.ok) {
       throw new Error(
@@ -43,7 +43,7 @@ export const fetchCheckMarkStatuses = async ({
   }
 }
 
-export const updateViewingStatus = async ({
+export const upsertViewingStatus = async ({
   isWatched,
   userId,
   videoId,
@@ -54,26 +54,32 @@ export const updateViewingStatus = async ({
 }) => {
   try {
     // 視聴状態を更新
-    const res = await fetch(`${BACKEND_API_BASE}/${userId}/${videoId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        isWatched,
-        userId,
-        videoId,
-      }),
-    })
-
-    // 視聴状態がDB上になければ新規作成
-    if (!res.ok) {
-      const postRes = await fetch(`${BACKEND_API_BASE}/${userId}/${videoId}`, {
-        method: 'POST',
+    const res = await fetch(
+      APIS.VIEWING_STATUS.STATUS.upsert(userId, videoId),
+      {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-      })
+        body: JSON.stringify({
+          isWatched,
+          userId,
+          videoId,
+        }),
+      },
+    )
+
+    // 視聴状態がDB上になければ新規作成
+    if (!res.ok) {
+      const postRes = await fetch(
+        APIS.VIEWING_STATUS.STATUS.upsert(userId, videoId),
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
 
       if (!postRes.ok) {
         throw new Error(
