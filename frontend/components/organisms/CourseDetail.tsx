@@ -249,19 +249,24 @@ export function CourseDetail({
                                       color="black"
                                       icon={<AiOutlineUser fontSize="2rem" />}
                                     />
-                                    <Box>
+                                    <Box overflow={'hidden'}>
                                       <CardHeader pb={'10px'}>
-                                        <Heading
-                                          size="md"
-                                          textTransform="uppercase"
-                                        >
-                                          {question.title}
-                                        </Heading>
+                                        <Box>
+                                          <Heading
+                                            size="md"
+                                            textTransform="uppercase"
+                                            isTruncated
+                                          >
+                                            {question.title}
+                                          </Heading>
+                                        </Box>
                                       </CardHeader>
                                       <CardBody pt={'0px'}>
-                                        <Text fontSize="md">
-                                          {question.content}
-                                        </Text>
+                                        <Box>
+                                          <Text fontSize="md" isTruncated>
+                                            {question.content}
+                                          </Text>
+                                        </Box>
                                       </CardBody>
                                     </Box>
                                   </HStack>
