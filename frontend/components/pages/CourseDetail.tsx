@@ -120,7 +120,20 @@ export function CourseDetail({
       ...prevStatus,
       [videoId]: newWatchedStatus,
     }))
-    await updateViewingStatus({ isWatched: newWatchedStatus, userId, videoId })
+
+    try {
+      await updateViewingStatus({
+        isWatched: newWatchedStatus,
+        userId,
+        videoId,
+      })
+      setIsChecked((prevStatus) => ({
+        ...prevStatus,
+        [videoId]: newWatchedStatus,
+      }))
+    } catch (error) {
+      showErrorToast(`${error}`)
+    }
   }
 
   return (

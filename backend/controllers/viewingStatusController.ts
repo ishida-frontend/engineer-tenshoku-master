@@ -11,7 +11,7 @@ export class ViewingStatusController {
         userId,
         videoId,
       })
-      res.status(201).json(viewingStatus)
+      res.status(200).json(viewingStatus)
     } catch (error) {
       res.status(500)
       throw error
