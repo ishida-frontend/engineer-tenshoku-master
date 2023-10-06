@@ -80,9 +80,10 @@ export function CourseDetail({
         setIsWatched(buttonStatus as { [key: string]: boolean })
 
         const checkMarkStatuses = await fetchCheckMarkStatuses({
-          courseId: courseData.id,
           userId: session?.user?.id,
+          courseId: courseData.id,
         })
+
         setIsChecked(checkMarkStatuses)
       } catch (error) {
         showErrorToast(`${error}`)
@@ -146,6 +147,7 @@ export function CourseDetail({
           bg={'gray.100'}
         >
           <CourseDetailAccordionMenu
+            userId={userId}
             isChecked={isChecked}
             courseData={courseData}
             handleChangeVideo={handleChangeVideo}
