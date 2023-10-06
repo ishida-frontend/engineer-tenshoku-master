@@ -5,6 +5,7 @@ import { contactValidationRules, contactValidate } from '../validation'
 import { validate, courseValidationRules } from '../validation/courseValidation'
 import { VideoValidator } from '../validation/videoValidator'
 import { UserController } from '../controllers/userController'
+import { ViewingStatusController } from '../controllers/viewingStatusController'
 import { VideoController } from '../controllers/videoController'
 
 const {
@@ -33,6 +34,7 @@ const router = express.Router()
 const userController = new UserController()
 const videoValidator = new VideoValidator()
 const videoController = new VideoController()
+const viewingStatusController = new ViewingStatusController()
 
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -100,6 +102,25 @@ contactRouter.post(
   '/create',
   contactValidate(contactValidationRules),
   checkCreateContact,
+)
+
+const viewingStatusRouter = express.Router()
+router.use('/viewingstatus', viewingStatusRouter)
+viewingStatusRouter.post(
+  '/:userId/:videoId',
+  viewingStatusController.upsertViewingStatus,
+)
+viewingStatusRouter.put(
+  '/:userId/:videoId',
+  viewingStatusController.upsertViewingStatus,
+)
+viewingStatusRouter.get(
+  '/:userId/:videoId',
+  viewingStatusController.getViewingStatus,
+)
+viewingStatusRouter.get(
+  '/all/:courseId/:userId',
+  viewingStatusController.getViewingStatuses,
 )
 
 export default router
