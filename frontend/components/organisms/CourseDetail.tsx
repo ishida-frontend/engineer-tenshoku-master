@@ -23,6 +23,8 @@ import {
   TabPanel,
   Tabs,
   CardBody,
+  Avatar,
+  Button,
 } from '@chakra-ui/react'
 import { CourseType } from '../../types/CourseType'
 import { SectionType } from '../../types/SectionType'
@@ -30,6 +32,7 @@ import { VideoType } from '../../types/VideoType'
 import { QuestionType } from 'types/QuestionType'
 import ReactMarkdown from 'react-markdown'
 import '../../styles/markdown.css'
+import { AiOutlineUser } from 'react-icons/ai'
 
 type CourseDetailPropsType = CourseType & {
   sections: (SectionType & { videos: VideoType[] })[]
@@ -225,7 +228,9 @@ export function CourseDetail({
                         mt={'20px'}
                         borderTop={'1px solid gray'}
                       >
-                        <Heading size="md">この動画の全ての質問</Heading>
+                        <Heading size="md" pb={'15px'}>
+                          この動画の全ての質問
+                        </Heading>
                         <Stack divider={<StackDivider />} spacing="4">
                           {questions &&
                             questions.map((question) => {
@@ -237,23 +242,29 @@ export function CourseDetail({
                                   _hover={{
                                     bg: 'transparent',
                                   }}
-                                  // onClick={() =>
-                                  //   handleViewAnswer(questionId,userId)
-                                  // }
                                 >
-                                  <CardHeader>
-                                    <Heading
-                                      size="xs"
-                                      textTransform="uppercase"
-                                    >
-                                      {question.title}
-                                    </Heading>
-                                  </CardHeader>
-                                  <CardBody>
-                                    <Text pt="2" fontSize="sm">
-                                      {question.content}
-                                    </Text>
-                                  </CardBody>
+                                  <HStack pl={'20px'}>
+                                    <Avatar
+                                      bg="blue.300"
+                                      color="black"
+                                      icon={<AiOutlineUser fontSize="2rem" />}
+                                    />
+                                    <Box>
+                                      <CardHeader pb={'10px'}>
+                                        <Heading
+                                          size="md"
+                                          textTransform="uppercase"
+                                        >
+                                          {question.title}
+                                        </Heading>
+                                      </CardHeader>
+                                      <CardBody pt={'0px'}>
+                                        <Text fontSize="md">
+                                          {question.content}
+                                        </Text>
+                                      </CardBody>
+                                    </Box>
+                                  </HStack>
                                 </Card>
                               )
                             })}
