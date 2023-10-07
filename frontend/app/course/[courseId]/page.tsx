@@ -1,4 +1,6 @@
 import React from 'react'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '../../api/auth/[...nextauth]/route'
 
 import { CourseDetail } from '../../../components/pages/CourseDetail'
 import { CourseType } from '../../../types/CourseType'
@@ -15,6 +17,8 @@ export default async function CourseDetailPage({
 }: {
   params: { courseId: string }
 }) {
+  const session = await getServerSession(authOptions)
+
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_FRONT_API_URL}/course/${params.courseId}`,
@@ -26,7 +30,7 @@ export default async function CourseDetailPage({
     )
     const courseData: CourseDetailPropsType = await res.json()
 
-    return <CourseDetail courseData={courseData} />
+    return <CourseDetail courseData={courseData} session={session} />
   } catch (e) {
     return <Error />
   }
