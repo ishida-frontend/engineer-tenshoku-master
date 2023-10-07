@@ -2,6 +2,7 @@ import React from 'react'
 import {
   AspectRatio,
   Box,
+  Button,
   Card,
   CardHeader,
   HStack,
@@ -10,6 +11,7 @@ import {
 } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown'
 
+import { FavIcon } from 'components/atoms/FavIcon'
 import { WatchedButton } from 'components/atoms/WatchedButton'
 import { SelectedVideo } from '../pages/CourseDetail'
 
@@ -17,14 +19,18 @@ export function CourseDetailVideoSection({
   userId,
   selectedVideo,
   isWatched,
+  isFavorited,
   isLoading,
   handleViewingStatus,
+  handleFavIconToggle,
 }: {
   userId: string | undefined
   selectedVideo: SelectedVideo
   isWatched: { [videoId: string]: boolean }
+  isFavorited: boolean
   isLoading: boolean
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
+  handleFavIconToggle: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -46,13 +52,22 @@ export function CourseDetailVideoSection({
               <Text pl={'3px'}>{selectedVideo.sections.videos.name}</Text>
               <Spacer />
               {userId && (
-                <WatchedButton
-                  isWatched={
-                    isWatched?.[selectedVideo.sections.videos.id] || false
-                  }
-                  isLoading={isLoading}
-                  handleViewingStatus={handleViewingStatus}
-                />
+                <>
+                  <WatchedButton
+                    isWatched={
+                      isWatched?.[selectedVideo.sections.videos.id] || false
+                    }
+                    isLoading={isLoading}
+                    handleViewingStatus={handleViewingStatus}
+                  />
+                  <Button
+                    onClick={handleFavIconToggle}
+                    size="24px"
+                    variant="unstyled"
+                  >
+                    <FavIcon isFavorited={isFavorited} />
+                  </Button>
+                </>
               )}
             </HStack>
           </CardHeader>
