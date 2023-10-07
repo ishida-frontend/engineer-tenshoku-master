@@ -47,6 +47,8 @@ export function CourseDetail({
   courseData: CourseDetailPropsType
   session: Session | null
 }) {
+  console.log('courseData:', courseData)
+  console.log('session:', session)
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
 
