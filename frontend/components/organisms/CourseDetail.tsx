@@ -33,6 +33,7 @@ import { QuestionType } from 'types/QuestionType'
 import ReactMarkdown from 'react-markdown'
 import '../../styles/markdown.css'
 import { AiOutlineUser } from 'react-icons/ai'
+import { QuestionForm } from './QuestionForm'
 
 type CourseDetailPropsType = CourseType & {
   sections: (SectionType & { videos: VideoType[] })[]
@@ -228,7 +229,8 @@ export function CourseDetail({
                         mt={'20px'}
                         borderTop={'1px solid gray'}
                       >
-                        <Heading size="md" pb={'15px'}>
+                        <QuestionForm />
+                        {/* <Heading size="md" pb={'15px'}>
                           この動画の全ての質問
                         </Heading>
                         <Stack divider={<StackDivider />} spacing="4">
@@ -273,7 +275,7 @@ export function CourseDetail({
                                 </Card>
                               )
                             })}
-                        </Stack>
+                        </Stack> */}
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
