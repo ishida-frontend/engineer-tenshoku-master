@@ -83,7 +83,7 @@ model Contact {
 }
 
 model Question {
-  id         String   @id @default(uuid()) @db.VarChar(255)
+  id         String   @id @db.VarChar(255)
   answer     Answer[]
   video      Video    @relation(fields: [video_id], references: [id])
   video_id   String   @db.VarChar(255)
@@ -96,7 +96,7 @@ model Question {
 }
 
 model Answer {
-  id          String   @id @default(uuid()) @db.VarChar(255)
+  id          String   @id @db.VarChar(255)
   question    Question @relation(fields: [question_id], references: [id])
   question_id String   @db.VarChar(255)
   user        User     @relation(fields: [user_id], references: [id])
