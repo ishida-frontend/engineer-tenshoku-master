@@ -40,7 +40,7 @@ export function SectionManage({
     id: '',
     sectionType: '',
     course_id,
-    order: 0,
+    order: 1,
     title: '',
     published: false,
   }
