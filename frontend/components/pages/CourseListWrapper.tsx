@@ -4,11 +4,14 @@ import React, { useState } from 'react'
 import { CourseList } from '../organisms/CourseList'
 import { CourseType } from '../../types/CourseType'
 import Error from '../../app/error'
+import { Session } from 'next-auth'
 
 export function CourseListWrapper({
   initialCourses,
+  session,
 }: {
   initialCourses: CourseType[]
+  session: Session | null
 }) {
   try {
     const [courses, setCourses] = useState<CourseType[]>(initialCourses)
@@ -43,9 +46,14 @@ export function CourseListWrapper({
         setCourses(allCourses)
       }
     }
-    return <CourseList courses={courses} handleTextChange={handleTextChange} />
+    return (
+      <CourseList
+        courses={courses}
+        session={session}
+        handleTextChange={handleTextChange}
+      />
+    )
   } catch (e) {
-    console.log(e)
     return <Error />
   }
 }

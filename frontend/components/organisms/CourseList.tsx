@@ -6,6 +6,7 @@ import {
   CardHeader,
   Center,
   Flex,
+  HStack,
   Heading,
   Image,
   Input,
@@ -22,9 +23,11 @@ import { CourseType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { SearchIcon } from '@chakra-ui/icons'
+import { Session } from 'next-auth'
 
 type CourseListProps = {
   courses: CourseType[]
+  session: Session | null
   handleTextChange: (event: any) => void
 }
 
@@ -80,20 +83,21 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
               </Heading>
             </VStack>
           )}
-          <SimpleGrid
-            columns={3}
-            mt="40px"
-            spacingX="auto"
-            spacingY="10"
-            minW={'100%'}
-          >
-            {courses &&
-              courses.map((course: CourseType) => (
+          {courses && (
+            <SimpleGrid
+              columns={3}
+              mt="40px"
+              spacingX="auto"
+              spacingY="10"
+              minW={'100%'}
+            >
+              {courses.map((course: CourseType) => (
                 <Card
                   key={course.id}
                   w="288px"
                   boxShadow="md"
                   borderRadius="8px"
+                  margin={'auto'}
                 >
                   <CardHeader p={0}>
                     <Image
@@ -134,7 +138,8 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                   </CardBody>
                 </Card>
               ))}
-          </SimpleGrid>
+            </SimpleGrid>
+          )}
         </Box>
       </VStack>
     </Center>
