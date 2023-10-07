@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import crypto from 'crypto'
+// import crypto from 'crypto'
 const prisma = new PrismaClient()
 
 export class QuestionApplication {
@@ -13,7 +13,7 @@ export class QuestionApplication {
       const { title, content, video_id, user_id } = params
       const question = await prisma.question.create({
         data: {
-          id: crypto.randomUUID(),
+          // id: crypto.randomUUID(),
           video_id,
           user_id,
           title,
