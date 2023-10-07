@@ -5,7 +5,8 @@ import { CourseType } from '../../../types/CourseType'
 import { SectionType } from '../../../types/SectionType'
 import { VideoType } from '../../../types/VideoType'
 import Error from '../../error'
-import { useSession } from 'next-auth/react'
+import { authOptions } from '../../api/auth/[...nextauth]/route'
+import { getServerSession } from 'next-auth'
 
 type CourseDetailPropsType = CourseType & {
   sections: (SectionType & { videos: VideoType[] })[]
@@ -17,7 +18,7 @@ export default async function CourseDetailPage({
   params: { courseId: string }
 }) {
   try {
-    const { data: session, status } = await useSession()
+    const session = await getServerSession(authOptions)
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_FRONT_API_URL}/course/${params.courseId}`,
       {
