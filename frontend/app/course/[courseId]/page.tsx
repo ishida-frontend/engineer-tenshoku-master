@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { CourseDetail } from '../../../components/organisms/CourseDetail'
+import { CourseDetail } from '../../../components/pages/CourseDetail'
 import { CourseType } from '../../../types/CourseType'
 import { SectionType } from '../../../types/SectionType'
 import { VideoType } from '../../../types/VideoType'
