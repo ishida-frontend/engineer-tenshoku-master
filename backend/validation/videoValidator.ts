@@ -16,7 +16,7 @@ export class VideoValidator {
         message: '※URLの形式で入力してください',
       }),
 
-      sectionId: z.number().positive(),
+      sectionId: z.string(),
     })
 
     const videoData = videoCreateSchema.safeParse(req.body)
