@@ -25,7 +25,6 @@ export default async function Course() {
       <CourseListWrapper initialCourses={initialCourses} session={session} />
     )
   } catch (e) {
-    console.log(e)
     return <Error />
   }
 }
