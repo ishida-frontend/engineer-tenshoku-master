@@ -14,7 +14,6 @@ import {
   Avatar,
   VStack,
 } from '@chakra-ui/react'
-import { SelectedVideo } from '../pages/CourseDetail'
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'

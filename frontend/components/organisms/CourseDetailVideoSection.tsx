@@ -28,6 +28,7 @@ import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
 import { QuestionList } from './QuestionList'
 import { HandleChangeVideo } from '../pages/CourseDetail'
+import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
 
 export function CourseDetailVideoSection({
   userId,
@@ -90,36 +91,11 @@ export function CourseDetailVideoSection({
             </HStack>
           </CardHeader>
           <CardBody bg={'white'} pl={'0px'} pr={'0px'}>
-            <Tabs isFitted colorScheme={'green'}>
-              <TabList>
-                <Tab>レッスン内容</Tab>
-                <Tab
-                  onClick={() =>
-                    handleGetQuestions(selectedVideo.sections.videos.id)
-                  }
-                >
-                  質問と回答
-                </Tab>
-              </TabList>
-              <TabPanels>
-                <TabPanel>
-                  <Box
-                    className="markdown"
-                    paddingLeft={'30px'}
-                    paddingRight={'30px'}
-                  >
-                    <ReactMarkdown>
-                      {selectedVideo.sections.videos.description}
-                    </ReactMarkdown>
-                  </Box>
-                </TabPanel>
-                <QuestionList
-                  userId={userId}
-                  selectedVideo={selectedVideo}
-                  questions={questions}
-                />
-              </TabPanels>
-            </Tabs>
+            <VideoDetailAndQAndA
+              selectedVideo={selectedVideo}
+              questions={questions}
+              handleGetQuestions={handleGetQuestions}
+            />
           </CardBody>
         </Card>
       </Box>
