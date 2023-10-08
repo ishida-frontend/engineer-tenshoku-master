@@ -75,7 +75,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
             borderColor={'blackAlpha.500'}
           ></Flex>
           {courses.length === 0 && (
-            <VStack>
+            <VStack mt="40px">
               <Heading color={PRIMARY_FONT_COLOR} fontSize="36px">
                 検索に一致するコースはありませんでした
               </Heading>
