@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import { QuestionList } from './QuestionList'
 import { QuestionType } from 'types/QuestionType'
 import { SelectedVideo } from '../pages/CourseDetail'
+import { QuestionForm } from './QuestionForm'
 
 export type handleGetQuestions = (videoId: string) => void
 
@@ -34,7 +35,8 @@ export function VideoDetailAndQAndA({
             </ReactMarkdown>
           </Box>
         </TabPanel>
-        <QuestionList questions={questions} />
+        {/* <QuestionList questions={questions} /> */}
+        <QuestionForm />
       </TabPanels>
     </Tabs>
   )

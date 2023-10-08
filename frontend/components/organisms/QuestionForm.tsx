@@ -11,7 +11,7 @@ import {
   Flex,
   Input,
   FormErrorMessage,
-  Textarea,
+  TabPanel,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 import { PATHS } from '../../constants/paths'
@@ -109,7 +109,7 @@ export function QuestionForm() {
   }
 
   return (
-    <Box>
+    <TabPanel>
       <Stack>
         <Link href="/course/${course_id}">
           <Button>全ての質問に戻る</Button>
@@ -154,13 +154,6 @@ export function QuestionForm() {
                   <Text color="teal">(必須)</Text>
                 </Flex>
               </Container>
-              <Textarea
-                name="質問の内容"
-                value={state.content}
-                onChange={onChangeHandler}
-                pb={'229px'}
-                placeholder={'質問内容を記入してください'}
-              />
               <Box display={'flex'} justifyContent={'space-between'}>
                 <Box w={'50%'} mr={'5'} h={'350px'}>
                   <ReactMde
@@ -202,6 +195,6 @@ export function QuestionForm() {
           </VStack>
         </FormControl>
       </Stack>
-    </Box>
+    </TabPanel>
   )
 }
