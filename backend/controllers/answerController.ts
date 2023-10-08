@@ -4,10 +4,11 @@ import { AnswerApplication } from '../application/answer'
 export class AnswerController {
   async create(req: express.Request, res: express.Response) {
     try {
+      const { comment, question_id, user_id } = req.params
       const data = await AnswerApplication.create({
-        comment: req.params.comment,
-        question_id: req.params.question_id,
-        user_id: req.params.user_id,
+        comment,
+        question_id,
+        user_id,
       })
       return res.status(200).json(data)
     } catch (error) {

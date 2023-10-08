@@ -12,6 +12,7 @@ import { CourseDetailAccordionMenu } from '../organisms/CourseDetailAccordionMen
 import { CourseType } from '../../types/CourseType'
 import { SectionType } from '../../types/SectionType'
 import { VideoType } from '../../types/VideoType'
+import { QuestionType } from 'types/QuestionType'
 import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
@@ -40,6 +41,8 @@ export type HandleChangeVideo = (
   videoIndex: number,
 ) => void
 
+export type handleGetQuestions = (videoId: string) => void
+
 export function CourseDetail({
   courseData,
   session,
@@ -53,6 +56,8 @@ export function CourseDetail({
   const [isWatched, setIsWatched] = useState<{ [key: string]: boolean }>({})
   const [isChecked, setIsChecked] = useState<{ [key: string]: boolean }>({})
   const [isLoading, setIsLoading] = useState(false)
+  const [isFavorited, setIsFavorited] = useState(false)
+  const [questions, setQuestions] = useState<QuestionType[]>()
   const [videoId, setVideoId] = useState<string>(
     courseData.sections[0].videos[0].id,
   )
@@ -136,6 +141,24 @@ export function CourseDetail({
     }
   }
 
+  const handleFavIconToggle = () => {
+    setIsFavorited((prevState) => !prevState)
+  }
+
+  const handleGetQuestions = async (videoId: string) => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${videoId}`,
+      {
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    const getQuestions: QuestionType[] = await res.json()
+    setQuestions(getQuestions)
+  }
+
   return (
     <VStack minH={'100vh'} bg={'gray.100'}>
       <Container minWidth={'100%'} padding={'0px'} bg={'white'}>
@@ -153,9 +176,13 @@ export function CourseDetail({
           <CourseDetailVideoSection
             userId={userId}
             selectedVideo={selectedVideo}
+            questions={questions}
             isWatched={isWatched}
+            isFavorited={isFavorited}
             isLoading={isLoading}
             handleViewingStatus={handleViewingStatus}
+            handleFavIconToggle={handleFavIconToggle}
+            handleGetQuestions={handleGetQuestions}
           />
         </Container>
       </Container>

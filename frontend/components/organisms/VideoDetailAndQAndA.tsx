@@ -1,25 +1,46 @@
 import React from 'react'
-import { Text, Tab, Tabs, TabList, TabPanel, TabPanels } from '@chakra-ui/react'
+import {
+  Text,
+  Tab,
+  Tabs,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Box,
+} from '@chakra-ui/react'
+import ReactMarkdown from 'react-markdown'
+import { QuestionList } from './QuestionList'
+import { QuestionType } from 'types/QuestionType'
+import { SelectedVideo, handleGetQuestions } from '../pages/CourseDetail'
 
 export function VideoDetailAndQAndA({
-  videoDescription,
+  selectedVideo,
+  questions,
+  handleGetQuestions,
 }: {
-  videoDescription: string
+  selectedVideo: SelectedVideo
+  questions: QuestionType[] | undefined
+  handleGetQuestions: handleGetQuestions
 }) {
   return (
-    <Tabs
-      colorScheme="green"
-      isFitted
-      m="20px"
-      boxShadow="0px 4px 6px -2px #0000000D, 0px 10px 15px -3px #0000001A"
-    >
+    <Tabs isFitted colorScheme={'green'}>
       <TabList>
-        <Tab>動画の内容</Tab>
+        <Tab>レッスン内容</Tab>
+        <Tab
+          onClick={() => handleGetQuestions(selectedVideo.sections.videos.id)}
+        >
+          質問と回答
+        </Tab>
       </TabList>
       <TabPanels>
         <TabPanel>
-          <Text whiteSpace="pre-wrap">{videoDescription}</Text>
+          <Box className="markdown" paddingLeft={'30px'} paddingRight={'30px'}>
+            <ReactMarkdown>
+              {selectedVideo.sections.videos.description}
+            </ReactMarkdown>
+          </Box>
         </TabPanel>
+        <QuestionList questions={questions} />
       </TabPanels>
     </Tabs>
   )
