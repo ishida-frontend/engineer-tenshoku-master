@@ -17,8 +17,6 @@ import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionType } from 'types/QuestionType'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
 
-export type handleGetQuestions = (videoId: string) => void
-
 export function CourseDetailVideoSection({
   userId,
   selectedVideo,
@@ -38,7 +36,7 @@ export function CourseDetailVideoSection({
   isLoading: boolean
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
   handleFavIconToggle: (event: React.MouseEvent<HTMLButtonElement>) => void
-  handleGetQuestions: handleGetQuestions
+  handleGetQuestions: (videoId: string) => void
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>

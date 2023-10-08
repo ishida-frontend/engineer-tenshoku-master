@@ -41,8 +41,6 @@ export type HandleChangeVideo = (
   videoIndex: number,
 ) => void
 
-export type handleGetQuestions = (videoId: string) => void
-
 export function CourseDetail({
   courseData,
   session,

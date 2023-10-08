@@ -5,8 +5,6 @@ import { QuestionList } from './QuestionList'
 import { QuestionType } from 'types/QuestionType'
 import { SelectedVideo } from '../pages/CourseDetail'
 
-export type handleGetQuestions = (videoId: string) => void
-
 export function VideoDetailAndQAndA({
   selectedVideo,
   questions,
@@ -14,7 +12,7 @@ export function VideoDetailAndQAndA({
 }: {
   selectedVideo: SelectedVideo
   questions: QuestionType[] | undefined
-  handleGetQuestions: handleGetQuestions
+  handleGetQuestions: (videoId: string) => void
 }) {
   return (
     <Tabs isFitted colorScheme={'green'}>
