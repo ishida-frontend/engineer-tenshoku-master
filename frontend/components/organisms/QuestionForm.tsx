@@ -13,9 +13,6 @@ import {
   FormErrorMessage,
   TabPanel,
 } from '@chakra-ui/react'
-import { useRouter } from 'next/navigation'
-import { PATHS } from '../../constants/paths'
-import { ZodError } from 'zod'
 import ReactMde from 'react-mde'
 import ReactMarkdown from 'react-markdown'
 import 'react-mde/lib/styles/css/react-mde-all.css'
@@ -27,9 +24,14 @@ type Errors = {
   content?: string[]
 }
 
-export function QuestionForm() {
-  const router = useRouter()
-  const [state, setState] = useState({
+export function QuestionForm({
+  videoId,
+  userId,
+}: {
+  videoId: string
+  userId: string | undefined
+}) {
+  const [question, setQuestion] = useState({
     title: '',
     content: '',
   })
@@ -39,20 +41,11 @@ export function QuestionForm() {
     content: [''],
   })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.persist()
-    const target = e.target
-    const title = target.title
-    setState(() => {
-      return { ...state, [title]: target.value }
-    })
-  }
+  const [questionContent, setQuestionContent] = useState<string>()
 
-  const onChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.persist()
-    setState((prevState) => {
-      return { ...prevState, message: e.target.value }
-    })
+  const contentChange = (value: string) => {
+    setQuestionContent(value)
+    setQuestion({ ...question, content: value })
   }
 
   const converter = new Showdown.Converter({
@@ -67,13 +60,16 @@ export function QuestionForm() {
   >('write')
 
   const fetcher = async () => {
+    console.log('question.title:', question.title)
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/create`,
       {
         method: 'POST',
         body: JSON.stringify({
-          title: state.title,
-          content: state.content,
+          title: question.title,
+          content: question.content,
+          video_id: videoId,
+          user_id: userId,
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -89,51 +85,42 @@ export function QuestionForm() {
     event.preventDefault()
     try {
       const res = await fetcher()
-      const items = res.error.reduce(
-        (accumulator: string[], value: { path: string; message: string }) => {
-          return { ...accumulator, [value.path]: [value.message] }
-        },
-        {
-          [res.error[0].path]: res.error[0].message,
-        },
-      )
-      setErrors(items as Errors)
+      return res.json()
     } catch (e) {
-      if (e instanceof ZodError) {
-        setErrors(e.flatten().fieldErrors as Errors)
-      } else {
-        router.push(PATHS.CONTACT.DONE.path)
-        console.log(e)
-      }
+      throw e
     }
   }
-
+  console.log('question:', question)
+  console.log('videoId:', videoId)
+  console.log('userId:', userId)
   return (
     <TabPanel>
-      <Stack>
-        <Link href="/course/${course_id}">
-          <Button>全ての質問に戻る</Button>
-        </Link>
-
+      <Stack mt={'20px'}>
         <FormControl>
-          <Container bg={'white'} p={'0px'}>
+          <Container bg={'white'} p={'0px'} minW={'90%'}>
+            <Link href="/course/${course_id}">
+              <Button>全ての質問に戻る</Button>
+            </Link>
             <FormControl
               isInvalid={!!errors.title?.[0]}
-              mb={'40px'}
+              mt={'20px'}
+              mb={'20px'}
               bg={'white'}
               h={'80px'}
             >
               <Container ml={'0px'} pb={'10px'} pl={'0px'}>
                 <Flex>
-                  <Text>質問タイトル</Text>
+                  <Text fontWeight={'bold'}>質問タイトル</Text>
                   <Text color="teal">(必須)</Text>
                 </Flex>
               </Container>
               <Input
                 type="text"
-                name="content"
-                value={state.title}
-                onChange={handleInputChange}
+                name="title"
+                value={question.title}
+                onChange={(e) =>
+                  setQuestion({ ...question, title: e.target.value })
+                }
                 placeholder={
                   '動画の15:00のところで型に関するエラーが出ています。'
                 }
@@ -145,32 +132,36 @@ export function QuestionForm() {
 
             <FormControl
               isInvalid={!!errors.content?.[0]}
-              mb={'40px'}
+              mb={'20px'}
               bg={'white'}
             >
               <Container ml={'0px'} pb={'10px'} pl={'0px'}>
                 <Flex>
-                  <Text>質問の内容</Text>
+                  <Text fontWeight={'bold'}>質問の内容</Text>
                   <Text color="teal">(必須)</Text>
                 </Flex>
               </Container>
               <Box display={'flex'} justifyContent={'space-between'}>
-                <Box w={'50%'} mr={'5'} h={'350px'}>
+                <Box w={'50%'} mr={'5'}>
                   <ReactMde
-                    heightUnits="vh"
-                    minEditorHeight={40}
-                    value={state.content}
-                    onChange={() => onChangeHandler}
+                    maxEditorHeight={250}
+                    value={questionContent}
+                    onChange={contentChange}
                     selectedTab={selectedEditorTab}
                     onTabChange={setSelectedEditorTab}
                     generateMarkdownPreview={(markdown) =>
                       Promise.resolve(converter.makeHtml(markdown))
                     }
+                    toolbarCommands={[
+                      ['header', 'bold', 'italic'],
+                      ['link', 'quote', 'code'],
+                      ['unordered-list', 'ordered-list'],
+                    ]}
                   />
                 </Box>
                 <Box
                   w={'50%'}
-                  h={'48vh'}
+                  maxH={'250px'}
                   overflow={'scroll'}
                   bg={'white'}
                   border={'1px solid gray'}
@@ -179,20 +170,25 @@ export function QuestionForm() {
                   paddingRight={'20px'}
                   className="markdown"
                 >
-                  <ReactMarkdown>{state.content}</ReactMarkdown>
+                  <ReactMarkdown>{questionContent}</ReactMarkdown>
                 </Box>
               </Box>
               <FormErrorMessage>
                 {errors.content && errors.content[0]}
               </FormErrorMessage>
             </FormControl>
-          </Container>
 
-          <VStack>
-            <Button onClick={handleSubmit} m={'80px 0'} colorScheme="teal">
-              質問する
-            </Button>
-          </VStack>
+            <VStack>
+              <Button
+                onClick={handleSubmit}
+                m={'20px 0'}
+                w={'100%'}
+                colorScheme="teal"
+              >
+                公開
+              </Button>
+            </VStack>
+          </Container>
         </FormControl>
       </Stack>
     </TabPanel>

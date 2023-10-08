@@ -5,6 +5,7 @@ export class QuestionController {
   async create(req: express.Request, res: express.Response) {
     try {
       const { title, content, video_id, user_id } = req.params
+      console.log('req.params:', req.params)
       const data = await QuestionApplication.create({
         title,
         content,

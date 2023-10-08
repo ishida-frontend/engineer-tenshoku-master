@@ -8,10 +8,12 @@ import { QuestionForm } from './QuestionForm'
 
 export function VideoDetailAndQAndA({
   selectedVideo,
+  userId,
   questions,
   handleGetQuestions,
 }: {
   selectedVideo: SelectedVideo
+  userId: string | undefined
   questions: QuestionType[] | undefined
   handleGetQuestions: (videoId: string) => void
 }) {
@@ -34,7 +36,10 @@ export function VideoDetailAndQAndA({
           </Box>
         </TabPanel>
         {/* <QuestionList questions={questions} /> */}
-        <QuestionForm />
+        <QuestionForm
+          videoId={selectedVideo.sections.videos.id}
+          userId={userId}
+        />
       </TabPanels>
     </Tabs>
   )

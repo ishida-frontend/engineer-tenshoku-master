@@ -10,6 +10,7 @@ export class QuestionApplication {
   }) {
     try {
       const { title, content, video_id, user_id } = params
+      console.log('params:', params)
       const question = await prisma.question.create({
         data: {
           video_id,

@@ -16,6 +16,7 @@ import { WatchedButton } from 'components/atoms/WatchedButton'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionType } from 'types/QuestionType'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
+import { Session } from 'next-auth'
 
 export function CourseDetailVideoSection({
   userId,
@@ -80,6 +81,7 @@ export function CourseDetailVideoSection({
           <CardBody bg={'white'} pl={'0px'} pr={'0px'}>
             <VideoDetailAndQAndA
               selectedVideo={selectedVideo}
+              userId={userId}
               questions={questions}
               handleGetQuestions={handleGetQuestions}
             />

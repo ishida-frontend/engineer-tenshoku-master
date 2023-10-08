@@ -8,6 +8,7 @@ import { UserController } from '../controllers/userController'
 import { ViewingStatusController } from '../controllers/viewingStatusController'
 import { VideoController } from '../controllers/videoController'
 import { QuestionController } from '../controllers/questionController'
+import { QuestionValidator } from '../validation/questionValidation'
 import { AnswerController } from '../controllers/answerController'
 
 const {
