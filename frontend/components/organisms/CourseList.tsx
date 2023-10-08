@@ -23,11 +23,9 @@ import { CourseType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { SearchIcon } from '@chakra-ui/icons'
-import { Session } from 'next-auth'
 
 type CourseListProps = {
   courses: CourseType[]
-  session: Session | null
   handleTextChange: (event: any) => void
 }
 
