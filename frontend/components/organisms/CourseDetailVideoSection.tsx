@@ -9,26 +9,15 @@ import {
   Text,
   Spacer,
   CardBody,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-  Heading,
-  Stack,
-  StackDivider,
-  Avatar,
 } from '@chakra-ui/react'
-import ReactMarkdown from 'react-markdown'
 
 import { FavIcon } from 'components/atoms/FavIcon'
 import { WatchedButton } from 'components/atoms/WatchedButton'
-import { SelectedVideo, handleGetQuestions } from '../pages/CourseDetail'
-import { AiOutlineUser } from 'react-icons/ai'
+import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionType } from 'types/QuestionType'
-import { QuestionList } from './QuestionList'
-import { HandleChangeVideo } from '../pages/CourseDetail'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
+
+export type handleGetQuestions = (videoId: string) => void
 
 export function CourseDetailVideoSection({
   userId,

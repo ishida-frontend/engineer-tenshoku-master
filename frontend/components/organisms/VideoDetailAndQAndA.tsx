@@ -1,17 +1,11 @@
 import React from 'react'
-import {
-  Text,
-  Tab,
-  Tabs,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Box,
-} from '@chakra-ui/react'
+import { Tab, Tabs, TabList, TabPanel, TabPanels, Box } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown'
 import { QuestionList } from './QuestionList'
 import { QuestionType } from 'types/QuestionType'
-import { SelectedVideo, handleGetQuestions } from '../pages/CourseDetail'
+import { SelectedVideo } from '../pages/CourseDetail'
+
+export type handleGetQuestions = (videoId: string) => void
 
 export function VideoDetailAndQAndA({
   selectedVideo,
