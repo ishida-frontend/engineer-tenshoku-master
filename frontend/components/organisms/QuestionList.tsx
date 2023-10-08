@@ -3,14 +3,11 @@ import {
   Box,
   Button,
   Card,
-  CardHeader,
   HStack,
   Text,
-  CardBody,
   TabPanel,
   Heading,
   Stack,
-  StackDivider,
   Avatar,
   VStack,
 } from '@chakra-ui/react'
@@ -18,11 +15,7 @@ import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 
-export function QuestionList({
-  questions,
-}: {
-  questions: QuestionType[] | undefined
-}) {
+export function QuestionList({ questions }: { questions?: QuestionType[] }) {
   return (
     <>
       {(questions === undefined || questions.length === 0) && (
@@ -34,7 +27,7 @@ export function QuestionList({
         >
           <VStack>
             <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
-              この動画に質問はありません。
+              まだ質問はありません。
             </Heading>
           </VStack>
           <Button mt={'20px'}>新しく質問する</Button>
@@ -50,14 +43,14 @@ export function QuestionList({
           <Heading size="md" pb={'15px'}>
             この動画の全ての質問
           </Heading>
-          <Stack divider={<StackDivider />} spacing="4">
+          <Stack spacing="4">
             {questions.map((question: QuestionType) => (
               <Card
                 key={question.id}
-                boxShadow={'rgba(0, 0, 0, 0.24) 0px 3px 3px;'}
+                boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
                 cursor={'pointer'}
                 _hover={{
-                  bg: 'transparent',
+                  bg: 'gray.100',
                 }}
               >
                 <HStack pl={'20px'}>
@@ -65,26 +58,20 @@ export function QuestionList({
                     bg="blue.300"
                     color="black"
                     icon={<AiOutlineUser fontSize="2rem" />}
+                    justifyContent={'center'}
                   />
-                  <Box overflow={'hidden'}>
-                    <CardHeader pb={'10px'}>
-                      <Box>
-                        <Heading
-                          size="md"
-                          textTransform="uppercase"
-                          isTruncated
-                        >
-                          {question.title}
-                        </Heading>
-                      </Box>
-                    </CardHeader>
-                    <CardBody pt={'0px'}>
-                      <Box>
-                        <Text fontSize="md" isTruncated>
-                          {question.content}
-                        </Text>
-                      </Box>
-                    </CardBody>
+                  <Box overflow={'hidden'} pl={'15px'} pt={'10px'} pb={'10px'}>
+                    <Heading
+                      pb={'10px'}
+                      size="md"
+                      textTransform="uppercase"
+                      isTruncated
+                    >
+                      {question.title}
+                    </Heading>
+                    <Text fontSize="md" isTruncated>
+                      {question.content}
+                    </Text>
                   </Box>
                 </HStack>
               </Card>
