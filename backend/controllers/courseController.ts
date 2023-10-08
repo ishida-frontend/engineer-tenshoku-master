@@ -7,6 +7,7 @@ import {
   readAllCourses,
   readFilteredCourses,
   readPublishedCourseContent,
+  getSearchedCourses,
 } from '../scripts/readCourse'
 import { updateCourse, updateCourses } from '../scripts/updateCourse'
 import { deleteCourse, deleteCourses } from '../scripts/deleteCourse'
@@ -72,6 +73,19 @@ exports.getPublishedCourse = async function (
   try {
     const publishedCourse = await readPublishedCourseContent(req.params.id)
     res.status(200).json(publishedCourse)
+  } catch (e: any) {
+    res.status(500).send('エラーが発生しました')
+  }
+}
+
+exports.getSearchedCourses = async function (
+  req: express.Request,
+  res: express.Response,
+) {
+  try {
+    const { text } = req.body
+    const searchCourses = await getSearchedCourses({ text })
+    res.status(200).json(searchCourses)
   } catch (e: any) {
     res.status(500).send('エラーが発生しました')
   }

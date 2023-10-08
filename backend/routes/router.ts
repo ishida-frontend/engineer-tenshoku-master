@@ -17,6 +17,7 @@ const {
   readAllCourses,
   readFilteredCourses,
   getPublishedCourse,
+  getSearchedCourses,
   updateCourse,
   deleteCourse,
 } = require('../controllers/courseController')
@@ -89,6 +90,7 @@ router.use('/course', courseRouter)
 courseRouter.get('/create', createCourse)
 courseRouter.get('/read', readCourse)
 courseRouter.get('/all', readAllCourses)
+courseRouter.post('/search', getSearchedCourses)
 courseRouter.get('/update', updateCourse)
 courseRouter.get('/:id', getPublishedCourse)
 
