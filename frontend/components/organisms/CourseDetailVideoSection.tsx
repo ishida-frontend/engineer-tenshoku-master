@@ -8,29 +8,35 @@ import {
   HStack,
   Text,
   Spacer,
+  CardBody,
 } from '@chakra-ui/react'
-import ReactMarkdown from 'react-markdown'
 
 import { FavIcon } from 'components/atoms/FavIcon'
 import { WatchedButton } from 'components/atoms/WatchedButton'
 import { SelectedVideo } from '../pages/CourseDetail'
+import { QuestionType } from 'types/QuestionType'
+import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
 
 export function CourseDetailVideoSection({
   userId,
   selectedVideo,
+  questions,
   isWatched,
   isFavorited,
   isLoading,
   handleViewingStatus,
   handleFavIconToggle,
+  handleGetQuestions,
 }: {
   userId: string | undefined
   selectedVideo: SelectedVideo
+  questions: QuestionType[] | undefined
   isWatched: { [videoId: string]: boolean }
   isFavorited: boolean
   isLoading: boolean
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
   handleFavIconToggle: (event: React.MouseEvent<HTMLButtonElement>) => void
+  handleGetQuestions: (videoId: string) => void
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -71,12 +77,14 @@ export function CourseDetailVideoSection({
               )}
             </HStack>
           </CardHeader>
+          <CardBody bg={'white'} pl={'0px'} pr={'0px'}>
+            <VideoDetailAndQAndA
+              selectedVideo={selectedVideo}
+              questions={questions}
+              handleGetQuestions={handleGetQuestions}
+            />
+          </CardBody>
         </Card>
-      </Box>
-      <Box className="markdown" paddingLeft={'30px'} paddingRight={'30px'}>
-        <ReactMarkdown>
-          {selectedVideo.sections.videos.description}
-        </ReactMarkdown>
       </Box>
     </Box>
   )
