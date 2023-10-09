@@ -8,7 +8,7 @@ type ViewingStatusesType = {
 }
 
 export class ViewingStatusApplicationService {
-  static async update({
+  static async upsert({
     isWatched,
     userId,
     videoId,

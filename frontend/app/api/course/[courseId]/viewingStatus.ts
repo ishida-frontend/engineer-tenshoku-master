@@ -10,10 +10,13 @@ export const fetchButtonStatus = async ({
   if (!userId || !videoId) return null
 
   try {
-    const res = await fetch(APIS.VIEWING_STATUS.BUTTON.get(userId, videoId))
+    const res = await fetch(
+      `${APIS.VIEWING_STATUS.GET.path(userId)}/${videoId}`,
+    )
     if (!res.ok) {
       throw new Error(`ボタンのステータス取得に失敗しました: ${res.statusText}`)
     }
+
     const viewingStatus = await res.json()
     return viewingStatus ? { [videoId]: viewingStatus.status } : null
   } catch (error) {
@@ -22,22 +25,23 @@ export const fetchButtonStatus = async ({
 }
 
 export const fetchCheckMarkStatuses = async ({
-  courseId,
   userId,
+  courseId,
 }: {
-  courseId: string
   userId: string | undefined
+  courseId: string
 }) => {
   try {
-    const response = await fetch(
-      APIS.VIEWING_STATUS.CHECKMARKS.get(courseId, userId),
+    const res = await fetch(
+      `${APIS.VIEWING_STATUS.GET.path(userId)}/${courseId}/all`,
     )
-    if (!response.ok) {
+    if (!res.ok) {
       throw new Error(
-        `チェックマークのステータス取得に失敗しました: ${response.statusText}`,
+        `チェックマークのステータス取得に失敗しました: ${res.statusText}`,
       )
     }
-    return await response.json()
+    const viewingStatuses = await res.json()
+    return viewingStatuses
   } catch (error) {
     return {}
   }
@@ -54,25 +58,22 @@ export const upsertViewingStatus = async ({
 }) => {
   try {
     // 視聴状態を更新
-    const res = await fetch(
-      APIS.VIEWING_STATUS.STATUS.upsert(userId, videoId),
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          isWatched,
-          userId,
-          videoId,
-        }),
+    const res = await fetch(APIS.VIEWING_STATUS.UPSERT.path(userId, videoId), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    )
+      body: JSON.stringify({
+        isWatched,
+        userId,
+        videoId,
+      }),
+    })
 
     // 視聴状態がDB上になければ新規作成
     if (!res.ok) {
       const postRes = await fetch(
-        APIS.VIEWING_STATUS.STATUS.upsert(userId, videoId),
+        APIS.VIEWING_STATUS.UPSERT.path(userId, videoId),
         {
           method: 'POST',
           headers: {

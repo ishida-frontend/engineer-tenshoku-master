@@ -6,7 +6,7 @@ export class ViewingStatusController {
   upsertViewingStatus = async (req: express.Request, res: express.Response) => {
     try {
       const { isWatched, userId, videoId } = req.body
-      const viewingStatus = await ViewingStatusApplicationService.update({
+      const viewingStatus = await ViewingStatusApplicationService.upsert({
         isWatched,
         userId,
         videoId,
