@@ -9,6 +9,7 @@ import { ViewingStatusController } from '../controllers/viewingStatusController'
 import { VideoController } from '../controllers/videoController'
 import { QuestionController } from '../controllers/questionController'
 import { AnswerController } from '../controllers/answerController'
+import { FavoriteVideoController } from '../controllers/favoriteVideoController'
 
 const {
   createCourse,
@@ -39,6 +40,7 @@ const videoController = new VideoController()
 const questionController = new QuestionController()
 const answerController = new AnswerController()
 const viewingStatusController = new ViewingStatusController()
+const favoriteVideoController = new FavoriteVideoController()
 
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -125,6 +127,7 @@ answerRouter.post('/create', (req, res) => {
 answerRouter.get('/:question_id', (req, res) => {
   answerController.get(req, res)
 })
+
 const viewingStatusRouter = express.Router()
 router.use('/viewingstatus', viewingStatusRouter)
 viewingStatusRouter.post(
@@ -142,6 +145,21 @@ viewingStatusRouter.get(
 viewingStatusRouter.get(
   '/:userId/:courseId/all',
   viewingStatusController.getViewingStatuses,
+)
+
+const favoriteVideoRouter = express.Router()
+router.use('/favoritevideo', favoriteVideoRouter)
+favoriteVideoRouter.post(
+  '/:userId/:courseId/:videoId',
+  favoriteVideoController.upsertFavoriteVideo,
+)
+favoriteVideoRouter.put(
+  '/:userId/:courseId/:videoId',
+  favoriteVideoController.upsertFavoriteVideo,
+)
+favoriteVideoRouter.get(
+  '/:userId/:courseId/:videoId',
+  favoriteVideoController.getFavoriteVideo,
 )
 
 export default router

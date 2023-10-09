@@ -52,6 +52,19 @@ export const APIS = {
       title: '視聴ステータスのフェッチ',
     },
   },
+  FAVORITE_VIDEO: {
+    UPSERT: {
+      path: (userId: string | undefined, courseId: string, videoId: string) =>
+        `${backendUrl}/favoritevideo/${userId}/${courseId}/${videoId}`,
+      title: '動画のお気に入りステータスの作成と更新',
+    },
+    GET: {
+      path: (userId: string | undefined, courseId: string, videoId: string) =>
+        `${backendUrl}/favoritevideo/${userId}/${courseId}/${videoId}`,
+      title: '動画のお気に入りステータスのフェッチ',
+    },
+  },
 }
+
 // TODO idなどを動的にするなら
 // 参考 https://abeshi-blog.com/blog/t8or29ad3dz

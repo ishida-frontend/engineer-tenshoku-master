@@ -3,10 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { Container, VStack } from '@chakra-ui/react'
 
 import {
+  upsertViewingStatus,
   fetchButtonStatus,
   fetchCheckMarkStatuses,
-  upsertViewingStatus,
 } from '../../app/api/course/[courseId]/viewingStatus'
+import {
+  upsertFavoriteVideo,
+  fetchFavButtonStatus,
+} from '../../app/api/course/[courseId]/favoriteVideo'
 import { CourseDetailVideoSection } from '../organisms/CourseDetailVideoSection'
 import { CourseDetailAccordionMenu } from '../organisms/CourseDetailAccordionMenu'
 import { CourseType } from '../../types/CourseType'
@@ -54,7 +58,7 @@ export function CourseDetail({
   const [isWatched, setIsWatched] = useState<{ [key: string]: boolean }>({})
   const [isChecked, setIsChecked] = useState<{ [key: string]: boolean }>({})
   const [isLoading, setIsLoading] = useState(false)
-  const [isFavorited, setIsFavorited] = useState(false)
+  const [isFavorited, setIsFavorited] = useState<{ [key: string]: boolean }>({})
   const [questions, setQuestions] = useState<QuestionType[]>()
   const [videoId, setVideoId] = useState<string>(
     courseData.sections[0].videos[0].id,
@@ -86,8 +90,14 @@ export function CourseDetail({
           userId: session?.user?.id,
           courseId: courseData.id,
         })
-
         setIsChecked(checkMarkStatuses)
+
+        const favButtonStatus = await fetchFavButtonStatus({
+          userId: session?.user?.id,
+          courseId: courseData.id,
+          videoId,
+        })
+        setIsFavorited(favButtonStatus as { [key: string]: boolean })
       } catch (error) {
         showErrorToast(`${error}`)
       } finally {
@@ -131,8 +141,8 @@ export function CourseDetail({
         userId,
         videoId,
       })
-      setIsChecked((prevStatus) => ({
-        ...prevStatus,
+      setIsChecked((prevViewingStatus) => ({
+        ...prevViewingStatus,
         [videoId]: newWatchedStatus,
       }))
     } catch (error) {
@@ -140,8 +150,23 @@ export function CourseDetail({
     }
   }
 
-  const handleFavIconToggle = () => {
-    setIsFavorited((prevState) => !prevState)
+  const handleFavoriteVideoStatus = async () => {
+    const newFavoritedStatus = !(isFavorited?.[videoId] || false)
+    setIsFavorited((prevFavoriteStatus) => ({
+      ...prevFavoriteStatus,
+      [videoId]: newFavoritedStatus,
+    }))
+
+    try {
+      await upsertFavoriteVideo({
+        isFavorited: newFavoritedStatus,
+        userId,
+        courseId: courseData.id,
+        videoId,
+      })
+    } catch (error) {
+      showErrorToast(`${error}`)
+    }
   }
 
   const handleGetQuestions = async (videoId: string) => {
@@ -181,7 +206,7 @@ export function CourseDetail({
             isFavorited={isFavorited}
             isLoading={isLoading}
             handleViewingStatus={handleViewingStatus}
-            handleFavIconToggle={handleFavIconToggle}
+            handleFavoriteVideoStatus={handleFavoriteVideoStatus}
             handleGetQuestions={handleGetQuestions}
           />
         </Container>

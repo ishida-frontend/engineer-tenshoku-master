@@ -2,7 +2,6 @@ import React from 'react'
 import {
   AspectRatio,
   Box,
-  Button,
   Card,
   CardHeader,
   HStack,
@@ -11,7 +10,7 @@ import {
   CardBody,
 } from '@chakra-ui/react'
 
-import { FavIcon } from 'components/atoms/FavIcon'
+import { FavButton } from 'components/atoms/FavButton'
 import { WatchedButton } from 'components/atoms/WatchedButton'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionType } from 'types/QuestionType'
@@ -25,17 +24,19 @@ export function CourseDetailVideoSection({
   isFavorited,
   isLoading,
   handleViewingStatus,
-  handleFavIconToggle,
+  handleFavoriteVideoStatus,
   handleGetQuestions,
 }: {
   userId: string | undefined
   selectedVideo: SelectedVideo
   questions: QuestionType[] | undefined
   isWatched: { [videoId: string]: boolean }
-  isFavorited: boolean
+  isFavorited: { [videoId: string]: boolean }
   isLoading: boolean
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
-  handleFavIconToggle: (event: React.MouseEvent<HTMLButtonElement>) => void
+  handleFavoriteVideoStatus: (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => void
   handleGetQuestions: (videoId: string) => void
 }) {
   return (
@@ -66,13 +67,14 @@ export function CourseDetailVideoSection({
                     isLoading={isLoading}
                     handleViewingStatus={handleViewingStatus}
                   />
-                  <Button
-                    onClick={handleFavIconToggle}
-                    size="24px"
-                    variant="unstyled"
-                  >
-                    <FavIcon isFavorited={isFavorited} />
-                  </Button>
+
+                  <FavButton
+                    isFavorited={
+                      isFavorited?.[selectedVideo.sections.videos.id] || false
+                    }
+                    isLoading={isLoading}
+                    handleFavoriteVideoStatus={handleFavoriteVideoStatus}
+                  />
                 </>
               )}
             </HStack>
