@@ -60,7 +60,6 @@ export function QuestionForm({
   >('write')
 
   const fetcher = async () => {
-    console.log('question.title:', question.title)
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/create`,
       {
@@ -85,14 +84,11 @@ export function QuestionForm({
     event.preventDefault()
     try {
       const res = await fetcher()
-      return res.json()
     } catch (e) {
       throw e
     }
   }
-  console.log('question:', question)
-  console.log('videoId:', videoId)
-  console.log('userId:', userId)
+
   return (
     <TabPanel>
       <Stack mt={'20px'}>
