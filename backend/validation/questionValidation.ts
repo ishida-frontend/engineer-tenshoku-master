@@ -7,6 +7,7 @@ export class QuestionValidator {
     res: express.Response,
     next: express.NextFunction,
   ) => {
+    console.log('req.body:', req.body)
     const questionCreateSchema = z.object({
       title: z
         .string()
@@ -20,9 +21,16 @@ export class QuestionValidator {
     if (questionData.success) {
       next()
     } else {
-      res
-        .status(400)
-        .json({ errors: questionData.error.formErrors.fieldErrors })
+      res.status(500).json({ errors: questionData.error.message })
+      console.log('questionData.error.message:', questionData.error.message)
+      console.log(
+        'questionData.error.errors[0].path[0]:',
+        questionData.error.errors[0].path[0],
+      )
+      console.log(
+        'questionData.error.errors[0].message:',
+        questionData.error.errors[0].message,
+      )
     }
   }
 }

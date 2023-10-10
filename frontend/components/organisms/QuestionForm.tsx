@@ -81,6 +81,8 @@ export function QuestionForm({
         },
       )
       const result = await response.json()
+      console.log('response:', response)
+      console.log('result:', result)
 
       if (response.status === 200) {
         setErrors({
@@ -94,7 +96,7 @@ export function QuestionForm({
         } else {
           setErrors((prevErrors) => ({
             ...prevErrors,
-            title: result.errors.title,
+            title: result.error.message.title,
           }))
         }
 
