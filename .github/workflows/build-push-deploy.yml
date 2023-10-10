@@ -85,8 +85,8 @@ jobs:
         with:
           cluster: ${{ secrets.ECS_CLUSTER_NAME }}
           task-definition: ${{ secrets.ECS_TASK_DEFINITION_NAME }}
-          subnets: subnet-094c33ebb31f93a6c
-          security-groups: sg-069156259e7cc13f5
+          subnets: ${{ secrets.SUBNET_IDS }}
+          security-groups: ${{ secrets.SECURITY_GROUP }}
           assign-public-ip: ENABLED
           override-container: express
           override-container-command: |
