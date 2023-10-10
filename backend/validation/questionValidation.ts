@@ -8,12 +8,11 @@ export class QuestionValidator {
     next: express.NextFunction,
   ) => {
     const questionCreateSchema = z.object({
-      title: z.string().min(10, { message: '※10文字以上で入力してください' }),
-      content: z.string().min(15, { message: '※15文字以上で入力してください' }),
-      video_id: z
+      title: z
         .string()
-        .min(20, { message: '※もう一度コースの選択から行なってください' }),
-      user_id: z.string().min(20, { message: '※ログインしてください' }),
+        .min(15, { message: '※15文字以上で入力してください' })
+        .max(255, { message: '※255文字以内で入力してください' }),
+      content: z.string().min(15, { message: '※15文字以上で入力してください' }),
     })
 
     const questionData = questionCreateSchema.safeParse(req.body)

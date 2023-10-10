@@ -12,12 +12,14 @@ import {
   Input,
   FormErrorMessage,
   TabPanel,
+  useDisclosure,
 } from '@chakra-ui/react'
 import ReactMde from 'react-mde'
 import ReactMarkdown from 'react-markdown'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import * as Showdown from 'showdown'
 import '../../styles/markdown.css'
+import { useCustomToast } from '../../hooks/useCustomToast'
 
 type Errors = {
   title?: string[]
@@ -43,6 +45,8 @@ export function QuestionForm({
 
   const [questionContent, setQuestionContent] = useState<string>()
 
+  const { showSuccessToast, showErrorToast } = useCustomToast()
+
   const contentChange = (value: string) => {
     setQuestionContent(value)
     setQuestion({ ...question, content: value })
@@ -60,22 +64,54 @@ export function QuestionForm({
   >('write')
 
   const fetcher = async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/create`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          title: question.title,
-          content: question.content,
-          video_id: videoId,
-          user_id: userId,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/create`,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            title: question.title,
+            content: question.content,
+            video_id: videoId,
+            user_id: userId,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      },
-    )
-    return res.json()
+      )
+      const result = await response.json()
+
+      if (response.status === 200) {
+        setErrors({
+          title: [''],
+          content: [''],
+        })
+        showSuccessToast(result.message)
+      } else if (response.status === 500) {
+        if (question.title && question.title.length >= 15) {
+          setErrors((prevErrors) => ({ ...prevErrors, title: [''] }))
+        } else {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            title: result.errors.title,
+          }))
+        }
+
+        if (question.content && question.content.length >= 15) {
+          setErrors((prevErrors) => ({ ...prevErrors, content: [''] }))
+        } else {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            content: result.errors.content,
+          }))
+        }
+
+        console.log('errors:', errors)
+      }
+    } catch (error) {
+      showErrorToast('質問の公開に失敗しました')
+    }
   }
 
   const handleSubmit = async (
@@ -83,11 +119,12 @@ export function QuestionForm({
   ) => {
     event.preventDefault()
     try {
-      const res = await fetcher()
+      await fetcher()
     } catch (e) {
       throw e
     }
   }
+  console.log('errors:', errors)
 
   return (
     <TabPanel>

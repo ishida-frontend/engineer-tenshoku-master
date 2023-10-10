@@ -5,17 +5,15 @@ export class QuestionController {
   async create(req: express.Request, res: express.Response) {
     try {
       const { title, content, video_id, user_id } = req.body
-      console.log('req.body:', req.body)
-      const data = await QuestionApplicationService.create({
+      await QuestionApplicationService.create({
         title,
         content,
         video_id,
         user_id,
       })
-      res.send('新しい質問が公開されました！')
-      res.status(200).json(data)
+      res.status(200).json({ message: '質問が公開されました' })
     } catch (error) {
-      res.status(500).send('エラーが発生しました')
+      res.status(500).json({ message: '質問作成時にエラーが発生しました' })
       throw error
     }
   }
