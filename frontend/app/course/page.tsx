@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { CourseList } from '../../components/organisms/CourseList'
+import { CourseListWrapper } from '../../components/pages/CourseListWrapper'
 import { CourseType } from '../../types/CourseType'
 import Error from '../error'
+
 export default async function Course() {
   try {
     const res = await fetch(
@@ -14,12 +15,10 @@ export default async function Course() {
         },
       },
     )
-    const courses: CourseType[] = await res.json()
-    console.log('courses', courses)
+    const initialCourses: CourseType[] = await res.json()
 
-    return <CourseList courses={courses} />
+    return <CourseListWrapper initialCourses={initialCourses} />
   } catch (e) {
-    console.log(e)
     return <Error />
   }
 }

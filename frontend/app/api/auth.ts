@@ -16,18 +16,19 @@ export const checkToken = async (): Promise<{
   return data
 }
 
-export const login = async (formState: {
-  email: string
-  password: string
-}): Promise<void> => {
-  await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signin`, {
-    credentials: 'include',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+export const login = async (formState: { email: string; password: string }) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signin`,
+    {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formState),
     },
-    body: JSON.stringify(formState),
-  })
+  )
+  return await res.json()
 }
 export const logout = async (): Promise<boolean> => {
   const res = await fetch(
