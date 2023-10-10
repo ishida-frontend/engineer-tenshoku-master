@@ -28,56 +28,56 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       # ECRへのログイン
-      # - name: Login to ECR
-      #   uses: aws-actions/amazon-ecr-login@v1
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v1
 
-      # # DockerイメージをビルドしてECRにプッシュ
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v2
-      #   with:
-      #     platforms: linux/arm64
+      # DockerイメージをビルドしてECRにプッシュ
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: linux/arm64
 
-      # - name: Build and Push Image
-      #   env:
-      #     ECR_REGISTRY: ${{ secrets.ECR_REGISTRY_NAME }}
-      #     ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
-      #     IMAGE_TAG: ${{ github.sha }}
-      #   run: |
-      #     echo "ECR_REGISTRY is $ECR_REGISTRY"
-      #     echo "Building Docker image..."
-      #     docker build --target production --platform linux/arm64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f backend/Dockerfile ./backend
-      #     echo "Pushing Docker image to ECR..."
-      #     docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Build and Push Image
+        env:
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY_NAME }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          echo "ECR_REGISTRY is $ECR_REGISTRY"
+          echo "Building Docker image..."
+          docker build --target production --platform linux/arm64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f backend/Dockerfile ./backend
+          echo "Pushing Docker image to ECR..."
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      # # ECSのタスク定義を出力
-      # - name: Download task definition
-      #   env:
-      #     TASK_DEFINITION: ${{ secrets.ECS_TASK_DEFINITION_NAME }}
-      #   run: |
-      #     echo "Fetching current task definition..."
-      #     aws ecs describe-task-definition --task-definition $TASK_DEFINITION --query taskDefinition > task-definition.json
+      # ECSのタスク定義を出力
+      - name: Download task definition
+        env:
+          TASK_DEFINITION: ${{ secrets.ECS_TASK_DEFINITION_NAME }}
+        run: |
+          echo "Fetching current task definition..."
+          aws ecs describe-task-definition --task-definition $TASK_DEFINITION --query taskDefinition > task-definition.json
 
-      # # ECSのタスク定義にコンテナイメージを紐づけ
-      # - name: Fill in the new image ID in the Amazon ECS task definition
-      #   id: task-def
-      #   uses: aws-actions/amazon-ecs-render-task-definition@v1
-      #   with:
-      #     task-definition: task-definition.json
-      #     container-name: ${{ secrets.CONTAINER_NAME }}
-      #     image: ${{ secrets.ECR_REGISTRY_NAME }}/${{ secrets.ECR_REPOSITORY_NAME }}:${{ github.sha }}
+      # ECSのタスク定義にコンテナイメージを紐づけ
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ secrets.CONTAINER_NAME }}
+          image: ${{ secrets.ECR_REGISTRY_NAME }}/${{ secrets.ECR_REPOSITORY_NAME }}:${{ github.sha }}
 
-      # - name: Echo Updated task definition message
-      #   run: |
-      #     echo "Updated the task definition with the new image."
+      - name: Echo Updated task definition message
+        run: |
+          echo "Updated the task definition with the new image."
 
-      # # ECSサービスを更新して新しいタスク定義をデプロイ
-      # - name: Deploy Amazon ECS task definition
-      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      #   with:
-      #     task-definition: ${{ steps.task-def.outputs.task-definition }}
-      #     service: ${{ secrets.ECS_SERVICE_NAME }}
-      #     cluster: ${{ secrets.ECS_CLUSTER_NAME }}
-      #     force-new-deployment: true
+      # ECSサービスを更新して新しいタスク定義をデプロイ
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ secrets.ECS_SERVICE_NAME }}
+          cluster: ${{ secrets.ECS_CLUSTER_NAME }}
+          force-new-deployment: true
 
       # ECSタスクでmigrationを実行
       - name: Run Prisma migration
