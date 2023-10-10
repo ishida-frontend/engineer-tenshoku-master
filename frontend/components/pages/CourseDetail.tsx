@@ -21,6 +21,11 @@ import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
 
+type loadingStates = {
+  watching: boolean
+  favoriting: boolean
+}
+
 export type CourseDetailPropsType = CourseType & {
   sections: (SectionType & { videos: VideoType[] })[]
 }
@@ -55,11 +60,16 @@ export function CourseDetail({
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
 
-  const [isWatched, setIsWatched] = useState<{ [key: string]: boolean }>({})
-  const [isChecked, setIsChecked] = useState<{ [key: string]: boolean }>({})
-  const [isLoading, setIsLoading] = useState(false)
-  const [isFavorited, setIsFavorited] = useState<{ [key: string]: boolean }>({})
+  const [isWatched, setIsWatched] = useState<Record<string, boolean>>({})
+  const [isChecked, setIsChecked] = useState<Record<string, boolean>>({})
+  const [isFavorited, setIsFavorited] = useState<Record<string, boolean>>({})
+  const [loadingStates, setLoadingStates] = useState<loadingStates>({
+    watching: false,
+    favoriting: false,
+  })
+
   const [questions, setQuestions] = useState<QuestionType[]>()
+
   const [videoId, setVideoId] = useState<string>(
     courseData.sections[0].videos[0].id,
   )
@@ -79,7 +89,7 @@ export function CourseDetail({
   })
 
   useEffect(() => {
-    setIsLoading(true)
+    setLoadingStates({ watching: true, favoriting: true })
 
     const fetchData = async () => {
       try {
@@ -93,15 +103,14 @@ export function CourseDetail({
         setIsChecked(checkMarkStatuses)
 
         const favButtonStatus = await fetchFavButtonStatus({
-          userId: session?.user?.id,
-          courseId: courseData.id,
+          userId,
           videoId,
         })
         setIsFavorited(favButtonStatus as { [key: string]: boolean })
       } catch (error) {
         showErrorToast(`${error}`)
       } finally {
-        setIsLoading(false)
+        setLoadingStates({ watching: false, favoriting: false })
       }
     }
 
@@ -129,6 +138,8 @@ export function CourseDetail({
   }
 
   const handleViewingStatus = async () => {
+    setLoadingStates((prev) => ({ ...prev, watching: true }))
+
     const newWatchedStatus = !(isWatched?.[videoId] || false)
     setIsWatched((prevStatus) => ({
       ...prevStatus,
@@ -147,10 +158,14 @@ export function CourseDetail({
       }))
     } catch (error) {
       showErrorToast(`${error}`)
+    } finally {
+      setLoadingStates((prev) => ({ ...prev, watching: false }))
     }
   }
 
   const handleFavoriteVideoStatus = async () => {
+    setLoadingStates((prev) => ({ ...prev, favoriting: true }))
+
     const newFavoritedStatus = !(isFavorited?.[videoId] || false)
     setIsFavorited((prevFavoriteStatus) => ({
       ...prevFavoriteStatus,
@@ -161,11 +176,12 @@ export function CourseDetail({
       await upsertFavoriteVideo({
         isFavorited: newFavoritedStatus,
         userId,
-        courseId: courseData.id,
         videoId,
       })
     } catch (error) {
       showErrorToast(`${error}`)
+    } finally {
+      setLoadingStates((prev) => ({ ...prev, favoriting: false }))
     }
   }
 
@@ -204,7 +220,7 @@ export function CourseDetail({
             questions={questions}
             isWatched={isWatched}
             isFavorited={isFavorited}
-            isLoading={isLoading}
+            loadingStates={loadingStates}
             handleViewingStatus={handleViewingStatus}
             handleFavoriteVideoStatus={handleFavoriteVideoStatus}
             handleGetQuestions={handleGetQuestions}

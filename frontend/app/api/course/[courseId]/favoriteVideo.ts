@@ -3,36 +3,30 @@ import { APIS } from 'constants/paths'
 export const upsertFavoriteVideo = async ({
   isFavorited,
   userId,
-  courseId,
   videoId,
 }: {
   isFavorited: boolean
   userId: string | undefined
-  courseId: string
   videoId: string
 }) => {
   try {
     // お気に入り状態を更新
-    const res = await fetch(
-      APIS.FAVORITE_VIDEO.UPSERT.path(userId, courseId, videoId),
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          isFavorited,
-          userId,
-          courseId,
-          videoId,
-        }),
+    const res = await fetch(APIS.FAVORITE_VIDEO.UPSERT.path(userId, videoId), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    )
+      body: JSON.stringify({
+        isFavorited,
+        userId,
+        videoId,
+      }),
+    })
 
     // お気に入り状態がDB上になければ新規作成
     if (!res.ok) {
       const postRes = await fetch(
-        APIS.FAVORITE_VIDEO.UPSERT.path(userId, courseId, videoId),
+        APIS.FAVORITE_VIDEO.UPSERT.path(userId, videoId),
         {
           method: 'POST',
           headers: {
@@ -57,27 +51,21 @@ export const upsertFavoriteVideo = async ({
 
 export const fetchFavButtonStatus = async ({
   userId,
-  courseId,
   videoId,
 }: {
   userId: string | undefined
-  courseId: string
   videoId: string
 }) => {
-  if (!userId || !courseId || !videoId) return null
-
   try {
-    const res = await fetch(
-      `${APIS.FAVORITE_VIDEO.GET.path(userId, courseId, videoId)}`,
-    )
+    const res = await fetch(APIS.FAVORITE_VIDEO.GET.path(userId, videoId))
     if (!res.ok) {
       throw new Error(
         `動画のお気に入りテータス取得に失敗しました: ${res.statusText}`,
       )
     }
 
-    const viewingStatus = await res.json()
-    return viewingStatus ? { [videoId]: viewingStatus.status } : null
+    const favoriteStatus = await res.json()
+    return favoriteStatus ? { [videoId]: favoriteStatus.status } : null
   } catch (error) {
     return null
   }

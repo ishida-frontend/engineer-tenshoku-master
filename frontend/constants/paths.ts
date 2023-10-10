@@ -54,13 +54,13 @@ export const APIS = {
   },
   FAVORITE_VIDEO: {
     UPSERT: {
-      path: (userId: string | undefined, courseId: string, videoId: string) =>
-        `${backendUrl}/favoritevideo/${userId}/${courseId}/${videoId}`,
+      path: (userId: string | undefined, videoId: string) =>
+        `${backendUrl}/favoritevideo/${userId}/${videoId}`,
       title: '動画のお気に入りステータスの作成と更新',
     },
     GET: {
-      path: (userId: string | undefined, courseId: string, videoId: string) =>
-        `${backendUrl}/favoritevideo/${userId}/${courseId}/${videoId}`,
+      path: (userId: string | undefined, videoId: string) =>
+        `${backendUrl}/favoritevideo/${userId}/${videoId}`,
       title: '動画のお気に入りステータスのフェッチ',
     },
   },

@@ -4,11 +4,11 @@ import { AiOutlineStar, AiFillStar } from 'react-icons/ai'
 
 export const FavButton = ({
   isFavorited,
-  isLoading,
+  loadingState,
   handleFavoriteVideoStatus,
 }: {
   isFavorited: boolean
-  isLoading: boolean
+  loadingState: boolean
   handleFavoriteVideoStatus: (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => void
@@ -18,9 +18,9 @@ export const FavButton = ({
       onClick={(e) => {
         handleFavoriteVideoStatus(e)
       }}
-      isDisabled={isLoading}
+      isLoading={loadingState}
       color="teal.500"
-      height="32px"
+      size="sm"
     >
       {isFavorited ? <AiFillStar size="24px" /> : <AiOutlineStar size="24px" />}
     </Button>

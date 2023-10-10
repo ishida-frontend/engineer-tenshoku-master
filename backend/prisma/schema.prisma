@@ -32,16 +32,15 @@ enum UserRole {
 }
 
 model Course {
-  id            String          @id @default(uuid()) @db.VarChar(255)
-  sections      Section[]
-  name          String
-  description   String?
-  image         String?
-  published     Boolean         @default(false) // コースが公開されているかどうか。
-  created_at    DateTime        @default(now())
-  updated_at    DateTime        @updatedAt
-  deleted_at    DateTime?
-  FavoriteVideo FavoriteVideo[]
+  id          String    @id @default(uuid()) @db.VarChar(255)
+  sections    Section[]
+  name        String
+  description String?
+  image       String?
+  published   Boolean   @default(false) // コースが公開されているかどうか。
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  deleted_at  DateTime?
 }
 
 model Section {
@@ -122,15 +121,14 @@ model ViewingStatus {
 }
 
 model FavoriteVideo {
-  status     Boolean  @default(false) // お気に入りでない：0、お気に入り：1
-  user_id    String   @db.VarChar(255)
-  course_id  String   @db.VarChar(255)
-  video_id   String   @db.VarChar(255)
-  user       User     @relation(fields: [user_id], references: [id])
-  course     Course   @relation(fields: [course_id], references: [id])
-  video      Video    @relation(fields: [video_id], references: [id])
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  status     Boolean   @default(false) // お気に入りでない：0、お気に入り：1
+  user_id    String    @db.VarChar(255)
+  video_id   String    @db.VarChar(255)
+  user       User      @relation(fields: [user_id], references: [id])
+  video      Video     @relation(fields: [video_id], references: [id])
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
 
-  @@unique([user_id, course_id, video_id])
+  @@unique([user_id, video_id])
 }
