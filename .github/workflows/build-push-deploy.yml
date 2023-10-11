@@ -3,9 +3,9 @@ name: Build, Push and Deploy
 on:
   push:
     branches:
-      - feature/create-CICD
-    # paths:
-    #   - 'backend/**'
+      - master
+    paths:
+      - 'backend/**'
 
 jobs:
   build-push-deploy:
