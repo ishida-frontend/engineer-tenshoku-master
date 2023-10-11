@@ -81,8 +81,9 @@ export function QuestionForm({
         },
       )
       const result = await response.json()
-      console.log('response:', response)
+      // console.log('response:', response)
       console.log('result:', result)
+      console.log('response:', response)
 
       if (response.status === 200) {
         setErrors({
