@@ -21,17 +21,8 @@ export class QuestionValidator {
     if (questionData.success) {
       next()
     } else {
-      res.status(500).json({ errors: questionData.error.issues })
-      console.log('questionData.error.errors:', questionData.error.errors)
-      console.log('questionData.error.issues:', questionData.error.issues)
-      console.log(
-        'questionData.error.errors[0].path[0]:',
-        questionData.error.errors[0].path[0],
-      )
-      console.log(
-        'questionData.error.errors[0].message:',
-        questionData.error.errors[0].message,
-      )
+      res.status(500).json({ errors: [questionData.error.errors] })
+      console.log('errors:', questionData.error.errors)
     }
   }
 }

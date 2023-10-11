@@ -37,7 +37,7 @@ export function QuestionForm({
     title: '',
     content: '',
   })
-
+  const [catchError, SetCatchError] = useState()
   const [errors, setErrors] = useState<Errors>({
     title: [''],
     content: [''],
@@ -82,8 +82,25 @@ export function QuestionForm({
       )
       const result = await response.json()
       // console.log('response:', response)
-      console.log('result:', result)
-      console.log('response:', response)
+      console.log('result.errors[0]:', result.errors[0])
+
+      if (result.errors[0]) {
+        result.errors[0].map((error: any) => {
+          if (error.path[0] === 'title') {
+            console.log('titleError:', error)
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              title: [error.message],
+            }))
+          } else if (error.path[0] === 'content') {
+            console.log('contentError:', error)
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              content: [error.message],
+            }))
+          }
+        })
+      }
 
       if (response.status === 200) {
         setErrors({
