@@ -12,18 +12,11 @@ import {
 import formatDate from '../../../utils/formatDate'
 import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-
-type CourseType = {
-  id: string
-  name: string
-  description: string
-  published: boolean
-  created_at: string
-  updated_at: string
-  deleted_at?: string
+import { CourseType } from '../../../types'
+type CourseListProps = {
+  courses: CourseType[]
 }
-
-export function CourseList(courses: CourseType[]) {
+export function CourseList({ courses }: CourseListProps) {
   const { showErrorToast } = useCustomToast()
 
   if (!courses) {
