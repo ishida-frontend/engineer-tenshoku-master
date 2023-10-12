@@ -28,4 +28,26 @@ export class UserApplicationService {
       throw error
     }
   }
+
+  static async update(params: {
+    id: string
+    name: string
+    oneWord: string
+    goal: string
+  }) {
+    try {
+      const { id, name, oneWord, goal } = params
+      const updatedProfile = await prisma.user.update({
+        where: { id },
+        data: {
+          name: name,
+          oneWord: oneWord,
+          goal: goal,
+        },
+      })
+      return updatedProfile
+    } catch (error) {
+      throw error
+    }
+  }
 }

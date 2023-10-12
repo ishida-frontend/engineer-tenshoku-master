@@ -10,4 +10,13 @@ export class UserController {
       throw error
     }
   }
+
+  async update(req: express.Request, res: express.Response) {
+    try {
+      const data = await UserApplicationService.update(req.body)
+      return res.status(200).json(data)
+    } catch (error) {
+      throw error
+    }
+  }
 }
