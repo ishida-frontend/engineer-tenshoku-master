@@ -85,50 +85,56 @@ export function QuestionForm({
       console.log('result.errors[0]:', result.errors[0])
 
       if (result.errors[0]) {
-        result.errors[0].map((error: any) => {
-          if (error.path[0] === 'title') {
-            console.log('titleError:', error)
-            setErrors((prevErrors) => ({
-              ...prevErrors,
-              title: [error.message],
-            }))
-          } else if (error.path[0] === 'content') {
-            console.log('contentError:', error)
-            setErrors((prevErrors) => ({
-              ...prevErrors,
-              content: [error.message],
-            }))
-          }
+        // result.errors[0].map((error: any) => {
+        //   if (error.path[0] === 'title') {
+        //     console.log('titleError:', error)
+        //     setErrors((prevErrors) => ({
+        //       ...prevErrors,
+        //       title: [error.message],
+        //     }))
+        //   } else if (error.path[0] === 'content') {
+        //     console.log('contentError:', error)
+        //     setErrors((prevErrors) => ({
+        //       ...prevErrors,
+        //       content: [error.message],
+        //     }))
+        //   }
+        // })
+        const zodErrors = result.errors.map((error) => {
+          title: error.message
+          content: error.message
         })
+
+        setErrors(zodErrors)
+      } else {
       }
 
-      if (response.status === 200) {
-        setErrors({
-          title: [''],
-          content: [''],
-        })
-        showSuccessToast(result.message)
-      } else if (response.status === 500) {
-        if (question.title && question.title.length >= 15) {
-          setErrors((prevErrors) => ({ ...prevErrors, title: [''] }))
-        } else {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            title: result.error.message.title,
-          }))
-        }
+      // if (response.status === 200) {
+      //   setErrors({
+      //     title: [''],
+      //     content: [''],
+      //   })
+      //   showSuccessToast(result.message)
+      // } else if (response.status === 500) {
+      //   if (question.title && question.title.length >= 15) {
+      //     setErrors((prevErrors) => ({ ...prevErrors, title: [''] }))
+      //   } else {
+      //     setErrors((prevErrors) => ({
+      //       ...prevErrors,
+      //       title: result.error.message.title,
+      //     }))
+      //   }
 
-        if (question.content && question.content.length >= 15) {
-          setErrors((prevErrors) => ({ ...prevErrors, content: [''] }))
-        } else {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            content: result.errors.content,
-          }))
-        }
-
-        console.log('errors:', errors)
-      }
+      //   if (question.content && question.content.length >= 15) {
+      //     setErrors((prevErrors) => ({ ...prevErrors, content: [''] }))
+      //   } else {
+      //     setErrors((prevErrors) => ({
+      //       ...prevErrors,
+      //       content: result.errors.content,
+      //     }))
+      //   }
+      // }
+      console.log('errors:', errors)
     } catch (error) {
       showErrorToast('質問の公開に失敗しました')
     }
