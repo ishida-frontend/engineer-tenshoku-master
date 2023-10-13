@@ -16,28 +16,36 @@ import { WatchedButton } from 'components/atoms/WatchedButton'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionType } from 'types/QuestionType'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
-import { Session } from 'next-auth'
+
+type CreateQuestionErrorType = (title: string, content: string) => void
 
 export function CourseDetailVideoSection({
   userId,
   selectedVideo,
   questions,
+  createQuestionErrors,
   isWatched,
   isFavorited,
   isLoading,
   handleViewingStatus,
   handleFavIconToggle,
   handleGetQuestions,
+  createQuestion,
 }: {
   userId: string | undefined
   selectedVideo: SelectedVideo
-  questions: QuestionType[] | undefined
+  questions?: QuestionType[]
+  createQuestionErrors?: CreateQuestionErrorType
   isWatched: { [videoId: string]: boolean }
   isFavorited: boolean
   isLoading: boolean
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
   handleFavIconToggle: (event: React.MouseEvent<HTMLButtonElement>) => void
   handleGetQuestions: (videoId: string) => void
+  createQuestion: (createQuestionParams: {
+    title: string
+    content: string
+  }) => Promise<void>
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -83,7 +91,9 @@ export function CourseDetailVideoSection({
               selectedVideo={selectedVideo}
               userId={userId}
               questions={questions}
+              createQuestionErrors={createQuestionErrors}
               handleGetQuestions={handleGetQuestions}
+              createQuestion={createQuestion}
             />
           </CardBody>
         </Card>

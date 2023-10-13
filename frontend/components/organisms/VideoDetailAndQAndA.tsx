@@ -6,17 +6,28 @@ import { QuestionType } from 'types/QuestionType'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionForm } from './QuestionForm'
 
+type CreateQuestionErrorType = (title: string, content: string) => void
+
 export function VideoDetailAndQAndA({
   selectedVideo,
   userId,
   questions,
+  createQuestionErrors,
   handleGetQuestions,
+  createQuestion,
 }: {
   selectedVideo: SelectedVideo
   userId: string | undefined
-  questions: QuestionType[] | undefined
+  questions?: QuestionType[]
+  createQuestionErrors?: CreateQuestionErrorType
   handleGetQuestions: (videoId: string) => void
+  createQuestion: (createQuestionParams: {
+    title: string
+    content: string
+  }) => Promise<void>
 }) {
+  console.log('createQuestion:', createQuestion)
+  console.log('createQuestionErrors:', createQuestionErrors)
   return (
     <Tabs isFitted colorScheme={'green'}>
       <TabList>
@@ -39,6 +50,8 @@ export function VideoDetailAndQAndA({
         <QuestionForm
           videoId={selectedVideo.sections.videos.id}
           userId={userId}
+          createQuestionErrors={createQuestionErrors}
+          createQuestion={createQuestion}
         />
       </TabPanels>
     </Tabs>

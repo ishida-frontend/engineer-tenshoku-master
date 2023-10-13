@@ -12,7 +12,6 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Link,
   SimpleGrid,
   Text,
   VStack,
@@ -23,6 +22,7 @@ import { CourseType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { SearchIcon } from '@chakra-ui/icons'
+import Link from 'next/link'
 
 type CourseListProps = {
   courses: CourseType[]
@@ -48,6 +48,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
 
   return (
     <Center bg={'gray.200'}>
+      <Link href="/contact">お問い合わせ</Link>
       <VStack mx="auto" padding={'60px 96px'}>
         <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
           コース一覧

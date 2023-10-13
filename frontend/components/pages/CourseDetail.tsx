@@ -41,6 +41,8 @@ export type HandleChangeVideo = (
   videoIndex: number,
 ) => void
 
+type CreateQuestionErrorType = (title: string, content: string) => void
+
 export function CourseDetail({
   courseData,
   session,
@@ -56,6 +58,8 @@ export function CourseDetail({
   const [isLoading, setIsLoading] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
   const [questions, setQuestions] = useState<QuestionType[]>()
+  const [createQuestionErrors, setCreateQuestionErrors] =
+    useState<CreateQuestionErrorType>()
   const [videoId, setVideoId] = useState<string>(
     courseData.sections[0].videos[0].id,
   )
@@ -158,6 +162,49 @@ export function CourseDetail({
     setQuestions(getQuestions)
   }
 
+  const createQuestion = async (createQuestionParams: {
+    title: string
+    content: string
+  }) => {
+    const { title, content } = createQuestionParams
+    console.log('title:', title)
+    console.log('content:', content)
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/create`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          title,
+          content,
+          video_id: videoId,
+          user_id: userId,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    const result = await response.json()
+
+    if (result.errors[0]) {
+      result.errors[0].map((error) => {
+        if (error.path[0] === 'title') {
+          setCreateQuestionErrors((prevErrors) => ({
+            ...prevErrors,
+            title: [error.message],
+          }))
+        } else if (error.path[0] === 'content') {
+          setCreateQuestionErrors((prevErrors) => ({
+            ...prevErrors,
+            content: [error.message],
+          }))
+        }
+      })
+    }
+    console.log('result:', result)
+  }
+  console.log('createQuestionErrors:', createQuestionErrors)
+
   return (
     <VStack minH={'100vh'} bg={'gray.100'}>
       <Container minWidth={'100%'} padding={'0px'} bg={'white'}>
@@ -177,12 +224,14 @@ export function CourseDetail({
             userId={userId}
             selectedVideo={selectedVideo}
             questions={questions}
+            createQuestionErrors={createQuestionErrors}
             isWatched={isWatched}
             isFavorited={isFavorited}
             isLoading={isLoading}
             handleViewingStatus={handleViewingStatus}
             handleFavIconToggle={handleFavIconToggle}
             handleGetQuestions={handleGetQuestions}
+            createQuestion={createQuestion}
           />
         </Container>
       </Container>

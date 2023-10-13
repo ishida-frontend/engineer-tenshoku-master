@@ -22,25 +22,34 @@ import '../../styles/markdown.css'
 import { useCustomToast } from '../../hooks/useCustomToast'
 
 type Errors = {
-  title?: string[]
-  content?: string[]
+  title?: string
+  content?: string
 }
+
+type CreateQuestionErrorType = (title: string, content: string) => void
 
 export function QuestionForm({
   videoId,
   userId,
+  createQuestionErrors,
+  createQuestion,
 }: {
   videoId: string
   userId: string | undefined
+  createQuestionErrors: CreateQuestionErrorType
+  createQuestion: (createQuestionParams: {
+    title: string
+    content: string
+  }) => Promise<void>
 }) {
   const [question, setQuestion] = useState({
     title: '',
     content: '',
   })
-  const [catchError, SetCatchError] = useState()
+
   const [errors, setErrors] = useState<Errors>({
-    title: [''],
-    content: [''],
+    title: '',
+    content: '',
   })
 
   const [questionContent, setQuestionContent] = useState<string>()
@@ -63,93 +72,39 @@ export function QuestionForm({
     'write' | 'preview'
   >('write')
 
-  const fetcher = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/create`,
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            title: question.title,
-            content: question.content,
-            video_id: videoId,
-            user_id: userId,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      )
-      const result = await response.json()
-      // console.log('response:', response)
-      console.log('result.errors[0]:', result.errors[0])
-
-      if (result.errors[0]) {
-        // result.errors[0].map((error: any) => {
-        //   if (error.path[0] === 'title') {
-        //     console.log('titleError:', error)
-        //     setErrors((prevErrors) => ({
-        //       ...prevErrors,
-        //       title: [error.message],
-        //     }))
-        //   } else if (error.path[0] === 'content') {
-        //     console.log('contentError:', error)
-        //     setErrors((prevErrors) => ({
-        //       ...prevErrors,
-        //       content: [error.message],
-        //     }))
-        //   }
-        // })
-        const zodErrors = result.errors.map((error) => {
-          title: error.message
-          content: error.message
-        })
-
-        setErrors(zodErrors)
-      } else {
-      }
-
-      // if (response.status === 200) {
-      //   setErrors({
-      //     title: [''],
-      //     content: [''],
-      //   })
-      //   showSuccessToast(result.message)
-      // } else if (response.status === 500) {
-      //   if (question.title && question.title.length >= 15) {
-      //     setErrors((prevErrors) => ({ ...prevErrors, title: [''] }))
-      //   } else {
-      //     setErrors((prevErrors) => ({
-      //       ...prevErrors,
-      //       title: result.error.message.title,
-      //     }))
-      //   }
-
-      //   if (question.content && question.content.length >= 15) {
-      //     setErrors((prevErrors) => ({ ...prevErrors, content: [''] }))
-      //   } else {
-      //     setErrors((prevErrors) => ({
-      //       ...prevErrors,
-      //       content: result.errors.content,
-      //     }))
-      //   }
-      // }
-      console.log('errors:', errors)
-    } catch (error) {
-      showErrorToast('質問の公開に失敗しました')
-    }
-  }
-
   const handleSubmit = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault()
-    try {
-      await fetcher()
-    } catch (e) {
-      throw e
-    }
+    // try {
+    // if (question.title && question.title.length >= 15) {
+    //   setErrors((prevErrors) => ({ ...prevErrors, title: '' }))
+    // } else {
+    //   setErrors((prevErrors) => ({
+    //     ...prevErrors,
+    //     title: '※15文字以上入力してください',
+    //   }))
+    // }
+
+    // if (question.content && question.content.length >= 15) {
+    //   setErrors((prevErrors) => ({ ...prevErrors, content: '' }))
+    // } else {
+    //   setErrors((prevErrors) => ({
+    //     ...prevErrors,
+    //     content: '※15文字以上入力してください',
+    //   }))
+    // }
+    // console.log('errors:', errors)
+    // if ((errors.title = '') && (errors.content = '')) {
+    console.log('aaaaa:')
+
+    await createQuestion({ title: question.title, content: question.content })
+    // }
+    // } catch (e) {
+    //   throw e
+    // }
   }
+  console.log('createQuestionErrors:', createQuestionErrors)
   console.log('errors:', errors)
 
   return (
@@ -185,7 +140,8 @@ export function QuestionForm({
                 }
               />
               <FormErrorMessage>
-                {errors.title && errors.title[0]}
+                {(errors.title && errors.title[0]) ||
+                  createQuestionErrors.title}
               </FormErrorMessage>
             </FormControl>
 

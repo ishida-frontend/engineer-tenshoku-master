@@ -22,7 +22,6 @@ export class QuestionValidator {
       next()
     } else {
       res.status(500).json({ errors: [questionData.error.errors] })
-      console.log('errors:', questionData.error.errors)
     }
   }
 }
