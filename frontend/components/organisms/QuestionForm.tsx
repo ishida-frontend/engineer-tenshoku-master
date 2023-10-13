@@ -26,7 +26,7 @@ type Errors = {
   content?: string
 }
 
-type CreateQuestionErrorType = (title: string, content: string) => void
+type CreateQuestionErrorType = { title: string; content: string }
 
 export function QuestionForm({
   videoId,
@@ -116,7 +116,7 @@ export function QuestionForm({
               <Button>全ての質問に戻る</Button>
             </Link>
             <FormControl
-              isInvalid={!!errors.title?.[0]}
+              isInvalid={!!createQuestionErrors}
               mt={'20px'}
               mb={'20px'}
               bg={'white'}
@@ -140,8 +140,7 @@ export function QuestionForm({
                 }
               />
               <FormErrorMessage>
-                {(errors.title && errors.title[0]) ||
-                  createQuestionErrors.title}
+                {createQuestionErrors && createQuestionErrors.title[0]}
               </FormErrorMessage>
             </FormControl>
 

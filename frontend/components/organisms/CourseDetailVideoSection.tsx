@@ -17,7 +17,7 @@ import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionType } from 'types/QuestionType'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
 
-type CreateQuestionErrorType = (title: string, content: string) => void
+type CreateQuestionErrorType = { title: string; content: string }
 
 export function CourseDetailVideoSection({
   userId,

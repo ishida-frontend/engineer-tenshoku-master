@@ -41,7 +41,7 @@ export type HandleChangeVideo = (
   videoIndex: number,
 ) => void
 
-type CreateQuestionErrorType = (title: string, content: string) => void
+type CreateQuestionErrorType = { title: string; content: string }
 
 export function CourseDetail({
   courseData,
@@ -203,7 +203,6 @@ export function CourseDetail({
     }
     console.log('result:', result)
   }
-  console.log('createQuestionErrors:', createQuestionErrors)
 
   return (
     <VStack minH={'100vh'} bg={'gray.100'}>

@@ -6,7 +6,7 @@ import { QuestionType } from 'types/QuestionType'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionForm } from './QuestionForm'
 
-type CreateQuestionErrorType = (title: string, content: string) => void
+type CreateQuestionErrorType = { title: string; content: string }
 
 export function VideoDetailAndQAndA({
   selectedVideo,
