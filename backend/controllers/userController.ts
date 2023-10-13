@@ -1,4 +1,6 @@
 import express from 'express'
+import z from 'zod'
+
 import { UserApplicationService } from '../application/user'
 
 export class UserController {
@@ -16,7 +18,9 @@ export class UserController {
       const data = await UserApplicationService.update(req.body)
       return res.status(200).json(data)
     } catch (error) {
-      throw error
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: error.issues[0].message })
+      }
     }
   }
 }

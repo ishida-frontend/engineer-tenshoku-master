@@ -1,53 +1,51 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import {
-  FormErrorMessage,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
+  Box,
+  Button,
+  Flex,
   FormControl,
   FormLabel,
   Input,
-  Button,
-  Container,
-  Flex,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  ModalFooter,
+  Text,
   Textarea,
+  FormErrorMessage,
 } from '@chakra-ui/react'
+import { AiOutlineUser } from 'react-icons/ai'
+import { SlBubble } from 'react-icons/sl'
+import { GoGoal } from 'react-icons/go'
 
 import { UserProfileType } from 'types'
+
+type UserProfileErrorType = {
+  nameError: string
+  oneWordError: string
+  goalError: string
+}
 
 export function UserProfileEditModal({
   isOpen,
   onClose,
   isLoading,
-  userProfile,
-  setUserProfile,
+  isButtonDisabled,
+  modalUserProfile,
+  setModalUserProfile,
+  errors,
   handleEditProfile,
 }: {
   isOpen: boolean
   onClose: () => void
   isLoading: boolean
-  userProfile: UserProfileType
-  setUserProfile: Dispatch<SetStateAction<UserProfileType>>
+  isButtonDisabled: () => boolean
+  modalUserProfile: UserProfileType
+  setModalUserProfile: Dispatch<SetStateAction<UserProfileType>>
+  errors: UserProfileErrorType
   handleEditProfile: () => void
 }) {
-  const [modalUserProfile, setModalUserProfile] = useState(userProfile)
-
-  useEffect(() => {
-    setModalUserProfile(userProfile)
-  }, [userProfile])
-
-  const hasChanges =
-    JSON.stringify(modalUserProfile) !== JSON.stringify(userProfile)
-
-  const handleSave = () => {
-    setUserProfile(modalUserProfile)
-    handleEditProfile()
-  }
-
   return (
     <Modal
       isOpen={isOpen}
@@ -56,86 +54,135 @@ export function UserProfileEditModal({
       blockScrollOnMount={false}
     >
       <ModalOverlay bg="rgba(0, 0, 0, 0.1)" />
-      <ModalContent minW={'50%'} h={'70%'} px="24px">
-        <ModalHeader>
-          <Flex justifyContent="right">
-            <Button
-              mr={3}
-              onClick={onClose}
-              bgColor="white"
-              w="60px"
-              h="40px"
-              fontSize="14px"
-            >
-              閉じる
-            </Button>
-            <Button
-              isLoading={isLoading}
-              isDisabled={!hasChanges}
-              colorScheme="green"
-              onClick={handleSave}
-              w="60px"
-              h="40px"
-              fontSize="14px"
-            >
-              保存
-            </Button>
-          </Flex>
-        </ModalHeader>
-        <ModalBody p="0">
-          <Container minW={'50%'}>
-            <FormControl id="userName" isRequired>
-              <FormLabel htmlFor="userName">
-                <strong>ユーザー名</strong>
-              </FormLabel>
-              <Input
-                type="text"
-                value={modalUserProfile.name}
-                onChange={(e) => {
-                  setModalUserProfile({
-                    ...modalUserProfile,
-                    name: e.target.value,
-                  })
-                }}
-                border="1px"
-                borderColor="gray.400"
-                autoFocus={true}
-              />
-            </FormControl>
-            <FormControl id="oneWord" mt={10}>
-              <FormLabel htmlFor="oneWord">
-                <strong>ひとこと</strong>
-              </FormLabel>
-              <Input
-                type="text"
-                value={modalUserProfile.oneWord}
-                onChange={(e) => {
-                  setModalUserProfile({
-                    ...modalUserProfile,
-                    oneWord: e.target.value,
-                  })
-                }}
-                border="1px"
-                borderColor="gray.400"
-              />
-            </FormControl>
-            <FormControl id="goal" mt={10}>
-              <FormLabel htmlFor="goal">
-                <strong>目標</strong>
-              </FormLabel>
-              <Textarea
-                value={modalUserProfile.goal}
-                onChange={(e) => {
-                  setModalUserProfile({
-                    ...modalUserProfile,
-                    goal: e.target.value,
-                  })
-                }}
-                border="1px"
-                borderColor="gray.400"
-              />
-            </FormControl>
-          </Container>
+      <ModalContent>
+        <ModalBody p="32px">
+          <FormControl id="userName" isInvalid={!!errors.nameError}>
+            <FormLabel htmlFor="userName">
+              <Flex>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  borderRadius="full"
+                  borderColor="gray.400"
+                  w="20px"
+                  h="20px"
+                >
+                  <AiOutlineUser size="20px" />
+                </Box>
+                <Text as="b" ml="10px" lineHeight="20px">
+                  名前（必須）
+                </Text>
+                <FormErrorMessage my="0" ml="10px">
+                  {errors.nameError}
+                </FormErrorMessage>
+              </Flex>
+            </FormLabel>
+            <Input
+              type="text"
+              value={modalUserProfile.name}
+              onChange={(e) => {
+                setModalUserProfile({
+                  ...modalUserProfile,
+                  name: e.target.value,
+                })
+              }}
+              bg="gray.100"
+              autoFocus={true}
+            />
+          </FormControl>
+          <FormControl id="oneWord" mt={4} isInvalid={!!errors.oneWordError}>
+            <FormLabel htmlFor="oneWord">
+              <Flex>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  borderRadius="full"
+                  borderColor="gray.400"
+                  w="20px"
+                  h="20px"
+                >
+                  <SlBubble size="20px" color="gray" />
+                </Box>
+                <Text as="b" ml="10px" lineHeight="20px">
+                  ひとこと
+                </Text>
+                <FormErrorMessage my="0" ml="10px">
+                  {errors.oneWordError}
+                </FormErrorMessage>
+              </Flex>
+            </FormLabel>
+            <Input
+              type="text"
+              value={modalUserProfile.oneWord}
+              onChange={(e) => {
+                setModalUserProfile({
+                  ...modalUserProfile,
+                  oneWord: e.target.value,
+                })
+              }}
+              bg="gray.100"
+            />
+          </FormControl>
+          <FormControl id="goal" mt={4} isInvalid={!!errors.goalError}>
+            <FormLabel htmlFor="goal">
+              <Flex>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  borderRadius="full"
+                  borderColor="gray.400"
+                  w="20px"
+                  h="20px"
+                >
+                  <GoGoal size="20px" color="green" />
+                </Box>
+                <Text as="b" ml="10px" lineHeight="20px">
+                  目標
+                </Text>
+                <FormErrorMessage my="0" ml="10px">
+                  {errors.goalError}
+                </FormErrorMessage>
+              </Flex>
+            </FormLabel>
+            <Textarea
+              value={modalUserProfile.goal}
+              onChange={(e) => {
+                setModalUserProfile({
+                  ...modalUserProfile,
+                  goal: e.target.value,
+                })
+              }}
+              bg="gray.100"
+            />
+          </FormControl>
+          <ModalFooter px="0" pb="0">
+            <Flex justifyContent="right">
+              <Button
+                mr={3}
+                onClick={onClose}
+                bg="white"
+                w="60px"
+                h="40px"
+                fontSize="14px"
+              >
+                閉じる
+              </Button>
+              <Button
+                isLoading={isLoading}
+                isDisabled={isButtonDisabled()}
+                colorScheme="green"
+                onClick={handleEditProfile}
+                w="60px"
+                h="40px"
+                fontSize="14px"
+              >
+                更新
+              </Button>
+            </Flex>
+          </ModalFooter>
         </ModalBody>
       </ModalContent>
     </Modal>

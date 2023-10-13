@@ -9,10 +9,10 @@ import { getUser } from 'app/api'
 export default async function UserProfilePage() {
   const session = await getServerSession(authOptions)
   const userId = session?.user.id
-  const userData = await getUser(userId)
+  const user = await getUser(userId)
 
   try {
-    return <UserProfile userData={userData} />
+    return <UserProfile user={user} />
   } catch (e) {
     return <Error />
   }

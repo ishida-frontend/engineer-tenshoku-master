@@ -40,9 +40,14 @@ export const updateUserProfile = async (userProfile: UserProfileType) => {
       }),
     })
 
+    if (!res.ok) {
+      const errorData = await res.json()
+      return { success: false, errors: errorData.errors }
+    }
+
     const updatedProfile = await res.json()
-    return updatedProfile
+    return { success: true, profile: updatedProfile }
   } catch (error) {
-    throw error
+    throw new Error('プロフィールの更新に失敗しました。')
   }
 }
