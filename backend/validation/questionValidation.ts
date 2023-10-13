@@ -7,7 +7,6 @@ export class QuestionValidator {
     res: express.Response,
     next: express.NextFunction,
   ) => {
-    console.log('req.body:', req.body)
     const questionCreateSchema = z.object({
       title: z
         .string()

@@ -5,29 +5,30 @@ import { QuestionList } from './QuestionList'
 import { QuestionType } from 'types/QuestionType'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionForm } from './QuestionForm'
-
-type CreateQuestionErrorType = { title: string; content: string }
+import { CreateQuestionErrorType } from '../pages/CourseDetail'
 
 export function VideoDetailAndQAndA({
   selectedVideo,
   userId,
+  questionPage,
   questions,
   createQuestionErrors,
   handleGetQuestions,
   createQuestion,
+  changeQuestionPage,
 }: {
   selectedVideo: SelectedVideo
   userId: string | undefined
+  questionPage: string
   questions?: QuestionType[]
-  createQuestionErrors?: CreateQuestionErrorType
+  createQuestionErrors: CreateQuestionErrorType
   handleGetQuestions: (videoId: string) => void
   createQuestion: (createQuestionParams: {
     title: string
     content: string
   }) => Promise<void>
+  changeQuestionPage: (value: string) => Promise<void>
 }) {
-  console.log('createQuestion:', createQuestion)
-  console.log('createQuestionErrors:', createQuestionErrors)
   return (
     <Tabs isFitted colorScheme={'green'}>
       <TabList>
@@ -46,13 +47,21 @@ export function VideoDetailAndQAndA({
             </ReactMarkdown>
           </Box>
         </TabPanel>
-        {/* <QuestionList questions={questions} /> */}
-        <QuestionForm
-          videoId={selectedVideo.sections.videos.id}
-          userId={userId}
-          createQuestionErrors={createQuestionErrors}
-          createQuestion={createQuestion}
-        />
+        {questionPage === 'QuestionList' && (
+          <QuestionList
+            questions={questions}
+            changeQuestionPage={changeQuestionPage}
+          />
+        )}
+        {questionPage === 'QuestionForm' && (
+          <QuestionForm
+            videoId={selectedVideo.sections.videos.id}
+            userId={userId}
+            createQuestionErrors={createQuestionErrors}
+            createQuestion={createQuestion}
+            changeQuestionPage={changeQuestionPage}
+          />
+        )}
       </TabPanels>
     </Tabs>
   )

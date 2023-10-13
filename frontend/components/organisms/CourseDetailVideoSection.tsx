@@ -16,12 +16,12 @@ import { WatchedButton } from 'components/atoms/WatchedButton'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionType } from 'types/QuestionType'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
-
-type CreateQuestionErrorType = { title: string; content: string }
+import { CreateQuestionErrorType } from '../pages/CourseDetail'
 
 export function CourseDetailVideoSection({
   userId,
   selectedVideo,
+  questionPage,
   questions,
   createQuestionErrors,
   isWatched,
@@ -31,11 +31,13 @@ export function CourseDetailVideoSection({
   handleFavIconToggle,
   handleGetQuestions,
   createQuestion,
+  changeQuestionPage,
 }: {
   userId: string | undefined
   selectedVideo: SelectedVideo
+  questionPage: string
   questions?: QuestionType[]
-  createQuestionErrors?: CreateQuestionErrorType
+  createQuestionErrors: CreateQuestionErrorType
   isWatched: { [videoId: string]: boolean }
   isFavorited: boolean
   isLoading: boolean
@@ -46,6 +48,7 @@ export function CourseDetailVideoSection({
     title: string
     content: string
   }) => Promise<void>
+  changeQuestionPage: (value: string) => Promise<void>
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -90,10 +93,12 @@ export function CourseDetailVideoSection({
             <VideoDetailAndQAndA
               selectedVideo={selectedVideo}
               userId={userId}
+              questionPage={questionPage}
               questions={questions}
               createQuestionErrors={createQuestionErrors}
               handleGetQuestions={handleGetQuestions}
               createQuestion={createQuestion}
+              changeQuestionPage={changeQuestionPage}
             />
           </CardBody>
         </Card>

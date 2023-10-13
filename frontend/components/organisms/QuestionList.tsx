@@ -15,7 +15,13 @@ import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 
-export function QuestionList({ questions }: { questions?: QuestionType[] }) {
+export function QuestionList({
+  questions,
+  changeQuestionPage,
+}: {
+  questions?: QuestionType[]
+  changeQuestionPage: (value: string) => Promise<void>
+}) {
   return (
     <>
       {(questions === undefined || questions.length === 0) && (
@@ -77,7 +83,12 @@ export function QuestionList({ questions }: { questions?: QuestionType[] }) {
               </Card>
             ))}
           </Stack>
-          <Button mt={'20px'}>新しく質問する</Button>
+          <Button
+            mt={'20px'}
+            onClick={() => changeQuestionPage('QuestionForm')}
+          >
+            新しく質問する
+          </Button>
         </TabPanel>
       )}
     </>

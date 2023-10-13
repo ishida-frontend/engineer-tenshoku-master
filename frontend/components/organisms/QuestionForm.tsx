@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Box,
   Container,
@@ -6,13 +6,11 @@ import {
   Stack,
   VStack,
   Button,
-  Link,
   FormControl,
   Flex,
   Input,
   FormErrorMessage,
   TabPanel,
-  useDisclosure,
 } from '@chakra-ui/react'
 import ReactMde from 'react-mde'
 import ReactMarkdown from 'react-markdown'
@@ -33,6 +31,7 @@ export function QuestionForm({
   userId,
   createQuestionErrors,
   createQuestion,
+  changeQuestionPage,
 }: {
   videoId: string
   userId: string | undefined
@@ -41,6 +40,7 @@ export function QuestionForm({
     title: string
     content: string
   }) => Promise<void>
+  changeQuestionPage: (value: string) => Promise<void>
 }) {
   const [question, setQuestion] = useState({
     title: '',
@@ -76,49 +76,56 @@ export function QuestionForm({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault()
-    // try {
-    // if (question.title && question.title.length >= 15) {
-    //   setErrors((prevErrors) => ({ ...prevErrors, title: '' }))
-    // } else {
-    //   setErrors((prevErrors) => ({
-    //     ...prevErrors,
-    //     title: '※15文字以上入力してください',
-    //   }))
-    // }
+    try {
+      if (question.title && question.title.length >= 15) {
+        setErrors((prevErrors) => ({ ...prevErrors, title: '' }))
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          title: '※15文字以上入力してください',
+        }))
+      }
 
-    // if (question.content && question.content.length >= 15) {
-    //   setErrors((prevErrors) => ({ ...prevErrors, content: '' }))
-    // } else {
-    //   setErrors((prevErrors) => ({
-    //     ...prevErrors,
-    //     content: '※15文字以上入力してください',
-    //   }))
-    // }
-    // console.log('errors:', errors)
-    // if ((errors.title = '') && (errors.content = '')) {
-    console.log('aaaaa:')
+      if (question.content && question.content.length >= 15) {
+        setErrors((prevErrors) => ({ ...prevErrors, content: '' }))
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          content: '※15文字以上入力してください',
+        }))
+      }
 
-    await createQuestion({ title: question.title, content: question.content })
-    // }
-    // } catch (e) {
-    //   throw e
-    // }
+      if (question.title.length >= 15 && question.content.length >= 15) {
+        await createQuestion({
+          title: question.title,
+          content: question.content,
+        })
+      }
+    } catch (e) {
+      throw e
+    }
   }
-  console.log('createQuestionErrors:', createQuestionErrors)
-  console.log('errors:', errors)
+
+  useEffect(() => {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      title: createQuestionErrors.title[0],
+      content: createQuestionErrors.content[0],
+    }))
+  }, [createQuestionErrors])
 
   return (
     <TabPanel>
       <Stack mt={'20px'}>
         <FormControl>
           <Container bg={'white'} p={'0px'} minW={'90%'}>
-            <Link href="/course/${course_id}">
-              <Button>全ての質問に戻る</Button>
-            </Link>
+            <Button onClick={() => changeQuestionPage('QuestionList')}>
+              全ての質問に戻る
+            </Button>
             <FormControl
-              isInvalid={!!createQuestionErrors}
+              isInvalid={!!errors.title}
               mt={'20px'}
-              mb={'20px'}
+              mb={'40px'}
               bg={'white'}
               h={'80px'}
             >
@@ -139,16 +146,10 @@ export function QuestionForm({
                   '動画の15:00のところで型に関するエラーが出ています。'
                 }
               />
-              <FormErrorMessage>
-                {createQuestionErrors && createQuestionErrors.title[0]}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors && errors.title}</FormErrorMessage>
             </FormControl>
 
-            <FormControl
-              isInvalid={!!errors.content?.[0]}
-              mb={'20px'}
-              bg={'white'}
-            >
+            <FormControl isInvalid={!!errors.content} mb={'20px'} bg={'white'}>
               <Container ml={'0px'} pb={'10px'} pl={'0px'}>
                 <Flex>
                   <Text fontWeight={'bold'}>質問の内容</Text>
@@ -188,7 +189,7 @@ export function QuestionForm({
                 </Box>
               </Box>
               <FormErrorMessage>
-                {errors.content && errors.content[0]}
+                {errors.content && errors.content}
               </FormErrorMessage>
             </FormControl>
 

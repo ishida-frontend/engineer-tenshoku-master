@@ -41,7 +41,7 @@ export type HandleChangeVideo = (
   videoIndex: number,
 ) => void
 
-type CreateQuestionErrorType = { title: string; content: string }
+export type CreateQuestionErrorType = { title: string; content: string }
 
 export function CourseDetail({
   courseData,
@@ -59,7 +59,8 @@ export function CourseDetail({
   const [isFavorited, setIsFavorited] = useState(false)
   const [questions, setQuestions] = useState<QuestionType[]>()
   const [createQuestionErrors, setCreateQuestionErrors] =
-    useState<CreateQuestionErrorType>()
+    useState<CreateQuestionErrorType>({ title: '', content: '' })
+  const [questionPage, setQuestionPage] = useState('QuestionList')
   const [videoId, setVideoId] = useState<string>(
     courseData.sections[0].videos[0].id,
   )
@@ -167,8 +168,6 @@ export function CourseDetail({
     content: string
   }) => {
     const { title, content } = createQuestionParams
-    console.log('title:', title)
-    console.log('content:', content)
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/create`,
       {
@@ -185,8 +184,11 @@ export function CourseDetail({
       },
     )
     const result = await response.json()
+    if (response.status === 200) {
+      setQuestionPage('QuestionList')
+    }
 
-    if (result.errors[0]) {
+    if (result.errors) {
       result.errors[0].map((error) => {
         if (error.path[0] === 'title') {
           setCreateQuestionErrors((prevErrors) => ({
@@ -201,7 +203,10 @@ export function CourseDetail({
         }
       })
     }
-    console.log('result:', result)
+  }
+
+  const changeQuestionPage = async (value: string) => {
+    setQuestionPage(value)
   }
 
   return (
@@ -222,7 +227,9 @@ export function CourseDetail({
           <CourseDetailVideoSection
             userId={userId}
             selectedVideo={selectedVideo}
+            questionPage={questionPage}
             questions={questions}
+            changeQuestionPage={changeQuestionPage}
             createQuestionErrors={createQuestionErrors}
             isWatched={isWatched}
             isFavorited={isFavorited}
