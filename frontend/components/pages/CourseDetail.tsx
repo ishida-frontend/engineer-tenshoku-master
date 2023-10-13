@@ -185,7 +185,8 @@ export function CourseDetail({
     )
     const result = await response.json()
     if (response.status === 200) {
-      setQuestionPage('QuestionList')
+      await handleGetQuestions
+      await setQuestionPage('QuestionList')
     }
 
     if (result.errors) {
