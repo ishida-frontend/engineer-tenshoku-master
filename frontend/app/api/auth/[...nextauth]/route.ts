@@ -49,8 +49,8 @@ export const authOptions: AuthOptions = {
       return {
         ...session,
         user: {
-          ...session.user,
           id: token.sub,
+          name: user.name,
           isAdmin: user.role === USER_ROLE.ADMIN,
         },
       }
