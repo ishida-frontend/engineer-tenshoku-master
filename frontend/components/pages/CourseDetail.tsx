@@ -9,17 +9,11 @@ import {
 } from '../../app/api/course/[courseId]/viewingStatus'
 import { CourseDetailVideoSection } from '../organisms/CourseDetailVideoSection'
 import { CourseDetailAccordionMenu } from '../organisms/CourseDetailAccordionMenu'
-import { CourseType } from '../../types/CourseType'
-import { SectionType } from '../../types/SectionType'
-import { VideoType } from '../../types/VideoType'
+import { CourseWithSectionsType } from '../../types/CourseType'
 import { QuestionType } from 'types/QuestionType'
 import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
-
-export type CourseDetailPropsType = CourseType & {
-  sections: (SectionType & { videos: VideoType[] })[]
-}
 
 export type SelectedVideo = {
   id: string
@@ -45,7 +39,7 @@ export function CourseDetail({
   courseData,
   session,
 }: {
-  courseData: CourseDetailPropsType
+  courseData: CourseWithSectionsType
   session: Session | null
 }) {
   const { showErrorToast } = useCustomToast()
