@@ -1,3 +1,5 @@
+import { TagType } from './TagType'
+
 export type CourseType = {
   id: string
   name: string
@@ -8,4 +10,8 @@ export type CourseType = {
   created_at: string
   updated_at: string
   deleted_at: string
+}
+
+export type CourseTagType = CourseType & {
+  courseTag: TagType[]
 }

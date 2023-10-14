@@ -10,41 +10,37 @@ import {
 } from '@chakra-ui/react'
 
 import formatDate from '../../../utils/formatDate'
-import { Loader } from '../../../components/admin/atoms/Loader'
+import { Loader } from '../atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 import { CourseType } from '../../../types'
-type CourseListProps = {
-  courses: CourseType[]
+import { TagType } from '../../../types/TagType'
+type TagListProps = {
+  tags: TagType[]
 }
-export function CourseList({ courses }: CourseListProps) {
+export function TagList({ tags }: TagListProps) {
   const { showErrorToast } = useCustomToast()
 
-  if (!courses) {
+  if (!tags) {
     showErrorToast('コースの取得に失敗しました。')
   }
-
-  if (!courses) return <Loader />
 
   return (
     <Box minH={'100vh'} padding={'60px 96px'}>
       <VStack spacing={5} p={4} maxW="800px" mx="auto">
         <Heading size="lg">タグ一覧</Heading>
         <SimpleGrid columns={2} spacing={5}>
-          {courses.map((course: CourseType) => (
-            <Box key={course.id} p="4" boxShadow="lg" rounded="md">
+          {tags.map((tag: TagType) => (
+            <Box key={tag.id} p="4" boxShadow="lg" rounded="md">
               <Text>
-                <strong>コースID</strong>：{course.id}
+                <strong>タグ名</strong>：{tag.name}
               </Text>
               <Text>
-                <strong>タグ名</strong>：{course.name}
+                <strong>作成日</strong>：{formatDate(tag.created_at)}
               </Text>
               <Text>
-                <strong>作成日</strong>：{formatDate(course.created_at)}
+                <strong>更新日</strong>：{formatDate(tag.updated_at)}
               </Text>
-              <Text>
-                <strong>更新日</strong>：{formatDate(course.updated_at)}
-              </Text>
-              <Link href={`/admin/course/edit/${course.id}`}>
+              <Link href={`/admin/tag/edit/${tag.id}`}>
                 <Button mt="2" colorScheme="green" variant="solid">
                   編集
                 </Button>

@@ -9,6 +9,8 @@ import { ViewingStatusController } from '../controllers/viewingStatusController'
 import { VideoController } from '../controllers/videoController'
 import { QuestionController } from '../controllers/questionController'
 import { AnswerController } from '../controllers/answerController'
+import { TagValidator } from '../validation/tagValidator'
+import { TagController } from '../controllers/tagController'
 
 const {
   createCourse,
@@ -34,6 +36,8 @@ const router = express.Router()
 
 const userController = new UserController()
 const videoValidator = new VideoValidator()
+const tagController = new TagController()
+const tagValidator = new TagValidator()
 const videoController = new VideoController()
 const questionController = new QuestionController()
 const answerController = new AnswerController()
@@ -76,6 +80,13 @@ adminRouter.put(
   videoController.updateVideo,
 )
 adminRouter.delete('/video/:id', videoController.deleteVideo)
+
+// Tagのルーティング
+router.get('/tag', (req, res) => tagController.getTags(req, res))
+router.get('/tag/:tagId', (req, res) => tagController.getTag(req, res))
+router.post('/tag', tagValidator.createTag, (req, res) => {
+  tagController.createTag(req, res)
+})
 
 const userRouter = express.Router()
 router.use('/user', userRouter)

@@ -19,10 +19,13 @@ import { BsChevronRight } from 'react-icons/bs'
 import { CourseType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
+import { Tag } from '../atoms/Tag'
+import { AllCourseType } from '../../app/course/page'
 
-export function CourseList({ courses }: { courses: CourseType[] }) {
+export function CourseList({ courses }: { courses: AllCourseType[] }) {
   // コースデータ読み込みアニメーション
   if (!courses) return <Loader />
+  console.log('courses', courses)
 
   return (
     <Center bg={'gray.200'}>
@@ -68,6 +71,10 @@ export function CourseList({ courses }: { courses: CourseType[] }) {
                   >
                     {course.description}
                   </Text>
+                  {course.courseTag.map((courseTag: any) => (
+                    <Tag>{courseTag.tag.name}</Tag>
+                  ))}
+
                   <Flex justify="flex-end">
                     <Link
                       href={`/course/${course.id}`}

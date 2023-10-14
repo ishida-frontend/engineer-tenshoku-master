@@ -18,13 +18,27 @@ export async function readCourse(id: string) {
 }
 
 export async function readAllCourses() {
-  const courses = await prisma.course.findMany({
-    where: {
-      deleted_at: null,
-      published: true,
-    },
-  })
-  return courses
+  console.log('aaaaa')
+  try {
+    const courses = await prisma.course.findMany({
+      where: {
+        deleted_at: null,
+        published: true,
+      },
+      include: {
+        courseTag: {
+          include: {
+            tag: true,
+          },
+        },
+      },
+    })
+    console.log('courses', courses)
+
+    return courses
+  } catch (error) {
+    console.log('error', error)
+  }
 }
 
 export async function readFilteredCourses() {
