@@ -26,7 +26,13 @@ export default async function CourseDetailPage({
     )
     const courseData: CourseWithSectionsType = await res.json()
 
-    return <CourseDetail courseData={courseData} session={session} />
+    return (
+      <CourseDetail
+        courseData={courseData}
+        session={session}
+        queryVideoId={query.videoId}
+      />
+    )
   } catch (e) {
     return <Error />
   }

@@ -38,9 +38,11 @@ export type HandleChangeVideo = (
 export function CourseDetail({
   courseData,
   session,
+  queryVideoId,
 }: {
   courseData: CourseWithSectionsType
   session: Session | null
+  queryVideoId: string
 }) {
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
@@ -50,9 +52,7 @@ export function CourseDetail({
   const [isLoading, setIsLoading] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
   const [questions, setQuestions] = useState<QuestionType[]>()
-  const [videoId, setVideoId] = useState<string>(
-    courseData.sections[0].videos[0].id,
-  )
+  const [videoId, setVideoId] = useState<string>(queryVideoId)
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo>({
     id: courseData.id,
     sections: {
@@ -93,6 +93,7 @@ export function CourseDetail({
   }, [courseData, session, videoId])
 
   const handleChangeVideo = (sectionIndex: number, videoIndex: number) => {
+    console.log('handleChangeVideo')
     const currentlySelectedVideo = {
       id: courseData.id,
       sections: {
@@ -139,6 +140,7 @@ export function CourseDetail({
   }
 
   const handleGetQuestions = async (videoId: string) => {
+    console.log('handleGetQuestions')
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${videoId}`,
       {
