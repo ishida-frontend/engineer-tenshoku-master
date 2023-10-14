@@ -60,9 +60,15 @@ export function CourseDetail({
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
 
-  const [isWatched, setIsWatched] = useState<Record<string, boolean>>({})
-  const [isChecked, setIsChecked] = useState<Record<string, boolean>>({})
-  const [isFavorited, setIsFavorited] = useState<Record<string, boolean>>({})
+  const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
+    {},
+  )
+  const [checkedStatus, setCheckedStatus] = useState<Record<string, boolean>>(
+    {},
+  )
+  const [favoritedStatus, setFavoritedStatus] = useState<
+    Record<string, boolean>
+  >({})
   const [loadingStates, setLoadingStates] = useState<loadingStates>({
     watching: false,
     favoriting: false,
@@ -94,19 +100,19 @@ export function CourseDetail({
     const fetchData = async () => {
       try {
         const buttonStatus = await fetchButtonStatus({ userId, videoId })
-        setIsWatched(buttonStatus as { [key: string]: boolean })
+        setWatchedStatus(buttonStatus as { [key: string]: boolean })
 
         const checkMarkStatuses = await fetchCheckMarkStatuses({
           userId: session?.user?.id,
           courseId: courseData.id,
         })
-        setIsChecked(checkMarkStatuses)
+        setCheckedStatus(checkMarkStatuses)
 
         const favButtonStatus = await fetchFavButtonStatus({
           userId,
           videoId,
         })
-        setIsFavorited(favButtonStatus as { [key: string]: boolean })
+        setFavoritedStatus(favButtonStatus as { [key: string]: boolean })
       } catch (error) {
         showErrorToast(`${error}`)
       } finally {
@@ -140,8 +146,8 @@ export function CourseDetail({
   const handleViewingStatus = async () => {
     setLoadingStates((prev) => ({ ...prev, watching: true }))
 
-    const newWatchedStatus = !(isWatched?.[videoId] || false)
-    setIsWatched((prevStatus) => ({
+    const newWatchedStatus = !(watchedStatus?.[videoId] || false)
+    setWatchedStatus((prevStatus) => ({
       ...prevStatus,
       [videoId]: newWatchedStatus,
     }))
@@ -152,7 +158,7 @@ export function CourseDetail({
         userId,
         videoId,
       })
-      setIsChecked((prevViewingStatus) => ({
+      setCheckedStatus((prevViewingStatus) => ({
         ...prevViewingStatus,
         [videoId]: newWatchedStatus,
       }))
@@ -166,15 +172,15 @@ export function CourseDetail({
   const handleFavoriteVideoStatus = async () => {
     setLoadingStates((prev) => ({ ...prev, favoriting: true }))
 
-    const newFavoritedStatus = !(isFavorited?.[videoId] || false)
-    setIsFavorited((prevFavoriteStatus) => ({
+    const newFavoritedStatus = !(favoritedStatus?.[videoId] || false)
+    setFavoritedStatus((prevFavoriteStatus) => ({
       ...prevFavoriteStatus,
       [videoId]: newFavoritedStatus,
     }))
 
     try {
       await upsertFavoriteVideo({
-        isFavorited: newFavoritedStatus,
+        favoritedStatus: newFavoritedStatus,
         userId,
         videoId,
       })
@@ -210,7 +216,7 @@ export function CourseDetail({
         >
           <CourseDetailAccordionMenu
             userId={userId}
-            isChecked={isChecked}
+            checkedStatus={checkedStatus}
             courseData={courseData}
             handleChangeVideo={handleChangeVideo}
           />
@@ -218,8 +224,8 @@ export function CourseDetail({
             userId={userId}
             selectedVideo={selectedVideo}
             questions={questions}
-            isWatched={isWatched}
-            isFavorited={isFavorited}
+            watchedStatus={watchedStatus}
+            favoritedStatus={favoritedStatus}
             loadingStates={loadingStates}
             handleViewingStatus={handleViewingStatus}
             handleFavoriteVideoStatus={handleFavoriteVideoStatus}

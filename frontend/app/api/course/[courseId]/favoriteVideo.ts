@@ -1,14 +1,18 @@
 import { APIS } from 'constants/paths'
 
 export const upsertFavoriteVideo = async ({
-  isFavorited,
+  favoritedStatus,
   userId,
   videoId,
 }: {
-  isFavorited: boolean
+  favoritedStatus: boolean
   userId: string | undefined
   videoId: string
 }) => {
+  if (!userId) {
+    throw new Error('userId does not exist.')
+  }
+
   try {
     // お気に入り状態を更新
     const res = await fetch(APIS.FAVORITE_VIDEO.UPSERT.path(userId, videoId), {
@@ -17,7 +21,7 @@ export const upsertFavoriteVideo = async ({
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        isFavorited,
+        favoritedStatus,
         userId,
         videoId,
       }),
@@ -42,8 +46,8 @@ export const upsertFavoriteVideo = async ({
       }
     }
 
-    const favoriteStatus = await res.json()
-    return { [videoId]: favoriteStatus.status }
+    const newStatus = await res.json()
+    return { [videoId]: newStatus.status }
   } catch (error) {
     return {}
   }
@@ -64,8 +68,8 @@ export const fetchFavButtonStatus = async ({
       )
     }
 
-    const favoriteStatus = await res.json()
-    return favoriteStatus ? { [videoId]: favoriteStatus.status } : null
+    const fetchedStatus = await res.json()
+    return fetchedStatus ? { [videoId]: fetchedStatus.status } : null
   } catch (error) {
     return null
   }

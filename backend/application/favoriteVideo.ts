@@ -4,16 +4,16 @@ const prisma = new PrismaClient()
 
 export class FavoriteVideoApplicationService {
   static async upsert({
-    isFavorited,
+    favoritedStatus,
     userId,
     videoId,
   }: {
-    isFavorited: boolean
+    favoritedStatus: boolean
     userId: string
     videoId: string
   }) {
     try {
-      const favoriteStatus = await prisma.favoriteVideo.upsert({
+      const newStatus = await prisma.favoriteVideo.upsert({
         where: {
           user_id_video_id: {
             user_id: userId,
@@ -21,14 +21,14 @@ export class FavoriteVideoApplicationService {
           },
         },
         create: {
-          status: isFavorited,
+          status: favoritedStatus,
           user_id: userId,
           video_id: videoId,
         },
-        update: { status: isFavorited },
+        update: { status: favoritedStatus },
       })
 
-      return favoriteStatus
+      return newStatus
     } catch (error: any) {
       throw error
     }
@@ -36,7 +36,7 @@ export class FavoriteVideoApplicationService {
 
   static async get({ userId, videoId }: { userId: string; videoId: string }) {
     try {
-      const favoriteStatus = await prisma.favoriteVideo.findUnique({
+      const fetchedStatus = await prisma.favoriteVideo.findUnique({
         where: {
           user_id_video_id: {
             user_id: userId,
@@ -45,7 +45,7 @@ export class FavoriteVideoApplicationService {
         },
         select: { status: true },
       })
-      return favoriteStatus
+      return fetchedStatus
     } catch (error) {
       throw error
     }

@@ -3,11 +3,11 @@ import { Button, HStack, Text } from '@chakra-ui/react'
 import { GoCheckCircleFill, GoCircle } from 'react-icons/go'
 
 export const WatchedButton = ({
-  isWatched,
+  watchedStatus,
   loadingState,
   handleViewingStatus,
 }: {
-  isWatched: boolean
+  watchedStatus: boolean
   loadingState: boolean
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) => {
@@ -24,7 +24,7 @@ export const WatchedButton = ({
       fontSize="14px"
     >
       <HStack mr="3px">
-        {isWatched ? (
+        {watchedStatus ? (
           <GoCheckCircleFill size="20px" />
         ) : (
           <GoCircle size="20px" />

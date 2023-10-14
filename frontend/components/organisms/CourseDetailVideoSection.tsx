@@ -20,8 +20,8 @@ export function CourseDetailVideoSection({
   userId,
   selectedVideo,
   questions,
-  isWatched,
-  isFavorited,
+  watchedStatus,
+  favoritedStatus,
   loadingStates,
   handleViewingStatus,
   handleFavoriteVideoStatus,
@@ -30,8 +30,8 @@ export function CourseDetailVideoSection({
   userId: string | undefined
   selectedVideo: SelectedVideo
   questions: QuestionType[] | undefined
-  isWatched: { [videoId: string]: boolean }
-  isFavorited: { [videoId: string]: boolean }
+  watchedStatus: { [videoId: string]: boolean }
+  favoritedStatus: { [videoId: string]: boolean }
   loadingStates: { [key: string]: boolean }
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
   handleFavoriteVideoStatus: (
@@ -61,20 +61,20 @@ export function CourseDetailVideoSection({
               {userId && (
                 <>
                   <WatchedButton
-                    isWatched={
-                      isWatched?.[selectedVideo.sections.videos.id] || false
+                    watchedStatus={
+                      watchedStatus?.[selectedVideo.sections.videos.id] || false
                     }
                     loadingState={loadingStates.watching}
                     handleViewingStatus={handleViewingStatus}
                   />
 
                   <FavButton
-                    isFavorited={
-                      isFavorited?.[selectedVideo.sections.videos.id] || false
+                    favoritedStatus={
+                      favoritedStatus?.[selectedVideo.sections.videos.id] ||
+                      false
                     }
                     loadingState={loadingStates.favoriting}
                     handleFavoriteVideoStatus={handleFavoriteVideoStatus}
-                    size="24px"
                   />
                 </>
               )}
