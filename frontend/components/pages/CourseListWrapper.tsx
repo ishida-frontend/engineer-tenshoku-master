@@ -3,15 +3,25 @@ import React, { useState } from 'react'
 
 import { CourseList } from '../organisms/CourseList'
 import { CourseType } from '../../types/CourseType'
+import { SectionType } from '../../types/SectionType'
+import { VideoType } from '../../types/VideoType'
 import Error from '../../app/error'
 
 export function CourseListWrapper({
   initialCourses,
 }: {
-  initialCourses: CourseType[]
+  initialCourses: CourseType &
+    {
+      sections: (SectionType & { videos: VideoType[] })[]
+    }[]
 }) {
   try {
-    const [courses, setCourses] = useState<CourseType[]>(initialCourses)
+    const [courses, setCourses] = useState<
+      CourseType &
+        {
+          sections: (SectionType & { videos: VideoType[] })[]
+        }[]
+    >(initialCourses)
 
     const handleTextChange = async (newText: string) => {
       if (newText) {
@@ -39,7 +49,10 @@ export function CourseListWrapper({
             },
           },
         )
-        const allCourses: CourseType[] = await res.json()
+        const allCourses: CourseType &
+          {
+            sections: (SectionType & { videos: VideoType[] })[]
+          }[] = await res.json()
         setCourses(allCourses)
       }
     }

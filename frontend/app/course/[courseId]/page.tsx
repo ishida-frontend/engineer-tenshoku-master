@@ -14,8 +14,10 @@ type CourseDetailPropsType = CourseType & {
 
 export default async function CourseDetailPage({
   params,
+  query,
 }: {
-  params: { courseId: string; videoId: string }
+  params: { courseId: string }
+  query: { videoId: string; questionId: string }
 }) {
   const session = await getServerSession(authOptions)
 
