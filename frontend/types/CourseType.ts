@@ -1,3 +1,5 @@
+import { SectionType } from './SectionType'
+
 export type CourseType = {
   id: string
   name: string
@@ -8,4 +10,8 @@ export type CourseType = {
   created_at: string
   updated_at: string
   deleted_at: string
+}
+
+export type CourseWithSectionsType = CourseType & {
+  sections: SectionType[]
 }

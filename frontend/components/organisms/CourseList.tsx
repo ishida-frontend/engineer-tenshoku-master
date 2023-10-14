@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react'
 import { BsChevronRight } from 'react-icons/bs'
 
-import { CourseType } from '../../types'
+import { CourseType, CourseWithSectionsType } from '../../types'
 import { SectionType } from '../../types/SectionType'
 import { VideoType } from '../../types/VideoType'
 import { Loader } from '../atoms/Loader'
@@ -27,9 +27,9 @@ import { SearchIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
 
 type CourseListProps = {
-  courses: CourseType & {
+  courses: (CourseType & {
     sections: (SectionType & { videos: VideoType[] })[]
-  }[],
+  })[]
   handleTextChange: (event: any) => void
 }
 
@@ -94,7 +94,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
               spacingY="10"
               minW={'100%'}
             >
-              {courses.map((course: CourseType & {sections: (SectionType & { videos: VideoType[] })[]}) => (
+              {courses.map((course: CourseWithSectionsType) => (
                 <Card
                   key={course.id}
                   w="288px"
@@ -126,7 +126,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                       {course.description}
                     </Text>
                     <Flex justify="flex-end">
-                      <Link
+                      {/* <Link
                         href={`/course/${course.id}/${}`}
                         mt="2"
                         color={PRIMARY_FONT_COLOR}
@@ -136,7 +136,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                           <BsChevronRight size="20" />
                           <Text pl={3}>もっと見る</Text>
                         </Flex>
-                      </Link>
+                      </Link> */}
                     </Flex>
                   </CardBody>
                 </Card>
