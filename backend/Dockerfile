@@ -9,6 +9,7 @@ FROM node:18.16.0 AS development
 WORKDIR /app
 
 COPY package*.json ./
+COPY yarn.lock ./
 COPY prisma ./prisma/
 
 RUN yarn install
@@ -18,17 +19,17 @@ EXPOSE 8000
 # DBコンテナでDBユーザー権限付与するまで待つ
 CMD sleep 45s; ./startup.sh
 
-
 ###############
 #    build    #
 ###############
-# ソースコードをビルドする。
+# ソースコードをビルドする
 # 基本的なベースイメージを設定し、アプリケーションのビルドを行う
 FROM node:18.16.0 AS build
 
 WORKDIR /app
 
 COPY package*.json ./
+COPY yarn.lock ./
 COPY prisma ./prisma/
 
 RUN yarn install --only=production
@@ -51,6 +52,9 @@ WORKDIR /app
 COPY --from=build /app/node_modules ./node_modules
 # ビルドステージでコンパイルされたJavaScriptファイルをコピー
 COPY --from=build /app/dist ./dist
+# ECSタスクでDBマイグレーションを行うために必要
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/prisma ./prisma/
 
 EXPOSE 8000
 
