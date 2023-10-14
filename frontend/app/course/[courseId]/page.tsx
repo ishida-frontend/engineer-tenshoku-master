@@ -15,7 +15,7 @@ type CourseDetailPropsType = CourseType & {
 export default async function CourseDetailPage({
   params,
 }: {
-  params: { courseId: string }
+  params: { courseId: string; videoId: string }
 }) {
   const session = await getServerSession(authOptions)
 
@@ -29,6 +29,8 @@ export default async function CourseDetailPage({
       },
     )
     const courseData: CourseDetailPropsType = await res.json()
+
+    console.log('courseData:', courseData)
 
     return <CourseDetail courseData={courseData} session={session} />
   } catch (e) {

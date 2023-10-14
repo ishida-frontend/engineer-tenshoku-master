@@ -19,13 +19,17 @@ import {
 import { BsChevronRight } from 'react-icons/bs'
 
 import { CourseType } from '../../types'
+import { SectionType } from '../../types/SectionType'
+import { VideoType } from '../../types/VideoType'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { SearchIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
 
 type CourseListProps = {
-  courses: CourseType[]
+  courses: CourseType & {
+    sections: (SectionType & { videos: VideoType[] })[]
+  }[],
   handleTextChange: (event: any) => void
 }
 
@@ -90,7 +94,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
               spacingY="10"
               minW={'100%'}
             >
-              {courses.map((course: CourseType) => (
+              {courses.map((course: CourseType & {sections: (SectionType & { videos: VideoType[] })[]}) => (
                 <Card
                   key={course.id}
                   w="288px"
@@ -123,7 +127,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                     </Text>
                     <Flex justify="flex-end">
                       <Link
-                        href={`/course/${course.id}`}
+                        href={`/course/${course.id}/${}`}
                         mt="2"
                         color={PRIMARY_FONT_COLOR}
                         _hover={{ textDecoration: 'none' }}
