@@ -8,8 +8,7 @@ import { getUser } from 'app/api'
 
 export default async function UserProfilePage() {
   const session = await getServerSession(authOptions)
-  const userId = session?.user.id
-  const user = await getUser(userId)
+  const user = await getUser(session?.user.id)
 
   try {
     return <UserProfile user={user} />

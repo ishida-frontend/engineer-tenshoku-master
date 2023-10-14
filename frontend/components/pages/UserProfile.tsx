@@ -60,8 +60,6 @@ export function UserProfile({ user }: { user: UserType }) {
     const result = await updateUserProfile(modalUserProfile)
     setIsLoading(false)
 
-    console.log('result:', result)
-
     if (result && result.success) {
       setErrors({
         nameError: '',

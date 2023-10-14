@@ -40,9 +40,9 @@ export class UserApplicationService {
       const updatedProfile = await prisma.user.update({
         where: { id },
         data: {
-          name: name,
-          oneWord: oneWord,
-          goal: goal,
+          name,
+          oneWord,
+          goal,
         },
       })
       return updatedProfile

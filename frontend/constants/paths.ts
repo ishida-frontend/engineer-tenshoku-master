@@ -71,6 +71,7 @@ export const APIS = {
   USER_PROFILE: {
     UPDATE: {
       path: (userId: string | undefined) => `${backendUrl}/user/${userId}`,
+      title: 'ユーザのプロフィール更新',
     },
   },
 }

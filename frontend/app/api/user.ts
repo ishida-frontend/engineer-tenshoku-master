@@ -27,16 +27,17 @@ export const getUser = async (
 
 export const updateUserProfile = async (userProfile: UserProfileType) => {
   try {
+    const { id, name, oneWord, goal } = userProfile
     const res = await fetch(APIS.USER_PROFILE.UPDATE.path(userProfile.id), {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        id: userProfile.id,
-        name: userProfile.name,
-        oneWord: userProfile.oneWord,
-        goal: userProfile.goal,
+        id,
+        name,
+        oneWord,
+        goal,
       }),
     })
 
