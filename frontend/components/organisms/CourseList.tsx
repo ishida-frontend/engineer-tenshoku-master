@@ -7,6 +7,7 @@ import {
   CardHeader,
   Center,
   Flex,
+  HStack,
   Heading,
   Image,
   Link,
@@ -71,9 +72,16 @@ export function CourseList({ courses }: { courses: AllCourseType[] }) {
                   >
                     {course.description}
                   </Text>
-                  {course.courseTag.map((courseTag: any) => (
-                    <Tag>{courseTag.tag.name}</Tag>
-                  ))}
+                  <HStack flexWrap="wrap">
+                    {course.courseTag.map((courseTag: any) => (
+                      <Tag
+                        color={courseTag.tag.color}
+                        backgroundColor={courseTag.tag.backgroundColor}
+                      >
+                        {courseTag.tag.name}
+                      </Tag>
+                    ))}
+                  </HStack>
 
                   <Flex justify="flex-end">
                     <Link
