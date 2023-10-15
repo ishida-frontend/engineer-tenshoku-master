@@ -43,9 +43,6 @@ export function CourseDetail({
   courseData: CourseWithSectionsType
   session: Session | null
 }) {
-  const searchParams = useSearchParams()
-  const searchedVideoId =
-    searchParams.get('videoId') || courseData.sections[0].videos[0].id
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
 
@@ -54,7 +51,9 @@ export function CourseDetail({
   const [isLoading, setIsLoading] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
   const [questions, setQuestions] = useState<QuestionType[]>()
-  const [videoId, setVideoId] = useState<string>(searchedVideoId)
+  const [videoId, setVideoId] = useState<string>(
+    courseData.sections[0].videos[0].id,
+  )
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo>({
     id: courseData.id,
     sections: {
@@ -69,6 +68,17 @@ export function CourseDetail({
       },
     },
   })
+
+  const searchParams = useSearchParams()
+  const searchedVideoId = searchParams.get('videoId')
+  const correctVideoData = courseData.sections.map((section) =>
+    section.videos.filter((video) => video.id === searchedVideoId),
+  )
+  // setVideoId(searchedVideoId)
+  console.log('correctVideoData:', correctVideoData)
+  if (correctVideoData) {
+    setVideoId(correctVideoData)
+  }
 
   useEffect(() => {
     setIsLoading(true)
