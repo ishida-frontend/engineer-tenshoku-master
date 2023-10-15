@@ -187,29 +187,22 @@ export function CourseDetail({
     if (response.status === 200) {
       await handleGetQuestions
       await setQuestionPage('QuestionList')
-    }
-    console.log('result:', result)
-    console.log('response:', response)
-    console.log('result.errors:', result.errors)
-    if (result.errors) {
-      console.log('aaaaa')
-      result.errors[0].map((error) => {
-        if (error.path[0] === 'title') {
-          console.log('bbbbb')
-          console.log('titleError:', error)
-          setCreateQuestionErrors((prevErrors) => ({
-            ...prevErrors,
-            title: error.message[0],
-          }))
-        } else if (error.path[0] === 'content') {
-          console.log('ccccc')
-          console.log('contantError:', error)
-          setCreateQuestionErrors((prevErrors) => ({
-            ...prevErrors,
-            content: error.message[0],
-          }))
-        }
-      })
+
+      if (result.errors) {
+        result.errors[0].map((error) => {
+          if (error.path[0] === 'title') {
+            setCreateQuestionErrors((prevErrors) => ({
+              ...prevErrors,
+              title: error.message[0],
+            }))
+          } else if (error.path[0] === 'content') {
+            setCreateQuestionErrors((prevErrors) => ({
+              ...prevErrors,
+              content: error.message[0],
+            }))
+          }
+        })
+      }
     }
   }
 

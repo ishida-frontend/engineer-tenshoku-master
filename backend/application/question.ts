@@ -28,6 +28,11 @@ export class QuestionApplicationService {
     try {
       const question = await prisma.question.findMany({
         where: { video_id },
+        orderBy: [
+          {
+            created_at: 'desc',
+          },
+        ],
       })
       return question
     } catch (error) {

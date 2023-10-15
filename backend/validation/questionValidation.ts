@@ -16,6 +16,7 @@ export class QuestionValidator {
     })
 
     const questionData = questionCreateSchema.safeParse(req.body)
+    console.log('questionData:', questionData)
 
     if (questionData.success) {
       next()

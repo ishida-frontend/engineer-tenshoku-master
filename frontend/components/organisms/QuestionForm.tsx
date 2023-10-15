@@ -11,6 +11,8 @@ import {
   Input,
   FormErrorMessage,
   TabPanel,
+  Heading,
+  Center,
 } from '@chakra-ui/react'
 import ReactMde from 'react-mde'
 import ReactMarkdown from 'react-markdown'
@@ -18,6 +20,7 @@ import 'react-mde/lib/styles/css/react-mde-all.css'
 import * as Showdown from 'showdown'
 import '../../styles/markdown.css'
 import { useCustomToast } from '../../hooks/useCustomToast'
+import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 
 type Errors = {
   title?: string
@@ -122,87 +125,102 @@ export function QuestionForm({
             <Button onClick={() => changeQuestionPage('QuestionList')}>
               全ての質問に戻る
             </Button>
-            <FormControl
-              isInvalid={!!errors.title}
-              mt={'20px'}
-              mb={'40px'}
-              bg={'white'}
-              h={'80px'}
-            >
-              <Container ml={'0px'} pb={'10px'} pl={'0px'}>
-                <Flex>
-                  <Text fontWeight={'bold'}>質問タイトル</Text>
-                  <Text color="teal">(必須)</Text>
-                </Flex>
-              </Container>
-              <Input
-                type="text"
-                name="title"
-                value={question.title}
-                onChange={(e) =>
-                  setQuestion({ ...question, title: e.target.value })
-                }
-                placeholder={
-                  '動画の15:00のところで型に関するエラーが出ています。'
-                }
-              />
-              <FormErrorMessage>{errors && errors.title}</FormErrorMessage>
-            </FormControl>
-
-            <FormControl isInvalid={!!errors.content} mb={'20px'} bg={'white'}>
-              <Container ml={'0px'} pb={'10px'} pl={'0px'}>
-                <Flex>
-                  <Text fontWeight={'bold'}>質問の内容</Text>
-                  <Text color="teal">(必須)</Text>
-                </Flex>
-              </Container>
-              <Box display={'flex'} justifyContent={'space-between'}>
-                <Box w={'50%'} mr={'5'}>
-                  <ReactMde
-                    maxEditorHeight={250}
-                    value={questionContent}
-                    onChange={contentChange}
-                    selectedTab={selectedEditorTab}
-                    onTabChange={setSelectedEditorTab}
-                    generateMarkdownPreview={(markdown) =>
-                      Promise.resolve(converter.makeHtml(markdown))
-                    }
-                    toolbarCommands={[
-                      ['header', 'bold', 'italic'],
-                      ['link', 'quote', 'code'],
-                      ['unordered-list', 'ordered-list'],
-                    ]}
-                  />
-                </Box>
-                <Box
-                  w={'50%'}
-                  maxH={'250px'}
-                  overflow={'scroll'}
+            {userId === undefined && (
+              <VStack>
+                <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
+                  質問をするには ログインまたは新規会員登録を行なってください
+                </Heading>
+              </VStack>
+            )}
+            {userId && (
+              <Box>
+                <FormControl
+                  isInvalid={!!errors.title}
+                  mt={'20px'}
+                  mb={'40px'}
                   bg={'white'}
-                  border={'1px solid gray'}
-                  borderRadius={'4px'}
-                  paddingLeft={'28px'}
-                  paddingRight={'20px'}
-                  className="markdown"
+                  h={'80px'}
                 >
-                  <ReactMarkdown>{questionContent}</ReactMarkdown>
-                </Box>
-              </Box>
-              <FormErrorMessage>
-                {errors.content && errors.content}
-              </FormErrorMessage>
-            </FormControl>
+                  <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                    <Flex>
+                      <Text fontWeight={'bold'}>質問タイトル</Text>
+                      <Text color="teal">(必須)</Text>
+                    </Flex>
+                  </Container>
+                  <Input
+                    type="text"
+                    name="title"
+                    value={question.title}
+                    onChange={(e) =>
+                      setQuestion({ ...question, title: e.target.value })
+                    }
+                    placeholder={
+                      '動画の15:00のところで型に関するエラーが出ています。'
+                    }
+                  />
+                  <FormErrorMessage>{errors && errors.title}</FormErrorMessage>
+                </FormControl>
 
-            <VStack>
-              <Button
-                onClick={handleSubmit}
-                m={'20px 0'}
-                w={'100%'}
-                colorScheme="teal"
-              >
-                公開
-              </Button>
-            </VStack>
+                <FormControl
+                  isInvalid={!!errors.content}
+                  mb={'20px'}
+                  bg={'white'}
+                >
+                  <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                    <Flex>
+                      <Text fontWeight={'bold'}>質問の内容</Text>
+                      <Text color="teal">(必須)</Text>
+                    </Flex>
+                  </Container>
+                  <Box display={'flex'} justifyContent={'space-between'}>
+                    <Box w={'50%'} mr={'5'}>
+                      <ReactMde
+                        maxEditorHeight={250}
+                        value={questionContent}
+                        onChange={contentChange}
+                        selectedTab={selectedEditorTab}
+                        onTabChange={setSelectedEditorTab}
+                        generateMarkdownPreview={(markdown) =>
+                          Promise.resolve(converter.makeHtml(markdown))
+                        }
+                        toolbarCommands={[
+                          ['header', 'bold', 'italic'],
+                          ['link', 'quote', 'code'],
+                          ['unordered-list', 'ordered-list'],
+                        ]}
+                      />
+                    </Box>
+                    <Box
+                      w={'50%'}
+                      maxH={'250px'}
+                      overflow={'scroll'}
+                      bg={'white'}
+                      border={'1px solid gray'}
+                      borderRadius={'4px'}
+                      paddingLeft={'28px'}
+                      paddingRight={'20px'}
+                      className="markdown"
+                    >
+                      <ReactMarkdown>{questionContent}</ReactMarkdown>
+                    </Box>
+                  </Box>
+                  <FormErrorMessage>
+                    {errors.content && errors.content}
+                  </FormErrorMessage>
+                </FormControl>
+
+                <VStack>
+                  <Button
+                    onClick={handleSubmit}
+                    m={'20px 0'}
+                    w={'100%'}
+                    colorScheme="teal"
+                  >
+                    公開
+                  </Button>
+                </VStack>
+              </Box>
+            )}
           </Container>
         </FormControl>
       </Stack>
