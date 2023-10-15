@@ -32,8 +32,6 @@ export default async function CourseDetailPage({
     )
     const courseData: CourseDetailPropsType = await res.json()
 
-    console.log('courseData:', courseData)
-
     return <CourseDetail courseData={courseData} session={session} />
   } catch (e) {
     return <Error />
