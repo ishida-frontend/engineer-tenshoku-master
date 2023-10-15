@@ -5,14 +5,14 @@ import { authOptions } from '../../api/auth/[...nextauth]/route'
 import { CourseDetail } from '../../../components/pages/CourseDetail'
 import { CourseWithSectionsType } from '../../../types/CourseType'
 import Error from '../../error'
+import { useSearchParams } from 'next/navigation'
 
 export default async function CourseDetailPage({
   params,
-  query,
 }: {
   params: { courseId: string }
-  query: { videoId: string }
 }) {
+  console.log('CourseDetailPage.tsx')
   const session = await getServerSession(authOptions)
 
   try {
@@ -26,11 +26,15 @@ export default async function CourseDetailPage({
     )
     const courseData: CourseWithSectionsType = await res.json()
 
+    const searchParams = useSearchParams()
+    const searchedVideoId =
+      searchParams.get('videoId') || courseData.sections[0].videos[0].id
+
     return (
       <CourseDetail
         courseData={courseData}
         session={session}
-        queryVideoId={query.videoId}
+        searchedVideoId={searchedVideoId}
       />
     )
   } catch (e) {

@@ -38,12 +38,13 @@ export type HandleChangeVideo = (
 export function CourseDetail({
   courseData,
   session,
-  queryVideoId,
+  searchedVideoId,
 }: {
   courseData: CourseWithSectionsType
   session: Session | null
-  queryVideoId: string
+  searchedVideoId: string
 }) {
+  console.log('CourseDetail')
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
 
@@ -52,7 +53,7 @@ export function CourseDetail({
   const [isLoading, setIsLoading] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
   const [questions, setQuestions] = useState<QuestionType[]>()
-  const [videoId, setVideoId] = useState<string>(queryVideoId)
+  const [videoId, setVideoId] = useState<string>(searchedVideoId)
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo>({
     id: courseData.id,
     sections: {
