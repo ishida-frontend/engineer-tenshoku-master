@@ -12,7 +12,7 @@ export default async function CourseDetailPage({
 }: {
   params: { courseId: string }
 }) {
-  console.log('CourseDetailPage.tsx')
+  console.log('CourseDetailのSC')
   const session = await getServerSession(authOptions)
 
   try {

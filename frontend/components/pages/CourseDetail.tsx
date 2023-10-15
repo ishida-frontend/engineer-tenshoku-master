@@ -44,7 +44,7 @@ export function CourseDetail({
   session: Session | null
   searchedVideoId: string
 }) {
-  console.log('CourseDetail')
+  console.log('CourseDetailのCC')
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
 
