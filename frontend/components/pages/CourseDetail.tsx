@@ -14,6 +14,7 @@ import { QuestionType } from 'types/QuestionType'
 import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
+import { useSearchParams } from 'next/navigation'
 
 export type SelectedVideo = {
   id: string
@@ -38,13 +39,13 @@ export type HandleChangeVideo = (
 export function CourseDetail({
   courseData,
   session,
-  searchedVideoId,
 }: {
   courseData: CourseWithSectionsType
   session: Session | null
-  searchedVideoId: string
 }) {
-  console.log('CourseDetailのCC')
+  const searchParams = useSearchParams()
+  const searchedVideoId =
+    searchParams.get('videoId') || courseData.sections[0].videos[0].id
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
 
@@ -94,7 +95,6 @@ export function CourseDetail({
   }, [courseData, session, videoId])
 
   const handleChangeVideo = (sectionIndex: number, videoIndex: number) => {
-    console.log('handleChangeVideo')
     const currentlySelectedVideo = {
       id: courseData.id,
       sections: {
@@ -141,7 +141,6 @@ export function CourseDetail({
   }
 
   const handleGetQuestions = async (videoId: string) => {
-    console.log('handleGetQuestions')
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${videoId}`,
       {
