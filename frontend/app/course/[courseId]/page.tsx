@@ -28,7 +28,8 @@ export default async function CourseDetailPage({
 
     const searchParams = useSearchParams()
     const searchedVideoId =
-      searchParams.get('videoId') || courseData.sections[0].videos[0].id
+      (await searchParams.get('videoId')) || courseData.sections[0].videos[0].id
+    console.log('searchedVideoId:', searchedVideoId)
 
     return (
       <CourseDetail
