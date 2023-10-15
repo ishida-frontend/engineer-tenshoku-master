@@ -13,7 +13,7 @@ export function VideoDetailAndQAndA({
   questionPage,
   questions,
   createQuestionErrors,
-  handleGetQuestions,
+  // handleGetQuestions,
   createQuestion,
   changeQuestionPage,
 }: {
@@ -22,7 +22,7 @@ export function VideoDetailAndQAndA({
   questionPage: string
   questions?: QuestionType[]
   createQuestionErrors: CreateQuestionErrorType
-  handleGetQuestions: (videoId: string) => void
+  // handleGetQuestions: (videoId: string) => void
   createQuestion: (createQuestionParams: {
     title: string
     content: string
@@ -34,7 +34,7 @@ export function VideoDetailAndQAndA({
       <TabList>
         <Tab>レッスン内容</Tab>
         <Tab
-          onClick={() => handleGetQuestions(selectedVideo.sections.videos.id)}
+        // onClick={() => handleGetQuestions(selectedVideo.sections.videos.id)}
         >
           質問と回答
         </Tab>

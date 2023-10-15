@@ -6,6 +6,7 @@ import { CourseDetail } from '../../../components/pages/CourseDetail'
 import { CourseType } from '../../../types/CourseType'
 import { SectionType } from '../../../types/SectionType'
 import { VideoType } from '../../../types/VideoType'
+import { QuestionType } from 'types/QuestionType'
 import Error from '../../error'
 
 type CourseDetailPropsType = CourseType & {
@@ -30,7 +31,27 @@ export default async function CourseDetailPage({
     )
     const courseData: CourseDetailPropsType = await res.json()
 
-    return <CourseDetail courseData={courseData} session={session} />
+    const handleGetQuestions = async (videoId: string) => {
+      const getQuestions = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${videoId}`,
+        {
+          cache: 'no-cache',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      const questions: QuestionType[] = await getQuestions.json()
+    }
+
+    return (
+      <CourseDetail
+        courseData={courseData}
+        session={session}
+        // handleGetQuestions={handleGetQuestions}
+        questions={questions}
+      />
+    )
   } catch (e) {
     return <Error />
   }

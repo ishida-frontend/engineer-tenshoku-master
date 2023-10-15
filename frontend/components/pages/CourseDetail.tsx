@@ -46,9 +46,13 @@ export type CreateQuestionErrorType = { title: string; content: string }
 export function CourseDetail({
   courseData,
   session,
+  // handleGetQuestions,
+  questions,
 }: {
   courseData: CourseDetailPropsType
   session: Session | null
+  // handleGetQuestions: (videoId: string) => void
+  questions?: QuestionType[]
 }) {
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
@@ -57,7 +61,9 @@ export function CourseDetail({
   const [isChecked, setIsChecked] = useState<{ [key: string]: boolean }>({})
   const [isLoading, setIsLoading] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
-  const [questions, setQuestions] = useState<QuestionType[]>()
+  const [getQuestions, setGetQuestions] = useState<QuestionType[] | undefined>(
+    questions,
+  )
   const [createQuestionErrors, setCreateQuestionErrors] =
     useState<CreateQuestionErrorType>({ title: '', content: '' })
   const [questionPage, setQuestionPage] = useState('QuestionList')
@@ -149,19 +155,19 @@ export function CourseDetail({
     setIsFavorited((prevState) => !prevState)
   }
 
-  const handleGetQuestions = async (videoId: string) => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${videoId}`,
-      {
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-    const getQuestions: QuestionType[] = await res.json()
-    setQuestions(getQuestions)
-  }
+  // const handleGetQuestions = async (videoId: string) => {
+  //   const res = await fetch(
+  //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${videoId}`,
+  //     {
+  //       cache: 'no-cache',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     },
+  //   )
+  //   const getQuestions: QuestionType[] = await res.json()
+  //   setQuestions(getQuestions)
+  // }
 
   const createQuestion = async (createQuestionParams: {
     title: string
@@ -185,7 +191,7 @@ export function CourseDetail({
     )
     const result = await response.json()
     if (response.status === 200) {
-      await handleGetQuestions
+      // await handleGetQuestions
       await setQuestionPage('QuestionList')
 
       if (result.errors) {
@@ -237,7 +243,7 @@ export function CourseDetail({
             isLoading={isLoading}
             handleViewingStatus={handleViewingStatus}
             handleFavIconToggle={handleFavIconToggle}
-            handleGetQuestions={handleGetQuestions}
+            // handleGetQuestions={handleGetQuestions}
             createQuestion={createQuestion}
           />
         </Container>
