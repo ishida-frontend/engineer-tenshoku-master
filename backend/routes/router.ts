@@ -3,13 +3,14 @@ import 'dotenv/config'
 
 import { contactValidationRules, contactValidate } from '../validation'
 import { validate, courseValidationRules } from '../validation/courseValidation'
-import { VideoValidator } from '../validation/videoValidator'
 import { UserController } from '../controllers/userController'
 import { ViewingStatusController } from '../controllers/viewingStatusController'
 import { VideoController } from '../controllers/videoController'
 import { QuestionController } from '../controllers/questionController'
 import { QuestionValidator } from '../validation/questionValidation'
 import { AnswerController } from '../controllers/answerController'
+import { UserValidator } from '../validation/userValidator'
+import { VideoValidator } from '../validation/videoValidator'
 
 const {
   createCourse,
@@ -34,12 +35,13 @@ const {
 
 const router = express.Router()
 
-const userController = new UserController()
+const userValidator = new UserValidator()
 const videoValidator = new VideoValidator()
 const videoController = new VideoController()
 const questionValidatior = new QuestionValidator()
 const questionController = new QuestionController()
 const answerController = new AnswerController()
+const userController = new UserController()
 const viewingStatusController = new ViewingStatusController()
 
 router.use(
@@ -85,6 +87,9 @@ router.use('/user', userRouter)
 userRouter.get('/:id', (req, res) => {
   userController.get(req, res)
 })
+userRouter.put('/:id', userValidator.update, (req, res) => {
+  userController.update(req, res)
+})
 
 const courseRouter = express.Router()
 router.use('/course', courseRouter)
@@ -129,6 +134,7 @@ answerRouter.post('/create', (req, res) => {
 answerRouter.get('/:question_id', (req, res) => {
   answerController.get(req, res)
 })
+
 const viewingStatusRouter = express.Router()
 router.use('/viewingstatus', viewingStatusRouter)
 viewingStatusRouter.post(

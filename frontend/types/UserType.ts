@@ -9,3 +9,10 @@ export type UserType = {
   createdAt: string
   updatedAt: string
 }
+
+export type UserProfileType = {
+  id: string
+  name: string
+  oneWord: string
+  goal: string
+}
