@@ -154,84 +154,61 @@ export function CourseDetail({
     content: string
   }) => {
     const { title, content } = createQuestionParams
-    // if (title && title.length >= 15) {
-    //   setCreateQuestionErrors((prevErrors) => ({ ...prevErrors, title: '' }))
-    // } else {
-    //   setCreateQuestionErrors((prevErrors) => ({
-    //     ...prevErrors,
-    //     title: '※15文字以上入力してください',
-    //   }))
-    // }
-
-    // if (content && content.length >= 15) {
-    //   setCreateQuestionErrors((prevErrors) => ({ ...prevErrors, content: '' }))
-    // } else {
-    //   setCreateQuestionErrors((prevErrors) => ({
-    //     ...prevErrors,
-    //     content: '※15文字以上入力してください',
-    //   }))
-    // }
-
-    // if (title.length >= 15 && content.length >= 15) {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/create`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          title,
-          content,
-          video_id: videoId,
-          user_id: userId,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-    const result = await response.json()
-    if (response.status === 200) {
-      router.refresh()
-      await setQuestionPage('QuestionList')
-    } else if (result.errors) {
-      console.log('result.errors[0]:', result.errors[0])
-      const isTitleError = result.errors[0].filter((error) => {
-        error.path[0] === 'title'
-      })
-      console.log('isTitleError:', isTitleError)
-      // if (!isTitleError) {
-      //   console.log('nonTitle')
-      //   setCreateQuestionErrors((prevErrors) => ({
-      //     ...prevErrors,
-      //     title: '',
-      //   }))
-      // }else if(isTitleError){
-      //     console.log('ErrorTitle')
-      //     setCreateQuestionErrors((prevErrors) => ({
-      //       ...prevErrors,
-      //       title: error.message,
-      //     }))
-
-      // }
-      // }
-      //   if (error.path[0] != 'content') {
-      //     console.log('nonContent')
-      //     setCreateQuestionErrors((prevErrors) => ({
-      //       ...prevErrors,
-      //       content: '',
-      //     }))
-      //   } else if (error.path[0] === 'content') {
-      //     console.log('ErrorContent')
-      //     setCreateQuestionErrors((prevErrors) => ({
-      //       ...prevErrors,
-      //       content: error.message,
-      //     }))
-      //   }
-      // })
+    if (title && title.length >= 15) {
+      setCreateQuestionErrors((prevErrors) => ({ ...prevErrors, title: '' }))
+    } else {
+      setCreateQuestionErrors((prevErrors) => ({
+        ...prevErrors,
+        title: '※15文字以上入力してください',
+      }))
     }
-    // }
-    // }
+
+    if (content && content.length >= 15) {
+      setCreateQuestionErrors((prevErrors) => ({ ...prevErrors, content: '' }))
+    } else {
+      setCreateQuestionErrors((prevErrors) => ({
+        ...prevErrors,
+        content: '※15文字以上入力してください',
+      }))
+    }
+
+    if (title.length >= 15 && content.length >= 15) {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/create`,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            title,
+            content,
+            video_id: videoId,
+            user_id: userId,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      const result = await response.json()
+      if (response.status === 200) {
+        router.refresh()
+        await setQuestionPage('QuestionList')
+      } else if (result.errors) {
+        result.errors[0].map((error) => {
+          if (error.path[0] === 'title') {
+            setCreateQuestionErrors((prevErrors) => ({
+              ...prevErrors,
+              title: error.message,
+            }))
+          } else if (error.path[0] === 'content') {
+            setCreateQuestionErrors((prevErrors) => ({
+              ...prevErrors,
+              content: error.message,
+            }))
+          }
+        })
+      }
+    }
   }
-  console.log('createQuestionErrors:', createQuestionErrors)
 
   const changeQuestionPage = async (value: string) => {
     setQuestionPage(value)

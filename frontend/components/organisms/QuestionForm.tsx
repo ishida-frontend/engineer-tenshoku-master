@@ -46,11 +46,6 @@ export function QuestionForm({
     content: '',
   })
 
-  const [errors, setErrors] = useState<Errors>({
-    title: '',
-    content: '',
-  })
-
   const [questionContent, setQuestionContent] = useState<string>()
 
   const contentChange = (value: string) => {
@@ -83,14 +78,6 @@ export function QuestionForm({
     }
   }
 
-  useEffect(() => {
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      title: createQuestionErrors.title,
-      content: createQuestionErrors.content,
-    }))
-  }, [createQuestionErrors])
-
   return (
     <TabPanel>
       <Stack mt={'20px'}>
@@ -109,7 +96,7 @@ export function QuestionForm({
             {userId && (
               <Box>
                 <FormControl
-                  isInvalid={!!errors.title}
+                  isInvalid={!!createQuestionErrors.title}
                   mt={'20px'}
                   mb={'40px'}
                   bg={'white'}
@@ -132,11 +119,13 @@ export function QuestionForm({
                       '動画の15:00のところで型に関するエラーが出ています。'
                     }
                   />
-                  <FormErrorMessage>{errors && errors.title}</FormErrorMessage>
+                  <FormErrorMessage>
+                    {createQuestionErrors && createQuestionErrors.title}
+                  </FormErrorMessage>
                 </FormControl>
 
                 <FormControl
-                  isInvalid={!!errors.content}
+                  isInvalid={!!createQuestionErrors.content}
                   mb={'20px'}
                   bg={'white'}
                 >
@@ -179,7 +168,8 @@ export function QuestionForm({
                     </Box>
                   </Box>
                   <FormErrorMessage>
-                    {errors.content && errors.content}
+                    {createQuestionErrors.content &&
+                      createQuestionErrors.content}
                   </FormErrorMessage>
                 </FormControl>
 
