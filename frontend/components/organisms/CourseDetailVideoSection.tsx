@@ -29,7 +29,6 @@ export function CourseDetailVideoSection({
   isLoading,
   handleViewingStatus,
   handleFavIconToggle,
-  // handleGetQuestions,
   createQuestion,
   changeQuestionPage,
 }: {
@@ -43,7 +42,6 @@ export function CourseDetailVideoSection({
   isLoading: boolean
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
   handleFavIconToggle: (event: React.MouseEvent<HTMLButtonElement>) => void
-  // handleGetQuestions: (videoId: string) => void
   createQuestion: (createQuestionParams: {
     title: string
     content: string
@@ -96,7 +94,6 @@ export function CourseDetailVideoSection({
               questionPage={questionPage}
               questions={questions}
               createQuestionErrors={createQuestionErrors}
-              // handleGetQuestions={handleGetQuestions}
               createQuestion={createQuestion}
               changeQuestionPage={changeQuestionPage}
             />

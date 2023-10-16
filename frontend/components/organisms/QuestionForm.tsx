@@ -12,14 +12,12 @@ import {
   FormErrorMessage,
   TabPanel,
   Heading,
-  Center,
 } from '@chakra-ui/react'
 import ReactMde from 'react-mde'
 import ReactMarkdown from 'react-markdown'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import * as Showdown from 'showdown'
 import '../../styles/markdown.css'
-import { useCustomToast } from '../../hooks/useCustomToast'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 
 type Errors = {
@@ -30,13 +28,11 @@ type Errors = {
 type CreateQuestionErrorType = { title: string; content: string }
 
 export function QuestionForm({
-  videoId,
   userId,
   createQuestionErrors,
   createQuestion,
   changeQuestionPage,
 }: {
-  videoId: string
   userId: string | undefined
   createQuestionErrors: CreateQuestionErrorType
   createQuestion: (createQuestionParams: {
@@ -57,8 +53,6 @@ export function QuestionForm({
 
   const [questionContent, setQuestionContent] = useState<string>()
 
-  const { showSuccessToast, showErrorToast } = useCustomToast()
-
   const contentChange = (value: string) => {
     setQuestionContent(value)
     setQuestion({ ...question, content: value })
@@ -75,35 +69,15 @@ export function QuestionForm({
     'write' | 'preview'
   >('write')
 
-  const handleSubmit = async (
+  const submitQuestion = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault()
     try {
-      if (question.title && question.title.length >= 15) {
-        setErrors((prevErrors) => ({ ...prevErrors, title: '' }))
-      } else {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          title: '※15文字以上入力してください',
-        }))
-      }
-
-      if (question.content && question.content.length >= 15) {
-        setErrors((prevErrors) => ({ ...prevErrors, content: '' }))
-      } else {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          content: '※15文字以上入力してください',
-        }))
-      }
-
-      if (question.title.length >= 15 && question.content.length >= 15) {
-        await createQuestion({
-          title: question.title,
-          content: question.content,
-        })
-      }
+      await createQuestion({
+        title: question.title,
+        content: question.content,
+      })
     } catch (e) {
       throw e
     }
@@ -112,8 +86,8 @@ export function QuestionForm({
   useEffect(() => {
     setErrors((prevErrors) => ({
       ...prevErrors,
-      title: createQuestionErrors.title[0],
-      content: createQuestionErrors.content[0],
+      title: createQuestionErrors.title,
+      content: createQuestionErrors.content,
     }))
   }, [createQuestionErrors])
 
@@ -211,7 +185,7 @@ export function QuestionForm({
 
                 <VStack>
                   <Button
-                    onClick={handleSubmit}
+                    onClick={submitQuestion}
                     m={'20px 0'}
                     w={'100%'}
                     colorScheme="teal"

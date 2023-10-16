@@ -15,6 +15,7 @@ import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
 import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 export type SelectedVideo = {
   id: string
@@ -41,14 +42,13 @@ export type CreateQuestionErrorType = { title: string; content: string }
 export function CourseDetail({
   courseData,
   session,
-  // handleGetQuestions,
   questions,
 }: {
   courseData: CourseWithSectionsType
   session: Session | null
-  // handleGetQuestions: (videoId: string) => void
   questions?: QuestionType[]
 }) {
+  const router = useRouter()
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
   const searchParams = useSearchParams()
@@ -58,9 +58,6 @@ export function CourseDetail({
   const [isChecked, setIsChecked] = useState<{ [key: string]: boolean }>({})
   const [isLoading, setIsLoading] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
-  const [getQuestions, setGetQuestions] = useState<QuestionType[] | undefined>(
-    questions,
-  )
   const [createQuestionErrors, setCreateQuestionErrors] =
     useState<CreateQuestionErrorType>({ title: '', content: '' })
   const [questionPage, setQuestionPage] = useState('QuestionList')
@@ -152,25 +149,30 @@ export function CourseDetail({
     setIsFavorited((prevState) => !prevState)
   }
 
-  // const handleGetQuestions = async (videoId: string) => {
-  //   const res = await fetch(
-  //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${videoId}`,
-  //     {
-  //       cache: 'no-cache',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     },
-  //   )
-  //   const getQuestions: QuestionType[] = await res.json()
-  //   setQuestions(getQuestions)
-  // }
-
   const createQuestion = async (createQuestionParams: {
     title: string
     content: string
   }) => {
     const { title, content } = createQuestionParams
+    // if (title && title.length >= 15) {
+    //   setCreateQuestionErrors((prevErrors) => ({ ...prevErrors, title: '' }))
+    // } else {
+    //   setCreateQuestionErrors((prevErrors) => ({
+    //     ...prevErrors,
+    //     title: '※15文字以上入力してください',
+    //   }))
+    // }
+
+    // if (content && content.length >= 15) {
+    //   setCreateQuestionErrors((prevErrors) => ({ ...prevErrors, content: '' }))
+    // } else {
+    //   setCreateQuestionErrors((prevErrors) => ({
+    //     ...prevErrors,
+    //     content: '※15文字以上入力してください',
+    //   }))
+    // }
+
+    // if (title.length >= 15 && content.length >= 15) {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/create`,
       {
@@ -188,26 +190,48 @@ export function CourseDetail({
     )
     const result = await response.json()
     if (response.status === 200) {
-      // await handleGetQuestions
+      router.refresh()
       await setQuestionPage('QuestionList')
+    } else if (result.errors) {
+      console.log('result.errors[0]:', result.errors[0])
+      const isTitleError = result.errors[0].filter((error) => {
+        error.path[0] === 'title'
+      })
+      console.log('isTitleError:', isTitleError)
+      // if (!isTitleError) {
+      //   console.log('nonTitle')
+      //   setCreateQuestionErrors((prevErrors) => ({
+      //     ...prevErrors,
+      //     title: '',
+      //   }))
+      // }else if(isTitleError){
+      //     console.log('ErrorTitle')
+      //     setCreateQuestionErrors((prevErrors) => ({
+      //       ...prevErrors,
+      //       title: error.message,
+      //     }))
 
-      if (result.errors) {
-        result.errors[0].map((error) => {
-          if (error.path[0] === 'title') {
-            setCreateQuestionErrors((prevErrors) => ({
-              ...prevErrors,
-              title: error.message[0],
-            }))
-          } else if (error.path[0] === 'content') {
-            setCreateQuestionErrors((prevErrors) => ({
-              ...prevErrors,
-              content: error.message[0],
-            }))
-          }
-        })
-      }
+      // }
+      // }
+      //   if (error.path[0] != 'content') {
+      //     console.log('nonContent')
+      //     setCreateQuestionErrors((prevErrors) => ({
+      //       ...prevErrors,
+      //       content: '',
+      //     }))
+      //   } else if (error.path[0] === 'content') {
+      //     console.log('ErrorContent')
+      //     setCreateQuestionErrors((prevErrors) => ({
+      //       ...prevErrors,
+      //       content: error.message,
+      //     }))
+      //   }
+      // })
     }
+    // }
+    // }
   }
+  console.log('createQuestionErrors:', createQuestionErrors)
 
   const changeQuestionPage = async (value: string) => {
     setQuestionPage(value)
@@ -240,7 +264,6 @@ export function CourseDetail({
             isLoading={isLoading}
             handleViewingStatus={handleViewingStatus}
             handleFavIconToggle={handleFavIconToggle}
-            // handleGetQuestions={handleGetQuestions}
             createQuestion={createQuestion}
           />
         </Container>

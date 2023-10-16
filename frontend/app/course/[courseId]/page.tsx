@@ -27,8 +27,7 @@ export default async function CourseDetailPage({
     )
     const courseData: CourseWithSectionsType = await getCourseData.json()
 
-    console.log('searchParams.videoId:', searchParams.videoId)
-    const handleGetQuestions = await fetch(
+    const getQuestionsData = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${searchParams.videoId}`,
       {
         cache: 'no-cache',
@@ -37,7 +36,7 @@ export default async function CourseDetailPage({
         },
       },
     )
-    const questions: QuestionType[] = await handleGetQuestions.json()
+    const questions: QuestionType[] = await getQuestionsData.json()
 
     return (
       <CourseDetail

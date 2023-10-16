@@ -36,7 +36,12 @@ export function QuestionList({
               まだ質問はありません。
             </Heading>
           </VStack>
-          <Button mt={'20px'}>新しく質問する</Button>
+          <Button
+            mt={'20px'}
+            onClick={() => changeQuestionPage('QuestionForm')}
+          >
+            新しく質問する
+          </Button>
         </TabPanel>
       )}
       {questions !== undefined && questions.length !== 0 && (
@@ -67,12 +72,7 @@ export function QuestionList({
                     justifyContent={'center'}
                   />
                   <Box overflow={'hidden'} pl={'15px'} pt={'10px'} pb={'10px'}>
-                    <Heading
-                      pb={'10px'}
-                      size="md"
-                      textTransform="uppercase"
-                      isTruncated
-                    >
+                    <Heading pb={'10px'} size="md" isTruncated>
                       {question.title}
                     </Heading>
                     <Text fontSize="md" isTruncated>

@@ -13,7 +13,6 @@ export function VideoDetailAndQAndA({
   questionPage,
   questions,
   createQuestionErrors,
-  // handleGetQuestions,
   createQuestion,
   changeQuestionPage,
 }: {
@@ -22,7 +21,6 @@ export function VideoDetailAndQAndA({
   questionPage: string
   questions?: QuestionType[]
   createQuestionErrors: CreateQuestionErrorType
-  // handleGetQuestions: (videoId: string) => void
   createQuestion: (createQuestionParams: {
     title: string
     content: string
@@ -33,11 +31,7 @@ export function VideoDetailAndQAndA({
     <Tabs isFitted colorScheme={'green'}>
       <TabList>
         <Tab>レッスン内容</Tab>
-        <Tab
-        // onClick={() => handleGetQuestions(selectedVideo.sections.videos.id)}
-        >
-          質問と回答
-        </Tab>
+        <Tab>質問と回答</Tab>
       </TabList>
       <TabPanels>
         <TabPanel>
@@ -55,7 +49,6 @@ export function VideoDetailAndQAndA({
         )}
         {questionPage === 'QuestionForm' && (
           <QuestionForm
-            videoId={selectedVideo.sections.videos.id}
             userId={userId}
             createQuestionErrors={createQuestionErrors}
             createQuestion={createQuestion}
