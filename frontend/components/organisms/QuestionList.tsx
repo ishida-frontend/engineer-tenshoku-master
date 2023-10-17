@@ -14,12 +14,17 @@ import {
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
+import Link from 'next/link'
 
 export function QuestionList({
   questions,
+  courseId,
+  videoId,
   changeQuestionPage,
 }: {
   questions?: QuestionType[]
+  courseId: string
+  videoId: string
   changeQuestionPage: (value: string) => Promise<void>
 }) {
   return (
@@ -71,14 +76,23 @@ export function QuestionList({
                     icon={<AiOutlineUser fontSize="2rem" />}
                     justifyContent={'center'}
                   />
-                  <Box overflow={'hidden'} pl={'15px'} pt={'10px'} pb={'10px'}>
-                    <Heading pb={'10px'} size="md" isTruncated>
-                      {question.title}
-                    </Heading>
-                    <Text fontSize="md" isTruncated>
-                      {question.content}
-                    </Text>
-                  </Box>
+                  <Link
+                    href={`/course/${courseId}/?videoId=${videoId}&questionId=${question.id}`}
+                  >
+                    <Box
+                      overflow={'hidden'}
+                      pl={'15px'}
+                      pt={'10px'}
+                      pb={'10px'}
+                    >
+                      <Heading pb={'10px'} size="md" isTruncated>
+                        {question.title}
+                      </Heading>
+                      <Text fontSize="md" isTruncated>
+                        {question.content}
+                      </Text>
+                    </Box>
+                  </Link>
                 </HStack>
               </Card>
             ))}

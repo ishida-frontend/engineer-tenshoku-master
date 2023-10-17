@@ -45,6 +45,8 @@ export function VideoDetailAndQAndA({
           <QuestionList
             questions={questions}
             changeQuestionPage={changeQuestionPage}
+            courseId={selectedVideo.id}
+            videoId={selectedVideo.sections.videos.id}
           />
         )}
         {questionPage === 'QuestionForm' && (
