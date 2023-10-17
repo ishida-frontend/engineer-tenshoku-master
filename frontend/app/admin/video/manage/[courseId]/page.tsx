@@ -34,7 +34,7 @@ import { VideoType } from '../../../../../types'
 export default function EditVideoPage() {
   const { showErrorToast } = useCustomToast()
 
-  const [currentSectionId, setCurrentSectionId] = useState<number | null>(null)
+  const [currentSectionId, setCurrentSectionId] = useState<string | null>(null)
 
   // 動画カード追加モーダル関連
   const [maxOrder, setMaxOrder] = useState<number>(1)
@@ -46,7 +46,7 @@ export default function EditVideoPage() {
 
   // 動画カード編集モーダル関連
   const [sectionToEdit, setSectionToEdit] = useState<SectionType | null>(null)
-  const [videoToEdit, setVideoToEdit] = useState<number | null>(null)
+  const [videoToEdit, setVideoToEdit] = useState<string | null>(null)
   const {
     isOpen: isEditModalOpen,
     onOpen: openEditModal,
@@ -54,7 +54,7 @@ export default function EditVideoPage() {
   } = useDisclosure()
 
   // 動画カード削除モーダル関連
-  const [videoToRemove, setVideoToRemove] = useState<number | null>(null)
+  const [videoToRemove, setVideoToRemove] = useState<string | null>(null)
   const {
     isOpen: isRemoveModalOpen,
     onOpen: openRemoveModal,
@@ -93,7 +93,7 @@ export default function EditVideoPage() {
     showErrorToast('データの取得に失敗しました')
   }
 
-  const handleCreateVideo = (sectionId: number) => {
+  const handleCreateVideo = (sectionId: string) => {
     setCurrentSectionId(sectionId)
     const currentSection = courseData?.sections.find(
       (s: SectionType) => s.id === sectionId,
@@ -109,7 +109,7 @@ export default function EditVideoPage() {
     openCreateModal()
   }
 
-  const handleEditVideo = (videoId: number, section: SectionType) => {
+  const handleEditVideo = (videoId: string, section: SectionType) => {
     setSectionToEdit(section)
     setVideoToEdit(videoId)
     openEditModal()
