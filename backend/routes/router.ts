@@ -155,10 +155,6 @@ viewingStatusRouter.get(
 
 const favoriteVideoRouter = express.Router()
 router.use('/favoritevideo', favoriteVideoRouter)
-favoriteVideoRouter.post(
-  '/:userId/:videoId',
-  favoriteVideoController.upsertFavoriteVideo,
-)
 favoriteVideoRouter.put(
   '/:userId/:videoId',
   favoriteVideoController.upsertFavoriteVideo,

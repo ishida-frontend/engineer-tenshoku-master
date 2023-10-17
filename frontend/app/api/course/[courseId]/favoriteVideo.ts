@@ -14,7 +14,6 @@ export const upsertFavoriteVideo = async ({
   }
 
   try {
-    // お気に入り状態を更新
     const res = await fetch(APIS.FAVORITE_VIDEO.UPSERT.path(userId, videoId), {
       method: 'PUT',
       headers: {
@@ -27,23 +26,10 @@ export const upsertFavoriteVideo = async ({
       }),
     })
 
-    // お気に入り状態がDB上になければ新規作成
     if (!res.ok) {
-      const postRes = await fetch(
-        APIS.FAVORITE_VIDEO.UPSERT.path(userId, videoId),
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
+      throw new Error(
+        `動画のお気に入りテータスの更新に失敗しました: ${res.statusText}`,
       )
-
-      if (!postRes.ok) {
-        throw new Error(
-          `動画のお気に入りテータスの更新に失敗しました: ${postRes.statusText}`,
-        )
-      }
     }
 
     const newStatus = await res.json()

@@ -23,7 +23,7 @@ import { useCustomToast } from 'hooks/useCustomToast'
 
 type loadingStates = {
   watching: boolean
-  favoriting: boolean
+  isFavorite: boolean
 }
 
 export type CourseDetailPropsType = CourseType & {
@@ -71,7 +71,7 @@ export function CourseDetail({
   >({})
   const [loadingStates, setLoadingStates] = useState<loadingStates>({
     watching: false,
-    favoriting: false,
+    isFavorite: false,
   })
 
   const [questions, setQuestions] = useState<QuestionType[]>()
@@ -95,7 +95,7 @@ export function CourseDetail({
   })
 
   useEffect(() => {
-    setLoadingStates({ watching: true, favoriting: true })
+    setLoadingStates({ watching: true, isFavorite: true })
 
     const fetchData = async () => {
       try {
@@ -116,7 +116,7 @@ export function CourseDetail({
       } catch (error) {
         showErrorToast(`${error}`)
       } finally {
-        setLoadingStates({ watching: false, favoriting: false })
+        setLoadingStates({ watching: false, isFavorite: false })
       }
     }
 
@@ -170,7 +170,7 @@ export function CourseDetail({
   }
 
   const handleFavoriteVideoStatus = async () => {
-    setLoadingStates((prev) => ({ ...prev, favoriting: true }))
+    setLoadingStates((prev) => ({ ...prev, isFavorite: true }))
 
     const newFavoritedStatus = !(favoritedStatus?.[videoId] || false)
     setFavoritedStatus((prevFavoriteStatus) => ({
@@ -187,7 +187,7 @@ export function CourseDetail({
     } catch (error) {
       showErrorToast(`${error}`)
     } finally {
-      setLoadingStates((prev) => ({ ...prev, favoriting: false }))
+      setLoadingStates((prev) => ({ ...prev, isFavorite: false }))
     }
   }
 
