@@ -14,13 +14,14 @@ import {
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
+import { QuestionPageType } from 'types/QuestionType'
 
 export function QuestionList({
   questions,
   changeQuestionPage,
 }: {
   questions?: QuestionType[]
-  changeQuestionPage: (value: string) => Promise<void>
+  changeQuestionPage: (value: QuestionPageType) => Promise<void>
 }) {
   return (
     <>

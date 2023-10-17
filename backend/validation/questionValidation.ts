@@ -10,7 +10,7 @@ export class QuestionValidator {
     const questionCreateSchema = z.object({
       title: z
         .string()
-        .min(15, { message: '※15文字以上で入力してください' })
+        .min(10, { message: '※10文字以上で入力してください' })
         .max(255, { message: '※255文字以内で入力してください' }),
       content: z.string().min(15, { message: '※15文字以上で入力してください' }),
     })

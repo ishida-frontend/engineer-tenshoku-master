@@ -5,7 +5,7 @@ import { QuestionList } from './QuestionList'
 import { QuestionType } from 'types/QuestionType'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionForm } from './QuestionForm'
-import { CreateQuestionErrorType } from '../pages/CourseDetail'
+import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
 
 export function VideoDetailAndQAndA({
   selectedVideo,
@@ -18,14 +18,14 @@ export function VideoDetailAndQAndA({
 }: {
   selectedVideo: SelectedVideo
   userId: string | undefined
-  questionPage: string
+  questionPage: QuestionPageType
   questions?: QuestionType[]
   createQuestionErrors: CreateQuestionErrorType
   createQuestion: (createQuestionParams: {
     title: string
     content: string
   }) => Promise<void>
-  changeQuestionPage: (value: string) => Promise<void>
+  changeQuestionPage: (value: QuestionPageType) => Promise<void>
 }) {
   return (
     <Tabs isFitted colorScheme={'green'}>

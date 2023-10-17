@@ -19,11 +19,7 @@ import 'react-mde/lib/styles/css/react-mde-all.css'
 import * as Showdown from 'showdown'
 import '../../styles/markdown.css'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
-
-type Errors = {
-  title?: string
-  content?: string
-}
+import { QuestionPageType } from 'types/QuestionType'
 
 type CreateQuestionErrorType = { title: string; content: string }
 
@@ -39,7 +35,7 @@ export function QuestionForm({
     title: string
     content: string
   }) => Promise<void>
-  changeQuestionPage: (value: string) => Promise<void>
+  changeQuestionPage: (value: QuestionPageType) => Promise<void>
 }) {
   const [question, setQuestion] = useState({
     title: '',

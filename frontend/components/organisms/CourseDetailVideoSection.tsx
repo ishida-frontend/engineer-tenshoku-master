@@ -16,7 +16,7 @@ import { WatchedButton } from 'components/atoms/WatchedButton'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionType } from 'types/QuestionType'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
-import { CreateQuestionErrorType } from '../pages/CourseDetail'
+import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
 
 export function CourseDetailVideoSection({
   userId,
@@ -34,7 +34,7 @@ export function CourseDetailVideoSection({
 }: {
   userId: string | undefined
   selectedVideo: SelectedVideo
-  questionPage: string
+  questionPage: QuestionPageType
   questions?: QuestionType[]
   createQuestionErrors: CreateQuestionErrorType
   isWatched: { [videoId: string]: boolean }
@@ -46,7 +46,7 @@ export function CourseDetailVideoSection({
     title: string
     content: string
   }) => Promise<void>
-  changeQuestionPage: (value: string) => Promise<void>
+  changeQuestionPage: (value: QuestionPageType) => Promise<void>
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
