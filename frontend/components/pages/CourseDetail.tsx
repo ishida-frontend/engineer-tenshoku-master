@@ -16,6 +16,7 @@ import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
+import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
 
 export type SelectedVideo = {
   id: string
@@ -37,8 +38,6 @@ export type HandleChangeVideo = (
   videoIndex: number,
 ) => void
 
-export type CreateQuestionErrorType = { title: string; content: string }
-
 export function CourseDetail({
   courseData,
   session,
@@ -58,9 +57,14 @@ export function CourseDetail({
   const [isChecked, setIsChecked] = useState<{ [key: string]: boolean }>({})
   const [isLoading, setIsLoading] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
+
+  const minTitleLength = 10
+  const maxTitleLength = 255
+  const minContentLength = 15
   const [createQuestionErrors, setCreateQuestionErrors] =
     useState<CreateQuestionErrorType>({ title: '', content: '' })
-  const [questionPage, setQuestionPage] = useState('QuestionList')
+  const [questionPage, setQuestionPage] =
+    useState<QuestionPageType>('QuestionList')
   const [videoId, setVideoId] = useState<string>(
     searchedVideoId || courseData.sections[0].videos[0].id,
   )
@@ -154,16 +158,21 @@ export function CourseDetail({
     content: string
   }) => {
     const { title, content } = createQuestionParams
-    if (title && title.length >= 15) {
+    if (title && title.length >= minTitleLength) {
       setCreateQuestionErrors((prevErrors) => ({ ...prevErrors, title: '' }))
-    } else {
+    } else if (title.length <= minTitleLength) {
       setCreateQuestionErrors((prevErrors) => ({
         ...prevErrors,
-        title: '※15文字以上入力してください',
+        title: `※${minTitleLength}文字以上入力してください`,
+      }))
+    } else if (title.length >= maxTitleLength) {
+      setCreateQuestionErrors((prevErrors) => ({
+        ...prevErrors,
+        title: `※${maxTitleLength}文字以内で入力してください`,
       }))
     }
 
-    if (content && content.length >= 15) {
+    if (content && content.length >= minContentLength) {
       setCreateQuestionErrors((prevErrors) => ({ ...prevErrors, content: '' }))
     } else {
       setCreateQuestionErrors((prevErrors) => ({
@@ -172,7 +181,11 @@ export function CourseDetail({
       }))
     }
 
-    if (title.length >= 15 && content.length >= 15) {
+    if (
+      title.length >= minTitleLength &&
+      title.length <= maxTitleLength &&
+      content.length >= minContentLength
+    ) {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/create`,
         {
@@ -210,7 +223,7 @@ export function CourseDetail({
     }
   }
 
-  const changeQuestionPage = async (value: string) => {
+  const changeQuestionPage = async (value: QuestionPageType) => {
     setQuestionPage(value)
   }
 

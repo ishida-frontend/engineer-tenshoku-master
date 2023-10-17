@@ -14,6 +14,7 @@ import {
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
+import { QuestionPageType } from 'types/QuestionType'
 import Link from 'next/link'
 
 export function QuestionList({
@@ -25,7 +26,7 @@ export function QuestionList({
   questions?: QuestionType[]
   courseId: string
   videoId: string
-  changeQuestionPage: (value: string) => Promise<void>
+  changeQuestionPage: (value: QuestionPageType) => Promise<void>
 }) {
   return (
     <>
