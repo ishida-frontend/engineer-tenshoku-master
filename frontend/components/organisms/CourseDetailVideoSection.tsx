@@ -2,7 +2,6 @@ import React from 'react'
 import {
   AspectRatio,
   Box,
-  Button,
   Card,
   CardHeader,
   HStack,
@@ -11,7 +10,7 @@ import {
   CardBody,
 } from '@chakra-ui/react'
 
-import { FavIcon } from 'components/atoms/FavIcon'
+import { FavButton } from 'components/atoms/FavButton'
 import { WatchedButton } from 'components/atoms/WatchedButton'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionType } from 'types/QuestionType'
@@ -21,21 +20,23 @@ export function CourseDetailVideoSection({
   userId,
   selectedVideo,
   questions,
-  isWatched,
-  isFavorited,
-  isLoading,
+  watchedStatus,
+  favoritedStatus,
+  loadingStates,
   handleViewingStatus,
-  handleFavIconToggle,
+  handleFavoriteVideoStatus,
   handleGetQuestions,
 }: {
   userId: string | undefined
   selectedVideo: SelectedVideo
   questions: QuestionType[] | undefined
-  isWatched: { [videoId: string]: boolean }
-  isFavorited: boolean
-  isLoading: boolean
+  watchedStatus: { [videoId: string]: boolean }
+  favoritedStatus: { [videoId: string]: boolean }
+  loadingStates: { [key: string]: boolean }
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
-  handleFavIconToggle: (event: React.MouseEvent<HTMLButtonElement>) => void
+  handleFavoriteVideoStatus: (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => void
   handleGetQuestions: (videoId: string) => void
 }) {
   return (
@@ -60,19 +61,21 @@ export function CourseDetailVideoSection({
               {userId && (
                 <>
                   <WatchedButton
-                    isWatched={
-                      isWatched?.[selectedVideo.sections.videos.id] || false
+                    watchedStatus={
+                      watchedStatus?.[selectedVideo.sections.videos.id] || false
                     }
-                    isLoading={isLoading}
+                    loadingState={loadingStates.watching}
                     handleViewingStatus={handleViewingStatus}
                   />
-                  <Button
-                    onClick={handleFavIconToggle}
-                    size="24px"
-                    variant="unstyled"
-                  >
-                    <FavIcon isFavorited={isFavorited} />
-                  </Button>
+
+                  <FavButton
+                    favoritedStatus={
+                      favoritedStatus?.[selectedVideo.sections.videos.id] ||
+                      false
+                    }
+                    loadingState={loadingStates.isFavorite}
+                    handleFavoriteVideoStatus={handleFavoriteVideoStatus}
+                  />
                 </>
               )}
             </HStack>

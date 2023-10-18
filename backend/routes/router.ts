@@ -8,6 +8,7 @@ import { ViewingStatusController } from '../controllers/viewingStatusController'
 import { VideoController } from '../controllers/videoController'
 import { QuestionController } from '../controllers/questionController'
 import { AnswerController } from '../controllers/answerController'
+import { FavoriteVideoController } from '../controllers/favoriteVideoController'
 import { UserValidator } from '../validation/userValidator'
 import { VideoValidator } from '../validation/videoValidator'
 
@@ -42,6 +43,7 @@ const questionController = new QuestionController()
 const userController = new UserController()
 const videoController = new VideoController()
 const viewingStatusController = new ViewingStatusController()
+const favoriteVideoController = new FavoriteVideoController()
 
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -149,6 +151,17 @@ viewingStatusRouter.get(
 viewingStatusRouter.get(
   '/:userId/:courseId/all',
   viewingStatusController.getViewingStatuses,
+)
+
+const favoriteVideoRouter = express.Router()
+router.use('/favoritevideo', favoriteVideoRouter)
+favoriteVideoRouter.put(
+  '/:userId/:videoId',
+  favoriteVideoController.upsertFavoriteVideo,
+)
+favoriteVideoRouter.get(
+  '/:userId/:videoId',
+  favoriteVideoController.getFavoriteVideo,
 )
 
 export default router

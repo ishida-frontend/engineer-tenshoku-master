@@ -22,12 +22,12 @@ import Link from 'next/link'
 
 export function CourseDetailAccordionMenu({
   userId,
-  isChecked,
+  checkedStatus,
   courseData,
   handleChangeVideo,
 }: {
   userId: string | undefined
-  isChecked: { [videoId: string]: boolean }
+  checkedStatus: { [videoId: string]: boolean }
   courseData: CourseWithSectionsType
   handleChangeVideo: HandleChangeVideo
 }) {
@@ -72,20 +72,23 @@ export function CourseDetailAccordionMenu({
                                 handleChangeVideo(sectionIndex, videoIndex)
                               }
                             >
-                              <CardHeader>
-                                <HStack>
-                                  {userId && (
-                                    <WatchedCheckCircle
-                                      isChecked={isChecked?.[video.id] || false}
-                                    />
-                                  )}
-                                  <Text size="sm">
-                                    {video.order}. {video.name}
-                                  </Text>
-                                </HStack>
-                              </CardHeader>
-                            </Card>
-                          </Link>
+                            <CardHeader>
+                              <HStack>
+                                {userId && (
+                                  <WatchedCheckCircle
+                                    checkedStatus={
+                                      checkedStatus?.[video.id] || false
+                                    }
+                                  />
+                                )}
+                                <Text size="sm">
+                                  {video.order}. {video.name}
+                                </Text>
+                              </HStack>
+                            </CardHeader>
+                          </Card>
+
+                          </Card>
                         )
                       })}
                   </Stack>
