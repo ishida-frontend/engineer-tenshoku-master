@@ -21,12 +21,12 @@ import { HandleChangeVideo } from '../pages/CourseDetail'
 
 export function CourseDetailAccordionMenu({
   userId,
-  isChecked,
+  checkedStatus,
   courseData,
   handleChangeVideo,
 }: {
   userId: string | undefined
-  isChecked: { [videoId: string]: boolean }
+  checkedStatus: { [videoId: string]: boolean }
   courseData: CourseDetailPropsType
   handleChangeVideo: HandleChangeVideo
 }) {
@@ -72,7 +72,9 @@ export function CourseDetailAccordionMenu({
                               <HStack>
                                 {userId && (
                                   <WatchedCheckCircle
-                                    isChecked={isChecked?.[video.id] || false}
+                                    checkedStatus={
+                                      checkedStatus?.[video.id] || false
+                                    }
                                   />
                                 )}
                                 <Text size="sm">
