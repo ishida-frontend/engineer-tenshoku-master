@@ -72,23 +72,22 @@ export function CourseDetailAccordionMenu({
                                 handleChangeVideo(sectionIndex, videoIndex)
                               }
                             >
-                            <CardHeader>
-                              <HStack>
-                                {userId && (
-                                  <WatchedCheckCircle
-                                    checkedStatus={
-                                      checkedStatus?.[video.id] || false
-                                    }
-                                  />
-                                )}
-                                <Text size="sm">
-                                  {video.order}. {video.name}
-                                </Text>
-                              </HStack>
-                            </CardHeader>
-                          </Card>
-
-                          </Card>
+                              <CardHeader>
+                                <HStack>
+                                  {userId && (
+                                    <WatchedCheckCircle
+                                      checkedStatus={
+                                        checkedStatus?.[video.id] || false
+                                      }
+                                    />
+                                  )}
+                                  <Text size="sm">
+                                    {video.order}. {video.name}
+                                  </Text>
+                                </HStack>
+                              </CardHeader>
+                            </Card>
+                          </Link>
                         )
                       })}
                   </Stack>

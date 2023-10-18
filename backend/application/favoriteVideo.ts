@@ -50,4 +50,64 @@ export class FavoriteVideoApplicationService {
       throw error
     }
   }
+
+  static async getAll({ userId }: { userId: string }) {
+    try {
+      const favoriteVideos = await prisma.course.findMany({
+        orderBy: [
+          {
+            created_at: 'asc',
+          },
+        ],
+        include: {
+          sections: {
+            orderBy: [
+              {
+                order: 'asc',
+              },
+            ],
+            include: {
+              videos: {
+                orderBy: [
+                  {
+                    order: 'asc',
+                  },
+                ],
+                where: {
+                  published: true,
+                  deleted_at: null,
+                },
+                select: {
+                  id: true,
+                  name: true,
+                  description: true,
+                  order: true,
+                  FavoriteVideo: {
+                    where: {
+                      user_id: userId,
+                      deleted_at: null,
+                    },
+                    select: {
+                      status: true,
+                    },
+                  },
+                },
+              },
+            },
+            where: {
+              published: true,
+              deleted_at: null,
+            },
+          },
+        },
+        where: {
+          published: true,
+          deleted_at: null,
+        },
+      })
+      return favoriteVideos
+    } catch (error) {
+      throw error
+    }
+  }
 }

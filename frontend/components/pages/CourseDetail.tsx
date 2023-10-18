@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Container, VStack } from '@chakra-ui/react'
 
 import {
@@ -18,7 +19,6 @@ import { QuestionType } from 'types/QuestionType'
 import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
-import { useSearchParams } from 'next/navigation'
 
 type loadingStates = {
   watching: boolean
@@ -73,9 +73,14 @@ export function CourseDetail({
 
   const [questions, setQuestions] = useState<QuestionType[]>()
 
-  const [videoId, setVideoId] = useState<string>(
-    searchedVideoId || courseData.sections[0].videos[0].id,
-  )
+  const getInitialVideoId = () => {
+    if (Array.isArray(searchedVideoId)) {
+      return searchedVideoId[0] || courseData.sections[0].videos[0].id
+    }
+    return searchedVideoId || courseData.sections[0].videos[0].id
+  }
+
+  const [videoId, setVideoId] = useState<string>(getInitialVideoId)
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo>({
     id: courseData.id,
     sections: {
@@ -90,6 +95,12 @@ export function CourseDetail({
       },
     },
   })
+  useEffect(() => {
+    const videoId = searchedVideoId
+    if (videoId) {
+      setVideoId(Array.isArray(videoId) ? videoId[0] : videoId)
+    }
+  }, [videoId])
 
   useEffect(() => {
     setLoadingStates({ watching: true, isFavorite: true })
