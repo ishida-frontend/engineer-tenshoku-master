@@ -16,10 +16,7 @@
     "readSection": "nodemon ./scripts/readSection.ts",
     "updateSection": "nodemon ./scripts/updateSection.ts",
     "deleteSection": "nodemon ./scripts/deleteSection.ts",
-    "validation": "nodemon ./scripts/validation.ts",
-    "createTag": "nodemon ./scripts/createTag.ts",
-    "readTag": "nodemon ./scripts/readTag.ts",
-    "deleteTag":"nodemon ./scripts/deleteTag.ts"
+    "validation": "nodemon ./scripts/validation.ts"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.379.1",

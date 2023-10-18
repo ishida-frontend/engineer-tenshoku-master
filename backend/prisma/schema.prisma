@@ -103,6 +103,9 @@ model Answer {
   question_id String   @db.VarChar(255)
   User        User?    @relation(fields: [userId], references: [id])
   userId      String?  @db.VarChar(255)
+  comment     String   @db.LongText
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 }
 
 model ViewingStatus {
@@ -127,7 +130,7 @@ model Tag {
   deleted_at      DateTime?
   courseId        String?     @db.VarChar(255)
   courses         Course[]
-  CourseTag       CourseTag[]
+  courseTag       CourseTag[]
 }
 
 model CourseTag {

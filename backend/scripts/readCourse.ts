@@ -26,7 +26,7 @@ export async function readAllCourses() {
         published: true,
       },
       include: {
-        courseTag: {
+        courses: {
           include: {
             tag: true,
           },
