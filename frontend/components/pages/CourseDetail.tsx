@@ -177,7 +177,7 @@ export function CourseDetail({
     } else {
       setCreateQuestionErrors((prevErrors) => ({
         ...prevErrors,
-        content: '※15文字以上入力してください',
+        content: `※${minContentLength}文字以上入力してください`,
       }))
     }
 

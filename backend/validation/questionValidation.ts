@@ -7,12 +7,23 @@ export class QuestionValidator {
     res: express.Response,
     next: express.NextFunction,
   ) => {
+    const minTitleLength = 10
+    const maxTitleLength = 255
+    const minContentLength = 15
     const questionCreateSchema = z.object({
       title: z
         .string()
-        .min(10, { message: '※10文字以上で入力してください' })
-        .max(255, { message: '※255文字以内で入力してください' }),
-      content: z.string().min(15, { message: '※15文字以上で入力してください' }),
+        .min(minTitleLength, {
+          message: `※${minTitleLength}文字以上で入力してください`,
+        })
+        .max(maxTitleLength, {
+          message: `※${maxTitleLength}文字以内で入力してください`,
+        }),
+      content: z
+        .string()
+        .min(minContentLength, {
+          message: `※${minContentLength}文字以上で入力してください`,
+        }),
     })
 
     const questionData = questionCreateSchema.safeParse(req.body)
