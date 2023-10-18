@@ -71,7 +71,7 @@ export function CourseDetail({
   const [createQuestionErrors, setCreateQuestionErrors] =
     useState<CreateQuestionErrorType>({ title: '', content: '' })
   const [questionPage, setQuestionPage] =
-    useState<QuestionPageType>('QuestionDetail')
+    useState<QuestionPageType>('QuestionList')
   const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
     {},
   )
