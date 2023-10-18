@@ -52,7 +52,7 @@ export function CourseDetail({
   session,
   questions,
 }: {
-  courseData: CourseWithSectionsType
+  courseData: () => Promise<CourseWithSectionsType>
   session: Session | null
   questions?: QuestionType[]
 }) {

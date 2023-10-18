@@ -17,7 +17,7 @@ export default async function CourseDetailPage({
   const session = await getServerSession(authOptions)
 
   try {
-    const courseData = async () => {
+    const courseData = async (): Promise<CourseWithSectionsType> => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_FRONT_API_URL}/course/${params.courseId}`,
         {
