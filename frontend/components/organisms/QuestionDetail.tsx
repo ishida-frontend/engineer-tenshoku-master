@@ -17,21 +17,24 @@ import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { QuestionPageType } from 'types/QuestionType'
 import { AnswerType } from 'types/AnswerType'
 import Link from 'next/link'
+import ReactMde from 'react-mde'
+import ReactMarkdown from 'react-markdown'
+import 'react-mde/lib/styles/css/react-mde-all.css'
+import * as Showdown from 'showdown'
+import '../../styles/answerMarkdown.css'
 
 export function QuestionDetail({
+  userId,
   answers,
-  courseId,
-  videoId,
   changeQuestionPage,
 }: {
+  userId: string | undefined
   answers?: AnswerType[]
-  courseId: string
-  videoId: string
   changeQuestionPage: (value: QuestionPageType) => Promise<void>
 }) {
   return (
     <>
-      {(answers === undefined || answers.length === 0) && (
+      {(userId === undefined || userId.length === 0) && (
         <TabPanel
           ml={'20px'}
           mr={'20px'}
@@ -40,7 +43,7 @@ export function QuestionDetail({
         >
           <VStack>
             <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
-              まだ回答はありません。
+              この質問の回答を見るにはログインをしてください。
             </Heading>
           </VStack>
           <Button
@@ -51,50 +54,74 @@ export function QuestionDetail({
           </Button>
         </TabPanel>
       )}
-      {answers !== undefined && answers.length !== 0 && (
-        <TabPanel
-          ml={'20px'}
-          mr={'20px'}
-          mt={'20px'}
-          borderTop={'1px solid gray'}
-        >
-          <Heading size="md" pb={'15px'}>
-            この動画の全ての質問
-          </Heading>
-          <Stack spacing="4">
-            {answers.map((answer: AnswerType) => (
-              <Card
-                key={answer.id}
-                boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
-                cursor={'pointer'}
-                _hover={{
-                  bg: 'gray.100',
-                }}
-              >
-                <HStack pl={'20px'}>
-                  <Avatar
-                    bg="blue.300"
-                    color="black"
-                    icon={<AiOutlineUser fontSize="2rem" />}
-                    justifyContent={'center'}
-                  />
-                  <Box pl={'15px'} pt={'10px'} pb={'10px'}>
-                    <Text fontSize="md" isTruncated>
-                      {answer.comment}
-                    </Text>
-                  </Box>
-                </HStack>
-              </Card>
-            ))}
-          </Stack>
-          <Button
+      {userId !== undefined &&
+        userId.length !== 0 &&
+        (answers === undefined || answers.length === 0) && (
+          <TabPanel
+            ml={'20px'}
+            mr={'20px'}
             mt={'20px'}
-            onClick={() => changeQuestionPage('QuestionList')}
+            borderTop={'1px solid gray'}
           >
-            全ての質問へ戻る
-          </Button>
-        </TabPanel>
-      )}
+            <VStack>
+              <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
+                まだ回答はありません。
+              </Heading>
+            </VStack>
+            <Button
+              mt={'20px'}
+              onClick={() => changeQuestionPage('QuestionList')}
+            >
+              全ての質問へ戻る
+            </Button>
+          </TabPanel>
+        )}
+      {userId !== undefined &&
+        userId.length !== 0 &&
+        answers !== undefined &&
+        answers.length !== 0 && (
+          <TabPanel
+            ml={'20px'}
+            mr={'20px'}
+            mt={'20px'}
+            borderTop={'1px solid gray'}
+          >
+            <Stack spacing="4">
+              {answers.map((answer: AnswerType) => (
+                <Card
+                  key={answer.id}
+                  boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
+                  pt={'10px'}
+                  pb={'10px'}
+                >
+                  <HStack pl={'20px'}>
+                    <Avatar
+                      bg="gray.400"
+                      color="white"
+                      icon={<AiOutlineUser fontSize="22px" />}
+                      justifyContent={'center'}
+                      size={'sm'}
+                    />
+                    <Box
+                      pl={'15px'}
+                      pt={'10px'}
+                      pb={'10px'}
+                      className="markdown"
+                    >
+                      <ReactMarkdown>{answer.comment}</ReactMarkdown>
+                    </Box>
+                  </HStack>
+                </Card>
+              ))}
+            </Stack>
+            <Button
+              mt={'20px'}
+              onClick={() => changeQuestionPage('QuestionList')}
+            >
+              全ての質問へ戻る
+            </Button>
+          </TabPanel>
+        )}
     </>
   )
 }

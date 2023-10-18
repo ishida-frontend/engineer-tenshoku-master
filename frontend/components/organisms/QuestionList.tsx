@@ -22,14 +22,21 @@ export function QuestionList({
   courseId,
   videoId,
   changeQuestionPage,
-  getAnswers,
 }: {
   questions?: QuestionType[]
   courseId: string
   videoId: string
   changeQuestionPage: (value: QuestionPageType) => Promise<void>
-  getAnswers: (value: string) => Promise<string>
 }) {
+  const changeToQuestionDetail = async (
+    event: React.MouseEventHandler<HTMLAnchorElement>,
+  ) => {
+    try {
+      await changeQuestionPage('QuestionDetail')
+    } catch (e) {
+      throw e
+    }
+  }
   return (
     <>
       {(questions === undefined || questions.length === 0) && (
@@ -64,30 +71,30 @@ export function QuestionList({
           </Heading>
           <Stack spacing="4">
             {questions.map((question: QuestionType) => (
-              <Card
-                key={question.id}
-                boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
-                cursor={'pointer'}
-                _hover={{
-                  bg: 'gray.100',
-                }}
+              <Link
+                href={`/course/${courseId}/?videoId=${videoId}&questionId=${question.id}`}
+                onClick={changeToQuestionDetail}
               >
-                <HStack pl={'20px'}>
-                  <Avatar
-                    bg="blue.300"
-                    color="black"
-                    icon={<AiOutlineUser fontSize="2rem" />}
-                    justifyContent={'center'}
-                  />
-                  <Link
-                    href={`/course/${courseId}/?videoId=${videoId}&questionId=${question.id}`}
-                  >
+                <Card
+                  key={question.id}
+                  boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
+                  cursor={'pointer'}
+                  _hover={{
+                    bg: 'gray.100',
+                  }}
+                >
+                  <HStack pl={'20px'}>
+                    <Avatar
+                      bg="blue.300"
+                      color="black"
+                      icon={<AiOutlineUser fontSize="2rem" />}
+                      justifyContent={'center'}
+                    />
                     <Box
                       overflow={'hidden'}
                       pl={'15px'}
                       pt={'10px'}
                       pb={'10px'}
-                      onClick={changenswers(question.id)}
                     >
                       <Heading pb={'10px'} size="md" isTruncated>
                         {question.title}
@@ -96,9 +103,9 @@ export function QuestionList({
                         {question.content}
                       </Text>
                     </Box>
-                  </Link>
-                </HStack>
-              </Card>
+                  </HStack>
+                </Card>
+              </Link>
             ))}
           </Stack>
           <Button

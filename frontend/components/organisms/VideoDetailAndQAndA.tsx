@@ -61,7 +61,13 @@ export function VideoDetailAndQAndA({
             changeQuestionPage={changeQuestionPage}
           />
         )}
-        {questionPage === 'QuestionDetail' && <QuestionDetail />}
+        {questionPage === 'QuestionDetail' && (
+          <QuestionDetail
+            userId={userId}
+            answers={answers}
+            changeQuestionPage={changeQuestionPage}
+          />
+        )}
       </TabPanels>
     </Tabs>
   )
