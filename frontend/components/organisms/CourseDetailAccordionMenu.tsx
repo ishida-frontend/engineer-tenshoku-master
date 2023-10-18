@@ -22,13 +22,13 @@ import Link from 'next/link'
 
 export function CourseDetailAccordionMenu({
   userId,
-  isChecked,
+  checkedStatus,
   courseData,
   handleChangeVideo,
 }: {
   userId: string | undefined
-  isChecked: { [videoId: string]: boolean }
   courseData: CourseWithSectionsType
+  checkedStatus: { [videoId: string]: boolean }
   handleChangeVideo: HandleChangeVideo
 }) {
   return (
@@ -76,7 +76,9 @@ export function CourseDetailAccordionMenu({
                                 <HStack>
                                   {userId && (
                                     <WatchedCheckCircle
-                                      isChecked={isChecked?.[video.id] || false}
+                                      checkedStatus={
+                                        checkedStatus?.[video.id] || false
+                                      }
                                     />
                                   )}
                                   <Text size="sm">

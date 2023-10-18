@@ -75,5 +75,6 @@ export const APIS = {
     },
   },
 }
+
 // TODO idなどを動的にするなら
 // 参考 https://abeshi-blog.com/blog/t8or29ad3dz
