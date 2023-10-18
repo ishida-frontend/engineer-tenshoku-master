@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { CourseListWrapper } from '../../components/pages/CourseListWrapper'
-import { CourseType } from '../../types/CourseType'
+import { CourseWithSectionsType } from '../../types/CourseType'
 import Error from '../error'
 
 export default async function Course() {
@@ -15,7 +15,7 @@ export default async function Course() {
         },
       },
     )
-    const initialCourses: CourseType[] = await res.json()
+    const initialCourses: CourseWithSectionsType[] = await res.json()
 
     return <CourseListWrapper initialCourses={initialCourses} />
   } catch (e) {

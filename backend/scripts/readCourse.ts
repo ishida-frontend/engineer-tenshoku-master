@@ -23,6 +23,40 @@ export async function readAllCourses() {
       deleted_at: null,
       published: true,
     },
+    orderBy: [
+      {
+        created_at: 'asc',
+      },
+    ],
+    include: {
+      sections: {
+        where: {
+          published: true,
+          deleted_at: null,
+        },
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
+        select: {
+          videos: {
+            where: {
+              published: true,
+              deleted_at: null,
+            },
+            select: {
+              id: true,
+            },
+            orderBy: [
+              {
+                order: 'asc',
+              },
+            ],
+          },
+        },
+      },
+    },
   })
   return courses
 }
@@ -81,6 +115,40 @@ export async function getSearchedCourses({ text }: { text: string }) {
         published: true,
         name: {
           contains: text,
+        },
+      },
+      orderBy: [
+        {
+          created_at: 'asc',
+        },
+      ],
+      include: {
+        sections: {
+          where: {
+            published: true,
+            deleted_at: null,
+          },
+          orderBy: [
+            {
+              order: 'asc',
+            },
+          ],
+          select: {
+            videos: {
+              where: {
+                published: true,
+                deleted_at: null,
+              },
+              select: {
+                id: true,
+              },
+              orderBy: [
+                {
+                  order: 'asc',
+                },
+              ],
+            },
+          },
         },
       },
     })

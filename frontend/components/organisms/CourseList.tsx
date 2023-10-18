@@ -6,7 +6,6 @@ import {
   CardHeader,
   Center,
   Flex,
-  HStack,
   Heading,
   Image,
   Input,
@@ -19,13 +18,13 @@ import {
 } from '@chakra-ui/react'
 import { BsChevronRight } from 'react-icons/bs'
 
-import { CourseType } from '../../types'
+import { CourseWithSectionsType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { SearchIcon } from '@chakra-ui/icons'
 
 type CourseListProps = {
-  courses: CourseType[]
+  courses: CourseWithSectionsType[]
   handleTextChange: (event: any) => void
 }
 
@@ -89,7 +88,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
               spacingY="10"
               minW={'100%'}
             >
-              {courses.map((course: CourseType) => (
+              {courses.map((course: CourseWithSectionsType) => (
                 <Card
                   key={course.id}
                   w="288px"
@@ -122,7 +121,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                     </Text>
                     <Flex justify="flex-end">
                       <Link
-                        href={`/course/${course.id}`}
+                        href={`/course/${course.id}/?videoId=${course.sections[0].videos[0].id}`}
                         mt="2"
                         color={PRIMARY_FONT_COLOR}
                         _hover={{ textDecoration: 'none' }}

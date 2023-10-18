@@ -9,17 +9,12 @@ import {
 } from '../../app/api/course/[courseId]/viewingStatus'
 import { CourseDetailVideoSection } from '../organisms/CourseDetailVideoSection'
 import { CourseDetailAccordionMenu } from '../organisms/CourseDetailAccordionMenu'
-import { CourseType } from '../../types/CourseType'
-import { SectionType } from '../../types/SectionType'
-import { VideoType } from '../../types/VideoType'
+import { CourseWithSectionsType } from '../../types/CourseType'
 import { QuestionType } from 'types/QuestionType'
 import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
-
-export type CourseDetailPropsType = CourseType & {
-  sections: (SectionType & { videos: VideoType[] })[]
-}
+import { useSearchParams } from 'next/navigation'
 
 export type SelectedVideo = {
   id: string
@@ -45,11 +40,13 @@ export function CourseDetail({
   courseData,
   session,
 }: {
-  courseData: CourseDetailPropsType
+  courseData: CourseWithSectionsType
   session: Session | null
 }) {
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
+  const searchParams = useSearchParams()
+  const searchedVideoId = searchParams.get('videoId')
 
   const [isWatched, setIsWatched] = useState<{ [key: string]: boolean }>({})
   const [isChecked, setIsChecked] = useState<{ [key: string]: boolean }>({})
@@ -57,7 +54,7 @@ export function CourseDetail({
   const [isFavorited, setIsFavorited] = useState(false)
   const [questions, setQuestions] = useState<QuestionType[]>()
   const [videoId, setVideoId] = useState<string>(
-    courseData.sections[0].videos[0].id,
+    searchedVideoId || courseData.sections[0].videos[0].id,
   )
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo>({
     id: courseData.id,
