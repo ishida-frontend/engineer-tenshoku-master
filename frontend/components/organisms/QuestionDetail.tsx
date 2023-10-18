@@ -15,24 +15,23 @@ import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { QuestionPageType } from 'types/QuestionType'
+import { AnswerType } from 'types/AnswerType'
 import Link from 'next/link'
 
-export function QuestionList({
-  questions,
+export function QuestionDetail({
+  answers,
   courseId,
   videoId,
   changeQuestionPage,
-  getAnswers,
 }: {
-  questions?: QuestionType[]
+  answers?: AnswerType[]
   courseId: string
   videoId: string
   changeQuestionPage: (value: QuestionPageType) => Promise<void>
-  getAnswers: (value: string) => Promise<string>
 }) {
   return (
     <>
-      {(questions === undefined || questions.length === 0) && (
+      {(answers === undefined || answers.length === 0) && (
         <TabPanel
           ml={'20px'}
           mr={'20px'}
@@ -41,18 +40,18 @@ export function QuestionList({
         >
           <VStack>
             <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
-              まだ質問はありません。
+              まだ回答はありません。
             </Heading>
           </VStack>
           <Button
             mt={'20px'}
-            onClick={() => changeQuestionPage('QuestionForm')}
+            onClick={() => changeQuestionPage('QuestionList')}
           >
-            新しく質問する
+            全ての質問へ戻る
           </Button>
         </TabPanel>
       )}
-      {questions !== undefined && questions.length !== 0 && (
+      {answers !== undefined && answers.length !== 0 && (
         <TabPanel
           ml={'20px'}
           mr={'20px'}
@@ -63,9 +62,9 @@ export function QuestionList({
             この動画の全ての質問
           </Heading>
           <Stack spacing="4">
-            {questions.map((question: QuestionType) => (
+            {answers.map((answer: AnswerType) => (
               <Card
-                key={question.id}
+                key={answer.id}
                 boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
                 cursor={'pointer'}
                 _hover={{
@@ -79,33 +78,20 @@ export function QuestionList({
                     icon={<AiOutlineUser fontSize="2rem" />}
                     justifyContent={'center'}
                   />
-                  <Link
-                    href={`/course/${courseId}/?videoId=${videoId}&questionId=${question.id}`}
-                  >
-                    <Box
-                      overflow={'hidden'}
-                      pl={'15px'}
-                      pt={'10px'}
-                      pb={'10px'}
-                      onClick={changenswers(question.id)}
-                    >
-                      <Heading pb={'10px'} size="md" isTruncated>
-                        {question.title}
-                      </Heading>
-                      <Text fontSize="md" isTruncated>
-                        {question.content}
-                      </Text>
-                    </Box>
-                  </Link>
+                  <Box pl={'15px'} pt={'10px'} pb={'10px'}>
+                    <Text fontSize="md" isTruncated>
+                      {answer.comment}
+                    </Text>
+                  </Box>
                 </HStack>
               </Card>
             ))}
           </Stack>
           <Button
             mt={'20px'}
-            onClick={() => changeQuestionPage('QuestionForm')}
+            onClick={() => changeQuestionPage('QuestionList')}
           >
-            新しく質問する
+            全ての質問へ戻る
           </Button>
         </TabPanel>
       )}

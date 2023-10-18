@@ -16,6 +16,7 @@ import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionType } from 'types/QuestionType'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
 import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
+import { AnswerType } from 'types/AnswerType'
 
 export function CourseDetailVideoSection({
   userId,
@@ -30,6 +31,7 @@ export function CourseDetailVideoSection({
   handleFavoriteVideoStatus,
   createQuestion,
   changeQuestionPage,
+  answers,
 }: {
   userId: string | undefined
   selectedVideo: SelectedVideo
@@ -48,6 +50,7 @@ export function CourseDetailVideoSection({
   handleFavoriteVideoStatus: (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => void
+  answers: AnswerType[]
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -99,6 +102,7 @@ export function CourseDetailVideoSection({
               createQuestionErrors={createQuestionErrors}
               createQuestion={createQuestion}
               changeQuestionPage={changeQuestionPage}
+              answers={answers}
             />
           </CardBody>
         </Card>

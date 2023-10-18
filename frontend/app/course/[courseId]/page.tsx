@@ -4,7 +4,7 @@ import { authOptions } from '../../api/auth/[...nextauth]/route'
 
 import { CourseDetail } from '../../../components/pages/CourseDetail'
 import { QuestionType } from 'types/QuestionType'
-import { CourseWithSectionsType } from '../../../types/CourseType'
+import { AnswerType } from 'types/AnswerType'
 import Error from '../../error'
 
 export default async function CourseDetailPage({
@@ -12,7 +12,7 @@ export default async function CourseDetailPage({
   searchParams,
 }: {
   params: { courseId: string }
-  searchParams: { videoId: string }
+  searchParams: { videoId: string; questionId: string }
 }) {
   const session = await getServerSession(authOptions)
 
@@ -41,11 +41,23 @@ export default async function CourseDetailPage({
     )
     const questions: QuestionType[] = await getQuestionsData.json()
 
+    const getAnswersData = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/answer/${searchParams.questionId}`,
+      {
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    const answers: AnswerType[] = await getAnswersData.json()
+
     return (
       <CourseDetail
         courseData={courseData}
         session={session}
         questions={questions}
+        answers={answers}
       />
     )
   } catch (e) {

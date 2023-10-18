@@ -21,6 +21,7 @@ import { useCustomToast } from 'hooks/useCustomToast'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
+import { AnswerType } from 'types/AnswerType'
 
 type loadingStates = {
   watching: boolean
@@ -51,10 +52,12 @@ export function CourseDetail({
   courseData,
   session,
   questions,
+  answers,
 }: {
   courseData: CourseWithSectionsType
   session: Session | null
   questions?: QuestionType[]
+  answers: AnswerType[]
 }) {
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
@@ -300,6 +303,7 @@ export function CourseDetail({
             favoritedStatus={favoritedStatus}
             loadingStates={loadingStates}
             handleFavoriteVideoStatus={handleFavoriteVideoStatus}
+            answers={answers}
           />
         </Container>
       </Container>

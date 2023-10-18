@@ -6,6 +6,7 @@ import { QuestionType } from 'types/QuestionType'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionForm } from './QuestionForm'
 import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
+import { AnswerType } from 'types/AnswerType'
 
 export function VideoDetailAndQAndA({
   selectedVideo,
@@ -15,6 +16,7 @@ export function VideoDetailAndQAndA({
   createQuestionErrors,
   createQuestion,
   changeQuestionPage,
+  answers,
 }: {
   selectedVideo: SelectedVideo
   userId: string | undefined
@@ -26,6 +28,7 @@ export function VideoDetailAndQAndA({
     content: string
   }) => Promise<void>
   changeQuestionPage: (value: QuestionPageType) => Promise<void>
+  answers: AnswerType[]
 }) {
   return (
     <Tabs isFitted colorScheme={'green'}>
@@ -57,6 +60,7 @@ export function VideoDetailAndQAndA({
             changeQuestionPage={changeQuestionPage}
           />
         )}
+        {questionPage === 'QuestionDetail' && <AnswerDetail />}
       </TabPanels>
     </Tabs>
   )
