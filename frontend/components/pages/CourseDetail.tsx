@@ -62,11 +62,6 @@ export function CourseDetail({
   const searchParams = useSearchParams()
   const searchedVideoId = searchParams.get('videoId')
 
-  // const [isWatched, setIsWatched] = useState<{ [key: string]: boolean }>({})
-  // const [isChecked, setIsChecked] = useState<{ [key: string]: boolean }>({})
-  // const [isLoading, setIsLoading] = useState(false)
-  // const [isFavorited, setIsFavorited] = useState(false)
-
   const minTitleLength = 10
   const maxTitleLength = 255
   const minContentLength = 15
