@@ -17,18 +17,15 @@ export default async function CourseDetailPage({
   const session = await getServerSession(authOptions)
 
   try {
-    const courseData = async (): Promise<CourseWithSectionsType> => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_FRONT_API_URL}/course/${params.courseId}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
+    const getCourseData = await fetch(
+      `${process.env.NEXT_PUBLIC_FRONT_API_URL}/course/${params.courseId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
         },
-      )
-      return res.json()
-      // const getCourseData = res.json()
-    }
+      },
+    )
+    const courseData: CourseWithSectionsType = await getCourseData.json()
 
     const getQuestionsData = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${searchParams.videoId}`,
