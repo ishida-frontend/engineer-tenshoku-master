@@ -25,10 +25,14 @@ import '../../styles/answerMarkdown.css'
 
 export function QuestionDetail({
   userId,
+  courseId,
+  videoId,
   answers,
   changeQuestionPage,
 }: {
   userId: string | undefined
+  courseId: string
+  videoId: string
   answers?: AnswerType[]
   changeQuestionPage: (value: QuestionPageType) => Promise<void>
 }) {
@@ -91,17 +95,31 @@ export function QuestionDetail({
                 <Card
                   key={answer.id}
                   boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
-                  pt={'10px'}
-                  pb={'10px'}
                 >
-                  <HStack pl={'20px'}>
-                    <Avatar
-                      bg="gray.400"
-                      color="white"
-                      icon={<AiOutlineUser fontSize="22px" />}
-                      justifyContent={'center'}
-                      size={'sm'}
-                    />
+                  <HStack>
+                    <VStack>
+                      <Box
+                        minHeight={'100%'}
+                        bg={'rgba(0, 0, 0, 0.04)'}
+                        pt={'10px'}
+                        pb={'10px'}
+                        pl={'9px'}
+                        pr={'9px'}
+                      >
+                        <Avatar
+                          bg="gray.400"
+                          color="white"
+                          icon={<AiOutlineUser fontSize="22px" />}
+                          justifyContent={'center'}
+                          size={'sm'}
+                        />
+                        {userId !== answer.user_id && (
+                          <Text color={PRIMARY_FONT_COLOR} fontSize={'14px'}>
+                            講師
+                          </Text>
+                        )}
+                      </Box>
+                    </VStack>
                     <Box
                       pl={'15px'}
                       pt={'10px'}
@@ -114,12 +132,14 @@ export function QuestionDetail({
                 </Card>
               ))}
             </Stack>
-            <Button
-              mt={'20px'}
-              onClick={() => changeQuestionPage('QuestionList')}
-            >
-              全ての質問へ戻る
-            </Button>
+            <Link href={`/course/${courseId}/?videoId=${videoId}`}>
+              <Button
+                mt={'20px'}
+                onClick={() => changeQuestionPage('QuestionList')}
+              >
+                全ての質問へ戻る
+              </Button>
+            </Link>
           </TabPanel>
         )}
     </>

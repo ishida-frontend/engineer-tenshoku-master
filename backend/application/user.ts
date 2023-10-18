@@ -29,6 +29,17 @@ export class UserApplicationService {
     }
   }
 
+  static async getRole() {
+    try {
+      const user = await prisma.user.findMany({
+        where: { role: 'ADMIN' },
+      })
+      return user
+    } catch (error) {
+      throw error
+    }
+  }
+
   static async update(params: {
     id: string
     name: string

@@ -64,6 +64,8 @@ export function VideoDetailAndQAndA({
         {questionPage === 'QuestionDetail' && (
           <QuestionDetail
             userId={userId}
+            courseId={selectedVideo.id}
+            videoId={selectedVideo.sections.videos.id}
             answers={answers}
             changeQuestionPage={changeQuestionPage}
           />

@@ -89,6 +89,9 @@ router.use('/user', userRouter)
 userRouter.get('/:id', (req, res) => {
   userController.get(req, res)
 })
+userRouter.get('/role', (req, res) => {
+  userController.getRole(req, res)
+})
 userRouter.put('/:id', userValidator.update, (req, res) => {
   userController.update(req, res)
 })
