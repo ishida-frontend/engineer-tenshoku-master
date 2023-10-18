@@ -2,6 +2,7 @@ import React from 'react'
 import { Tab, Tabs, TabList, TabPanel, TabPanels, Box } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown'
 import { QuestionList } from './QuestionList'
+import { QuestionDetail } from './QuestionDetail'
 import { QuestionType } from 'types/QuestionType'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionForm } from './QuestionForm'
@@ -60,7 +61,7 @@ export function VideoDetailAndQAndA({
             changeQuestionPage={changeQuestionPage}
           />
         )}
-        {questionPage === 'QuestionDetail' && <AnswerDetail />}
+        {questionPage === 'QuestionDetail' && <QuestionDetail />}
       </TabPanels>
     </Tabs>
   )
