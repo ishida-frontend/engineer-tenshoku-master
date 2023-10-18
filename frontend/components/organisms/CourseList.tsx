@@ -121,7 +121,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                     </Text>
                     <Flex justify="flex-end">
                       <Link
-                        href={`/course/${course.id}/?videoId=${course.sections[0].videos[0].id}`}
+                        href={`/course/${course.id}?videoId=${course.sections[0].videos[0].id}`}
                         mt="2"
                         color={PRIMARY_FONT_COLOR}
                         _hover={{ textDecoration: 'none' }}
