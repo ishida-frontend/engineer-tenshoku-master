@@ -50,11 +50,6 @@ export default async function CourseDetailPage({
     )
     const answers: AnswerType[] = await getAnswersData.json()
 
-    const selectedQuestion = questions.filter((question) => {
-      question.id = searchParams.questionId
-    })
-    console.log('selectedQuestion:', selectedQuestion)
-
     return (
       <CourseDetail
         courseData={courseData}

@@ -55,7 +55,7 @@ export function CourseDetailVideoSection({
   ) => void
   answers: AnswerType[]
   session: Session | null
-  questionId?: string | null
+  questionId?: string
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>

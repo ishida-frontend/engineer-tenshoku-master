@@ -105,6 +105,16 @@ export function CourseDetail({
       },
     },
   })
+  const [selectedQuestion, setSelectedQuestion] = useState<QuestionType>()
+
+  useEffect(() => {
+    if (questions) {
+      const questionData = questions.find((question) => {
+        question.id === questionId
+      })
+      setSelectedQuestion(questionData)
+    }
+  }, [questionId, questions])
 
   useEffect(() => {
     setLoadingStates({ watching: true, isFavorite: true })
@@ -277,9 +287,6 @@ export function CourseDetail({
     setQuestionPage(value)
   }
 
-  const selectedQuestion = questions?.filter((question) => {
-    question.id === questionId
-  })
   console.log('questions:', questions)
   console.log('questionId:', questionId)
   console.log('selectedQuestion:', selectedQuestion)
