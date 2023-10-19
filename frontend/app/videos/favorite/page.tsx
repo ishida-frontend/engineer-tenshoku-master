@@ -10,10 +10,10 @@ import Error from 'app/error'
 export default async function FavoriteVideos() {
   try {
     const session = await getServerSession(authOptions)
-    const userId = await getUser(session?.user.id)
+    const user = await getUser(session?.user.id)
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/favoritevideo/${userId}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/favoritevideo/${user.id}`,
       {
         cache: 'no-cache',
         headers: {

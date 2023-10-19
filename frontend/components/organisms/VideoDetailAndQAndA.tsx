@@ -10,7 +10,7 @@ export function VideoDetailAndQAndA({
   questions,
   handleGetQuestions,
 }: {
-  selectedVideo: SelectedVideo
+  selectedVideo: SelectedVideo | null
   questions: QuestionType[] | undefined
   handleGetQuestions: (videoId: string) => void
 }) {
@@ -19,7 +19,11 @@ export function VideoDetailAndQAndA({
       <TabList>
         <Tab>レッスン内容</Tab>
         <Tab
-          onClick={() => handleGetQuestions(selectedVideo.sections.videos.id)}
+          onClick={() => {
+            if (selectedVideo) {
+              handleGetQuestions(selectedVideo.sections.videos.id)
+            }
+          }}
         >
           質問と回答
         </Tab>
@@ -28,7 +32,7 @@ export function VideoDetailAndQAndA({
         <TabPanel>
           <Box className="markdown" paddingLeft={'30px'} paddingRight={'30px'}>
             <ReactMarkdown>
-              {selectedVideo.sections.videos.description}
+              {selectedVideo?.sections.videos.description}
             </ReactMarkdown>
           </Box>
         </TabPanel>

@@ -34,7 +34,7 @@ export class FavoriteVideoController {
 
   getFavoriteVideos = async (req: express.Request, res: express.Response) => {
     try {
-      const { userId, videoId } = req.params
+      const { userId } = req.params
       const favoriteVideos = await FavoriteVideoApplicationService.getAll({
         userId,
       })

@@ -84,6 +84,7 @@ export class FavoriteVideoApplicationService {
                   order: true,
                   FavoriteVideo: {
                     where: {
+                      status: true,
                       user_id: userId,
                       deleted_at: null,
                     },

@@ -59,8 +59,7 @@ export function CourseDetailAccordionMenu({
                       section.videos.map((video, videoIndex) => {
                         return (
                           <Link
-                            key={video.id}
-                            href={`/course/${courseData.id}?videoId=${video.id}`}
+                            href={`/course/${courseData.id}/?videoId=${video.id}`}
                           >
                             <Card
                               key={video.id}
