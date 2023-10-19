@@ -21,7 +21,7 @@ import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
 import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
-import { AnswerType } from 'types/AnswerType'
+import { AnswerType, CreateAnswerErrorType } from 'types/AnswerType'
 
 type loadingStates = {
   watching: boolean
@@ -70,8 +70,11 @@ export function CourseDetail({
   const minTitleLength = 10
   const maxTitleLength = 255
   const minContentLength = 15
+  const minCommentLength = 5
   const [createQuestionErrors, setCreateQuestionErrors] =
     useState<CreateQuestionErrorType>({ title: '', content: '' })
+  const [createAnswerErrors, setCreateAnswerErrors] =
+    useState<CreateAnswerErrorType>({ comment: '' })
   const [questionPage, setQuestionPage] =
     useState<QuestionPageType>('QuestionList')
   const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
@@ -98,19 +101,14 @@ export function CourseDetail({
     try {
       if (questions) {
         const questionData = questions.find((question) => {
-          console.log('question.id:', question.id)
-          console.log('questionId:', questionId)
-          console.log('question.id === questionId:', question.id === questionId)
-          question.id === questionId
+          return question.id === questionId
         })
-        console.log('questionData:', questionData)
-        return setSelectedQuestion(questionData)
+        setSelectedQuestion(questionData)
       }
     } catch (error) {
       throw error
     }
   }, [questionId, questions])
-  console.log('selectedQuestion:', selectedQuestion)
 
   useEffect(() => {
     const section = courseData.sections.find((currentSection) =>
@@ -310,13 +308,33 @@ export function CourseDetail({
     }
   }
 
+  const createAnswer = async (createAnswerParams: { comment: string }) => {
+    const { comment } = createAnswerParams
+    console.log('createAnswerParams:', createAnswerParams)
+    console.log('questionId:', questionId)
+    console.log('userId:', userId)
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/answer/create`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          question_id: selectedQuestion?.id,
+          user_id: session?.user.id,
+          comment,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    if (response.status === 200) {
+      router.refresh()
+    }
+  }
+
   const changeQuestionPage = async (value: QuestionPageType) => {
     setQuestionPage(value)
   }
-
-  console.log('questions:', questions)
-  console.log('questionId:', questionId)
-  console.log('selectedQuestion:', selectedQuestion)
 
   return (
     <VStack minH={'100vh'} bg={'gray.100'}>
@@ -350,7 +368,7 @@ export function CourseDetail({
             session={session}
             questionId={questionId}
             selectedQuestion={selectedQuestion}
-            // createAnswer={createAnswer}
+            createAnswer={createAnswer}
           />
         </Container>
       </Container>

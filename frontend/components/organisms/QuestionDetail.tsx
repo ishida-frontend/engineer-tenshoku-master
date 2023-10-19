@@ -13,6 +13,7 @@ import {
   FormControl,
   Container,
   Flex,
+  FormErrorMessage,
 } from '@chakra-ui/react'
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
@@ -36,8 +37,9 @@ export function QuestionDetail({
   session,
   questionId,
   questions,
-} // createAnswer
-: {
+  selectedQuestion,
+  createAnswer,
+}: {
   userId: string | undefined
   courseId?: string
   videoId?: string
@@ -46,16 +48,13 @@ export function QuestionDetail({
   session: Session | null
   questionId?: string
   questions?: QuestionType[]
-  // createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
+  selectedQuestion?: QuestionType
+  createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
 }) {
-  // const [newAnswer, setNewAnswer] = useState({
-  //   comment: '',
-  // })
-  const [answerComment, setAnswerComment] = useState<string>()
+  const [answerComment, setAnswerComment] = useState<string>('')
 
   const commentChange = (value: string) => {
     setAnswerComment(value)
-    // setNewAnswer({ ...newAnswer, comment: value })
   }
 
   const converter = new Showdown.Converter({
@@ -69,25 +68,16 @@ export function QuestionDetail({
     'write' | 'preview'
   >('write')
 
-  const submitAnswer = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
-    event.preventDefault()
+  const submitAnswer = async () => {
     try {
-      // await createAnswer({
-      //   comment: answerComment,
-      // })
+      await createAnswer({
+        comment: answerComment,
+      })
     } catch (e) {
       throw e
     }
   }
 
-  // const questionData = questions?.find((question) => {
-  //   question.id === questionId
-  // })
-  // console.log('questions:', questions)
-  // console.log('questionId:', questionId)
-  // console.log('questionData:', questionData)
   return (
     <>
       <TabPanel
@@ -96,29 +86,32 @@ export function QuestionDetail({
         mt={'20px'}
         borderTop={'1px solid gray'}
       >
-        {/* {questionData && (
+        {selectedQuestion && (
           <Card
-            key={questionData.id}
+            key={selectedQuestion.id}
             boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
+            mb={'15px'}
           >
-            <HStack pl={'20px'}>
-              <Avatar
-                bg="blue.300"
-                color="black"
-                icon={<AiOutlineUser fontSize="2rem" />}
-                justifyContent={'center'}
-              />
-              <Box overflow={'hidden'} pl={'15px'} pt={'10px'} pb={'10px'}>
-                <Heading pb={'10px'} size="md" isTruncated>
-                  {questionData.title}
+            <HStack>
+              <Box pt={'10px'} pb={'10px'} pl={'9px'} pr={'9px'}>
+                <Avatar
+                  bg="gray.400"
+                  color="white"
+                  icon={<AiOutlineUser fontSize="22px" />}
+                  justifyContent={'center'}
+                  size={'sm'}
+                />
+              </Box>
+
+              <Box pl={'15px'} pt={'10px'} pb={'10px'}>
+                <Heading pb={'10px'} size="md">
+                  {selectedQuestion.title}
                 </Heading>
-                <Text fontSize="md" isTruncated>
-                  {questionData.content}
-                </Text>
+                <Text fontSize="md">{selectedQuestion.content}</Text>
               </Box>
             </HStack>
           </Card>
-        )} */}
+        )}
         {(userId === undefined || userId.length === 0) && (
           <VStack>
             <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
@@ -159,28 +152,38 @@ export function QuestionDetail({
                 >
                   <HStack>
                     <VStack>
-                      <Box
-                        minHeight={'100%'}
-                        bg={'rgba(0, 0, 0, 0.04)'}
-                        pt={'10px'}
-                        pb={'10px'}
-                        pl={'9px'}
-                        pr={'9px'}
-                      >
-                        <Avatar
-                          bg="gray.400"
-                          color="white"
-                          icon={<AiOutlineUser fontSize="22px" />}
-                          justifyContent={'center'}
-                          size={'sm'}
-                        />
-                        {session?.user.id !== answer.user_id &&
-                          session?.user.isAdmin === true && (
-                            <Text color={PRIMARY_FONT_COLOR} fontSize={'14px'}>
-                              講師
-                            </Text>
-                          )}
-                      </Box>
+                      {answer.user_id !== selectedQuestion?.user_id && (
+                        <Box
+                          minHeight={'100%'}
+                          bg={'rgba(0, 0, 0, 0.04)'}
+                          pt={'10px'}
+                          pb={'10px'}
+                          pl={'9px'}
+                          pr={'9px'}
+                        >
+                          <Avatar
+                            bg="gray.400"
+                            color="white"
+                            icon={<AiOutlineUser fontSize="22px" />}
+                            justifyContent={'center'}
+                            size={'sm'}
+                          />
+                          <Text color={PRIMARY_FONT_COLOR} fontSize={'14px'}>
+                            講師
+                          </Text>
+                        </Box>
+                      )}
+                      {answer.user_id === selectedQuestion?.user_id && (
+                        <Box pt={'10px'} pb={'10px'} pl={'9px'} pr={'9px'}>
+                          <Avatar
+                            bg="gray.400"
+                            color="white"
+                            icon={<AiOutlineUser fontSize="22px" />}
+                            justifyContent={'center'}
+                            size={'sm'}
+                          />
+                        </Box>
+                      )}
                     </VStack>
                     <Box
                       pl={'15px'}
@@ -201,60 +204,64 @@ export function QuestionDetail({
                   全ての質問へ戻る
                 </Button>
               </Link>
-              <FormControl mt={'40px'}>
-                <FormControl
-                  isInvalid={!!answerComment}
-                  mb={'20px'}
-                  bg={'white'}
-                >
-                  <Container ml={'0px'} pb={'10px'} pl={'0px'}>
-                    <Text fontWeight={'bold'}>コメント内容</Text>
-                  </Container>
-                  <Box display={'flex'} justifyContent={'space-between'}>
-                    <Box w={'50%'} mr={'5'}>
-                      <ReactMde
-                        maxEditorHeight={250}
-                        value={answerComment}
-                        onChange={commentChange}
-                        selectedTab={selectedEditorTab}
-                        onTabChange={setSelectedEditorTab}
-                        generateMarkdownPreview={(markdown) =>
-                          Promise.resolve(converter.makeHtml(markdown))
-                        }
-                        toolbarCommands={[
-                          ['header', 'bold', 'italic'],
-                          ['link', 'quote', 'code'],
-                          ['unordered-list', 'ordered-list'],
-                        ]}
-                      />
-                    </Box>
-                    <Box
-                      w={'50%'}
-                      maxH={'250px'}
-                      overflow={'scroll'}
+              {session &&
+                (session.user.isAdmin === true ||
+                  selectedQuestion?.user_id === session.user.id) && (
+                  <FormControl mt={'40px'}>
+                    <FormControl
+                      isInvalid={!!answerComment}
+                      mb={'20px'}
                       bg={'white'}
-                      border={'1px solid gray'}
-                      borderRadius={'4px'}
-                      paddingLeft={'28px'}
-                      paddingRight={'20px'}
-                      className="markdown"
                     >
-                      <ReactMarkdown>{answerComment}</ReactMarkdown>
-                    </Box>
-                  </Box>
-                </FormControl>
+                      <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                        <Text fontWeight={'bold'}>コメント内容</Text>
+                      </Container>
+                      <Box display={'flex'} justifyContent={'space-between'}>
+                        <Box w={'50%'} mr={'5'}>
+                          <ReactMde
+                            maxEditorHeight={250}
+                            value={answerComment}
+                            onChange={commentChange}
+                            selectedTab={selectedEditorTab}
+                            onTabChange={setSelectedEditorTab}
+                            generateMarkdownPreview={(markdown) =>
+                              Promise.resolve(converter.makeHtml(markdown))
+                            }
+                            toolbarCommands={[
+                              ['header', 'bold', 'italic'],
+                              ['link', 'quote', 'code'],
+                              ['unordered-list', 'ordered-list'],
+                            ]}
+                          />
+                        </Box>
+                        <Box
+                          w={'50%'}
+                          maxH={'250px'}
+                          overflow={'scroll'}
+                          bg={'white'}
+                          border={'1px solid gray'}
+                          borderRadius={'4px'}
+                          paddingLeft={'28px'}
+                          paddingRight={'20px'}
+                          className="markdown"
+                        >
+                          <ReactMarkdown>{answerComment}</ReactMarkdown>
+                        </Box>
+                      </Box>
+                    </FormControl>
 
-                <VStack>
-                  <Button
-                    onClick={submitAnswer}
-                    m={'10px 0'}
-                    w={'100%'}
-                    colorScheme="teal"
-                  >
-                    コメントする
-                  </Button>
-                </VStack>
-              </FormControl>
+                    <VStack>
+                      <Button
+                        onClick={submitAnswer}
+                        m={'10px 0'}
+                        w={'100%'}
+                        colorScheme="teal"
+                      >
+                        コメントする
+                      </Button>
+                    </VStack>
+                  </FormControl>
+                )}
             </Stack>
           )}
       </TabPanel>
