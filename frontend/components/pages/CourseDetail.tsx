@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Container, VStack } from '@chakra-ui/react'
 
 import {
@@ -19,8 +20,6 @@ import { QuestionType } from 'types/QuestionType'
 import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
-import { useSearchParams } from 'next/navigation'
-import { useRouter } from 'next/navigation'
 import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
 
 type loadingStates = {
@@ -271,7 +270,7 @@ export function CourseDetail({
         router.refresh()
         await setQuestionPage('QuestionList')
       } else if (result.errors) {
-        result.errors[0].map((error) => {
+        result.errors[0].map((error: any) => {
           if (error.path[0] === 'title') {
             setCreateQuestionErrors((prevErrors) => ({
               ...prevErrors,
