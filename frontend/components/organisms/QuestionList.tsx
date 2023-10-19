@@ -24,8 +24,8 @@ export function QuestionList({
   changeQuestionPage,
 }: {
   questions?: QuestionType[]
-  courseId: string
-  videoId: string
+  courseId?: string
+  videoId?: string
   changeQuestionPage: (value: QuestionPageType) => Promise<void>
 }) {
   const changeToQuestionDetail = async (

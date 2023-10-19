@@ -35,8 +35,8 @@ export function QuestionDetail({
   questions,
 }: {
   userId: string | undefined
-  courseId: string
-  videoId: string
+  courseId?: string
+  videoId?: string
   answers?: AnswerType[]
   changeQuestionPage: (value: QuestionPageType) => Promise<void>
   session: Session | null

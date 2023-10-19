@@ -92,6 +92,7 @@ export function CourseDetail({
     searchedVideoId || courseData.sections[0].videos[0].id,
   )
   const [selectedQuestion, setSelectedQuestion] = useState<QuestionType>()
+  const [selectedVideo, setSelectedVideo] = useState<SelectedVideo | null>(null)
 
   useEffect(() => {
     if (questions) {
@@ -101,8 +102,6 @@ export function CourseDetail({
       setSelectedQuestion(questionData)
     }
   }, [questionId, questions])
-
-  const [selectedVideo, setSelectedVideo] = useState<SelectedVideo | null>(null)
 
   useEffect(() => {
     const section = courseData.sections.find((currentSection) =>
