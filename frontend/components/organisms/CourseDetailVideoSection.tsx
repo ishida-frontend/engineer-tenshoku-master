@@ -32,7 +32,7 @@ export function CourseDetailVideoSection({
   changeQuestionPage,
 }: {
   userId: string | undefined
-  selectedVideo: SelectedVideo
+  selectedVideo: SelectedVideo | null
   questionPage: QuestionPageType
   questions: QuestionType[] | undefined
   createQuestionErrors: CreateQuestionErrorType
@@ -54,7 +54,7 @@ export function CourseDetailVideoSection({
       <AspectRatio ratio={16 / 9}>
         <iframe
           title="selectedVideo"
-          src={selectedVideo.sections.videos.url}
+          src={selectedVideo?.sections.videos.url}
           allowFullScreen
         />
       </AspectRatio>
@@ -63,12 +63,12 @@ export function CourseDetailVideoSection({
           <CardHeader>
             <HStack fontSize={'xl'}>
               <Text color={'teal.400'} fontWeight={'bold'}>
-                SECTION {selectedVideo.sections.order}
+                SECTION {selectedVideo?.sections.order}
               </Text>
-              <Text pl={'40px'}>{selectedVideo.sections.videos.order}.</Text>
-              <Text pl={'3px'}>{selectedVideo.sections.videos.name}</Text>
+              <Text pl={'40px'}>{selectedVideo?.sections.videos.order}.</Text>
+              <Text pl={'3px'}>{selectedVideo?.sections.videos.name}</Text>
               <Spacer />
-              {userId && (
+              {userId && selectedVideo && (
                 <>
                   <WatchedButton
                     watchedStatus={

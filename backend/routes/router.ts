@@ -166,5 +166,6 @@ favoriteVideoRouter.get(
   '/:userId/:videoId',
   favoriteVideoController.getFavoriteVideo,
 )
+favoriteVideoRouter.get('/:userId', favoriteVideoController.getFavoriteVideos)
 
 export default router

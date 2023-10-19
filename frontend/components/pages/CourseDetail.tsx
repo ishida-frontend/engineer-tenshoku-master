@@ -1,5 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Container, VStack } from '@chakra-ui/react'
 
 import {
@@ -18,8 +20,6 @@ import { QuestionType } from 'types/QuestionType'
 import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
-import { useSearchParams } from 'next/navigation'
-import { useRouter } from 'next/navigation'
 import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
 
 type loadingStates = {
@@ -86,20 +86,39 @@ export function CourseDetail({
   const [videoId, setVideoId] = useState<string>(
     searchedVideoId || courseData.sections[0].videos[0].id,
   )
-  const [selectedVideo, setSelectedVideo] = useState<SelectedVideo>({
-    id: courseData.id,
-    sections: {
-      id: courseData.sections[0].id,
-      order: courseData.sections[0].order,
-      videos: {
-        id: courseData.sections[0].videos[0].id,
-        order: courseData.sections[0].videos[0].order,
-        name: courseData.sections[0].videos[0].name,
-        description: courseData.sections[0].videos[0].description,
-        url: courseData.sections[0].videos[0].url,
-      },
-    },
-  })
+
+  const [selectedVideo, setSelectedVideo] = useState<SelectedVideo | null>(null)
+
+  useEffect(() => {
+    const section = courseData.sections.find((currentSection) =>
+      currentSection.videos.some((video) => video.id === searchedVideoId),
+    )
+
+    const video = section
+      ? section.videos.find((video) => video.id === searchedVideoId)
+      : null
+
+    if (video && section) {
+      const selectedVideoData = {
+        id: courseData.id,
+        sections: {
+          id: section.id,
+          order: section.order,
+          videos: {
+            id: video.id,
+            order: video.order,
+            name: video.name,
+            description: video.description,
+            url: video.url,
+          },
+        },
+      }
+      setSelectedVideo(selectedVideoData)
+      setVideoId(video.id)
+    } else {
+      showErrorToast('該当の動画が見つかりませんでした')
+    }
+  }, [searchedVideoId, courseData])
 
   useEffect(() => {
     setLoadingStates({ watching: true, isFavorite: true })
@@ -251,7 +270,7 @@ export function CourseDetail({
         router.refresh()
         await setQuestionPage('QuestionList')
       } else if (result.errors) {
-        result.errors[0].map((error) => {
+        result.errors[0].map((error: any) => {
           if (error.path[0] === 'title') {
             setCreateQuestionErrors((prevErrors) => ({
               ...prevErrors,
