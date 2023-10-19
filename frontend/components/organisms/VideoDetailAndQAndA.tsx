@@ -4,25 +4,34 @@ import ReactMarkdown from 'react-markdown'
 import { QuestionList } from './QuestionList'
 import { QuestionType } from 'types/QuestionType'
 import { SelectedVideo } from '../pages/CourseDetail'
+import { QuestionForm } from './QuestionForm'
+import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
 
 export function VideoDetailAndQAndA({
   selectedVideo,
+  userId,
+  questionPage,
   questions,
-  handleGetQuestions,
+  createQuestionErrors,
+  createQuestion,
+  changeQuestionPage,
 }: {
   selectedVideo: SelectedVideo
-  questions: QuestionType[] | undefined
-  handleGetQuestions: (videoId: string) => void
+  userId: string | undefined
+  questionPage: QuestionPageType
+  questions?: QuestionType[]
+  createQuestionErrors: CreateQuestionErrorType
+  createQuestion: (createQuestionParams: {
+    title: string
+    content: string
+  }) => Promise<void>
+  changeQuestionPage: (value: QuestionPageType) => Promise<void>
 }) {
   return (
     <Tabs isFitted colorScheme={'green'}>
       <TabList>
         <Tab>レッスン内容</Tab>
-        <Tab
-          onClick={() => handleGetQuestions(selectedVideo.sections.videos.id)}
-        >
-          質問と回答
-        </Tab>
+        <Tab>質問と回答</Tab>
       </TabList>
       <TabPanels>
         <TabPanel>
@@ -32,7 +41,20 @@ export function VideoDetailAndQAndA({
             </ReactMarkdown>
           </Box>
         </TabPanel>
-        <QuestionList questions={questions} />
+        {questionPage === 'QuestionList' && (
+          <QuestionList
+            questions={questions}
+            changeQuestionPage={changeQuestionPage}
+          />
+        )}
+        {questionPage === 'QuestionForm' && (
+          <QuestionForm
+            userId={userId}
+            createQuestionErrors={createQuestionErrors}
+            createQuestion={createQuestion}
+            changeQuestionPage={changeQuestionPage}
+          />
+        )}
       </TabPanels>
     </Tabs>
   )

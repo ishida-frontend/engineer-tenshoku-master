@@ -20,25 +20,15 @@ export async function readCourse(id: string) {
 export async function readAllCourses() {
   const courses = await prisma.course.findMany({
     where: {
-      deleted_at: null,
       published: true,
+      deleted_at: null,
     },
-    orderBy: [
-      {
-        created_at: 'asc',
-      },
-    ],
     include: {
       sections: {
         where: {
           published: true,
           deleted_at: null,
         },
-        orderBy: [
-          {
-            order: 'asc',
-          },
-        ],
         select: {
           videos: {
             where: {
@@ -55,8 +45,18 @@ export async function readAllCourses() {
             ],
           },
         },
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
       },
     },
+    orderBy: [
+      {
+        created_at: 'asc',
+      },
+    ],
   })
   return courses
 }

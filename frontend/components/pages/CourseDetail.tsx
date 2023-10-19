@@ -19,6 +19,8 @@ import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
 import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
 
 type loadingStates = {
   watching: boolean
@@ -48,15 +50,25 @@ export type HandleChangeVideo = (
 export function CourseDetail({
   courseData,
   session,
+  questions,
 }: {
   courseData: CourseWithSectionsType
   session: Session | null
+  questions?: QuestionType[]
 }) {
+  const router = useRouter()
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
   const searchParams = useSearchParams()
   const searchedVideoId = searchParams.get('videoId')
 
+  const minTitleLength = 10
+  const maxTitleLength = 255
+  const minContentLength = 15
+  const [createQuestionErrors, setCreateQuestionErrors] =
+    useState<CreateQuestionErrorType>({ title: '', content: '' })
+  const [questionPage, setQuestionPage] =
+    useState<QuestionPageType>('QuestionList')
   const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
     {},
   )
@@ -70,8 +82,6 @@ export function CourseDetail({
     watching: false,
     isFavorite: false,
   })
-
-  const [questions, setQuestions] = useState<QuestionType[]>()
 
   const [videoId, setVideoId] = useState<string>(
     searchedVideoId || courseData.sections[0].videos[0].id,
@@ -188,18 +198,78 @@ export function CourseDetail({
     }
   }
 
-  const handleGetQuestions = async (videoId: string) => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${videoId}`,
-      {
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
+  const createQuestion = async (createQuestionParams: {
+    title: string
+    content: string
+  }) => {
+    const { title, content } = createQuestionParams
+    if (title && title.length >= minTitleLength) {
+      setCreateQuestionErrors((prevErrors) => ({ ...prevErrors, title: '' }))
+    } else if (title.length <= minTitleLength) {
+      setCreateQuestionErrors((prevErrors) => ({
+        ...prevErrors,
+        title: `※${minTitleLength}文字以上入力してください`,
+      }))
+    } else if (title.length >= maxTitleLength) {
+      setCreateQuestionErrors((prevErrors) => ({
+        ...prevErrors,
+        title: `※${maxTitleLength}文字以内で入力してください`,
+      }))
+    }
+
+    if (content && content.length >= minContentLength) {
+      setCreateQuestionErrors((prevErrors) => ({ ...prevErrors, content: '' }))
+    } else {
+      setCreateQuestionErrors((prevErrors) => ({
+        ...prevErrors,
+        content: `※${minContentLength}文字以上入力してください`,
+      }))
+    }
+
+    if (
+      title.length >= minTitleLength &&
+      title.length <= maxTitleLength &&
+      content.length >= minContentLength
+    ) {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/create`,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            title,
+            content,
+            video_id: videoId,
+            user_id: userId,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      },
-    )
-    const getQuestions: QuestionType[] = await res.json()
-    setQuestions(getQuestions)
+      )
+      const result = await response.json()
+      if (response.status === 200) {
+        router.refresh()
+        await setQuestionPage('QuestionList')
+      } else if (result.errors) {
+        result.errors[0].map((error) => {
+          if (error.path[0] === 'title') {
+            setCreateQuestionErrors((prevErrors) => ({
+              ...prevErrors,
+              title: error.message,
+            }))
+          } else if (error.path[0] === 'content') {
+            setCreateQuestionErrors((prevErrors) => ({
+              ...prevErrors,
+              content: error.message,
+            }))
+          }
+        })
+      }
+    }
+  }
+
+  const changeQuestionPage = async (value: QuestionPageType) => {
+    setQuestionPage(value)
   }
 
   return (
@@ -220,13 +290,16 @@ export function CourseDetail({
           <CourseDetailVideoSection
             userId={userId}
             selectedVideo={selectedVideo}
+            questionPage={questionPage}
+            changeQuestionPage={changeQuestionPage}
             questions={questions}
+            createQuestion={createQuestion}
+            createQuestionErrors={createQuestionErrors}
+            handleViewingStatus={handleViewingStatus}
             watchedStatus={watchedStatus}
             favoritedStatus={favoritedStatus}
             loadingStates={loadingStates}
-            handleViewingStatus={handleViewingStatus}
             handleFavoriteVideoStatus={handleFavoriteVideoStatus}
-            handleGetQuestions={handleGetQuestions}
           />
         </Container>
       </Container>

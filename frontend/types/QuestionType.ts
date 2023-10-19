@@ -6,3 +6,6 @@ export type QuestionType = {
   content: string
   created_at: string
 }
+export type QuestionPageType = 'QuestionList' | 'QuestionForm'
+
+export type CreateQuestionErrorType = { title: string; content: string }
