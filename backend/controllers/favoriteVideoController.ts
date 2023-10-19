@@ -31,4 +31,17 @@ export class FavoriteVideoController {
       throw error
     }
   }
+
+  getFavoriteVideos = async (req: express.Request, res: express.Response) => {
+    try {
+      const { userId } = req.params
+      const favoriteVideos = await FavoriteVideoApplicationService.getAll({
+        userId,
+      })
+      res.status(200).json(favoriteVideos)
+    } catch (error) {
+      res.status(500)
+      throw error
+    }
+  }
 }

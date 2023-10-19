@@ -46,7 +46,7 @@ export function VideoDetailAndQAndA({
         <TabPanel>
           <Box className="markdown" paddingLeft={'30px'} paddingRight={'30px'}>
             <ReactMarkdown>
-              {selectedVideo.sections.videos.description}
+              {selectedVideo?.sections.videos.description}
             </ReactMarkdown>
           </Box>
         </TabPanel>
