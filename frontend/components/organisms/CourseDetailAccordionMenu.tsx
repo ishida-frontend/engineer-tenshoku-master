@@ -16,8 +16,9 @@ import {
 } from '@chakra-ui/react'
 
 import { WatchedCheckCircle } from 'components/atoms/WatchedCheckCircle'
-import { CourseDetailPropsType } from '../pages/CourseDetail'
+import { CourseWithSectionsType } from '../../types/CourseType'
 import { HandleChangeVideo } from '../pages/CourseDetail'
+import Link from 'next/link'
 
 export function CourseDetailAccordionMenu({
   userId,
@@ -26,8 +27,8 @@ export function CourseDetailAccordionMenu({
   handleChangeVideo,
 }: {
   userId: string | undefined
+  courseData: CourseWithSectionsType
   checkedStatus: { [videoId: string]: boolean }
-  courseData: CourseDetailPropsType
   handleChangeVideo: HandleChangeVideo
 }) {
   return (
@@ -57,32 +58,36 @@ export function CourseDetailAccordionMenu({
                     {section.videos &&
                       section.videos.map((video, videoIndex) => {
                         return (
-                          <Card
-                            key={video.id}
-                            boxShadow={'rgba(0, 0, 0, 0.24) 0px 3px 3px;'}
-                            cursor={'pointer'}
-                            _hover={{
-                              bg: 'transparent',
-                            }}
-                            onClick={() =>
-                              handleChangeVideo(sectionIndex, videoIndex)
-                            }
+                          <Link
+                            href={`/course/${courseData.id}/?videoId=${video.id}`}
                           >
-                            <CardHeader>
-                              <HStack>
-                                {userId && (
-                                  <WatchedCheckCircle
-                                    checkedStatus={
-                                      checkedStatus?.[video.id] || false
-                                    }
-                                  />
-                                )}
-                                <Text size="sm">
-                                  {video.order}. {video.name}
-                                </Text>
-                              </HStack>
-                            </CardHeader>
-                          </Card>
+                            <Card
+                              key={video.id}
+                              boxShadow={'rgba(0, 0, 0, 0.24) 0px 3px 3px;'}
+                              cursor={'pointer'}
+                              _hover={{
+                                bg: 'transparent',
+                              }}
+                              onClick={() =>
+                                handleChangeVideo(sectionIndex, videoIndex)
+                              }
+                            >
+                              <CardHeader>
+                                <HStack>
+                                  {userId && (
+                                    <WatchedCheckCircle
+                                      checkedStatus={
+                                        checkedStatus?.[video.id] || false
+                                      }
+                                    />
+                                  )}
+                                  <Text size="sm">
+                                    {video.order}. {video.name}
+                                  </Text>
+                                </HStack>
+                              </CardHeader>
+                            </Card>
+                          </Link>
                         )
                       })}
                   </Stack>

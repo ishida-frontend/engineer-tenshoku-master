@@ -3,14 +3,8 @@ import { getServerSession } from 'next-auth/next'
 import { authOptions } from '../../api/auth/[...nextauth]/route'
 
 import { CourseDetail } from '../../../components/pages/CourseDetail'
-import { CourseType } from '../../../types/CourseType'
-import { SectionType } from '../../../types/SectionType'
-import { VideoType } from '../../../types/VideoType'
+import { CourseWithSectionsType } from '../../../types/CourseType'
 import Error from '../../error'
-
-type CourseDetailPropsType = CourseType & {
-  sections: (SectionType & { videos: VideoType[] })[]
-}
 
 export default async function CourseDetailPage({
   params,
@@ -28,7 +22,7 @@ export default async function CourseDetailPage({
         },
       },
     )
-    const courseData: CourseDetailPropsType = await res.json()
+    const courseData: CourseWithSectionsType = await res.json()
 
     return <CourseDetail courseData={courseData} session={session} />
   } catch (e) {

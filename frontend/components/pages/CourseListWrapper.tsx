@@ -2,16 +2,17 @@
 import React, { useState } from 'react'
 
 import { CourseList } from '../organisms/CourseList'
-import { CourseType } from '../../types/CourseType'
+import { CourseWithSectionsType } from '../../types/CourseType'
 import Error from '../../app/error'
 
 export function CourseListWrapper({
   initialCourses,
 }: {
-  initialCourses: CourseType[]
+  initialCourses: CourseWithSectionsType[]
 }) {
   try {
-    const [courses, setCourses] = useState<CourseType[]>(initialCourses)
+    const [courses, setCourses] =
+      useState<CourseWithSectionsType[]>(initialCourses)
 
     const handleTextChange = async (newText: string) => {
       if (newText) {
@@ -27,7 +28,7 @@ export function CourseListWrapper({
             },
           },
         )
-        const searchedCourses: CourseType[] = await res.json()
+        const searchedCourses: CourseWithSectionsType[] = await res.json()
         setCourses(searchedCourses)
       } else {
         const res = await fetch(
@@ -39,7 +40,7 @@ export function CourseListWrapper({
             },
           },
         )
-        const allCourses: CourseType[] = await res.json()
+        const allCourses: CourseWithSectionsType[] = await res.json()
         setCourses(allCourses)
       }
     }
