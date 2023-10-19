@@ -83,7 +83,7 @@ export function CourseDetailVideoSection({
                       favoritedStatus?.[selectedVideo.sections.videos.id] ||
                       false
                     }
-                    loadingState={loadingStates.favoriting}
+                    loadingState={loadingStates.isFavorite}
                     handleFavoriteVideoStatus={handleFavoriteVideoStatus}
                   />
                 </>
