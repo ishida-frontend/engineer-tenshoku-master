@@ -27,8 +27,8 @@ export function CourseDetailAccordionMenu({
   handleChangeVideo,
 }: {
   userId: string | undefined
-  checkedStatus: { [videoId: string]: boolean }
   courseData: CourseWithSectionsType
+  checkedStatus: { [videoId: string]: boolean }
   handleChangeVideo: HandleChangeVideo
 }) {
   return (

@@ -15,29 +15,39 @@ import { WatchedButton } from 'components/atoms/WatchedButton'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionType } from 'types/QuestionType'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
+import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
 
 export function CourseDetailVideoSection({
   userId,
   selectedVideo,
+  questionPage,
   questions,
+  createQuestionErrors,
   watchedStatus,
   favoritedStatus,
   loadingStates,
   handleViewingStatus,
   handleFavoriteVideoStatus,
-  handleGetQuestions,
+  createQuestion,
+  changeQuestionPage,
 }: {
   userId: string | undefined
   selectedVideo: SelectedVideo | null
+  questionPage: QuestionPageType
   questions: QuestionType[] | undefined
+  createQuestionErrors: CreateQuestionErrorType
   watchedStatus: { [videoId: string]: boolean }
   favoritedStatus: { [videoId: string]: boolean }
   loadingStates: { [key: string]: boolean }
+  createQuestion: (createQuestionParams: {
+    title: string
+    content: string
+  }) => Promise<void>
+  changeQuestionPage: (value: QuestionPageType) => Promise<void>
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
   handleFavoriteVideoStatus: (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => void
-  handleGetQuestions: (videoId: string) => void
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -83,8 +93,12 @@ export function CourseDetailVideoSection({
           <CardBody bg={'white'} pl={'0px'} pr={'0px'}>
             <VideoDetailAndQAndA
               selectedVideo={selectedVideo}
+              userId={userId}
+              questionPage={questionPage}
               questions={questions}
-              handleGetQuestions={handleGetQuestions}
+              createQuestionErrors={createQuestionErrors}
+              createQuestion={createQuestion}
+              changeQuestionPage={changeQuestionPage}
             />
           </CardBody>
         </Card>

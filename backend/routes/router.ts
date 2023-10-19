@@ -7,6 +7,7 @@ import { UserController } from '../controllers/userController'
 import { ViewingStatusController } from '../controllers/viewingStatusController'
 import { VideoController } from '../controllers/videoController'
 import { QuestionController } from '../controllers/questionController'
+import { QuestionValidator } from '../validation/questionValidation'
 import { AnswerController } from '../controllers/answerController'
 import { FavoriteVideoController } from '../controllers/favoriteVideoController'
 import { UserValidator } from '../validation/userValidator'
@@ -37,11 +38,11 @@ const router = express.Router()
 
 const userValidator = new UserValidator()
 const videoValidator = new VideoValidator()
-
-const answerController = new AnswerController()
-const questionController = new QuestionController()
-const userController = new UserController()
 const videoController = new VideoController()
+const questionValidatior = new QuestionValidator()
+const questionController = new QuestionController()
+const answerController = new AnswerController()
+const userController = new UserController()
 const viewingStatusController = new ViewingStatusController()
 const favoriteVideoController = new FavoriteVideoController()
 
@@ -118,9 +119,11 @@ contactRouter.post(
 
 const questionRouter = express.Router()
 router.use('/question', questionRouter)
-questionRouter.post('/create', (req, res) => {
-  questionController.create(req, res)
-})
+questionRouter.post(
+  '/create',
+  questionValidatior.create,
+  questionController.create,
+)
 questionRouter.get('/:video_id', (req, res) => {
   questionController.get(req, res)
 })

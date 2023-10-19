@@ -14,8 +14,15 @@ import {
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
+import { QuestionPageType } from 'types/QuestionType'
 
-export function QuestionList({ questions }: { questions?: QuestionType[] }) {
+export function QuestionList({
+  questions,
+  changeQuestionPage,
+}: {
+  questions?: QuestionType[]
+  changeQuestionPage: (value: QuestionPageType) => Promise<void>
+}) {
   return (
     <>
       {(questions === undefined || questions.length === 0) && (
@@ -30,7 +37,12 @@ export function QuestionList({ questions }: { questions?: QuestionType[] }) {
               まだ質問はありません。
             </Heading>
           </VStack>
-          <Button mt={'20px'}>新しく質問する</Button>
+          <Button
+            mt={'20px'}
+            onClick={() => changeQuestionPage('QuestionForm')}
+          >
+            新しく質問する
+          </Button>
         </TabPanel>
       )}
       {questions !== undefined && questions.length !== 0 && (
@@ -61,12 +73,7 @@ export function QuestionList({ questions }: { questions?: QuestionType[] }) {
                     justifyContent={'center'}
                   />
                   <Box overflow={'hidden'} pl={'15px'} pt={'10px'} pb={'10px'}>
-                    <Heading
-                      pb={'10px'}
-                      size="md"
-                      textTransform="uppercase"
-                      isTruncated
-                    >
+                    <Heading pb={'10px'} size="md" isTruncated>
                       {question.title}
                     </Heading>
                     <Text fontSize="md" isTruncated>
@@ -77,7 +84,12 @@ export function QuestionList({ questions }: { questions?: QuestionType[] }) {
               </Card>
             ))}
           </Stack>
-          <Button mt={'20px'}>新しく質問する</Button>
+          <Button
+            mt={'20px'}
+            onClick={() => changeQuestionPage('QuestionForm')}
+          >
+            新しく質問する
+          </Button>
         </TabPanel>
       )}
     </>
