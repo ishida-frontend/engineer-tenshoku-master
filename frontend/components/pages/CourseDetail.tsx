@@ -95,18 +95,22 @@ export function CourseDetail({
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo | null>(null)
 
   useEffect(() => {
-    if (questions) {
-      const questionData = questions.find((question) => {
-        console.log('question.id:', question.id)
-        console.log('questionId:', questionId)
-        console.log('question.id === questionId:', question.id === questionId)
-        question.id === questionId
-      })
-      setSelectedQuestion(questionData)
-      // console.log('questionData:', questionData)
+    try {
+      if (questions) {
+        const questionData = questions.find((question) => {
+          console.log('question.id:', question.id)
+          console.log('questionId:', questionId)
+          console.log('question.id === questionId:', question.id === questionId)
+          question.id === questionId
+        })
+        console.log('questionData:', questionData)
+        return setSelectedQuestion(questionData)
+      }
+    } catch (error) {
+      throw error
     }
   }, [questionId, questions])
-  // console.log('selectedQuestion:', selectedQuestion)
+  console.log('selectedQuestion:', selectedQuestion)
 
   useEffect(() => {
     const section = courseData.sections.find((currentSection) =>
@@ -346,6 +350,7 @@ export function CourseDetail({
             session={session}
             questionId={questionId}
             selectedQuestion={selectedQuestion}
+            // createAnswer={createAnswer}
           />
         </Container>
       </Container>

@@ -36,7 +36,8 @@ export function CourseDetailVideoSection({
   session,
   questionId,
   selectedQuestion,
-}: {
+} // createAnswer,
+: {
   userId: string | undefined
   selectedVideo: SelectedVideo | null
   questionPage: QuestionPageType
@@ -58,6 +59,7 @@ export function CourseDetailVideoSection({
   session: Session | null
   questionId?: string
   selectedQuestion?: QuestionType
+  // createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
 }) {
   console.log('selectedQuestion:', selectedQuestion)
   return (
@@ -113,6 +115,7 @@ export function CourseDetailVideoSection({
               answers={answers}
               session={session}
               questionId={questionId}
+              // createAnswer={createAnswer}
             />
           </CardBody>
         </Card>

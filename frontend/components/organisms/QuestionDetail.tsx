@@ -36,7 +36,8 @@ export function QuestionDetail({
   session,
   questionId,
   questions,
-}: {
+} // createAnswer
+: {
   userId: string | undefined
   courseId?: string
   videoId?: string
@@ -45,7 +46,7 @@ export function QuestionDetail({
   session: Session | null
   questionId?: string
   questions?: QuestionType[]
-  createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
+  // createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
 }) {
   // const [newAnswer, setNewAnswer] = useState({
   //   comment: '',
@@ -73,9 +74,9 @@ export function QuestionDetail({
   ) => {
     event.preventDefault()
     try {
-      await createAnswer({
-        comment: answerComment,
-      })
+      // await createAnswer({
+      //   comment: answerComment,
+      // })
     } catch (e) {
       throw e
     }

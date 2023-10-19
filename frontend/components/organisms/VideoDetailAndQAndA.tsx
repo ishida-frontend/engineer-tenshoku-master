@@ -21,7 +21,8 @@ export function VideoDetailAndQAndA({
   answers,
   session,
   questionId,
-}: {
+} // createAnswer,
+: {
   selectedVideo: SelectedVideo | null
   userId: string | undefined
   questionPage: QuestionPageType
@@ -35,6 +36,7 @@ export function VideoDetailAndQAndA({
   answers: AnswerType[]
   session: Session | null
   questionId?: string
+  // createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
 }) {
   return (
     <Tabs isFitted colorScheme={'green'}>
@@ -76,6 +78,7 @@ export function VideoDetailAndQAndA({
             session={session}
             questionId={questionId}
             questions={questions}
+            // createAnswer={createAnswer}
           />
         )}
       </TabPanels>
