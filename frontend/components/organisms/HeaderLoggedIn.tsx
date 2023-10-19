@@ -107,7 +107,7 @@ export function HeaderLoggedIn({ user, signOut }: HeaderLoggedInType) {
                     text="プロフィール"
                   />
                   <MenuLinkItem
-                    path={`${PATHS.FAVORITE_VIDEO.path}`}
+                    path={`${PATHS.VIDEO.FAVORITE.path}`}
                     icon={<AiOutlineStar />}
                     text="お気に入り動画"
                   />

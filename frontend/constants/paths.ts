@@ -29,9 +29,11 @@ export const PATHS = {
     path: '/profile',
     title: 'プロフィール',
   },
-  FAVORITE_VIDEO: {
-    path: '/videos/favorite',
-    title: 'プロフィール',
+  VIDEO: {
+    FAVORITE: {
+      path: '/videos/favorite',
+      title: 'お気に入り動画一覧',
+    },
   },
   ADMIN: {
     COURSE: {
