@@ -97,6 +97,9 @@ export function CourseDetail({
   useEffect(() => {
     if (questions) {
       const questionData = questions.find((question) => {
+        console.log('question.id:', question.id)
+        console.log('questionId:', questionId)
+        console.log('question.id === questionId:', question.id === questionId)
         question.id === questionId
       })
       setSelectedQuestion(questionData)

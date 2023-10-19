@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   Button,
@@ -10,6 +10,9 @@ import {
   Stack,
   Avatar,
   VStack,
+  FormControl,
+  Container,
+  Flex,
 } from '@chakra-ui/react'
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
@@ -42,7 +45,42 @@ export function QuestionDetail({
   session: Session | null
   questionId?: string
   questions?: QuestionType[]
+  createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
 }) {
+  // const [newAnswer, setNewAnswer] = useState({
+  //   comment: '',
+  // })
+  const [answerComment, setAnswerComment] = useState<string>()
+
+  const commentChange = (value: string) => {
+    setAnswerComment(value)
+    // setNewAnswer({ ...newAnswer, comment: value })
+  }
+
+  const converter = new Showdown.Converter({
+    tables: true,
+    simplifiedAutoLink: true,
+    strikethrough: true,
+    tasklists: true,
+  })
+
+  const [selectedEditorTab, setSelectedEditorTab] = useState<
+    'write' | 'preview'
+  >('write')
+
+  const submitAnswer = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.preventDefault()
+    try {
+      await createAnswer({
+        comment: answerComment,
+      })
+    } catch (e) {
+      throw e
+    }
+  }
+
   // const questionData = questions?.find((question) => {
   //   question.id === questionId
   // })
@@ -162,6 +200,60 @@ export function QuestionDetail({
                   全ての質問へ戻る
                 </Button>
               </Link>
+              <FormControl mt={'40px'}>
+                <FormControl
+                  isInvalid={!!answerComment}
+                  mb={'20px'}
+                  bg={'white'}
+                >
+                  <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                    <Text fontWeight={'bold'}>コメント内容</Text>
+                  </Container>
+                  <Box display={'flex'} justifyContent={'space-between'}>
+                    <Box w={'50%'} mr={'5'}>
+                      <ReactMde
+                        maxEditorHeight={250}
+                        value={answerComment}
+                        onChange={commentChange}
+                        selectedTab={selectedEditorTab}
+                        onTabChange={setSelectedEditorTab}
+                        generateMarkdownPreview={(markdown) =>
+                          Promise.resolve(converter.makeHtml(markdown))
+                        }
+                        toolbarCommands={[
+                          ['header', 'bold', 'italic'],
+                          ['link', 'quote', 'code'],
+                          ['unordered-list', 'ordered-list'],
+                        ]}
+                      />
+                    </Box>
+                    <Box
+                      w={'50%'}
+                      maxH={'250px'}
+                      overflow={'scroll'}
+                      bg={'white'}
+                      border={'1px solid gray'}
+                      borderRadius={'4px'}
+                      paddingLeft={'28px'}
+                      paddingRight={'20px'}
+                      className="markdown"
+                    >
+                      <ReactMarkdown>{answerComment}</ReactMarkdown>
+                    </Box>
+                  </Box>
+                </FormControl>
+
+                <VStack>
+                  <Button
+                    onClick={submitAnswer}
+                    m={'10px 0'}
+                    w={'100%'}
+                    colorScheme="teal"
+                  >
+                    コメントする
+                  </Button>
+                </VStack>
+              </FormControl>
             </Stack>
           )}
       </TabPanel>
