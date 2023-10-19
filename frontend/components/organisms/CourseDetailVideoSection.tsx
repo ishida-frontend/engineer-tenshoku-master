@@ -35,6 +35,7 @@ export function CourseDetailVideoSection({
   answers,
   session,
   questionId,
+  selectedQuestion,
 }: {
   userId: string | undefined
   selectedVideo: SelectedVideo | null
@@ -56,7 +57,9 @@ export function CourseDetailVideoSection({
   answers: AnswerType[]
   session: Session | null
   questionId?: string
+  selectedQuestion?: QuestionType
 }) {
+  console.log('selectedQuestion:', selectedQuestion)
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
       <AspectRatio ratio={16 / 9}>

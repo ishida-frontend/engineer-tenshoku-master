@@ -103,8 +103,10 @@ export function CourseDetail({
         question.id === questionId
       })
       setSelectedQuestion(questionData)
+      // console.log('questionData:', questionData)
     }
   }, [questionId, questions])
+  // console.log('selectedQuestion:', selectedQuestion)
 
   useEffect(() => {
     const section = courseData.sections.find((currentSection) =>
@@ -343,6 +345,7 @@ export function CourseDetail({
             answers={answers}
             session={session}
             questionId={questionId}
+            selectedQuestion={selectedQuestion}
           />
         </Container>
       </Container>
