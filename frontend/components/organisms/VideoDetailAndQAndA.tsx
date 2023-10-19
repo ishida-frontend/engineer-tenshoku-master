@@ -8,6 +8,7 @@ import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionForm } from './QuestionForm'
 import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
 import { AnswerType } from 'types/AnswerType'
+import { Session } from 'next-auth'
 
 export function VideoDetailAndQAndA({
   selectedVideo,
@@ -18,6 +19,8 @@ export function VideoDetailAndQAndA({
   createQuestion,
   changeQuestionPage,
   answers,
+  session,
+  questionId,
 }: {
   selectedVideo: SelectedVideo
   userId: string | undefined
@@ -30,6 +33,8 @@ export function VideoDetailAndQAndA({
   }) => Promise<void>
   changeQuestionPage: (value: QuestionPageType) => Promise<void>
   answers: AnswerType[]
+  session: Session | null
+  questionId?: string
 }) {
   return (
     <Tabs isFitted colorScheme={'green'}>
@@ -68,6 +73,9 @@ export function VideoDetailAndQAndA({
             videoId={selectedVideo.sections.videos.id}
             answers={answers}
             changeQuestionPage={changeQuestionPage}
+            session={session}
+            questionId={questionId}
+            questions={questions}
           />
         )}
       </TabPanels>

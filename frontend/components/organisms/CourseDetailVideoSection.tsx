@@ -17,6 +17,7 @@ import { QuestionType } from 'types/QuestionType'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
 import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
 import { AnswerType } from 'types/AnswerType'
+import { Session } from 'next-auth'
 
 export function CourseDetailVideoSection({
   userId,
@@ -32,6 +33,8 @@ export function CourseDetailVideoSection({
   createQuestion,
   changeQuestionPage,
   answers,
+  session,
+  questionId,
 }: {
   userId: string | undefined
   selectedVideo: SelectedVideo
@@ -51,6 +54,8 @@ export function CourseDetailVideoSection({
     event: React.MouseEvent<HTMLButtonElement>,
   ) => void
   answers: AnswerType[]
+  session: Session | null
+  questionId?: string | null
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -103,6 +108,8 @@ export function CourseDetailVideoSection({
               createQuestion={createQuestion}
               changeQuestionPage={changeQuestionPage}
               answers={answers}
+              session={session}
+              questionId={questionId}
             />
           </CardBody>
         </Card>

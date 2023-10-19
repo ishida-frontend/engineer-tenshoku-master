@@ -53,11 +53,13 @@ export function CourseDetail({
   session,
   questions,
   answers,
+  questionId,
 }: {
   courseData: CourseWithSectionsType
   session: Session | null
   questions?: QuestionType[]
   answers: AnswerType[]
+  questionId?: string
 }) {
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
@@ -275,6 +277,13 @@ export function CourseDetail({
     setQuestionPage(value)
   }
 
+  const selectedQuestion = questions?.filter((question) => {
+    question.id === questionId
+  })
+  console.log('questions:', questions)
+  console.log('questionId:', questionId)
+  console.log('selectedQuestion:', selectedQuestion)
+
   return (
     <VStack minH={'100vh'} bg={'gray.100'}>
       <Container minWidth={'100%'} padding={'0px'} bg={'white'}>
@@ -304,6 +313,8 @@ export function CourseDetail({
             loadingStates={loadingStates}
             handleFavoriteVideoStatus={handleFavoriteVideoStatus}
             answers={answers}
+            session={session}
+            questionId={questionId}
           />
         </Container>
       </Container>

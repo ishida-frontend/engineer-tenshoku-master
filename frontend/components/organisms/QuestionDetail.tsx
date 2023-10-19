@@ -22,6 +22,7 @@ import ReactMarkdown from 'react-markdown'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import * as Showdown from 'showdown'
 import '../../styles/answerMarkdown.css'
+import { Session } from 'next-auth'
 
 export function QuestionDetail({
   userId,
@@ -29,67 +30,88 @@ export function QuestionDetail({
   videoId,
   answers,
   changeQuestionPage,
+  session,
+  questionId,
+  questions,
 }: {
   userId: string | undefined
   courseId: string
   videoId: string
   answers?: AnswerType[]
   changeQuestionPage: (value: QuestionPageType) => Promise<void>
+  session: Session | null
+  questionId?: string
+  questions?: QuestionType[]
 }) {
+  // const questionData = questions?.find((question) => {
+  //   question.id === questionId
+  // })
+  // console.log('questions:', questions)
+  // console.log('questionId:', questionId)
+  // console.log('questionData:', questionData)
   return (
     <>
-      {(userId === undefined || userId.length === 0) && (
-        <TabPanel
-          ml={'20px'}
-          mr={'20px'}
-          mt={'20px'}
-          borderTop={'1px solid gray'}
-        >
+      <TabPanel
+        ml={'20px'}
+        mr={'20px'}
+        mt={'20px'}
+        borderTop={'1px solid gray'}
+      >
+        {/* {questionData && (
+          <Card
+            key={questionData.id}
+            boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
+          >
+            <HStack pl={'20px'}>
+              <Avatar
+                bg="blue.300"
+                color="black"
+                icon={<AiOutlineUser fontSize="2rem" />}
+                justifyContent={'center'}
+              />
+              <Box overflow={'hidden'} pl={'15px'} pt={'10px'} pb={'10px'}>
+                <Heading pb={'10px'} size="md" isTruncated>
+                  {questionData.title}
+                </Heading>
+                <Text fontSize="md" isTruncated>
+                  {questionData.content}
+                </Text>
+              </Box>
+            </HStack>
+          </Card>
+        )} */}
+        {(userId === undefined || userId.length === 0) && (
           <VStack>
             <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
               この質問の回答を見るにはログインをしてください。
             </Heading>
-          </VStack>
-          <Button
-            mt={'20px'}
-            onClick={() => changeQuestionPage('QuestionList')}
-          >
-            全ての質問へ戻る
-          </Button>
-        </TabPanel>
-      )}
-      {userId !== undefined &&
-        userId.length !== 0 &&
-        (answers === undefined || answers.length === 0) && (
-          <TabPanel
-            ml={'20px'}
-            mr={'20px'}
-            mt={'20px'}
-            borderTop={'1px solid gray'}
-          >
-            <VStack>
-              <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
-                まだ回答はありません。
-              </Heading>
-            </VStack>
             <Button
               mt={'20px'}
               onClick={() => changeQuestionPage('QuestionList')}
             >
               全ての質問へ戻る
             </Button>
-          </TabPanel>
+          </VStack>
         )}
-      {userId !== undefined &&
-        userId.length !== 0 &&
-        answers !== undefined &&
-        answers.length !== 0 && (
-          <TabPanel
-            ml={'20px'}
-            mr={'20px'}
-            mt={'20px'}
-            borderTop={'1px solid gray'}
-          >
+        {userId !== undefined &&
+          userId.length !== 0 &&
+          (answers === undefined || answers.length === 0) && (
+            <VStack>
+              <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
+                まだ回答はありません。
+              </Heading>
+              <Button
+                mt={'20px'}
+                onClick={() => changeQuestionPage('QuestionList')}
+              >
+                全ての質問へ戻る
+              </Button>
+            </VStack>
+          )}
+        {userId !== undefined &&
+          userId.length !== 0 &&
+          answers !== undefined &&
+          answers.length !== 0 && (
             <Stack spacing="4">
               {answers.map((answer: AnswerType) => (
                 <Card
@@ -113,11 +135,12 @@ export function QuestionDetail({
                           justifyContent={'center'}
                           size={'sm'}
                         />
-                        {userId !== answer.user_id && (
-                          <Text color={PRIMARY_FONT_COLOR} fontSize={'14px'}>
-                            講師
-                          </Text>
-                        )}
+                        {session?.user.id !== answer.user_id &&
+                          session?.user.isAdmin === true && (
+                            <Text color={PRIMARY_FONT_COLOR} fontSize={'14px'}>
+                              講師
+                            </Text>
+                          )}
                       </Box>
                     </VStack>
                     <Box
@@ -131,17 +154,17 @@ export function QuestionDetail({
                   </HStack>
                 </Card>
               ))}
+              <Link href={`/course/${courseId}/?videoId=${videoId}`}>
+                <Button
+                  mt={'20px'}
+                  onClick={() => changeQuestionPage('QuestionList')}
+                >
+                  全ての質問へ戻る
+                </Button>
+              </Link>
             </Stack>
-            <Link href={`/course/${courseId}/?videoId=${videoId}`}>
-              <Button
-                mt={'20px'}
-                onClick={() => changeQuestionPage('QuestionList')}
-              >
-                全ての質問へ戻る
-              </Button>
-            </Link>
-          </TabPanel>
-        )}
+          )}
+      </TabPanel>
     </>
   )
 }
