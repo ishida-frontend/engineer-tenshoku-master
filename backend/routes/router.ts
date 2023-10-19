@@ -3,15 +3,12 @@ import 'dotenv/config'
 
 import { contactValidationRules, contactValidate } from '../validation'
 import { validate, courseValidationRules } from '../validation/courseValidation'
+import { VideoValidator } from '../validation/videoValidator'
 import { UserController } from '../controllers/userController'
 import { ViewingStatusController } from '../controllers/viewingStatusController'
 import { VideoController } from '../controllers/videoController'
 import { QuestionController } from '../controllers/questionController'
-import { QuestionValidator } from '../validation/questionValidation'
 import { AnswerController } from '../controllers/answerController'
-import { FavoriteVideoController } from '../controllers/favoriteVideoController'
-import { UserValidator } from '../validation/userValidator'
-import { VideoValidator } from '../validation/videoValidator'
 
 const {
   createCourse,
@@ -36,15 +33,12 @@ const {
 
 const router = express.Router()
 
-const userValidator = new UserValidator()
+const userController = new UserController()
 const videoValidator = new VideoValidator()
 const videoController = new VideoController()
-const questionValidatior = new QuestionValidator()
 const questionController = new QuestionController()
 const answerController = new AnswerController()
-const userController = new UserController()
 const viewingStatusController = new ViewingStatusController()
-const favoriteVideoController = new FavoriteVideoController()
 
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -89,12 +83,6 @@ router.use('/user', userRouter)
 userRouter.get('/:id', (req, res) => {
   userController.get(req, res)
 })
-userRouter.get('/role', (req, res) => {
-  userController.getRole(req, res)
-})
-userRouter.put('/:id', userValidator.update, (req, res) => {
-  userController.update(req, res)
-})
 
 const courseRouter = express.Router()
 router.use('/course', courseRouter)
@@ -122,11 +110,9 @@ contactRouter.post(
 
 const questionRouter = express.Router()
 router.use('/question', questionRouter)
-questionRouter.post(
-  '/create',
-  questionValidatior.create,
-  questionController.create,
-)
+questionRouter.post('/create', (req, res) => {
+  questionController.create(req, res)
+})
 questionRouter.get('/:video_id', (req, res) => {
   questionController.get(req, res)
 })
@@ -139,7 +125,6 @@ answerRouter.post('/create', (req, res) => {
 answerRouter.get('/:question_id', (req, res) => {
   answerController.get(req, res)
 })
-
 const viewingStatusRouter = express.Router()
 router.use('/viewingstatus', viewingStatusRouter)
 viewingStatusRouter.post(
@@ -157,17 +142,6 @@ viewingStatusRouter.get(
 viewingStatusRouter.get(
   '/:userId/:courseId/all',
   viewingStatusController.getViewingStatuses,
-)
-
-const favoriteVideoRouter = express.Router()
-router.use('/favoritevideo', favoriteVideoRouter)
-favoriteVideoRouter.put(
-  '/:userId/:videoId',
-  favoriteVideoController.upsertFavoriteVideo,
-)
-favoriteVideoRouter.get(
-  '/:userId/:videoId',
-  favoriteVideoController.getFavoriteVideo,
 )
 
 export default router

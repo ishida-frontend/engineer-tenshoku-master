@@ -12,14 +12,6 @@ export class UserController {
       throw error
     }
   }
-  async getRole(req: express.Request, res: express.Response) {
-    try {
-      const data = await UserApplicationService.getRole()
-      return res.status(200).json(data)
-    } catch (error) {
-      throw error
-    }
-  }
 
   async update(req: express.Request, res: express.Response) {
     try {
