@@ -52,7 +52,7 @@ export function QuestionDetail({
   >('write')
 
   return (
-    <TabPanel ml={'20px'} mr={'20px'} mt={'20px'} borderTop={'1px solid gray'}>
+    <TabPanel m={'20px'} borderTop={'1px solid gray'}>
       {selectedQuestion && (
         <Card
           key={selectedQuestion.id}
