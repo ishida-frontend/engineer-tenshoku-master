@@ -20,9 +20,11 @@ export function HeaderLoggedOut() {
             <Box pl="22px">
               <TitleLogo boxSize="62px" />
             </Box>
-            <Heading as="h1" fontSize="30px" fontWeight="400" pl="17px">
-              JS学習プラットフォーム
-            </Heading>
+            <Link href="/" _hover={{ textDecoration: 'none' }}>
+              <Heading as="h1" fontSize="30px" fontWeight="400" pl="17px">
+                JS学習プラットフォーム
+              </Heading>
+            </Link>
           </HStack>
           <Spacer />
           <HStack spacing="40px" pr="40px">
