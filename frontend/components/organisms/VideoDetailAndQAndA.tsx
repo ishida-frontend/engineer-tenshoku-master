@@ -78,8 +78,6 @@ export function VideoDetailAndQAndA({
             answers={answers}
             changeQuestionPage={changeQuestionPage}
             session={session}
-            questionId={questionId}
-            questions={questions}
             selectedQuestion={selectedQuestion}
             createAnswer={createAnswer}
           />

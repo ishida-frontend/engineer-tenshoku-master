@@ -35,8 +35,6 @@ export function QuestionDetail({
   answers,
   changeQuestionPage,
   session,
-  questionId,
-  questions,
   selectedQuestion,
   createAnswer,
 }: {
@@ -46,8 +44,6 @@ export function QuestionDetail({
   answers?: AnswerType[]
   changeQuestionPage: (value: QuestionPageType) => Promise<void>
   session: Session | null
-  questionId?: string
-  questions?: QuestionType[]
   selectedQuestion?: QuestionType
   createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
 }) {
