@@ -20,7 +20,10 @@ import { QuestionType } from 'types/QuestionType'
 import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
-import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
+import { CreateQuestionErrorType } from 'types/QuestionType'
+import { QUESTION_PAGES } from 'constants/index'
+import { QuestionPageType } from 'types/QuestionType'
+import { AnswerType } from 'types/AnswerType'
 
 type loadingStates = {
   watching: boolean
@@ -51,10 +54,14 @@ export function CourseDetail({
   courseData,
   session,
   questions,
+  answers,
+  questionId,
 }: {
   courseData: CourseWithSectionsType
   session: Session | null
   questions?: QuestionType[]
+  answers: AnswerType[]
+  questionId?: string
 }) {
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
@@ -67,8 +74,9 @@ export function CourseDetail({
   const minContentLength = 15
   const [createQuestionErrors, setCreateQuestionErrors] =
     useState<CreateQuestionErrorType>({ title: '', content: '' })
-  const [questionPage, setQuestionPage] =
-    useState<QuestionPageType>('QuestionList')
+  const [questionPage, setQuestionPage] = useState<QuestionPageType>(
+    QUESTION_PAGES.QuestionList,
+  )
   const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
     {},
   )
@@ -86,8 +94,21 @@ export function CourseDetail({
   const [videoId, setVideoId] = useState<string>(
     searchedVideoId || courseData.sections[0].videos[0].id,
   )
-
+  const [selectedQuestion, setSelectedQuestion] = useState<QuestionType>()
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo | null>(null)
+
+  useEffect(() => {
+    try {
+      if (questions) {
+        const questionData = questions.find((question) => {
+          return question.id === questionId
+        })
+        setSelectedQuestion(questionData)
+      }
+    } catch (error) {
+      throw error
+    }
+  }, [questionId, questions])
 
   useEffect(() => {
     const section = courseData.sections.find((currentSection) =>
@@ -287,6 +308,27 @@ export function CourseDetail({
     }
   }
 
+  const createAnswer = async (createAnswerParams: { comment: string }) => {
+    const { comment } = createAnswerParams
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/answer/create`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          question_id: selectedQuestion?.id,
+          user_id: session?.user.id,
+          comment,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    if (response.status === 200) {
+      router.refresh()
+    }
+  }
+
   const changeQuestionPage = async (value: QuestionPageType) => {
     setQuestionPage(value)
   }
@@ -319,6 +361,10 @@ export function CourseDetail({
             favoritedStatus={favoritedStatus}
             loadingStates={loadingStates}
             handleFavoriteVideoStatus={handleFavoriteVideoStatus}
+            answers={answers}
+            session={session}
+            selectedQuestion={selectedQuestion}
+            createAnswer={createAnswer}
           />
         </Container>
       </Container>

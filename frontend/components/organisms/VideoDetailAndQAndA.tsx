@@ -2,10 +2,15 @@ import React from 'react'
 import { Tab, Tabs, TabList, TabPanel, TabPanels, Box } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown'
 import { QuestionList } from './QuestionList'
+import { QuestionDetail } from './QuestionDetail'
 import { QuestionType } from 'types/QuestionType'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionForm } from './QuestionForm'
-import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
+import { CreateQuestionErrorType } from 'types/QuestionType'
+import { QUESTION_PAGES } from 'constants/index'
+import { QuestionPageType } from 'types/QuestionType'
+import { AnswerType } from 'types/AnswerType'
+import { Session } from 'next-auth'
 
 export function VideoDetailAndQAndA({
   selectedVideo,
@@ -15,8 +20,12 @@ export function VideoDetailAndQAndA({
   createQuestionErrors,
   createQuestion,
   changeQuestionPage,
+  answers,
+  session,
+  selectedQuestion,
+  createAnswer,
 }: {
-  selectedVideo: SelectedVideo
+  selectedVideo: SelectedVideo | null
   userId: string | undefined
   questionPage: QuestionPageType
   questions?: QuestionType[]
@@ -26,6 +35,10 @@ export function VideoDetailAndQAndA({
     content: string
   }) => Promise<void>
   changeQuestionPage: (value: QuestionPageType) => Promise<void>
+  answers: AnswerType[]
+  session: Session | null
+  selectedQuestion?: QuestionType
+  createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
 }) {
   return (
     <Tabs isFitted colorScheme={'green'}>
@@ -41,18 +54,32 @@ export function VideoDetailAndQAndA({
             </ReactMarkdown>
           </Box>
         </TabPanel>
-        {questionPage === 'QuestionList' && (
+        {questionPage === QUESTION_PAGES.QuestionList && (
           <QuestionList
             questions={questions}
             changeQuestionPage={changeQuestionPage}
+            courseId={selectedVideo?.id}
+            videoId={selectedVideo?.sections.videos.id}
           />
         )}
-        {questionPage === 'QuestionForm' && (
+        {questionPage === QUESTION_PAGES.QuestionForm && (
           <QuestionForm
             userId={userId}
             createQuestionErrors={createQuestionErrors}
             createQuestion={createQuestion}
             changeQuestionPage={changeQuestionPage}
+          />
+        )}
+        {questionPage === QUESTION_PAGES.QuestionDetail && (
+          <QuestionDetail
+            userId={userId}
+            courseId={selectedVideo?.id}
+            videoId={selectedVideo?.sections.videos.id}
+            answers={answers}
+            changeQuestionPage={changeQuestionPage}
+            session={session}
+            selectedQuestion={selectedQuestion}
+            createAnswer={createAnswer}
           />
         )}
       </TabPanels>
