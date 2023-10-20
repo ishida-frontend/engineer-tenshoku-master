@@ -90,12 +90,7 @@ export function QuestionList({
                       icon={<AiOutlineUser fontSize="2rem" />}
                       justifyContent={'center'}
                     />
-                    <Box
-                      overflow={'hidden'}
-                      pl={'15px'}
-                      pt={'10px'}
-                      pb={'10px'}
-                    >
+                    <Box overflow={'hidden'} p={'10px 0px 15px'}>
                       <Heading pb={'10px'} size="md" isTruncated>
                         {question.title}
                       </Heading>

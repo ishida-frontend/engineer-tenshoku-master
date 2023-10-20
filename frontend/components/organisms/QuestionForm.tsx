@@ -16,10 +16,10 @@ import {
 import ReactMde from 'react-mde'
 import ReactMarkdown from 'react-markdown'
 import 'react-mde/lib/styles/css/react-mde-all.css'
-import * as Showdown from 'showdown'
 import '../../styles/markdown.css'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { QuestionPageType } from 'types/QuestionType'
+import { converter } from 'utils/markdown'
 
 type CreateQuestionErrorType = { title: string; content: string }
 
@@ -48,13 +48,6 @@ export function QuestionForm({
     setQuestionContent(value)
     setQuestion({ ...question, content: value })
   }
-
-  const converter = new Showdown.Converter({
-    tables: true,
-    simplifiedAutoLink: true,
-    strikethrough: true,
-    tasklists: true,
-  })
 
   const [selectedEditorTab, setSelectedEditorTab] = useState<
     'write' | 'preview'
