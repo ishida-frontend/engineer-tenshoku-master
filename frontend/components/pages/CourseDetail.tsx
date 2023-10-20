@@ -310,9 +310,6 @@ export function CourseDetail({
 
   const createAnswer = async (createAnswerParams: { comment: string }) => {
     const { comment } = createAnswerParams
-    console.log('createAnswerParams:', createAnswerParams)
-    console.log('questionId:', questionId)
-    console.log('userId:', userId)
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/answer/create`,
       {
