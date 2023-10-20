@@ -60,7 +60,7 @@ export function QuestionDetail({
           mb={'15px'}
         >
           <HStack>
-            <Box pt={'10px'} pb={'10px'} pl={'9px'} pr={'9px'}>
+            <Box p={'10px 9px'}>
               <Avatar
                 bg="gray.400"
                 color="white"
@@ -70,7 +70,7 @@ export function QuestionDetail({
               />
             </Box>
 
-            <Box pl={'15px'} pt={'10px'} pb={'10px'}>
+            <Box p={'10px 15px'}>
               <Heading pb={'10px'} size="md">
                 {selectedQuestion.title}
               </Heading>
@@ -144,7 +144,7 @@ export function QuestionDetail({
                     </Box>
                   )}
                 </VStack>
-                <Box pl={'15px'} pt={'10px'} pb={'10px'} className="markdown">
+                <Box p={'10px 15px'} className="markdown">
                   <ReactMarkdown>{answer.comment}</ReactMarkdown>
                 </Box>
               </HStack>
@@ -158,64 +158,59 @@ export function QuestionDetail({
               全ての質問へ戻る
             </Button>
           </Link>
-          {session &&
-            (session.user.isAdmin === true ||
-              selectedQuestion?.user_id === session.user.id) && (
-              <FormControl mt={'40px'}>
-                <FormControl
-                  isInvalid={!!answerComment}
-                  mb={'20px'}
-                  bg={'white'}
-                >
-                  <Container ml={'0px'} pb={'10px'} pl={'0px'}>
-                    <Text fontWeight={'bold'}>コメント内容</Text>
-                  </Container>
-                  <Box display={'flex'} justifyContent={'space-between'}>
-                    <Box w={'50%'} mr={'5'}>
-                      <ReactMde
-                        maxEditorHeight={250}
-                        value={answerComment}
-                        onChange={(e) => setAnswerComment(e)}
-                        selectedTab={selectedEditorTab}
-                        onTabChange={setSelectedEditorTab}
-                        generateMarkdownPreview={(markdown) =>
-                          Promise.resolve(converter.makeHtml(markdown))
-                        }
-                        toolbarCommands={[
-                          ['header', 'bold', 'italic'],
-                          ['link', 'quote', 'code'],
-                          ['unordered-list', 'ordered-list'],
-                        ]}
-                      />
-                    </Box>
-                    <Box
-                      w={'50%'}
-                      maxH={'250px'}
-                      overflow={'scroll'}
-                      bg={'white'}
-                      border={'1px solid gray'}
-                      borderRadius={'4px'}
-                      paddingLeft={'28px'}
-                      paddingRight={'20px'}
-                      className="markdown"
-                    >
-                      <ReactMarkdown>{answerComment}</ReactMarkdown>
-                    </Box>
+          {(session?.user.isAdmin === true ||
+            selectedQuestion?.user_id === session?.user.id) && (
+            <FormControl mt={'40px'}>
+              <FormControl isInvalid={!!answerComment} mb={'20px'} bg={'white'}>
+                <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                  <Text fontWeight={'bold'}>コメント内容</Text>
+                </Container>
+                <Box display={'flex'} justifyContent={'space-between'}>
+                  <Box w={'50%'} mr={'5'}>
+                    <ReactMde
+                      maxEditorHeight={250}
+                      value={answerComment}
+                      onChange={(e) => setAnswerComment(e)}
+                      selectedTab={selectedEditorTab}
+                      onTabChange={setSelectedEditorTab}
+                      generateMarkdownPreview={(markdown) =>
+                        Promise.resolve(converter.makeHtml(markdown))
+                      }
+                      toolbarCommands={[
+                        ['header', 'bold', 'italic'],
+                        ['link', 'quote', 'code'],
+                        ['unordered-list', 'ordered-list'],
+                      ]}
+                    />
                   </Box>
-                </FormControl>
-
-                <VStack>
-                  <Button
-                    onClick={() => createAnswer({ comment: answerComment })}
-                    m={'10px 0'}
-                    w={'100%'}
-                    colorScheme="teal"
+                  <Box
+                    w={'50%'}
+                    maxH={'250px'}
+                    overflow={'scroll'}
+                    bg={'white'}
+                    border={'1px solid gray'}
+                    borderRadius={'4px'}
+                    paddingLeft={'28px'}
+                    paddingRight={'20px'}
+                    className="markdown"
                   >
-                    コメントする
-                  </Button>
-                </VStack>
+                    <ReactMarkdown>{answerComment}</ReactMarkdown>
+                  </Box>
+                </Box>
               </FormControl>
-            )}
+
+              <VStack>
+                <Button
+                  onClick={() => createAnswer({ comment: answerComment })}
+                  my={'10px'}
+                  w={'100%'}
+                  colorScheme="teal"
+                >
+                  コメントする
+                </Button>
+              </VStack>
+            </FormControl>
+          )}
         </Stack>
       )}
     </TabPanel>
