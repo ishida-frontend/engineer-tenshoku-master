@@ -21,7 +21,8 @@ import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
 import { CreateQuestionErrorType } from 'types/QuestionType'
-import { QuestionPageType, QUESTION_PAGES } from 'constants/question'
+import { QUESTION_PAGES } from 'constants/index'
+import { QuestionPageType } from 'types/QuestionType'
 import { AnswerType } from 'types/AnswerType'
 
 type loadingStates = {

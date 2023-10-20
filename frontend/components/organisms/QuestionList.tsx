@@ -14,7 +14,8 @@ import {
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
-import { QuestionPageType, QUESTION_PAGES } from 'constants/question'
+import { QUESTION_PAGES } from 'constants/index'
+import { QuestionPageType } from 'types/QuestionType'
 import Link from 'next/link'
 
 export function QuestionList({

@@ -18,7 +18,8 @@ import ReactMarkdown from 'react-markdown'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import '../../styles/markdown.css'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
-import { QuestionPageType, QUESTION_PAGES } from 'constants/question'
+import { QUESTION_PAGES } from 'constants/index'
+import { QuestionPageType } from 'types/QuestionType'
 import { converter } from 'utils/markdown'
 
 type CreateQuestionErrorType = { title: string; content: string }

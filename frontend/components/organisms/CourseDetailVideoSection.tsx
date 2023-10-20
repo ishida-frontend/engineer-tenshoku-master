@@ -16,7 +16,7 @@ import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionType } from 'types/QuestionType'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
 import { CreateQuestionErrorType } from 'types/QuestionType'
-import { QuestionPageType } from 'constants/question'
+import { QuestionPageType } from 'types/QuestionType'
 import { AnswerType } from 'types/AnswerType'
 import { Session } from 'next-auth'
 

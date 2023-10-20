@@ -3,5 +3,3 @@ export const QUESTION_PAGES = {
   QuestionForm: 'QuestionForm',
   QuestionDetail: 'QuestionDetail',
 } as const
-
-export type QuestionPageType = keyof typeof QUESTION_PAGES
