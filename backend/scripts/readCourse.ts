@@ -18,7 +18,6 @@ export async function readCourse(id: string) {
 }
 
 export async function readAllCourses() {
-  console.log('aaaaa')
   try {
     const courses = await prisma.course.findMany({
       where: {
@@ -26,15 +25,13 @@ export async function readAllCourses() {
         published: true,
       },
       include: {
-        courses: {
+        tags: {
           include: {
             tag: true,
           },
         },
       },
     })
-    console.log('courses', courses)
-
     return courses
   } catch (error) {
     console.log('error', error)

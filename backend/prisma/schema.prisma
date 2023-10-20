@@ -40,8 +40,7 @@ model Course {
   created_at  DateTime    @default(now())
   updated_at  DateTime    @updatedAt
   deleted_at  DateTime?
-  tags        Tag[]
-  CourseTag   CourseTag[]
+  tags        CourseTag[]
 }
 
 model Section {
@@ -129,8 +128,7 @@ model Tag {
   updated_at      DateTime    @updatedAt
   deleted_at      DateTime?
   courseId        String?     @db.VarChar(255)
-  courses         Course[]
-  courseTag       CourseTag[]
+  courses         CourseTag[]
 }
 
 model CourseTag {

@@ -17,13 +17,12 @@ import {
 } from '@chakra-ui/react'
 import { BsChevronRight } from 'react-icons/bs'
 
-import { CourseType } from '../../types'
+import { CourseTagType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { Tag } from '../atoms/Tag'
-import { AllCourseType } from '../../app/course/page'
 
-export function CourseList({ courses }: { courses: AllCourseType[] }) {
+export function CourseList({ courses }: { courses: CourseTagType[] }) {
   // コースデータ読み込みアニメーション
   if (!courses) return <Loader />
   console.log('courses', courses)
@@ -47,7 +46,7 @@ export function CourseList({ courses }: { courses: AllCourseType[] }) {
             spacingX={[0, 10, 20]}
             spacingY="10"
           >
-            {courses.map((course: CourseType) => (
+            {courses.map((course: CourseTagType) => (
               <Card key={course.id} w="288px" boxShadow="md" borderRadius="8px">
                 <CardHeader p={0}>
                   <Image
@@ -73,7 +72,7 @@ export function CourseList({ courses }: { courses: AllCourseType[] }) {
                     {course.description}
                   </Text>
                   <HStack flexWrap="wrap">
-                    {course.courseTag.map((courseTag: any) => (
+                    {course.tags.map((courseTag: any) => (
                       <Tag
                         color={courseTag.tag.color}
                         backgroundColor={courseTag.tag.backgroundColor}

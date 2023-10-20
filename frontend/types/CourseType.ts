@@ -13,5 +13,5 @@ export type CourseType = {
 }
 
 export type CourseTagType = CourseType & {
-  courseTag: TagType[]
+  tags: TagType[]
 }
