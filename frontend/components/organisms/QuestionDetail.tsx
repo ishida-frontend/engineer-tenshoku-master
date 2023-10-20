@@ -12,8 +12,6 @@ import {
   VStack,
   FormControl,
   Container,
-  Flex,
-  FormErrorMessage,
 } from '@chakra-ui/react'
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
@@ -25,7 +23,7 @@ import ReactMde from 'react-mde'
 import ReactMarkdown from 'react-markdown'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import * as Showdown from 'showdown'
-import '../../styles/answerMarkdown.css'
+import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 
 export function QuestionDetail({
@@ -108,7 +106,7 @@ export function QuestionDetail({
             </HStack>
           </Card>
         )}
-        {(userId === undefined || userId.length === 0) && (
+        {!userId && (
           <VStack>
             <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
               この質問の回答を見るにはログインをしてください。
@@ -121,145 +119,135 @@ export function QuestionDetail({
             </Button>
           </VStack>
         )}
-        {userId !== undefined &&
-          userId.length !== 0 &&
-          (answers === undefined || answers.length === 0) && (
-            <VStack>
-              <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
-                まだ回答はありません。
-              </Heading>
+        {userId && !answers && (
+          <VStack>
+            <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
+              まだ回答はありません。
+            </Heading>
+            <Button
+              mt={'20px'}
+              onClick={() => changeQuestionPage('QuestionList')}
+            >
+              全ての質問へ戻る
+            </Button>
+          </VStack>
+        )}
+        {userId && answers && (
+          <Stack spacing="4">
+            {answers.map((answer: AnswerType) => (
+              <Card
+                key={answer.id}
+                boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
+              >
+                <HStack>
+                  <VStack>
+                    {answer.user_id !== selectedQuestion?.user_id && (
+                      <Box
+                        minHeight={'100%'}
+                        bg={'rgba(0, 0, 0, 0.04)'}
+                        pt={'10px'}
+                        pb={'10px'}
+                        pl={'9px'}
+                        pr={'9px'}
+                      >
+                        <Avatar
+                          bg="gray.400"
+                          color="white"
+                          icon={<AiOutlineUser fontSize="22px" />}
+                          justifyContent={'center'}
+                          size={'sm'}
+                        />
+                        <Text color={PRIMARY_FONT_COLOR} fontSize={'14px'}>
+                          講師
+                        </Text>
+                      </Box>
+                    )}
+                    {answer.user_id === selectedQuestion?.user_id && (
+                      <Box pt={'10px'} pb={'10px'} pl={'9px'} pr={'9px'}>
+                        <Avatar
+                          bg="gray.400"
+                          color="white"
+                          icon={<AiOutlineUser fontSize="22px" />}
+                          justifyContent={'center'}
+                          size={'sm'}
+                        />
+                      </Box>
+                    )}
+                  </VStack>
+                  <Box pl={'15px'} pt={'10px'} pb={'10px'} className="markdown">
+                    <ReactMarkdown>{answer.comment}</ReactMarkdown>
+                  </Box>
+                </HStack>
+              </Card>
+            ))}
+            <Link href={`/course/${courseId}/?videoId=${videoId}`}>
               <Button
                 mt={'20px'}
                 onClick={() => changeQuestionPage('QuestionList')}
               >
                 全ての質問へ戻る
               </Button>
-            </VStack>
-          )}
-        {userId !== undefined &&
-          userId.length !== 0 &&
-          answers !== undefined &&
-          answers.length !== 0 && (
-            <Stack spacing="4">
-              {answers.map((answer: AnswerType) => (
-                <Card
-                  key={answer.id}
-                  boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
-                >
-                  <HStack>
-                    <VStack>
-                      {answer.user_id !== selectedQuestion?.user_id && (
-                        <Box
-                          minHeight={'100%'}
-                          bg={'rgba(0, 0, 0, 0.04)'}
-                          pt={'10px'}
-                          pb={'10px'}
-                          pl={'9px'}
-                          pr={'9px'}
-                        >
-                          <Avatar
-                            bg="gray.400"
-                            color="white"
-                            icon={<AiOutlineUser fontSize="22px" />}
-                            justifyContent={'center'}
-                            size={'sm'}
-                          />
-                          <Text color={PRIMARY_FONT_COLOR} fontSize={'14px'}>
-                            講師
-                          </Text>
-                        </Box>
-                      )}
-                      {answer.user_id === selectedQuestion?.user_id && (
-                        <Box pt={'10px'} pb={'10px'} pl={'9px'} pr={'9px'}>
-                          <Avatar
-                            bg="gray.400"
-                            color="white"
-                            icon={<AiOutlineUser fontSize="22px" />}
-                            justifyContent={'center'}
-                            size={'sm'}
-                          />
-                        </Box>
-                      )}
-                    </VStack>
-                    <Box
-                      pl={'15px'}
-                      pt={'10px'}
-                      pb={'10px'}
-                      className="markdown"
-                    >
-                      <ReactMarkdown>{answer.comment}</ReactMarkdown>
-                    </Box>
-                  </HStack>
-                </Card>
-              ))}
-              <Link href={`/course/${courseId}/?videoId=${videoId}`}>
-                <Button
-                  mt={'20px'}
-                  onClick={() => changeQuestionPage('QuestionList')}
-                >
-                  全ての質問へ戻る
-                </Button>
-              </Link>
-              {session &&
-                (session.user.isAdmin === true ||
-                  selectedQuestion?.user_id === session.user.id) && (
-                  <FormControl mt={'40px'}>
-                    <FormControl
-                      isInvalid={!!answerComment}
-                      mb={'20px'}
-                      bg={'white'}
-                    >
-                      <Container ml={'0px'} pb={'10px'} pl={'0px'}>
-                        <Text fontWeight={'bold'}>コメント内容</Text>
-                      </Container>
-                      <Box display={'flex'} justifyContent={'space-between'}>
-                        <Box w={'50%'} mr={'5'}>
-                          <ReactMde
-                            maxEditorHeight={250}
-                            value={answerComment}
-                            onChange={commentChange}
-                            selectedTab={selectedEditorTab}
-                            onTabChange={setSelectedEditorTab}
-                            generateMarkdownPreview={(markdown) =>
-                              Promise.resolve(converter.makeHtml(markdown))
-                            }
-                            toolbarCommands={[
-                              ['header', 'bold', 'italic'],
-                              ['link', 'quote', 'code'],
-                              ['unordered-list', 'ordered-list'],
-                            ]}
-                          />
-                        </Box>
-                        <Box
-                          w={'50%'}
-                          maxH={'250px'}
-                          overflow={'scroll'}
-                          bg={'white'}
-                          border={'1px solid gray'}
-                          borderRadius={'4px'}
-                          paddingLeft={'28px'}
-                          paddingRight={'20px'}
-                          className="markdown"
-                        >
-                          <ReactMarkdown>{answerComment}</ReactMarkdown>
-                        </Box>
+            </Link>
+            {session &&
+              (session.user.isAdmin === true ||
+                selectedQuestion?.user_id === session.user.id) && (
+                <FormControl mt={'40px'}>
+                  <FormControl
+                    isInvalid={!!answerComment}
+                    mb={'20px'}
+                    bg={'white'}
+                  >
+                    <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+                      <Text fontWeight={'bold'}>コメント内容</Text>
+                    </Container>
+                    <Box display={'flex'} justifyContent={'space-between'}>
+                      <Box w={'50%'} mr={'5'}>
+                        <ReactMde
+                          maxEditorHeight={250}
+                          value={answerComment}
+                          onChange={commentChange}
+                          selectedTab={selectedEditorTab}
+                          onTabChange={setSelectedEditorTab}
+                          generateMarkdownPreview={(markdown) =>
+                            Promise.resolve(converter.makeHtml(markdown))
+                          }
+                          toolbarCommands={[
+                            ['header', 'bold', 'italic'],
+                            ['link', 'quote', 'code'],
+                            ['unordered-list', 'ordered-list'],
+                          ]}
+                        />
                       </Box>
-                    </FormControl>
-
-                    <VStack>
-                      <Button
-                        onClick={submitAnswer}
-                        m={'10px 0'}
-                        w={'100%'}
-                        colorScheme="teal"
+                      <Box
+                        w={'50%'}
+                        maxH={'250px'}
+                        overflow={'scroll'}
+                        bg={'white'}
+                        border={'1px solid gray'}
+                        borderRadius={'4px'}
+                        paddingLeft={'28px'}
+                        paddingRight={'20px'}
+                        className="markdown"
                       >
-                        コメントする
-                      </Button>
-                    </VStack>
+                        <ReactMarkdown>{answerComment}</ReactMarkdown>
+                      </Box>
+                    </Box>
                   </FormControl>
-                )}
-            </Stack>
-          )}
+
+                  <VStack>
+                    <Button
+                      onClick={submitAnswer}
+                      m={'10px 0'}
+                      w={'100%'}
+                      colorScheme="teal"
+                    >
+                      コメントする
+                    </Button>
+                  </VStack>
+                </FormControl>
+              )}
+          </Stack>
+        )}
       </TabPanel>
     </>
   )

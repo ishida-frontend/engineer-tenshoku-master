@@ -6,9 +6,13 @@ export type QuestionType = {
   content: string
   created_at: string
 }
-export type QuestionPageType =
-  | 'QuestionList'
-  | 'QuestionForm'
-  | 'QuestionDetail'
+
+const QUESTION_PAGES = {
+  QuestionList: 'QuestionList',
+  QuestionForm: 'QuestionForm',
+  QuestionDetail: 'QuestionDetail',
+} as const
+
+export type QuestionPageType = keyof typeof QUESTION_PAGES
 
 export type CreateQuestionErrorType = { title: string; content: string }
