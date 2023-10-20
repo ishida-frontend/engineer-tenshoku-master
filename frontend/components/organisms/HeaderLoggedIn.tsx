@@ -20,7 +20,6 @@ import { FiLogOut } from 'react-icons/fi'
 
 import { TitleLogo } from '../atoms/TitleLogo'
 import { FC, ReactNode } from 'react'
-import { useRouter } from 'next/navigation'
 import { PATHS } from '../../constants/paths'
 
 type HeaderLoggedInType = {
@@ -40,8 +39,6 @@ type MenuLinkItemProps = {
 }
 
 export function HeaderLoggedIn({ user, signOut }: HeaderLoggedInType) {
-  const router = useRouter()
-
   const MenuLinkItem: FC<MenuLinkItemProps> = ({
     path,
     icon,
@@ -69,7 +66,6 @@ export function HeaderLoggedIn({ user, signOut }: HeaderLoggedInType) {
 
   const handleLogout = async () => {
     await signOut()
-    router.push(PATHS.LOGIN.path)
   }
 
   return (
