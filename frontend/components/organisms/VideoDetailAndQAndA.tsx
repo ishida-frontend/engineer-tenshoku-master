@@ -21,7 +21,6 @@ export function VideoDetailAndQAndA({
   changeQuestionPage,
   answers,
   session,
-  questionId,
   selectedQuestion,
   createAnswer,
 }: {
@@ -37,7 +36,6 @@ export function VideoDetailAndQAndA({
   changeQuestionPage: (value: QuestionPageType) => Promise<void>
   answers: AnswerType[]
   session: Session | null
-  questionId?: string
   selectedQuestion?: QuestionType
   createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
 }) {

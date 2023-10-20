@@ -35,7 +35,6 @@ export function CourseDetailVideoSection({
   changeQuestionPage,
   answers,
   session,
-  questionId,
   selectedQuestion,
   createAnswer,
 }: {
@@ -58,7 +57,6 @@ export function CourseDetailVideoSection({
   ) => void
   answers: AnswerType[]
   session: Session | null
-  questionId?: string
   selectedQuestion?: QuestionType
   createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
 }) {
@@ -114,7 +112,6 @@ export function CourseDetailVideoSection({
               changeQuestionPage={changeQuestionPage}
               answers={answers}
               session={session}
-              questionId={questionId}
               selectedQuestion={selectedQuestion}
               createAnswer={createAnswer}
             />

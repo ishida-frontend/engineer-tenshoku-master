@@ -362,7 +362,6 @@ export function CourseDetail({
             handleFavoriteVideoStatus={handleFavoriteVideoStatus}
             answers={answers}
             session={session}
-            questionId={questionId}
             selectedQuestion={selectedQuestion}
             createAnswer={createAnswer}
           />
