@@ -20,8 +20,9 @@ import { QuestionType } from 'types/QuestionType'
 import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from 'hooks/useCustomToast'
-import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
-import { AnswerType, CreateAnswerErrorType } from 'types/AnswerType'
+import { CreateQuestionErrorType } from 'types/QuestionType'
+import { QuestionPageType, QUESTION_PAGES } from 'constants/question'
+import { AnswerType } from 'types/AnswerType'
 
 type loadingStates = {
   watching: boolean
@@ -70,13 +71,11 @@ export function CourseDetail({
   const minTitleLength = 10
   const maxTitleLength = 255
   const minContentLength = 15
-  const minCommentLength = 5
   const [createQuestionErrors, setCreateQuestionErrors] =
     useState<CreateQuestionErrorType>({ title: '', content: '' })
-  const [createAnswerErrors, setCreateAnswerErrors] =
-    useState<CreateAnswerErrorType>({ comment: '' })
-  const [questionPage, setQuestionPage] =
-    useState<QuestionPageType>('QuestionList')
+  const [questionPage, setQuestionPage] = useState<QuestionPageType>(
+    QUESTION_PAGES.QuestionList,
+  )
   const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
     {},
   )

@@ -14,7 +14,7 @@ import {
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
-import { QuestionPageType } from 'types/QuestionType'
+import { QuestionPageType, QUESTION_PAGES } from 'constants/question'
 import Link from 'next/link'
 
 export function QuestionList({
@@ -32,7 +32,7 @@ export function QuestionList({
     event: React.MouseEventHandler<HTMLAnchorElement>,
   ) => {
     try {
-      await changeQuestionPage('QuestionDetail')
+      await changeQuestionPage(QUESTION_PAGES.QuestionDetail)
     } catch (e) {
       throw e
     }
@@ -53,7 +53,7 @@ export function QuestionList({
           </VStack>
           <Button
             mt={'20px'}
-            onClick={() => changeQuestionPage('QuestionForm')}
+            onClick={() => changeQuestionPage(QUESTION_PAGES.QuestionForm)}
           >
             新しく質問する
           </Button>
@@ -105,7 +105,7 @@ export function QuestionList({
           </Stack>
           <Button
             mt={'20px'}
-            onClick={() => changeQuestionPage('QuestionForm')}
+            onClick={() => changeQuestionPage(QUESTION_PAGES.QuestionForm)}
           >
             新しく質問する
           </Button>

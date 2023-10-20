@@ -16,7 +16,7 @@ import {
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from 'types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
-import { QuestionPageType } from 'types/QuestionType'
+import { QuestionPageType, QUESTION_PAGES } from 'constants/question'
 import { AnswerType } from 'types/AnswerType'
 import Link from 'next/link'
 import ReactMde from 'react-mde'
@@ -86,7 +86,7 @@ export function QuestionDetail({
           </Heading>
           <Button
             mt={'20px'}
-            onClick={() => changeQuestionPage('QuestionList')}
+            onClick={() => changeQuestionPage(QUESTION_PAGES.QuestionList)}
           >
             全ての質問へ戻る
           </Button>
@@ -99,7 +99,7 @@ export function QuestionDetail({
           </Heading>
           <Button
             mt={'20px'}
-            onClick={() => changeQuestionPage('QuestionList')}
+            onClick={() => changeQuestionPage(QUESTION_PAGES.QuestionList)}
           >
             全ての質問へ戻る
           </Button>
@@ -153,12 +153,12 @@ export function QuestionDetail({
           <Link href={`/course/${courseId}/?videoId=${videoId}`}>
             <Button
               mt={'20px'}
-              onClick={() => changeQuestionPage('QuestionList')}
+              onClick={() => changeQuestionPage(QUESTION_PAGES.QuestionList)}
             >
               全ての質問へ戻る
             </Button>
           </Link>
-          {(session?.user.isAdmin === true ||
+          {(session?.user.isAdmin ||
             selectedQuestion?.user_id === session?.user.id) && (
             <FormControl mt={'40px'}>
               <FormControl isInvalid={!!answerComment} mb={'20px'} bg={'white'}>

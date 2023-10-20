@@ -6,7 +6,8 @@ import { QuestionDetail } from './QuestionDetail'
 import { QuestionType } from 'types/QuestionType'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionForm } from './QuestionForm'
-import { QuestionPageType, CreateQuestionErrorType } from 'types/QuestionType'
+import { CreateQuestionErrorType } from 'types/QuestionType'
+import { QuestionPageType, QUESTION_PAGES } from 'constants/question'
 import { AnswerType } from 'types/AnswerType'
 import { Session } from 'next-auth'
 
@@ -54,7 +55,7 @@ export function VideoDetailAndQAndA({
             </ReactMarkdown>
           </Box>
         </TabPanel>
-        {questionPage === 'QuestionList' && (
+        {questionPage === QUESTION_PAGES.QuestionList && (
           <QuestionList
             questions={questions}
             changeQuestionPage={changeQuestionPage}
@@ -62,7 +63,7 @@ export function VideoDetailAndQAndA({
             videoId={selectedVideo?.sections.videos.id}
           />
         )}
-        {questionPage === 'QuestionForm' && (
+        {questionPage === QUESTION_PAGES.QuestionForm && (
           <QuestionForm
             userId={userId}
             createQuestionErrors={createQuestionErrors}
@@ -70,7 +71,7 @@ export function VideoDetailAndQAndA({
             changeQuestionPage={changeQuestionPage}
           />
         )}
-        {questionPage === 'QuestionDetail' && (
+        {questionPage === QUESTION_PAGES.QuestionDetail && (
           <QuestionDetail
             userId={userId}
             courseId={selectedVideo?.id}

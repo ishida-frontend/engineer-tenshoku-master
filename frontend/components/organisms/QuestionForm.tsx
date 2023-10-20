@@ -18,7 +18,7 @@ import ReactMarkdown from 'react-markdown'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import '../../styles/markdown.css'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
-import { QuestionPageType } from 'types/QuestionType'
+import { QuestionPageType, QUESTION_PAGES } from 'constants/question'
 import { converter } from 'utils/markdown'
 
 type CreateQuestionErrorType = { title: string; content: string }
@@ -72,7 +72,9 @@ export function QuestionForm({
       <Stack mt={'20px'}>
         <FormControl>
           <Container bg={'white'} p={'0px'} minW={'90%'}>
-            <Button onClick={() => changeQuestionPage('QuestionList')}>
+            <Button
+              onClick={() => changeQuestionPage(QUESTION_PAGES.QuestionList)}
+            >
               全ての質問に戻る
             </Button>
             {userId === undefined && (
