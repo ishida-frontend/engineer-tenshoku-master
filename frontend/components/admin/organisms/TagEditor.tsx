@@ -9,52 +9,36 @@ import {
   Input,
   Stack,
   Select,
+  Text,
   Textarea,
   Link,
-  CheckboxGroup,
-  HStack,
-  Text,
 } from '@chakra-ui/react'
 
-import { CourseRemover } from './CourseRemover'
-import { CourseType, TagType } from '../../../types'
+import { tagRemover } from './CourseRemover'
+import { TagType } from '../../../types'
 import formatDate from '../../../utils/formatDate'
-import { Loader } from '../../../components/admin/atoms/Loader'
+import { Loader } from '../atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-import { THEME_COLOR } from '../../../constants/colors'
-type CourseWithTagsType = CourseType & {
-  tags: {
-    tag_id: string
-  }[]
-}
-export function CourseEditor({
-  course_id,
-  courseData,
-  tags,
+
+export function tagEditor({
+  tagId,
+  tagData,
 }: {
-  course_id: string
-  courseData: CourseWithTagsType
-  tags: TagType[]
+  tagId: string
+  tagData: TagType
 }) {
   const { showSuccessToast, showErrorToast } = useCustomToast()
 
-  const selectedCourseState: CourseWithTagsType = {
-    id: courseData.id,
-    name: courseData.name,
-    description: courseData.description,
-    image: courseData.image,
-    icon: courseData.icon,
-    published: courseData.published,
-    created_at: courseData.created_at,
-    updated_at: courseData.updated_at,
-    deleted_at: courseData.deleted_at,
-    tags: courseData.tags,
+  const selectedTag: TagType = {
+    id: tagData.id,
+    name: tagData.name,
+    color: tagData.color,
+    backgroundColor: tagData.backgroundColor,
+    created_at: tagData.created_at,
+    updated_at: tagData.updated_at,
+    deleted_at: tagData.deleted_at,
   }
-  const [course, setCourse] = useState<CourseType>(selectedCourseState)
-  const [tagIds, setTagIds] = useState<string[]>(
-    courseData.tags.map((tag) => tag.tag_id),
-  )
-  console.log('tagIds', tagIds)
+  const [tag, setTag] = useState<TagType>(selectedTag)
 
   const [errors, setErrors] = useState({
     nameError: '',
@@ -65,33 +49,22 @@ export function CourseEditor({
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (!courseData) {
+      if (!tagData) {
         showErrorToast('データの取得に失敗しました。')
       }
     }, 10000)
     return () => clearTimeout(timeout)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courseData])
+  }, [tagData])
 
   useEffect(() => {
-    if (courseData) {
-      setCourse(courseData)
+    if (tagData) {
+      setTag(tagData)
     }
-  }, [courseData])
+  }, [tagData])
 
   const hasChanges = () => {
-    return JSON.stringify(selectedCourseState) !== JSON.stringify(course)
-  }
-
-  const handleTagIds = (tagId: string) => () => {
-    // idが選択されていたら
-    if (tagIds.includes(tagId)) {
-      // idを取り除く
-      setTagIds(tagIds.filter((id) => id !== tagId))
-    } else {
-      // idを追加する
-      setTagIds([...tagIds, tagId])
-    }
+    return JSON.stringify(selectedTag) !== JSON.stringify(tag)
   }
 
   const isButtonDisabled = () => {
@@ -112,11 +85,11 @@ export function CourseEditor({
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            id: course.id,
-            name: course.name,
-            description: course.description,
-            published: course.published,
-            tagIds,
+            id: tag.id,
+            name: tag.name,
+            color: tag.color
+            description: tag.description,
+            published: tag.published,
           }),
         },
       )
@@ -130,7 +103,7 @@ export function CourseEditor({
           descError: '',
         })
       } else if (response.status === 400) {
-        if (course.name && course.name.length >= 5) {
+        if (tag.name && tag.name.length >= 5) {
           setErrors((prevErrors) => ({ ...prevErrors, nameError: '' }))
         } else {
           setErrors((prevErrors) => ({
@@ -139,7 +112,7 @@ export function CourseEditor({
           }))
         }
 
-        if (course.description && course.description.length >= 15) {
+        if (tag.description && tag.description.length >= 15) {
           setErrors((prevErrors) => ({ ...prevErrors, descError: '' }))
         } else {
           setErrors((prevErrors) => ({
@@ -155,32 +128,32 @@ export function CourseEditor({
     }
   }
 
-  if (!courseData) return <Loader />
+  if (!tagData) return <Loader />
 
   return (
     <Box w="full" maxW="600px" mx="auto" p={6}>
       <Stack spacing={4}>
-        <Link href="/admin/course">
+        <Link href="/admin/tag">
           <Button colorScheme="green">一覧へ戻る</Button>
         </Link>
         <Box p={4} border="1px" borderColor="gray.400" borderRadius={9}>
-          <Text>コースID：{course.id}</Text>
+          <Text>コースID：{tag.id}</Text>
           <Text>
             作成日時：
-            {courseData.created_at && formatDate(courseData.created_at)}
+            {tagData.created_at && formatDate(tagData.created_at)}
           </Text>
           <Text>
             更新日時：
-            {courseData.updated_at && formatDate(courseData.updated_at)}
+            {tagData.updated_at && formatDate(tagData.updated_at)}
           </Text>
         </Box>
-        <FormControl id="courseName" isRequired isInvalid={!!errors.nameError}>
-          <FormLabel htmlFor="courseName">コース名（5文字以上）</FormLabel>
+        <FormControl id="tagName" isRequired isInvalid={!!errors.nameError}>
+          <FormLabel htmlFor="tagName">コース名（5文字以上）</FormLabel>
           <Input
-            id="courseName"
+            id="tagName"
             type="text"
-            value={course.name}
-            onChange={(e) => setCourse({ ...course, name: e.target.value })}
+            value={tag.name}
+            onChange={(e) => settag({ ...tag, name: e.target.value })}
             aria-required={true}
             border="1px"
             borderColor="gray.400"
@@ -188,18 +161,18 @@ export function CourseEditor({
           <FormErrorMessage>{errors.nameError}</FormErrorMessage>
         </FormControl>
         <FormControl
-          id="courseDescription"
+          id="tagDescription"
           isRequired
           isInvalid={!!errors.descError}
         >
-          <FormLabel htmlFor="courseDescription">
+          <FormLabel htmlFor="tagDescription">
             コース概要（15文字以上）
           </FormLabel>
           <Textarea
-            id="courseDescription"
-            value={course.description}
+            id="tagDescription"
+            value={tag.description}
             onChange={(e) =>
-              setCourse({ ...course, description: e.target.value })
+              settag({ ...tag, description: e.target.value })
             }
             size="lg"
             rows={10}
@@ -209,13 +182,13 @@ export function CourseEditor({
           ></Textarea>
           <FormErrorMessage>{errors.descError}</FormErrorMessage>
         </FormControl>
-        <FormControl id="coursePublished" isRequired>
-          <FormLabel htmlFor="CoursePublished">コースの公開設定</FormLabel>
+        <FormControl id="tagPublished" isRequired>
+          <FormLabel htmlFor="tagPublished">コースの公開設定</FormLabel>
           <Select
-            id="coursePublished"
-            value={course.published ? 'public' : 'hidden'}
+            id="tagPublished"
+            value={tag.published ? 'public' : 'hidden'}
             onChange={(e) =>
-              setCourse({ ...course, published: e.target.value === 'public' })
+              settag({ ...tag, published: e.target.value === 'public' })
             }
             border="1px"
             borderColor="gray.400"
@@ -224,24 +197,8 @@ export function CourseEditor({
             <option value="public">公開</option>
           </Select>
         </FormControl>
-        <CheckboxGroup colorScheme={THEME_COLOR.PRIMARY_FONT_COLOR}>
-          <Stack spacing={[5]} direction={['row']} flexWrap={'wrap'}>
-            {tags.map((tag) => (
-              <HStack as="label" htmlFor={tag.id} cursor={'pointer'}>
-                <input
-                  id={tag.id}
-                  type="checkbox"
-                  checked={tagIds.includes(tag.id)}
-                  onChange={handleTagIds(tag.id)}
-                />
-                <Text>{tag.name}</Text>
-              </HStack>
-            ))}
-          </Stack>
-        </CheckboxGroup>
-
         <Button
-          onClick={updateCourse}
+          onClick={updatetag}
           isLoading={isSubmitting}
           isDisabled={isButtonDisabled()}
           colorScheme="green"
@@ -249,7 +206,7 @@ export function CourseEditor({
         >
           変更を保存
         </Button>
-        <CourseRemover />
+        <tagRemover />
       </Stack>
     </Box>
   )

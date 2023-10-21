@@ -6,6 +6,7 @@ import {
   CardHeader,
   Center,
   Flex,
+  HStack,
   Heading,
   Image,
   Input,
@@ -18,13 +19,15 @@ import {
 } from '@chakra-ui/react'
 import { BsChevronRight } from 'react-icons/bs'
 
-import { CourseWithSectionsType } from '../../types'
+import { CourseTagType, CourseWithSectionsType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { SearchIcon } from '@chakra-ui/icons'
+import { Tag } from '../atoms/Tag'
 
+type CourseListType = CourseWithSectionsType & CourseTagType
 type CourseListProps = {
-  courses: CourseWithSectionsType[]
+  courses: CourseListType[]
   handleTextChange: (event: any) => void
 }
 
@@ -88,13 +91,14 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
               spacingY="10"
               minW={'100%'}
             >
-              {courses.map((course: CourseWithSectionsType) => (
+              {courses.map((course: CourseListType) => (
                 <Card
                   key={course.id}
                   w="288px"
                   boxShadow="md"
                   borderRadius="8px"
                   margin={'auto'}
+                  height={'330px'}
                 >
                   <CardHeader p={0}>
                     <Image
@@ -104,9 +108,18 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                       width="100%"
                       height="150px"
                       objectFit={'cover'}
+                      borderRadius={'8px 8px 0 0'}
                     />
                   </CardHeader>
-                  <CardBody px={3} py={4}>
+                  <CardBody
+                    px={3}
+                    pt={4}
+                    pb={3}
+                    display={'flex'}
+                    flexDirection={'column'}
+                    flex={'1 1 auto'}
+                    position={'relative'}
+                  >
                     <Heading fontSize="16px">{course.name}</Heading>
                     <Text
                       h="34px"
@@ -119,7 +132,24 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                     >
                       {course.description}
                     </Text>
-                    <Flex justify="flex-end">
+                    {course.tags && (
+                      <HStack flexWrap="wrap">
+                        {course.tags.map((courseTag: any) => (
+                          <Tag
+                            color={courseTag.tag.color}
+                            backgroundColor={courseTag.tag.backgroundColor}
+                          >
+                            {courseTag.tag.name}
+                          </Tag>
+                        ))}
+                      </HStack>
+                    )}
+                    <Flex
+                      justify="flex-end"
+                      position={'absolute'}
+                      bottom={'8px'}
+                      right={'12px'}
+                    >
                       <Link
                         href={`/course/${course.id}?videoId=${course.sections[0]?.videos[0]?.id}`}
                         mt="2"

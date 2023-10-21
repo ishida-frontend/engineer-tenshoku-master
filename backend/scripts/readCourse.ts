@@ -12,6 +12,11 @@ export async function readCourse(id: string) {
           videos: true,
         },
       },
+      tags: {
+        select: {
+          tag_id: true,
+        },
+      },
     },
   })
   return course
@@ -50,6 +55,11 @@ export async function readAllCourses() {
             order: 'asc',
           },
         ],
+      },
+      tags: {
+        include: {
+          tag: true,
+        },
       },
     },
     orderBy: [
@@ -148,6 +158,11 @@ export async function getSearchedCourses({ text }: { text: string }) {
                 },
               ],
             },
+          },
+        },
+        tags: {
+          include: {
+            tag: true,
           },
         },
       },

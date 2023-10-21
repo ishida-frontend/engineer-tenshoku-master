@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import crypto from 'crypto'
-
+import { THEME_COLOR } from '../../constants'
 const prisma = new PrismaClient()
 
 async function main() {
@@ -37,6 +37,77 @@ async function main() {
     })
     console.log({ post })
   }
+
+  await prisma.tag.createMany({
+    data: [
+      {
+        id: crypto.randomUUID(),
+        name: 'React',
+        color: THEME_COLOR.BASIC_BLACK,
+        backgroundColor: '#61dafb',
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'JavaScript',
+        color: THEME_COLOR.BASIC_BLACK,
+        backgroundColor: '#f0db4f',
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'TypeScript',
+        color: THEME_COLOR.BASIC_WHITE,
+        backgroundColor: '#007acc',
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'Node.js',
+        color: THEME_COLOR.BASIC_WHITE,
+        backgroundColor: '#68a063',
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'Express',
+        color: THEME_COLOR.BASIC_WHITE,
+        backgroundColor: '#000000',
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'GraphQL',
+        color: THEME_COLOR.BASIC_WHITE,
+        backgroundColor: '#e535ab',
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'Next.js',
+        color: THEME_COLOR.BASIC_WHITE,
+        backgroundColor: '#000000',
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'Docker',
+        color: THEME_COLOR.BASIC_WHITE,
+        backgroundColor: '#2496ed',
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'MySQL',
+        color: THEME_COLOR.BASIC_BLACK,
+        backgroundColor: '#4479a1',
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'Git',
+        color: THEME_COLOR.BASIC_WHITE,
+        backgroundColor: '#f34f29',
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'VSCode',
+        color: THEME_COLOR.BASIC_BLACK,
+        backgroundColor: '#007acc',
+      },
+    ],
+  })
 }
 
 main()

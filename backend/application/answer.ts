@@ -12,7 +12,7 @@ export class AnswerApplicationService {
       const answer = await prisma.answer.create({
         data: {
           question_id,
-          user_id,
+          userId: user_id,
           comment,
         },
       })

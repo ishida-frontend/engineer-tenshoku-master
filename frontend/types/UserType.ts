@@ -1,4 +1,4 @@
-import { USER_ROLE } from '../constants'
+import { QUESTION_PAGES, USER_ROLE } from '../constants'
 
 export type UserType = {
   id: string
@@ -10,6 +10,7 @@ export type UserType = {
   updatedAt: string
 }
 
+export type QuestionPageType = keyof typeof QUESTION_PAGES
 export type UserProfileType = {
   id: string
   name: string

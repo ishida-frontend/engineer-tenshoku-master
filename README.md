@@ -147,6 +147,15 @@ Prisma のスキームを変更・追加する方法。
 cd backend
 ```
 
+```bash
+yarn prisma migrate dev --create-only
+```
+
+コマンドでどういうSQLが作成されるか確認。
+今回の対応で関係ないものが含まれていないか確認してください。
+確認が済んだら
+
+
 以下を実行で schema を更新
 
 ```bash
