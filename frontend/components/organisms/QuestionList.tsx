@@ -74,6 +74,7 @@ export function QuestionList({
             {questions.map((question: QuestionType) => (
               <Link
                 href={`/course/${courseId}/?videoId=${videoId}&questionId=${question.id}`}
+                scroll={false}
                 onClick={changeToQuestionDetail}
               >
                 <Card
