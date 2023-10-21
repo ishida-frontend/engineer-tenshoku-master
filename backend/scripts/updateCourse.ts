@@ -66,12 +66,9 @@ export async function updateCourse({
         },
       },
     })
-    console.log('updatedCourse', updatedCourse)
 
     return updatedCourse
   } catch (error) {
-    console.log('error', error)
-
     throw error
   }
 }
