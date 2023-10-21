@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export class TagApplicationService {
-  static async createTag(params: {
+  async createTag(params: {
     name: string
     color: string
     backgroundColor: string
@@ -22,7 +22,7 @@ export class TagApplicationService {
     }
   }
 
-  static async getTag(tagId: string) {
+  async getTag(tagId: string) {
     try {
       const question = await prisma.tag.findUnique({
         where: { id: tagId },
@@ -32,7 +32,7 @@ export class TagApplicationService {
       throw error
     }
   }
-  static async getTags() {
+  async getTags() {
     try {
       const question = await prisma.tag.findMany({
         where: { deleted_at: null },

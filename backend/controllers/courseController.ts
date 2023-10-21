@@ -16,7 +16,7 @@ exports.createCourse = async function (
   res: express.Response,
 ) {
   try {
-    const { name, description, published } = req.body
+    const { name, description, published, tagIds } = req.body
 
     if (!name || !description) {
       return res
@@ -24,9 +24,20 @@ exports.createCourse = async function (
         .json({ message: 'コース名とコース概要は必須です。' })
     }
 
-    await createCourse(name, description, published)
+    const createdCourse = await createCourse(
+      name,
+      description,
+      published,
+      tagIds,
+    )
 
-    res.status(201).json({ message: '新しいコースが作成されました！' })
+    if (!createdCourse) {
+      return res.status(400).json({ message: 'コースの作成に失敗しました。' })
+    }
+
+    res.status(201).json({
+      message: `新しいコース(${createdCourse.name})が作成されました！`,
+    })
   } catch (e: any) {
     res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })
   }

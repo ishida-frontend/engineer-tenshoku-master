@@ -2,27 +2,31 @@ import express from 'express'
 import { TagApplicationService } from '../application/tag'
 
 export class TagController {
-  createTag = async function (req: express.Request, res: express.Response) {
+  private tagApplicationService: TagApplicationService
+  constructor() {
+    this.tagApplicationService = new TagApplicationService()
+  }
+  async createTag(req: express.Request, res: express.Response) {
     try {
       const tagData = req.body
-      await TagApplicationService.createTag(tagData)
+      await this.tagApplicationService.createTag(tagData)
       res.status(201).json({ message: '正常にタグを追加しました' })
     } catch (e: any) {
       res.status(500).json({ message: 'エラーが発生しました' })
     }
   }
 
-  getTag = async function (req: express.Request, res: express.Response) {
+  async getTag(req: express.Request, res: express.Response) {
     try {
-      const tag = await TagApplicationService.getTag(req.params.id)
+      const tag = await this.tagApplicationService.getTag(req.params.id)
       res.status(200).json(tag)
     } catch (e: any) {
       res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })
     }
   }
-  getTags = async function (req: express.Request, res: express.Response) {
+  async getTags(req: express.Request, res: express.Response) {
     try {
-      const tags = await TagApplicationService.getTags()
+      const tags = await this.tagApplicationService.getTags()
       res.status(200).json(tags)
     } catch (e: any) {
       res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })

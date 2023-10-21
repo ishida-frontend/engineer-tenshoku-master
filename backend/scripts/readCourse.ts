@@ -12,6 +12,11 @@ export async function readCourse(id: string) {
           videos: true,
         },
       },
+      tags: {
+        select: {
+          tag_id: true,
+        },
+      },
     },
   })
   return course
