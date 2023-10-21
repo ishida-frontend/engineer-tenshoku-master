@@ -6,9 +6,12 @@ import { validate, courseValidationRules } from '../validation/courseValidation'
 import { VideoValidator } from '../validation/videoValidator'
 import { UserController } from '../controllers/userController'
 import { ViewingStatusController } from '../controllers/viewingStatusController'
+import { FavoriteVideoController } from '../controllers/favoriteVideoController'
 import { VideoController } from '../controllers/videoController'
 import { QuestionController } from '../controllers/questionController'
 import { AnswerController } from '../controllers/answerController'
+import { TagValidator } from '../validation/tagValidator'
+import { TagController } from '../controllers/tagController'
 
 const {
   createCourse,
@@ -35,10 +38,13 @@ const router = express.Router()
 
 const userController = new UserController()
 const videoValidator = new VideoValidator()
+const tagController = new TagController()
+const tagValidator = new TagValidator()
 const videoController = new VideoController()
 const questionController = new QuestionController()
 const answerController = new AnswerController()
 const viewingStatusController = new ViewingStatusController()
+const favoriteVideoController = new FavoriteVideoController()
 
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -77,6 +83,13 @@ adminRouter.put(
   videoController.updateVideo,
 )
 adminRouter.delete('/video/:id', videoController.deleteVideo)
+
+// Tagのルーティング
+router.get('/tag', (req, res) => tagController.getTags(req, res))
+router.get('/tag/:tagId', (req, res) => tagController.getTag(req, res))
+router.post('/tag', tagValidator.createTag, (req, res) => {
+  tagController.createTag(req, res)
+})
 
 const userRouter = express.Router()
 router.use('/user', userRouter)
@@ -143,5 +156,17 @@ viewingStatusRouter.get(
   '/:userId/:courseId/all',
   viewingStatusController.getViewingStatuses,
 )
+
+const favoriteVideoRouter = express.Router()
+router.use('/favoritevideo', favoriteVideoRouter)
+favoriteVideoRouter.put(
+  '/:userId/:videoId',
+  favoriteVideoController.upsertFavoriteVideo,
+)
+favoriteVideoRouter.get(
+  '/:userId/:videoId',
+  favoriteVideoController.getFavoriteVideo,
+)
+favoriteVideoRouter.get('/:userId', favoriteVideoController.getFavoriteVideos)
 
 export default router

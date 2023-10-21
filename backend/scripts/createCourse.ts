@@ -6,6 +6,7 @@ export async function createCourse(
   name: string,
   description: string,
   published: boolean,
+  tagIds: string[],
 ) {
   try {
     const createdCourse = await prisma.course.create({
@@ -14,8 +15,18 @@ export async function createCourse(
         name: name,
         description: description,
         published: published,
+        tags: {
+          create: tagIds.map((tagId) => ({
+            tag: {
+              connect: {
+                id: tagId,
+              },
+            },
+          })),
+        },
       },
     })
+    return createdCourse
   } catch (e: any) {
     console.log(e.message)
   } finally {

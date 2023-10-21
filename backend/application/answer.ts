@@ -1,18 +1,18 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-export class AnswerApplication {
-  static async create(params: {
+export class AnswerApplicationService {
+  static async create(body: {
     question_id: string
     user_id: string
     comment: string
   }) {
     try {
-      const { comment, question_id, user_id } = params
+      const { comment, question_id, user_id } = body
       const answer = await prisma.answer.create({
         data: {
           question_id,
-          user_id,
+          userId: user_id,
           comment,
         },
       })
@@ -26,6 +26,11 @@ export class AnswerApplication {
     try {
       const answer = await prisma.answer.findMany({
         where: { question_id },
+        orderBy: [
+          {
+            created_at: 'asc',
+          },
+        ],
       })
       return answer
     } catch (error) {

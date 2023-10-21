@@ -12,17 +12,18 @@ datasource db {
 }
 
 model User {
-  id         String    @id @db.VarChar(255)
-  question   Question[]
-  answer     Answer[]
-  role       UserRole  @default(USER)
-  name       String?
-  oneWord    String?
-  goal       String?
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  deleted_at DateTime?
+  id            String          @id @db.VarChar(255)
+  question      Question[]
+  answer        Answer[]
+  role          UserRole        @default(USER)
+  name          String?
+  oneWord       String?
+  goal          String?
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+  deleted_at    DateTime?
   ViewingStatus ViewingStatus[]
+  FavoriteVideo FavoriteVideo[]
 }
 
 enum UserRole {
@@ -31,15 +32,16 @@ enum UserRole {
 }
 
 model Course {
-  id          String    @id @default(uuid()) @db.VarChar(255)
+  id          String      @id @default(uuid()) @db.VarChar(255)
   sections    Section[]
   name        String
   description String?
   image       String?
-  published   Boolean   @default(false) // コースが公開されているかどうか。
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
+  published   Boolean     @default(false) // コースが公開されているかどうか。
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
   deleted_at  DateTime?
+  tags        CourseTag[]
 }
 
 model Section {
@@ -56,19 +58,20 @@ model Section {
 }
 
 model Video {
-  id          String    @id @default(uuid()) @db.VarChar(255)
-  question    Question[]
-  section     Section   @relation(fields: [section_id], references: [id])
-  section_id  String    @db.VarChar(255)
-  order       Int
-  url         String?
-  name        String?
-  description String?   @db.LongText
-  published   Boolean   @default(false) // 動画が公開されているかどうか。
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  deleted_at  DateTime?
+  id            String          @id @default(uuid()) @db.VarChar(255)
+  question      Question[]
+  section       Section         @relation(fields: [section_id], references: [id])
+  section_id    String          @db.VarChar(255)
+  order         Int
+  url           String?
+  name          String?
+  description   String?         @db.LongText
+  published     Boolean         @default(false) // 動画が公開されているかどうか。
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+  deleted_at    DateTime?
   ViewingStatus ViewingStatus[]
+  FavoriteVideo FavoriteVideo[]
 }
 
 model Contact {
@@ -92,18 +95,18 @@ model Question {
   title      String   @db.VarChar(255)
   content    String   @db.LongText
   created_at DateTime @default(now())
-  updated_at  DateTime  @updatedAt
+  updated_at DateTime @updatedAt
 }
 
 model Answer {
   id          String   @id @default(uuid()) @db.VarChar(255)
   question    Question @relation(fields: [question_id], references: [id])
   question_id String   @db.VarChar(255)
-  user        User     @relation(fields: [user_id], references: [id])
-  user_id     String   @db.VarChar(255)
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      String?  @db.VarChar(255)
   comment     String   @db.LongText
   created_at  DateTime @default(now())
-  updated_at  DateTime  @updatedAt
+  updated_at  DateTime @updatedAt
 }
 
 model ViewingStatus {
@@ -114,6 +117,40 @@ model ViewingStatus {
   video      Video    @relation(fields: [video_id], references: [id])
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  @@unique([user_id, video_id])
+}
+
+model Tag {
+  id              String      @id @default(uuid())
+  name            String
+  color           String
+  backgroundColor String
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  deleted_at      DateTime?
+  courseId        String?     @db.VarChar(255)
+  courses         CourseTag[]
+}
+
+model CourseTag {
+  course    Course @relation(fields: [course_id], references: [id])
+  course_id String @db.VarChar(255)
+  tag       Tag    @relation(fields: [tag_id], references: [id])
+  tag_id    String @db.VarChar(255)
+
+  @@id([course_id, tag_id])
+}
+
+model FavoriteVideo {
+  status     Boolean   @default(false) // お気に入りでない：0、お気に入り：1
+  user_id    String    @db.VarChar(255)
+  video_id   String    @db.VarChar(255)
+  user       User      @relation(fields: [user_id], references: [id])
+  video      Video     @relation(fields: [video_id], references: [id])
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
 
   @@unique([user_id, video_id])
 }

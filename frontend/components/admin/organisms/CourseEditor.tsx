@@ -9,27 +9,36 @@ import {
   Input,
   Stack,
   Select,
-  Text,
   Textarea,
   Link,
+  CheckboxGroup,
+  HStack,
+  Text,
 } from '@chakra-ui/react'
 
 import { CourseRemover } from './CourseRemover'
-import { CourseType } from '../../../types'
+import { CourseType, TagType } from '../../../types'
 import formatDate from '../../../utils/formatDate'
 import { Loader } from '../../../components/admin/atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-
+import { THEME_COLOR } from '../../../constants/colors'
+type CourseWithTagsType = CourseType & {
+  tags: {
+    tag_id: string
+  }[]
+}
 export function CourseEditor({
   course_id,
   courseData,
+  tags,
 }: {
   course_id: string
-  courseData: CourseType
+  courseData: CourseWithTagsType
+  tags: TagType[]
 }) {
   const { showSuccessToast, showErrorToast } = useCustomToast()
 
-  const selectedCourseState: CourseType = {
+  const selectedCourseState: CourseWithTagsType = {
     id: courseData.id,
     name: courseData.name,
     description: courseData.description,
@@ -39,8 +48,13 @@ export function CourseEditor({
     created_at: courseData.created_at,
     updated_at: courseData.updated_at,
     deleted_at: courseData.deleted_at,
+    tags: courseData.tags,
   }
   const [course, setCourse] = useState<CourseType>(selectedCourseState)
+  const [tagIds, setTagIds] = useState<string[]>(
+    courseData.tags.map((tag) => tag.tag_id),
+  )
+  console.log('tagIds', tagIds)
 
   const [errors, setErrors] = useState({
     nameError: '',
@@ -69,6 +83,17 @@ export function CourseEditor({
     return JSON.stringify(selectedCourseState) !== JSON.stringify(course)
   }
 
+  const handleTagIds = (tagId: string) => () => {
+    // idが選択されていたら
+    if (tagIds.includes(tagId)) {
+      // idを取り除く
+      setTagIds(tagIds.filter((id) => id !== tagId))
+    } else {
+      // idを追加する
+      setTagIds([...tagIds, tagId])
+    }
+  }
+
   const isButtonDisabled = () => {
     return !hasChanges()
   }
@@ -91,6 +116,7 @@ export function CourseEditor({
             name: course.name,
             description: course.description,
             published: course.published,
+            tagIds,
           }),
         },
       )
@@ -198,6 +224,22 @@ export function CourseEditor({
             <option value="public">公開</option>
           </Select>
         </FormControl>
+        <CheckboxGroup colorScheme={THEME_COLOR.PRIMARY_FONT_COLOR}>
+          <Stack spacing={[5]} direction={['row']} flexWrap={'wrap'}>
+            {tags.map((tag) => (
+              <HStack as="label" htmlFor={tag.id} cursor={'pointer'}>
+                <input
+                  id={tag.id}
+                  type="checkbox"
+                  checked={tagIds.includes(tag.id)}
+                  onChange={handleTagIds(tag.id)}
+                />
+                <Text>{tag.name}</Text>
+              </HStack>
+            ))}
+          </Stack>
+        </CheckboxGroup>
+
         <Button
           onClick={updateCourse}
           isLoading={isSubmitting}

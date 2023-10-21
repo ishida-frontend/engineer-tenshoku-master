@@ -25,6 +25,16 @@ export const PATHS = {
       title: 'お問い合わせ完了',
     },
   },
+  PROFILE: {
+    path: '/profile',
+    title: 'プロフィール',
+  },
+  VIDEO: {
+    FAVORITE: {
+      path: '/videos/favorite',
+      title: 'お気に入り動画一覧',
+    },
+  },
   ADMIN: {
     COURSE: {
       LIST: {
@@ -40,6 +50,18 @@ export const PATHS = {
 }
 
 export const APIS = {
+  FAVORITE_VIDEO: {
+    UPSERT: {
+      path: (userId: string | undefined, videoId: string) =>
+        `${backendUrl}/favoritevideo/${userId}/${videoId}`,
+      title: '動画のお気に入りステータスの作成と更新',
+    },
+    GET: {
+      path: (userId: string | undefined, videoId: string) =>
+        `${backendUrl}/favoritevideo/${userId}/${videoId}`,
+      title: '動画のお気に入りステータスのフェッチ',
+    },
+  },
   VIEWING_STATUS: {
     UPSERT: {
       path: (userId: string | undefined, videoId: string) =>
@@ -52,6 +74,13 @@ export const APIS = {
       title: '視聴ステータスのフェッチ',
     },
   },
+  USER_PROFILE: {
+    UPDATE: {
+      path: (userId: string | undefined) => `${backendUrl}/user/${userId}`,
+      title: 'ユーザのプロフィール更新',
+    },
+  },
 }
+
 // TODO idなどを動的にするなら
 // 参考 https://abeshi-blog.com/blog/t8or29ad3dz
