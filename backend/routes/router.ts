@@ -6,6 +6,7 @@ import { validate, courseValidationRules } from '../validation/courseValidation'
 import { VideoValidator } from '../validation/videoValidator'
 import { UserController } from '../controllers/userController'
 import { ViewingStatusController } from '../controllers/viewingStatusController'
+import { FavoriteVideoController } from '../controllers/favoriteVideoController'
 import { VideoController } from '../controllers/videoController'
 import { QuestionController } from '../controllers/questionController'
 import { AnswerController } from '../controllers/answerController'
@@ -18,6 +19,7 @@ const {
   readAllCourses,
   readFilteredCourses,
   getPublishedCourse,
+  getSearchedCourses,
   updateCourse,
   deleteCourse,
 } = require('../controllers/courseController')
@@ -42,6 +44,7 @@ const videoController = new VideoController()
 const questionController = new QuestionController()
 const answerController = new AnswerController()
 const viewingStatusController = new ViewingStatusController()
+const favoriteVideoController = new FavoriteVideoController()
 
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -99,6 +102,7 @@ router.use('/course', courseRouter)
 courseRouter.get('/create', createCourse)
 courseRouter.get('/read', readCourse)
 courseRouter.get('/all', readAllCourses)
+courseRouter.post('/search', getSearchedCourses)
 courseRouter.get('/update', updateCourse)
 courseRouter.get('/:id', getPublishedCourse)
 
@@ -149,8 +153,20 @@ viewingStatusRouter.get(
   viewingStatusController.getViewingStatus,
 )
 viewingStatusRouter.get(
-  '/all/:courseId/:userId',
+  '/:userId/:courseId/all',
   viewingStatusController.getViewingStatuses,
 )
+
+const favoriteVideoRouter = express.Router()
+router.use('/favoritevideo', favoriteVideoRouter)
+favoriteVideoRouter.put(
+  '/:userId/:videoId',
+  favoriteVideoController.upsertFavoriteVideo,
+)
+favoriteVideoRouter.get(
+  '/:userId/:videoId',
+  favoriteVideoController.getFavoriteVideo,
+)
+favoriteVideoRouter.get('/:userId', favoriteVideoController.getFavoriteVideos)
 
 export default router

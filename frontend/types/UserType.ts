@@ -1,4 +1,4 @@
-import { USER_ROLE } from '../constants/user'
+import { QUESTION_PAGES, USER_ROLE } from '../constants'
 
 export type UserType = {
   id: string
@@ -10,10 +10,10 @@ export type UserType = {
   updatedAt: string
 }
 
-export const QUESTION_PAGES = {
-  QuestionList: 'QuestionList',
-  QuestionForm: 'QuestionForm',
-  QuestionDetail: 'QuestionDetail',
-} as const // `as const`を使って、リテラル型を維持
-
 export type QuestionPageType = keyof typeof QUESTION_PAGES
+export type UserProfileType = {
+  id: string
+  name: string
+  oneWord: string
+  goal: string
+}

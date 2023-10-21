@@ -1,3 +1,5 @@
+const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}`
+
 export const PATHS = {
   LOGIN: {
     path: '/auth/login',
@@ -23,6 +25,16 @@ export const PATHS = {
       title: 'お問い合わせ完了',
     },
   },
+  PROFILE: {
+    path: '/profile',
+    title: 'プロフィール',
+  },
+  VIDEO: {
+    FAVORITE: {
+      path: '/videos/favorite',
+      title: 'お気に入り動画一覧',
+    },
+  },
   ADMIN: {
     COURSE: {
       LIST: {
@@ -38,21 +50,34 @@ export const PATHS = {
 }
 
 export const APIS = {
+  FAVORITE_VIDEO: {
+    UPSERT: {
+      path: (userId: string | undefined, videoId: string) =>
+        `${backendUrl}/favoritevideo/${userId}/${videoId}`,
+      title: '動画のお気に入りステータスの作成と更新',
+    },
+    GET: {
+      path: (userId: string | undefined, videoId: string) =>
+        `${backendUrl}/favoritevideo/${userId}/${videoId}`,
+      title: '動画のお気に入りステータスのフェッチ',
+    },
+  },
   VIEWING_STATUS: {
-    STATUS: {
-      upsert: (userId: string | undefined, videoId: string) =>
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
+    UPSERT: {
+      path: (userId: string | undefined, videoId: string) =>
+        `${backendUrl}/viewingstatus/${userId}/${videoId}`,
       title: '視聴ステータスの作成と更新',
     },
-    BUTTON: {
-      get: (userId: string | undefined, videoId: string) =>
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/${userId}/${videoId}`,
-      title: '視聴完了ボタンのステータスフェッチ',
+    GET: {
+      path: (userId: string | undefined) =>
+        `${backendUrl}/viewingstatus/${userId}`,
+      title: '視聴ステータスのフェッチ',
     },
-    CHECKMARKS: {
-      get: (courseId: string, userId: string | undefined) =>
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/viewingstatus/all/${courseId}/${userId}`,
-      title: 'コース全体のチェックマークのステータスフェッチ',
+  },
+  USER_PROFILE: {
+    UPDATE: {
+      path: (userId: string | undefined) => `${backendUrl}/user/${userId}`,
+      title: 'ユーザのプロフィール更新',
     },
   },
 }

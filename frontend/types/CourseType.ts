@@ -1,4 +1,6 @@
 import { TagType } from './TagType'
+import { SectionType } from './SectionType'
+import { CourseList } from '../components/organisms/CourseList'
 
 export type CourseType = {
   id: string
@@ -14,4 +16,12 @@ export type CourseType = {
 
 export type CourseTagType = CourseType & {
   tags: TagType[]
+}
+export type CourseWithSectionsType = CourseType & {
+  sections: SectionType[]
+}
+
+export type CourseListType = CourseType & {
+  tags: TagType[]
+  sections: SectionType[]
 }

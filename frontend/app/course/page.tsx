@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { CourseList } from '../../components/organisms/CourseList'
-import { CourseTagType } from '../../types/CourseType'
-import Error from '../error'
+import { CourseListType, CourseTagType } from '../../types/CourseType'
 import { authOptions } from '../api/auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth'
-
+import { CourseListWrapper } from '../../components/pages/CourseListWrapper'
+import { CourseWithSectionsType } from '../../types/CourseType'
+import Error from '../error'
 export default async function Course() {
   // TODO ユーザ情報を渡してデータ取得できるようにする
   const session = await getServerSession(authOptions)
@@ -20,12 +20,11 @@ export default async function Course() {
         },
       },
     )
-    const courses: CourseTagType[] = await res.json()
-    console.log('courses', courses)
 
-    return <CourseList courses={courses} />
+    const initialCourses: CourseListType[] = await res.json()
+
+    return <CourseListWrapper initialCourses={initialCourses} />
   } catch (e) {
-    console.log(e)
     return <Error />
   }
 }

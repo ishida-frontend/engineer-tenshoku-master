@@ -8,6 +8,8 @@ declare module 'next-auth' {
     user: {
       /** The user's Id. */
       id: string
+      isAdmin: boolean
+      name: string
     }
   }
 }

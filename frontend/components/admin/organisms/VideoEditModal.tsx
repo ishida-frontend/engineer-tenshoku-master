@@ -155,7 +155,7 @@ export function VideoEditModal({
 
       const result = await response.json()
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         mutate(`course${courseId}`)
         setErrors({
           nameError: '',

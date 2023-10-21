@@ -3,24 +3,22 @@ import { getServerSession } from 'next-auth/next'
 import { authOptions } from '../../api/auth/[...nextauth]/route'
 
 import { CourseDetail } from '../../../components/pages/CourseDetail'
-import { CourseType } from '../../../types/CourseType'
-import { SectionType } from '../../../types/SectionType'
-import { VideoType } from '../../../types/VideoType'
+import { CourseWithSectionsType } from 'types'
+import { QuestionType } from 'types/QuestionType'
+import { AnswerType } from 'types/AnswerType'
 import Error from '../../error'
-
-type CourseDetailPropsType = CourseType & {
-  sections: (SectionType & { videos: VideoType[] })[]
-}
 
 export default async function CourseDetailPage({
   params,
+  searchParams,
 }: {
   params: { courseId: string }
+  searchParams: { videoId: string; questionId: string }
 }) {
   const session = await getServerSession(authOptions)
 
   try {
-    const res = await fetch(
+    const getCourseData = await fetch(
       `${process.env.NEXT_PUBLIC_FRONT_API_URL}/course/${params.courseId}`,
       {
         headers: {
@@ -28,9 +26,39 @@ export default async function CourseDetailPage({
         },
       },
     )
-    const courseData: CourseDetailPropsType = await res.json()
+    const courseData: CourseWithSectionsType = await getCourseData.json()
 
-    return <CourseDetail courseData={courseData} session={session} />
+    const getQuestionsData = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${searchParams.videoId}`,
+      {
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    const questions: QuestionType[] = await getQuestionsData.json()
+
+    const getAnswersData = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/answer/${searchParams.questionId}`,
+      {
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    const answers: AnswerType[] = await getAnswersData.json()
+
+    return (
+      <CourseDetail
+        courseData={courseData}
+        session={session}
+        questions={questions}
+        answers={answers}
+        questionId={searchParams.questionId}
+      />
+    )
   } catch (e) {
     return <Error />
   }
