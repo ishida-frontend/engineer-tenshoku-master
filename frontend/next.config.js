@@ -1,5 +1,3 @@
-import { config } from 'dotenv'
-
 module.exports = {
   env: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
