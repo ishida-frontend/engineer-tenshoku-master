@@ -41,7 +41,7 @@ export function QuestionDetail({
   courseId?: string
   videoId?: string
   answers?: AnswerType[]
-  changeQuestionPage: (value: QuestionPageType) => Promise<void>
+  changeQuestionPage: (value: QuestionPageType) => void
   session: Session | null
   selectedQuestion?: QuestionType
   createAnswer: (createAnswerParams: { comment: string }) => Promise<void>

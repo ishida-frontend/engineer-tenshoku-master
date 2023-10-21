@@ -50,7 +50,7 @@ export function CourseDetailVideoSection({
     title: string
     content: string
   }) => Promise<void>
-  changeQuestionPage: (value: QuestionPageType) => Promise<void>
+  changeQuestionPage: (value: QuestionPageType) => void
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
   handleFavoriteVideoStatus: (
     event: React.MouseEvent<HTMLButtonElement>,
