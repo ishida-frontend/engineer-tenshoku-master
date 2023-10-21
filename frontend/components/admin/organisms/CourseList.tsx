@@ -28,7 +28,7 @@ export function CourseList({ courses }: CourseListProps) {
   return (
     <Box minH={'100vh'} padding={'60px 96px'}>
       <VStack spacing={5} p={4} maxW="800px" mx="auto">
-        <Heading size="lg">タグ一覧</Heading>
+        <Heading size="lg">コース一覧</Heading>
         <SimpleGrid columns={2} spacing={5}>
           {courses.map((course: CourseType) => (
             <Box key={course.id} p="4" boxShadow="lg" rounded="md">
@@ -36,7 +36,7 @@ export function CourseList({ courses }: CourseListProps) {
                 <strong>コースID</strong>：{course.id}
               </Text>
               <Text>
-                <strong>タグ名</strong>：{course.name}
+                <strong>コース名</strong>：{course.name}
               </Text>
               <Text>
                 <strong>作成日</strong>：{formatDate(course.created_at)}
