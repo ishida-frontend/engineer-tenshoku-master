@@ -20,8 +20,6 @@ export const TagEditor = ({ tag }: TagEditorProps) => {
   }
   const [tagData, setTagData] = useState<TagType>(selectedTag)
 
-  console.log('tagData', tagData)
-
   const [errors, setErrors] = useState({
     nameError: '',
     colorError: '',

@@ -1,6 +1,5 @@
 import express from 'express'
 import { TagApplicationService } from '../application/tag'
-import { updateTag } from '../scripts/updateTag'
 
 export class TagController {
   private tagApplicationService: TagApplicationService
