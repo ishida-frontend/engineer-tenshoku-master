@@ -105,9 +105,16 @@ exports.updateCourse = async function (
   res: express.Response,
 ) {
   try {
-    const { id, name, description, published } = req.body
+    const { id, name, description, published, tagIds } = req.body
 
-    await updateCourse({ id, name, description, published })
+    const response = await updateCourse({
+      id,
+      name,
+      description,
+      published,
+      tagIds,
+    })
+
     res.status(200).json({ message: '変更が保存されました。' })
   } catch (error) {
     if (error instanceof z.ZodError) {

@@ -224,10 +224,7 @@ export function CourseEditor({
             <option value="public">公開</option>
           </Select>
         </FormControl>
-        <CheckboxGroup
-          colorScheme={THEME_COLOR.PRIMARY_FONT_COLOR}
-          defaultValue={[]}
-        >
+        <CheckboxGroup colorScheme={THEME_COLOR.PRIMARY_FONT_COLOR}>
           <Stack spacing={[5]} direction={['row']} flexWrap={'wrap'}>
             {tags.map((tag) => (
               <HStack as="label" htmlFor={tag.id} cursor={'pointer'}>
