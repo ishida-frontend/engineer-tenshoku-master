@@ -98,7 +98,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                   boxShadow="md"
                   borderRadius="8px"
                   margin={'auto'}
-                  minHeight={'320px'}
+                  height={'330px'}
                 >
                   <CardHeader p={0}>
                     <Image
@@ -108,9 +108,18 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                       width="100%"
                       height="150px"
                       objectFit={'cover'}
+                      borderRadius={'8px 8px 0 0'}
                     />
                   </CardHeader>
-                  <CardBody px={3} pt={4} pb={3} flexGrow={1}>
+                  <CardBody
+                    px={3}
+                    pt={4}
+                    pb={3}
+                    display={'flex'}
+                    flexDirection={'column'}
+                    flex={'1 1 auto'}
+                    position={'relative'}
+                  >
                     <Heading fontSize="16px">{course.name}</Heading>
                     <Text
                       h="34px"
@@ -123,17 +132,24 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                     >
                       {course.description}
                     </Text>
-                    <HStack flexWrap="wrap">
-                      {course.tags.map((courseTag: any) => (
-                        <Tag
-                          color={courseTag.tag.color}
-                          backgroundColor={courseTag.tag.backgroundColor}
-                        >
-                          {courseTag.tag.name}
-                        </Tag>
-                      ))}
-                    </HStack>
-                    <Flex justify="flex-end">
+                    {course.tags && (
+                      <HStack flexWrap="wrap">
+                        {course.tags.map((courseTag: any) => (
+                          <Tag
+                            color={courseTag.tag.color}
+                            backgroundColor={courseTag.tag.backgroundColor}
+                          >
+                            {courseTag.tag.name}
+                          </Tag>
+                        ))}
+                      </HStack>
+                    )}
+                    <Flex
+                      justify="flex-end"
+                      position={'absolute'}
+                      bottom={'8px'}
+                      right={'12px'}
+                    >
                       <Link
                         href={`/course/${course.id}?videoId=${course.sections[0]?.videos[0]?.id}`}
                         mt="2"
