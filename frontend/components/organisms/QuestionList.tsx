@@ -27,13 +27,13 @@ export function QuestionList({
   questions?: QuestionType[]
   courseId?: string
   videoId?: string
-  changeQuestionPage: (value: QuestionPageType) => Promise<void>
+  changeQuestionPage: (value: QuestionPageType) => void
 }) {
-  const changeToQuestionDetail = async (
-    event: React.MouseEventHandler<HTMLAnchorElement>,
+  const changeToQuestionDetail = (
+    event: React.MouseEvent<HTMLAnchorElement>,
   ) => {
     try {
-      await changeQuestionPage(QUESTION_PAGES.QuestionDetail)
+      changeQuestionPage(QUESTION_PAGES.QuestionDetail)
     } catch (e) {
       throw e
     }
@@ -74,7 +74,7 @@ export function QuestionList({
             {questions.map((question: QuestionType) => (
               <Link
                 href={`/course/${courseId}/?videoId=${videoId}&questionId=${question.id}`}
-                onClick={changeToQuestionDetail}
+                onClick={(e) => changeToQuestionDetail(e)}
               >
                 <Card
                   key={question.id}
