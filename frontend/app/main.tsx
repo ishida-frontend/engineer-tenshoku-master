@@ -3,6 +3,7 @@ import { Header } from './header'
 import { Footer } from '../components/organisms/Footer'
 import { PATHS } from '../constants/paths'
 import { useSession, signOut } from 'next-auth/react'
+import { loggerInfo } from '../utils/logger'
 
 export const Main = ({ children }: { children: React.ReactNode }) => {
   const { data: session, status } = useSession()
