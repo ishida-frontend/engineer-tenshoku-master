@@ -2,9 +2,9 @@ name: Format Check
 
 on:
   push:
-    paths:
-      - 'frontend/**'
-      - 'backend/**'
+    # paths:
+    #   - 'frontend/**'
+    #   - 'backend/**'
 
 jobs:
   format-check:
