@@ -4,10 +4,10 @@ const prisma = new PrismaClient()
 export async function readTag() {
   const tag = await prisma.tag.findUnique({
     where: {
-      id: 1,
+      id: '1',
     },
   })
-  console.log("readTag", tag)
+  console.log('readTag', tag)
 }
 
 readTag()
@@ -20,7 +20,7 @@ readTag()
 
 export async function readAllTag() {
   const tag = await prisma.tag.findMany({})
-  console.log("readAllTag", tag)
+  console.log('readAllTag', tag)
 }
 
 readAllTag()
@@ -41,7 +41,7 @@ export async function readFilteredTag() {
       },
     },
   })
-  console.log("readFilteredTag", tag)
+  console.log('readFilteredTag', tag)
 }
 
 readFilteredTag()

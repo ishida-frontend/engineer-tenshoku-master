@@ -10,6 +10,6 @@
   "rules": {
     "devDependencies": false,
     "@typescript-eslint/semi": ["off"],
-    "no-unsafe-finally": ["off"],
+    "no-unsafe-finally": ["off"]
   }
  }
