@@ -7,6 +7,7 @@ import { CourseWithSectionsType } from 'types'
 import { QuestionType } from 'types/QuestionType'
 import { AnswerType } from 'types/AnswerType'
 import Error from '../../error'
+import { loggerInfo } from '../../../utils/logger'
 
 export default async function CourseDetailPage({
   params,
@@ -60,6 +61,10 @@ export default async function CourseDetailPage({
       />
     )
   } catch (e) {
+    loggerInfo(`error: ${e}`, {
+      caller: 'frontend/app/course/[courseId]/page.tsx',
+      status: 400,
+    })
     return <Error />
   }
 }
