@@ -170,7 +170,3 @@ favoriteVideoRouter.get(
 favoriteVideoRouter.get('/:userId', favoriteVideoController.getFavoriteVideos)
 
 export default router
-
-const courseCreateRouter = express.Router()
-
-const
