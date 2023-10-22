@@ -6,7 +6,7 @@ on:
       #   - 'frontend/**'
       - 'backend/**'
 
-  # jobs:
+jobs:
   #   format-check-frontend:
   #     name: frontend
   #     runs-on: ubuntu-latest
