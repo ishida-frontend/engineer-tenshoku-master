@@ -26,5 +26,8 @@ jobs:
       - name: Yarn Installation
         run: yarn
 
-      - name: Format Check
-        run: yarn prettier --check .
+      # - name: Format with Prettier
+      #   run: yarn prettier --check .
+
+      - name: Format with Lint
+        run: yarn next lint
