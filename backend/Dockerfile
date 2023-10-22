@@ -4,7 +4,7 @@
 # docker-composeでコードを共有する前提
 # 実行ステージ（開発環境）
 # 開発用のイメージをビルドするステージ
-FROM node:18.16.0 AS development
+FROM node:18.16.0-alpine AS development
 
 WORKDIR /app
 
@@ -24,7 +24,7 @@ CMD sleep 45s; ./startup.sh
 ###############
 # ソースコードをビルドする
 # 基本的なベースイメージを設定し、アプリケーションのビルドを行う
-FROM node:18.16.0 AS build
+FROM node:18.16.0-alpine AS build
 
 WORKDIR /app
 
@@ -44,7 +44,7 @@ RUN yarn run build
 ###############
 # 実行ステージ（本番環境）
 # 本番環境用のイメージをビルドするステージ
-FROM node:18.16.0 AS production
+FROM node:18.16.0-alpine AS production
 ENV NODE_ENV=production
 
 WORKDIR /app
