@@ -8,8 +8,8 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "devDependencies": false,
+    "devDependencies": 0,
     "@typescript-eslint/semi": ["off"],
-    "no-unsafe-finally": ["off"],
+    "no-unsafe-finally": ["off"]
   }
- }
+}
