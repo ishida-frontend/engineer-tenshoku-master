@@ -3,14 +3,12 @@ name: Format Check
 on:
   push:
     paths:
-      - './**'
+      - 'frontend/**'
+      - 'backend/**'
 
 jobs:
   format-check:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./
 
     steps:
       - name: Checkout Repository
