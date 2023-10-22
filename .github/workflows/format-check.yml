@@ -1,0 +1,30 @@
+name: Format Check
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+
+jobs:
+  format-check:
+    name: frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.16
+
+      - name: Yarn Installation
+        run: yarn
+
+      - name: Format Check
+        run: yarn prettier --check .
