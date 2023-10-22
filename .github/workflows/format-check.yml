@@ -2,9 +2,9 @@ name: Format Check
 
 on:
   push:
-    # paths:
-    #   - 'frontend/**'
-    #   - 'backend/**'
+    paths:
+      #   - 'frontend/**'
+      - 'backend/**'
 
 jobs:
   format-check-frontend:
@@ -53,3 +53,6 @@ jobs:
 
       - name: Format with Prettier
         run: yarn prettier --check .
+
+      - name: Format with Lint
+        run: yarn next lint

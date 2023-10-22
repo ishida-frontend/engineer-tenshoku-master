@@ -151,7 +151,7 @@ export function QuestionDetail({
               </HStack>
             </Card>
           ))}
-          <Link href={`/course/${courseId}/?videoId=${videoId}`}>
+          <Link href={`/course/${courseId}/?videoId=${videoId}`} scroll={false}>
             <Button
               mt={'20px'}
               onClick={() => changeQuestionPage(QUESTION_PAGES.QuestionList)}
