@@ -3,7 +3,7 @@ export const convertVideoUrl = (videoUrl?: string): string | null => {
     throw new Error('有効な動画URLではありません')
   }
 
-  // 通常の YouTube URL (ブラウザのアドレスバーに表示されるURL) ＆　再生リストに入った動画のURL
+  // 通常の YouTube URL (ブラウザのアドレスバーに表示されるURL)＆再生リストに入った動画のURL
   let regExp = /https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/
   let match = videoUrl.match(regExp)
   if (match && match[1]) {
