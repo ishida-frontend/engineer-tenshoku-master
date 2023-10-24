@@ -16,14 +16,14 @@ import {
 import { CourseDetailVideoSection } from '../organisms/CourseDetailVideoSection'
 import { CourseDetailAccordionMenu } from '../organisms/CourseDetailAccordionMenu'
 import { CourseWithSectionsType } from '../../types/CourseType'
-import { QuestionType } from 'types/QuestionType'
+import { QuestionType } from '../../types/QuestionType'
 import '../../styles/markdown.css'
 import { Session } from 'next-auth'
-import { useCustomToast } from 'hooks/useCustomToast'
-import { CreateQuestionErrorType } from 'types/QuestionType'
-import { QUESTION_PAGES } from 'constants/index'
-import { QuestionPageType } from 'types/QuestionType'
-import { AnswerType } from 'types/AnswerType'
+import { useCustomToast } from '../../hooks/useCustomToast'
+import { CreateQuestionErrorType } from '../../types/QuestionType'
+import { QUESTION_PAGES } from '../../constants/index'
+import { QuestionPageType } from '../../types/QuestionType'
+import { AnswerType } from '../../types/AnswerType'
 
 type loadingStates = {
   watching: boolean
@@ -63,6 +63,8 @@ export function CourseDetail({
   answers: AnswerType[]
   questionId?: string
 }) {
+  console.log('courseData:', courseData)
+
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
@@ -77,6 +79,8 @@ export function CourseDetail({
   const [questionPage, setQuestionPage] = useState<QuestionPageType>(
     QUESTION_PAGES.QuestionList,
   )
+
+  const [completePercentage, setCompletePercentage] = useState(0)
   const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
     {},
   )
@@ -96,6 +100,35 @@ export function CourseDetail({
   )
   const [selectedQuestion, setSelectedQuestion] = useState<QuestionType>()
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo | null>(null)
+
+  const getCompletePercentage = () => {
+    let totalVideos = 0
+    let watchedVideos = 0
+
+    courseData.sections.forEach((section) => {
+      section.videos.forEach((video) => {
+        totalVideos++
+        if (
+          video.ViewingStatus.some(
+            (viewingStatus) => viewingStatus.status === true,
+          )
+        ) {
+          watchedVideos++
+        }
+      })
+    })
+    console.log('totalVideos:', totalVideos)
+    console.log('watchedVideos:', watchedVideos)
+
+    console.log('watchedStatus:', JSON.stringify(watchedStatus, null, 2))
+
+    return totalVideos > 0 ? (watchedVideos / totalVideos) * 100 : 0
+  }
+
+  useEffect(() => {
+    const initialCompletePercentage = getCompletePercentage()
+    setCompletePercentage(initialCompletePercentage)
+  }, [])
 
   useEffect(() => {
     try {
@@ -209,6 +242,9 @@ export function CourseDetail({
         ...prevViewingStatus,
         [videoId]: newWatchedStatus,
       }))
+
+      const newCompletePercentage = getCompletePercentage()
+      setCompletePercentage(newCompletePercentage)
     } catch (error) {
       showErrorToast(`${error}`)
     } finally {
@@ -333,6 +369,8 @@ export function CourseDetail({
     setQuestionPage(value)
   }
 
+  console.log('completePercentage:', completePercentage)
+
   return (
     <VStack minH={'100vh'} bg={'gray.100'}>
       <Container minWidth={'100%'} padding={'0px'} bg={'white'}>
@@ -344,6 +382,7 @@ export function CourseDetail({
         >
           <CourseDetailAccordionMenu
             userId={userId}
+            completePercentage={completePercentage}
             checkedStatus={checkedStatus}
             courseData={courseData}
             handleChangeVideo={handleChangeVideo}

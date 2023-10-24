@@ -3,9 +3,9 @@ import { getServerSession } from 'next-auth/next'
 import { authOptions } from '../../api/auth/[...nextauth]/route'
 
 import { CourseDetail } from '../../../components/pages/CourseDetail'
-import { CourseWithSectionsType } from 'types'
-import { QuestionType } from 'types/QuestionType'
-import { AnswerType } from 'types/AnswerType'
+import { CourseWithSectionsType } from '../../../types'
+import { QuestionType } from '../../../types/QuestionType'
+import { AnswerType } from '../../../types/AnswerType'
 import Error from '../../error'
 
 export default async function CourseDetailPage({

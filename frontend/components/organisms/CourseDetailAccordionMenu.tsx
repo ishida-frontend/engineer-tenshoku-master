@@ -8,6 +8,8 @@ import {
   Box,
   Card,
   CardHeader,
+  Center,
+  Flex,
   Heading,
   HStack,
   Text,
@@ -15,24 +17,34 @@ import {
   StackDivider,
 } from '@chakra-ui/react'
 
-import { WatchedCheckCircle } from 'components/atoms/WatchedCheckCircle'
+import { CourseProgressBar } from '../../components/atoms/CourseProgressBar'
+import { WatchedCheckCircle } from '../../components/atoms/WatchedCheckCircle'
 import { CourseWithSectionsType } from '../../types/CourseType'
 import { HandleChangeVideo } from '../pages/CourseDetail'
 import Link from 'next/link'
 
 export function CourseDetailAccordionMenu({
   userId,
+  completePercentage,
   checkedStatus,
   courseData,
   handleChangeVideo,
 }: {
   userId: string | undefined
+  completePercentage: number
   courseData: CourseWithSectionsType
   checkedStatus: { [videoId: string]: boolean }
   handleChangeVideo: HandleChangeVideo
 }) {
   return (
     <Box w={'427px'} float={'right'} bg={'white'}>
+      {userId && (
+        <Center minH="60px" bg="gray.100">
+          <Box w="403px" bg="white">
+            <CourseProgressBar completePercentage={completePercentage} />
+          </Box>
+        </Center>
+      )}
       <Accordion allowToggle>
         {courseData.sections &&
           courseData.sections.map((section, sectionIndex) => {
@@ -59,6 +71,7 @@ export function CourseDetailAccordionMenu({
                       section.videos.map((video, videoIndex) => {
                         return (
                           <Link
+                            key={video.id}
                             href={`/course/${courseData.id}/?videoId=${video.id}`}
                           >
                             <Card
