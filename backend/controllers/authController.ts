@@ -5,9 +5,14 @@ import {
   InitiateAuthCommand,
   InitiateAuthResponse,
   SignUpCommand,
+  UpdateUserAttributes,
+  UpdateUserAttributesCommand,
 } from '@aws-sdk/client-cognito-identity-provider'
 import { jwtHelper } from '../utils/jwt'
-import { signupValidationRules } from '../validation/auth'
+import {
+  signupValidationRules,
+  updateEmailValidationRules,
+} from '../validation/auth'
 import { validate } from '../validation/index'
 import { UserApplicationService } from '../application/user'
 
@@ -151,5 +156,43 @@ router.post('/logout', async (req, res) => {
     res.status(400).json({ error: errorMessage })
   }
 })
+
+// update email
+router.post(
+  '/update',
+  validate(updateEmailValidationRules),
+  async (req: Request, res: Response) => {
+    const result = validationResult(req)
+    if (!result.isEmpty()) {
+      return res.status(422).json({ errors: result.array() })
+    }
+    const { email, password } = req.body
+
+    const params = {
+      ClientId: process.env.COGNITO_CLIENT_ID || '',
+      Password: password,
+      Username: email,
+    }
+
+    const updateEmailCommand = new UpdateUserAttributes(params)
+
+    try {
+      const data = await CognitoClient.send(updateEmailCommand)
+
+      if (!data.$metadata) {
+        throw new Error(
+          'ユーザー登録に失敗しました。時間をおいてお試しください',
+        )
+      }
+
+      res.status(200).json({
+        success: true,
+      })
+    } catch (err) {
+      console.error(err)
+      res.status(400).end()
+    }
+  },
+)
 
 export default router
