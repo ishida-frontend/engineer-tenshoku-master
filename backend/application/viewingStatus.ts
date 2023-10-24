@@ -34,8 +34,10 @@ export class ViewingStatusApplicationService {
       })
 
       return viewingStatus
-    } catch (error: any) {
-      throw error
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error
+      }
     }
   }
 

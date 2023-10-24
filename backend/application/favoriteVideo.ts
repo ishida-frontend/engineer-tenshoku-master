@@ -29,8 +29,10 @@ export class FavoriteVideoApplicationService {
       })
 
       return newStatus
-    } catch (error: any) {
-      throw error
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error
+      }
     }
   }
 

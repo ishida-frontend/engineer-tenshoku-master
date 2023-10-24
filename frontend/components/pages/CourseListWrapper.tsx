@@ -13,7 +13,7 @@ export function CourseListWrapper({
   try {
     const [courses, setCourses] = useState<CourseListType[]>(initialCourses)
 
-    const handleTextChange = async (newText: string) => {
+    const handleTextChange = async (newText: string | undefined) => {
       if (newText) {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/search`,

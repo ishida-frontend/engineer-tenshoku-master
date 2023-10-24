@@ -28,7 +28,7 @@ import { Tag } from '../atoms/Tag'
 type CourseListType = CourseWithSectionsType & CourseTagType
 type CourseListProps = {
   courses: CourseListType[]
-  handleTextChange: (event: any) => void
+  handleTextChange: (newText: string | undefined) => void
 }
 
 export function CourseList({ courses, handleTextChange }: CourseListProps) {
@@ -61,7 +61,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
               onChange={(e) => handleInputChange(e)}
               onKeyDown={(e) => handleKeyDown(e)}
               variant="outline"
-              placeholder="javaScript"
+              placeholder="JavaScript"
               background={'white'}
             />
             <InputRightElement onClick={() => handleSubmit()}>

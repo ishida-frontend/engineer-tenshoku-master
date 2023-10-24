@@ -13,8 +13,8 @@ export class FavoriteVideoController {
       })
       res.status(200).json(newStatus)
     } catch (error) {
+      console.log(error)
       res.status(500)
-      throw error
     }
   }
 
@@ -27,8 +27,8 @@ export class FavoriteVideoController {
       })
       res.status(200).json(fetchedStatus)
     } catch (error) {
+      console.log(error)
       res.status(500)
-      throw error
     }
   }
 
@@ -40,8 +40,8 @@ export class FavoriteVideoController {
       })
       res.status(200).json(favoriteVideos)
     } catch (error) {
+      console.log(error)
       res.status(500)
-      throw error
     }
   }
 }

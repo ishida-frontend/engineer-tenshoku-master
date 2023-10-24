@@ -16,14 +16,14 @@ import {
 import { CourseDetailVideoSection } from '../organisms/CourseDetailVideoSection'
 import { CourseDetailAccordionMenu } from '../organisms/CourseDetailAccordionMenu'
 import { CourseWithSectionsType } from '../../types/CourseType'
-import { QuestionType } from 'types/QuestionType'
+import { QuestionType } from '../../types/QuestionType'
 import '../../styles/markdown.css'
 import { Session } from 'next-auth'
-import { useCustomToast } from 'hooks/useCustomToast'
-import { CreateQuestionErrorType } from 'types/QuestionType'
-import { QUESTION_PAGES } from 'constants/index'
-import { QuestionPageType } from 'types/QuestionType'
-import { AnswerType } from 'types/AnswerType'
+import { useCustomToast } from '../../hooks/useCustomToast'
+import { CreateQuestionErrorType } from '../../types/QuestionType'
+import { QUESTION_PAGES } from '../../constants/index'
+import { QuestionPageType } from '../../types/QuestionType'
+import { AnswerType } from '../../types/AnswerType'
 
 type loadingStates = {
   watching: boolean

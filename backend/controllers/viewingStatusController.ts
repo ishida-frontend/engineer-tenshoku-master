@@ -13,8 +13,8 @@ export class ViewingStatusController {
       })
       res.status(200).json(viewingStatus)
     } catch (error) {
+      console.log(error)
       res.status(500)
-      throw error
     }
   }
 
@@ -27,8 +27,8 @@ export class ViewingStatusController {
       })
       res.status(200).json(viewingStatus)
     } catch (error) {
+      console.log(error)
       res.status(500)
-      throw error
     }
   }
 
@@ -41,8 +41,8 @@ export class ViewingStatusController {
       )
       res.status(200).json(viewingStatuses)
     } catch (error) {
+      console.log(error)
       res.status(500)
-      throw error
     }
   }
 }

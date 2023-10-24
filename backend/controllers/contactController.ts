@@ -1,9 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express'
-import { PrismaClient } from '@prisma/client'
 import { readAllContacts } from '../scripts/readContact'
 import { createContact } from '../scripts/createContact'
 
-const prisma = new PrismaClient()
 const router = express.Router()
 
 exports.checkCreateContact = async function (req: Request, res: Response) {
@@ -22,7 +20,7 @@ exports.checkReadContact = async function (
   try {
     const result = await readAllContacts()
     res.json(result)
-  } catch (e: any) {
+  } catch (error) {
     res.status(500).send('エラーが発生しました')
   }
 }

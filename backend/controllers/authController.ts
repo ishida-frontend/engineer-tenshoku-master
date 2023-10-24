@@ -104,8 +104,10 @@ router.get('/tokenVerification', async (req, res, next) => {
     //  リクエストされたjwtトークンを検証
     const decode = await jwtHelper.verifyToken(token)
     return res.status(200).json(decode)
-  } catch (e: any) {
-    throw new Error(e)
+  } catch (err) {
+    if (err instanceof Error) {
+      throw err
+    }
   }
 })
 

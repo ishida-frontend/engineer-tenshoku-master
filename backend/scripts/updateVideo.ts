@@ -72,16 +72,3 @@ export async function updateVideo({
     throw error
   }
 }
-
-export async function updateVideos() {
-  const videos = await prisma.video.updateMany({
-    where: {
-      description: {
-        contains: 'Enjoy the video!',
-      },
-    },
-    data: {
-      description: 'This video will change your life!',
-    },
-  })
-}
