@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { Container, VStack } from '@chakra-ui/react'
 
+import { getCourseData } from '../../app/api/course/courseData'
 import {
   upsertViewingStatus,
   fetchButtonStatus,
@@ -51,20 +52,20 @@ export type HandleChangeVideo = (
 ) => void
 
 export function CourseDetail({
-  courseData,
+  courseId,
+  initialCourseData,
   session,
   questions,
   answers,
   questionId,
 }: {
-  courseData: CourseWithSectionsType
+  courseId: string
+  initialCourseData: CourseWithSectionsType
   session: Session | null
   questions?: QuestionType[]
   answers: AnswerType[]
   questionId?: string
 }) {
-  console.log('courseData:', courseData)
-
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
   const userId = session?.user?.id
@@ -80,7 +81,10 @@ export function CourseDetail({
     QUESTION_PAGES.QuestionList,
   )
 
+  const [courseData, setCourseData] = useState(initialCourseData)
+
   const [completePercentage, setCompletePercentage] = useState(0)
+
   const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
     {},
   )
@@ -101,7 +105,7 @@ export function CourseDetail({
   const [selectedQuestion, setSelectedQuestion] = useState<QuestionType>()
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo | null>(null)
 
-  const getCompletePercentage = () => {
+  const getCompletionPercentage = () => {
     let totalVideos = 0
     let watchedVideos = 0
 
@@ -117,18 +121,50 @@ export function CourseDetail({
         }
       })
     })
-    console.log('totalVideos:', totalVideos)
-    console.log('watchedVideos:', watchedVideos)
-
-    console.log('watchedStatus:', JSON.stringify(watchedStatus, null, 2))
-
     return totalVideos > 0 ? (watchedVideos / totalVideos) * 100 : 0
   }
 
   useEffect(() => {
-    const initialCompletePercentage = getCompletePercentage()
-    setCompletePercentage(initialCompletePercentage)
+    const initialCompletionPercentage = getCompletionPercentage()
+    setCompletePercentage(initialCompletionPercentage)
+    console.log('initialCompletionPercentage:', initialCompletionPercentage)
   }, [])
+
+  useEffect(() => {
+    setCompletePercentage(getCompletionPercentage())
+  }, [courseData])
+
+  const handleViewingStatus = async () => {
+    setLoadingStates((prev) => ({ ...prev, watching: true }))
+
+    const newWatchedStatus = !(watchedStatus?.[videoId] || false)
+    setWatchedStatus((prevStatus) => ({
+      ...prevStatus,
+      [videoId]: newWatchedStatus,
+    }))
+
+    try {
+      await upsertViewingStatus({
+        isWatched: newWatchedStatus,
+        userId,
+        videoId,
+      })
+      setCheckedStatus((prevViewingStatus) => ({
+        ...prevViewingStatus,
+        [videoId]: newWatchedStatus,
+      }))
+
+      const updatedCourseData = await getCourseData(courseId)
+      setCourseData(updatedCourseData)
+      console.log('courseData fetched by getCourseData:', courseData)
+      // setCompletePercentage(getCompletionPercentage())
+      console.log('Updated Completion Percentage:', completePercentage)
+    } catch (error) {
+      showErrorToast(`${error}`)
+    } finally {
+      setLoadingStates((prev) => ({ ...prev, watching: false }))
+    }
+  }
 
   useEffect(() => {
     try {
@@ -221,35 +257,6 @@ export function CourseDetail({
     }
     setSelectedVideo(currentlySelectedVideo)
     setVideoId(currentlySelectedVideo.sections.videos.id)
-  }
-
-  const handleViewingStatus = async () => {
-    setLoadingStates((prev) => ({ ...prev, watching: true }))
-
-    const newWatchedStatus = !(watchedStatus?.[videoId] || false)
-    setWatchedStatus((prevStatus) => ({
-      ...prevStatus,
-      [videoId]: newWatchedStatus,
-    }))
-
-    try {
-      await upsertViewingStatus({
-        isWatched: newWatchedStatus,
-        userId,
-        videoId,
-      })
-      setCheckedStatus((prevViewingStatus) => ({
-        ...prevViewingStatus,
-        [videoId]: newWatchedStatus,
-      }))
-
-      const newCompletePercentage = getCompletePercentage()
-      setCompletePercentage(newCompletePercentage)
-    } catch (error) {
-      showErrorToast(`${error}`)
-    } finally {
-      setLoadingStates((prev) => ({ ...prev, watching: false }))
-    }
   }
 
   const handleFavoriteVideoStatus = async () => {
@@ -368,8 +375,6 @@ export function CourseDetail({
   const changeQuestionPage = async (value: QuestionPageType) => {
     setQuestionPage(value)
   }
-
-  console.log('completePercentage:', completePercentage)
 
   return (
     <VStack minH={'100vh'} bg={'gray.100'}>
