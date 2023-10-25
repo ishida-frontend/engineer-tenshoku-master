@@ -6,4 +6,5 @@ export type VideoType = {
   published: boolean
   order: number
   sectionId: string
+  requiredTime?: number
 }

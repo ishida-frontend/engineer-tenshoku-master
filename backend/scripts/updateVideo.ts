@@ -11,6 +11,7 @@ export async function updateVideo({
   order: newOrder,
   url,
   published,
+  requiredTime,
 }: Partial<VideoType>) {
   try {
     const currentVideo = await prisma.video.findUnique({
@@ -66,6 +67,7 @@ export async function updateVideo({
         order: newOrder !== undefined ? newOrder : currentOrder,
         url: convertVideoUrl(url),
         published,
+        requiredTime,
       },
     })
   } catch (error) {

@@ -18,6 +18,11 @@ import {
   Box,
   Container,
   Flex,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from '@chakra-ui/react'
 import { mutate } from 'swr'
 import { SectionType, VideoType } from '../../../types'
@@ -51,12 +56,14 @@ export function VideoEditModal({
     order: 1,
     url: '',
     published: false,
+    requiredTime: 0,
   })
 
   const [errors, setErrors] = useState({
     nameError: '',
     descError: '',
     urlError: '',
+    timeError: '',
   })
 
   const [initialVideoData, setInitialVideoData] = useState<Partial<VideoType>>(
@@ -161,6 +168,7 @@ export function VideoEditModal({
           nameError: '',
           descError: '',
           urlError: '',
+          timeError: '',
         })
         onClose()
         showSuccessToast(result.message)
@@ -192,6 +200,15 @@ export function VideoEditModal({
           setErrors((prevErrors) => ({
             ...prevErrors,
             urlError: result.errors.url,
+          }))
+        }
+
+        if (video.requiredTime && video.requiredTime >= 0) {
+          setErrors((prevErrors) => ({ ...prevErrors, timeError: '' }))
+        } else {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            timeError: result.errors.requiredTime,
           }))
         }
       }
@@ -325,6 +342,42 @@ export function VideoEditModal({
                     <option value="hidden">非公開</option>
                     <option value="public">公開</option>
                   </Select>
+                </FormControl>
+                <FormControl
+                  id="videoTime"
+                  isRequired
+                  isInvalid={!!errors.timeError}
+                >
+                  <FormLabel htmlFor="videoTime">学習目安時間</FormLabel>
+                  <FormErrorMessage>{errors.timeError}</FormErrorMessage>
+                  <NumberInput
+                    defaultValue={5}
+                    min={0}
+                    max={60}
+                    value={video.requiredTime}
+                    onChange={(e) =>
+                      setVideo({ ...video, requiredTime: video.requiredTime })
+                    }
+                    aria-required={true}
+                    border="1px"
+                    borderColor="gray.400"
+                  >
+                    <NumberInputField />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                  {/* <Input
+                    type="text"
+                    value={video.requiredTime}
+                    onChange={(e) =>
+                      setVideo({ ...video, requiredTime: e.target.value })
+                    }
+                    aria-required={true}
+                    border="1px"
+                    borderColor="gray.400"
+                  /> */}
                 </FormControl>
               </Box>
             </Flex>
