@@ -9,7 +9,6 @@ import {
   Card,
   CardHeader,
   Center,
-  Flex,
   Heading,
   HStack,
   Text,
@@ -39,8 +38,13 @@ export function CourseDetailAccordionMenu({
   return (
     <Box w={'427px'} float={'right'} bg={'white'}>
       {userId && (
-        <Center minH="60px" bg="gray.100">
-          <Box w="403px" bg="white">
+        <Center
+          minH="60px"
+          bg="gray.100"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Box w="403px" bg="white" borderRadius="30px">
             <CourseProgressBar completePercentage={completePercentage} />
           </Box>
         </Center>

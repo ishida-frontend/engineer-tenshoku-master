@@ -51,6 +51,11 @@ export type HandleChangeVideo = (
   videoIndex: number,
 ) => void
 
+type QuestionValidationError = {
+  path: string[]
+  message: string
+}
+
 export function CourseDetail({
   courseId,
   initialCourseData,
@@ -75,6 +80,7 @@ export function CourseDetail({
   const minTitleLength = 10
   const maxTitleLength = 255
   const minContentLength = 15
+
   const [createQuestionErrors, setCreateQuestionErrors] =
     useState<CreateQuestionErrorType>({ title: '', content: '' })
   const [questionPage, setQuestionPage] = useState<QuestionPageType>(
@@ -127,7 +133,6 @@ export function CourseDetail({
   useEffect(() => {
     const initialCompletionPercentage = getCompletionPercentage()
     setCompletePercentage(initialCompletionPercentage)
-    console.log('initialCompletionPercentage:', initialCompletionPercentage)
   }, [])
 
   useEffect(() => {
@@ -156,9 +161,6 @@ export function CourseDetail({
 
       const updatedCourseData = await getCourseData(courseId)
       setCourseData(updatedCourseData)
-      console.log('courseData fetched by getCourseData:', courseData)
-      // setCompletePercentage(getCompletionPercentage())
-      console.log('Updated Completion Percentage:', completePercentage)
     } catch (error) {
       showErrorToast(`${error}`)
     } finally {
@@ -167,15 +169,11 @@ export function CourseDetail({
   }
 
   useEffect(() => {
-    try {
-      if (questions) {
-        const questionData = questions.find((question) => {
-          return question.id === questionId
-        })
-        setSelectedQuestion(questionData)
-      }
-    } catch (error) {
-      throw error
+    if (questions) {
+      const questionData = questions.find((question) => {
+        return question.id === questionId
+      })
+      setSelectedQuestion(questionData)
     }
   }, [questionId, questions])
 
@@ -334,7 +332,7 @@ export function CourseDetail({
         router.refresh()
         await setQuestionPage('QuestionList')
       } else if (result.errors) {
-        result.errors[0].map((error: any) => {
+        result.errors[0].map((error: QuestionValidationError) => {
           if (error.path[0] === 'title') {
             setCreateQuestionErrors((prevErrors) => ({
               ...prevErrors,

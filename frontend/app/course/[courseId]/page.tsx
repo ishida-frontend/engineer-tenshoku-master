@@ -16,10 +16,9 @@ export default async function CourseDetailPage({
   searchParams: { videoId: string; questionId: string }
 }) {
   const session = await getServerSession(authOptions)
-  const courseId = params.courseId
 
   try {
-    const initialCourseData = await getCourseData(courseId)
+    const initialCourseData = await getCourseData(params.courseId)
 
     const getQuestionsData = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${searchParams.videoId}`,
@@ -45,7 +44,7 @@ export default async function CourseDetailPage({
 
     return (
       <CourseDetail
-        courseId={courseId}
+        courseId={params.courseId}
         initialCourseData={initialCourseData}
         session={session}
         questions={questions}
