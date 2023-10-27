@@ -4,32 +4,16 @@ import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { Container, VStack } from '@chakra-ui/react'
 
-import { getCourseData } from '../../app/api/course/courseData'
-import {
-  upsertViewingStatus,
-  fetchButtonStatus,
-  fetchCheckMarkStatuses,
-} from '../../app/api/course/[courseId]/viewingStatus'
-import {
-  upsertFavoriteVideo,
-  fetchFavButtonStatus,
-} from '../../app/api/course/[courseId]/favoriteVideo'
 import { CourseDetailVideoSection } from '../organisms/CourseDetailVideoSection'
 import { CourseDetailAccordionMenu } from '../organisms/CourseDetailAccordionMenu'
 import { CourseWithSectionsType } from '../../types/CourseType'
 import { QuestionType } from '../../types/QuestionType'
-import '../../styles/markdown.css'
 import { Session } from 'next-auth'
 import { useCustomToast } from '../../hooks/useCustomToast'
 import { CreateQuestionErrorType } from '../../types/QuestionType'
 import { QUESTION_PAGES } from '../../constants/index'
 import { QuestionPageType } from '../../types/QuestionType'
 import { AnswerType } from '../../types/AnswerType'
-
-type loadingStates = {
-  watching: boolean
-  isFavorite: boolean
-}
 
 export type SelectedVideo = {
   id: string
@@ -57,23 +41,38 @@ type QuestionValidationError = {
 }
 
 export function CourseDetail({
-  courseId,
-  initialCourseData,
+  courseData,
   session,
+  userId,
+  completePercentage,
+  watchedStatus,
+  checkedStatus,
+  favoritedStatus,
+  loadingStates,
   questions,
   answers,
   questionId,
+  handleViewingStatus,
+  handleFavoriteVideoStatus,
 }: {
-  courseId: string
-  initialCourseData: CourseWithSectionsType
+  courseData: CourseWithSectionsType
   session: Session | null
+  userId: string
+  completePercentage: number
+  watchedStatus: Record<string, boolean>
+  checkedStatus: Record<string, boolean>
+  favoritedStatus: Record<string, boolean>
+  loadingStates: { watching: boolean; isFavorite: boolean }
   questions?: QuestionType[]
   answers: AnswerType[]
   questionId?: string
+  handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
+  handleFavoriteVideoStatus: (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => void
 }) {
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
-  const userId = session?.user?.id
   const searchParams = useSearchParams()
   const searchedVideoId = searchParams.get('videoId')
 
@@ -87,86 +86,11 @@ export function CourseDetail({
     QUESTION_PAGES.QuestionList,
   )
 
-  const [courseData, setCourseData] = useState(initialCourseData)
-
-  const [completePercentage, setCompletePercentage] = useState(0)
-
-  const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
-    {},
-  )
-  const [checkedStatus, setCheckedStatus] = useState<Record<string, boolean>>(
-    {},
-  )
-  const [favoritedStatus, setFavoritedStatus] = useState<
-    Record<string, boolean>
-  >({})
-  const [loadingStates, setLoadingStates] = useState<loadingStates>({
-    watching: false,
-    isFavorite: false,
-  })
-
   const [videoId, setVideoId] = useState<string>(
     searchedVideoId || courseData.sections[0].videos[0].id,
   )
   const [selectedQuestion, setSelectedQuestion] = useState<QuestionType>()
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo | null>(null)
-
-  const getCompletionPercentage = () => {
-    let totalVideos = 0
-    let watchedVideos = 0
-
-    courseData.sections.forEach((section) => {
-      section.videos.forEach((video) => {
-        totalVideos++
-        if (
-          video.ViewingStatus.some(
-            (viewingStatus) => viewingStatus.status === true,
-          )
-        ) {
-          watchedVideos++
-        }
-      })
-    })
-    return totalVideos > 0 ? (watchedVideos / totalVideos) * 100 : 0
-  }
-
-  useEffect(() => {
-    const initialCompletionPercentage = getCompletionPercentage()
-    setCompletePercentage(initialCompletionPercentage)
-  }, [])
-
-  useEffect(() => {
-    setCompletePercentage(getCompletionPercentage())
-  }, [courseData])
-
-  const handleViewingStatus = async () => {
-    setLoadingStates((prev) => ({ ...prev, watching: true }))
-
-    const newWatchedStatus = !(watchedStatus?.[videoId] || false)
-    setWatchedStatus((prevStatus) => ({
-      ...prevStatus,
-      [videoId]: newWatchedStatus,
-    }))
-
-    try {
-      await upsertViewingStatus({
-        isWatched: newWatchedStatus,
-        userId,
-        videoId,
-      })
-      setCheckedStatus((prevViewingStatus) => ({
-        ...prevViewingStatus,
-        [videoId]: newWatchedStatus,
-      }))
-
-      const updatedCourseData = await getCourseData(courseId)
-      setCourseData(updatedCourseData)
-    } catch (error) {
-      showErrorToast(`${error}`)
-    } finally {
-      setLoadingStates((prev) => ({ ...prev, watching: false }))
-    }
-  }
 
   useEffect(() => {
     if (questions) {
@@ -208,35 +132,6 @@ export function CourseDetail({
     }
   }, [searchedVideoId, courseData])
 
-  useEffect(() => {
-    setLoadingStates({ watching: true, isFavorite: true })
-
-    const fetchData = async () => {
-      try {
-        const buttonStatus = await fetchButtonStatus({ userId, videoId })
-        setWatchedStatus(buttonStatus as { [key: string]: boolean })
-
-        const checkMarkStatuses = await fetchCheckMarkStatuses({
-          userId: session?.user?.id,
-          courseId: courseData.id,
-        })
-        setCheckedStatus(checkMarkStatuses)
-
-        const favButtonStatus = await fetchFavButtonStatus({
-          userId,
-          videoId,
-        })
-        setFavoritedStatus(favButtonStatus as { [key: string]: boolean })
-      } catch (error) {
-        showErrorToast(`${error}`)
-      } finally {
-        setLoadingStates({ watching: false, isFavorite: false })
-      }
-    }
-
-    fetchData()
-  }, [courseData, session, videoId])
-
   const handleChangeVideo = (sectionIndex: number, videoIndex: number) => {
     const currentlySelectedVideo = {
       id: courseData.id,
@@ -255,28 +150,6 @@ export function CourseDetail({
     }
     setSelectedVideo(currentlySelectedVideo)
     setVideoId(currentlySelectedVideo.sections.videos.id)
-  }
-
-  const handleFavoriteVideoStatus = async () => {
-    setLoadingStates((prev) => ({ ...prev, isFavorite: true }))
-
-    const newFavoritedStatus = !(favoritedStatus?.[videoId] || false)
-    setFavoritedStatus((prevFavoriteStatus) => ({
-      ...prevFavoriteStatus,
-      [videoId]: newFavoritedStatus,
-    }))
-
-    try {
-      await upsertFavoriteVideo({
-        favoritedStatus: newFavoritedStatus,
-        userId,
-        videoId,
-      })
-    } catch (error) {
-      showErrorToast(`${error}`)
-    } finally {
-      setLoadingStates((prev) => ({ ...prev, isFavorite: false }))
-    }
   }
 
   const createQuestion = async (createQuestionParams: {
