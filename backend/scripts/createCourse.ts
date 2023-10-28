@@ -5,6 +5,7 @@ const prisma = new PrismaClient()
 export async function createCourse(
   name: string,
   description: string,
+  image: string,
   published: boolean,
   tagIds: string[],
 ) {
@@ -12,9 +13,10 @@ export async function createCourse(
     const createdCourse = await prisma.course.create({
       data: {
         id: crypto.randomUUID(),
-        name: name,
-        description: description,
-        published: published,
+        name,
+        description,
+        image,
+        published,
         tags: {
           create: tagIds.map((tagId) => ({
             tag: {
