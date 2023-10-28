@@ -11,6 +11,7 @@ export async function updateCourse({
   id,
   name,
   description,
+  image,
   published,
   tagIds,
 }: CourseUpdateInput) {
@@ -37,6 +38,7 @@ export async function updateCourse({
       data: {
         name,
         description,
+        image,
         published,
         tags: {
           upsert: tagIds.map((tagId) => ({
