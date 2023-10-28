@@ -16,10 +16,10 @@ import {
   Text,
 } from '@chakra-ui/react'
 
-import { CourseRemover } from './CourseRemover'
+import { CourseRemover } from '../organisms/CourseRemover'
 import { CourseType, TagType } from '../../../types'
 import formatDate from '../../../utils/formatDate'
-import { Loader } from '../../../components/admin/atoms/Loader'
+import { Loader } from '../atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 import { THEME_COLOR } from '../../../constants/colors'
 type CourseWithTagsType = CourseType & {
@@ -28,11 +28,11 @@ type CourseWithTagsType = CourseType & {
   }[]
 }
 export function CourseEditor({
-  course_id,
+  courseId,
   courseData,
   tags,
 }: {
-  course_id: string
+  courseId: string
   courseData: CourseWithTagsType
   tags: TagType[]
 }) {
@@ -54,7 +54,6 @@ export function CourseEditor({
   const [tagIds, setTagIds] = useState<string[]>(
     courseData.tags.map((tag) => tag.tag_id),
   )
-  console.log('tagIds', tagIds)
 
   const [errors, setErrors] = useState({
     nameError: '',
@@ -105,7 +104,7 @@ export function CourseEditor({
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/edit/${course_id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/edit/${courseId}`,
         {
           method: 'PUT',
           headers: {
@@ -115,6 +114,7 @@ export function CourseEditor({
             id: course.id,
             name: course.name,
             description: course.description,
+            image: course.image,
             published: course.published,
             tagIds,
           }),
@@ -209,8 +209,21 @@ export function CourseEditor({
           ></Textarea>
           <FormErrorMessage>{errors.descError}</FormErrorMessage>
         </FormControl>
-        <FormControl id="coursePublished" isRequired>
-          <FormLabel htmlFor="CoursePublished">コースの公開設定</FormLabel>
+        <FormControl id="courseImage">
+          <FormLabel htmlFor="courseImage">コース画像URL</FormLabel>
+          <Input
+            id="courseImage"
+            type="text"
+            value={course.image}
+            onChange={(e) => setCourse({ ...course, image: e.target.value })}
+            aria-required={true}
+            border="1px"
+            borderColor="gray.400"
+          />
+          <FormErrorMessage>{errors.nameError}</FormErrorMessage>
+        </FormControl>
+        <FormControl id="coursePublished">
+          <FormLabel htmlFor="CoursePublished">コース公開設定</FormLabel>
           <Select
             id="coursePublished"
             value={course.published ? 'public' : 'hidden'}
@@ -239,7 +252,6 @@ export function CourseEditor({
             ))}
           </Stack>
         </CheckboxGroup>
-
         <Button
           onClick={updateCourse}
           isLoading={isSubmitting}

@@ -1,12 +1,12 @@
-import { CourseEditor } from '../../../../../components/admin/organisms/CourseEditor'
+import { CourseEditor } from '../../../../../components/admin/pages/CourseEditor'
 
 export default async function AdminEditCourse({
   params,
 }: {
-  params: { course_id: string }
+  params: { courseId: string }
 }) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${params.course_id}`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/${params.courseId}`,
     {
       cache: 'no-cache',
     },
@@ -18,7 +18,7 @@ export default async function AdminEditCourse({
 
   return (
     <CourseEditor
-      course_id={params.course_id}
+      courseId={params.courseId}
       courseData={courseData}
       tags={tags}
     />

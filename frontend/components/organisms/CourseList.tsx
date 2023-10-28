@@ -102,9 +102,9 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                 >
                   <CardHeader p={0}>
                     <Image
-                      src={`/images/${course.image}`}
+                      src={`${course.image}`}
                       alt={`${course.name}の画像`}
-                      fallbackSrc="/images/img_no_image.png"
+                      fallbackSrc="images/img_no_image.png"
                       width="100%"
                       height="150px"
                       objectFit={'cover'}

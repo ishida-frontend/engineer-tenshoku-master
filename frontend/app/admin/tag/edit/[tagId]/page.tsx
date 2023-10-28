@@ -1,4 +1,4 @@
-import { CourseEditor } from '../../../../../components/admin/organisms/CourseEditor'
+import { CourseEditor } from '../../../../../components/admin/pages/CourseEditor'
 
 export default async function AdminEditCourse({
   params,
