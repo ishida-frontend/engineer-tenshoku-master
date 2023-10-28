@@ -54,7 +54,6 @@ export function CourseEditor({
   const [tagIds, setTagIds] = useState<string[]>(
     courseData.tags.map((tag) => tag.tag_id),
   )
-  console.log('tagIds', tagIds)
 
   const [errors, setErrors] = useState({
     nameError: '',
@@ -115,7 +114,7 @@ export function CourseEditor({
             id: course.id,
             name: course.name,
             description: course.description,
-
+            image: course.image,
             published: course.published,
             tagIds,
           }),
