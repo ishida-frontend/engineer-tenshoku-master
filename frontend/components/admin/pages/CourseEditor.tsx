@@ -14,6 +14,11 @@ import {
   CheckboxGroup,
   HStack,
   Text,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from '@chakra-ui/react'
 
 import { CourseRemover } from '../organisms/CourseRemover'
@@ -49,6 +54,7 @@ export function CourseEditor({
     updated_at: courseData.updated_at,
     deleted_at: courseData.deleted_at,
     tags: courseData.tags,
+    requiredTime: courseData.requiredTime,
   }
   const [course, setCourse] = useState<CourseType>(selectedCourseState)
   const [tagIds, setTagIds] = useState<string[]>(
@@ -61,6 +67,10 @@ export function CourseEditor({
   })
 
   const [isSubmitting, SetIsSubmitting] = useState(false)
+  const initialRequiredTime = '15'
+  const [requiredTime, setRequiredTime] = useState(
+    selectedCourseState.requiredTime || initialRequiredTime,
+  )
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -116,6 +126,7 @@ export function CourseEditor({
             description: course.description,
             image: course.image,
             published: course.published,
+            requiredTime: requiredTime,
             tagIds,
           }),
         },
@@ -220,6 +231,31 @@ export function CourseEditor({
             border="1px"
             borderColor="gray.400"
           />
+          <FormErrorMessage>{errors.nameError}</FormErrorMessage>
+        </FormControl>
+        <FormControl id="courseRequiredTime">
+          <FormLabel htmlFor="courseRequiredTime">
+            コース修了の目安時間
+          </FormLabel>
+          <HStack>
+            <NumberInput
+              id="courseRequiredTime"
+              value={requiredTime}
+              onChange={(timeValue) => setRequiredTime(timeValue)}
+              min={0}
+              max={1000}
+              keepWithinRange={false}
+              clampValueOnBlur={false}
+              w={'100%'}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <Text>(h)</Text>
+          </HStack>
           <FormErrorMessage>{errors.nameError}</FormErrorMessage>
         </FormControl>
         <FormControl id="coursePublished">

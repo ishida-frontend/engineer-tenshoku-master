@@ -22,7 +22,7 @@ import { BsChevronRight } from 'react-icons/bs'
 import { CourseTagType, CourseWithSectionsType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
-import { SearchIcon } from '@chakra-ui/icons'
+import { SearchIcon, TimeIcon } from '@chakra-ui/icons'
 import { Tag } from '../atoms/Tag'
 
 type CourseListType = CourseWithSectionsType & CourseTagType
@@ -143,6 +143,19 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                           </Tag>
                         ))}
                       </HStack>
+                    )}
+                    {course.requiredTime && (
+                      <Flex
+                        position={'absolute'}
+                        bottom={'13px'}
+                        height={'15px'}
+                        color={'gray.500'}
+                      >
+                        <TimeIcon w={'15px'} lineHeight={'15px'} />
+                        <Text pl={'5px'} lineHeight={'15px'}>
+                          {course.requiredTime}h
+                        </Text>
+                      </Flex>
                     )}
                     <Flex
                       justify="flex-end"

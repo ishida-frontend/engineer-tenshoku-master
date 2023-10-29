@@ -56,7 +56,6 @@ model Section {
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
   deleted_at DateTime?
-  requiredTime Int?
 }
 
 model Video {
@@ -74,7 +73,6 @@ model Video {
   deleted_at    DateTime?
   ViewingStatus ViewingStatus[]
   FavoriteVideo FavoriteVideo[]
-  requiredTime Int?
 }
 
 model Contact {
