@@ -42,7 +42,7 @@ model Course {
   updated_at  DateTime    @updatedAt
   deleted_at  DateTime?
   tags        CourseTag[]
-  requiredTime Int?
+  requiredTime String?
 }
 
 model Section {
