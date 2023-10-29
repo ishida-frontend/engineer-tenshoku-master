@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth'
 import type { AuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import GoogleProvider from 'next-auth/providers/google'
 import { login } from '../../auth'
 import { getJwtDecoded } from '../../../../utils/jwtDecode'
 import { getUser } from '../../user'
@@ -42,20 +43,56 @@ export const authOptions: AuthOptions = {
         }
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
   ],
   callbacks: {
     session: async ({ session, token, ...other }) => {
       const user = await getUser(token.sub || '')
-      return {
-        ...session,
-        user: {
-          id: token.sub,
-          name: user.name,
-          isAdmin: user.role === USER_ROLE.ADMIN,
-        },
+
+      if (user) {
+        return {
+          ...session,
+          user: {
+            id: token.sub,
+            name: user.name,
+            isAdmin: user.role === USER_ROLE.ADMIN,
+          },
+        }
+      } else {
+        return session
+      }
+    },
+    signIn: async ({ profile }) => {
+      try {
+        const { sub: id, name } = profile
+        let existingUser = await getUser(id)
+
+        if (!existingUser) {
+          await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google-signup`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                id,
+                name,
+              }),
+            },
+          )
+        }
+
+        return true
+      } catch (err) {
+        throw new Error('エラーが発生しました')
       }
     },
   },
+  secret: process.env.JWT_SECRET,
 }
 
 const handler = NextAuth(authOptions)

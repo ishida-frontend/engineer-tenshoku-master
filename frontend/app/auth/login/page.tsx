@@ -12,6 +12,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import { BsGoogle } from 'react-icons/bs'
+import { LuMail } from 'react-icons/lu'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
@@ -106,11 +108,15 @@ export default function Login() {
         <Button
           w={'100%'}
           mt={'42px'}
-          mb={'24px'}
+          mb={'12px'}
           colorScheme="teal"
           onClick={handleSubmit}
         >
-          ログイン
+          {' '}
+          <Box mr={'16px'}>
+            <LuMail />
+          </Box>
+          メールアドレスでログイン
         </Button>
 
         <Box border={'1px solid #C400'} />
@@ -120,6 +126,18 @@ export default function Login() {
         <Box color={'teal'}>
           <Link href={'/auth/register'}>新規登録はこちら</Link>
         </Box>
+
+        <Button
+          w={'100%'}
+          mt={'36px'}
+          colorScheme="blue"
+          onClick={() => signIn('google', { callbackUrl: '/' })}
+        >
+          <Box mr={'16px'}>
+            <BsGoogle />
+          </Box>
+          Googleアカウントでログイン
+        </Button>
       </Container>
     </Center>
   )

@@ -57,6 +57,29 @@ router.post(
   },
 )
 
+// signup with Google
+router.post('/google-signup', async (req: Request, res: Response) => {
+  try {
+    const { id, name } = req.body
+
+    const user = UserApplicationService.create({
+      id,
+      name,
+    })
+
+    if (!user) {
+      throw new Error('ユーザー登録に失敗しました。時間をおいてお試しください')
+    }
+
+    res.status(200).json({
+      success: true,
+    })
+  } catch (err) {
+    console.error(err)
+    res.status(400).end()
+  }
+})
+
 // signin
 router.post('/signin', async (req, res) => {
   const { email, password } = req.body

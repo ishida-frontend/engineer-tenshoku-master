@@ -1,6 +1,6 @@
-import { APIS } from 'constants/paths'
+import { APIS } from '../../constants/paths'
 import { UserType } from '../../types'
-import { UserProfileType } from 'types'
+import { UserProfileType } from '../../types'
 
 export const getUser = async (
   userId: string | undefined,
@@ -17,6 +17,9 @@ export const getUser = async (
         credentials: 'include',
       },
     )
+    if (!res.ok) {
+      return null
+    }
     const user = await res.json()
 
     return user

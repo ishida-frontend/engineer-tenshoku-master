@@ -16,7 +16,10 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
 import React, { useState } from 'react'
+import { BsGoogle } from 'react-icons/bs'
+import { LuMail } from 'react-icons/lu'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export default function Register() {
@@ -141,17 +144,34 @@ export default function Register() {
         </VStack>
         <Button
           w={'100%'}
-          mt={'42px'}
-          mb={'24px'}
+          mt={'28px'}
+          mb={'12px'}
           colorScheme="teal"
+          pl={'26px'}
           onClick={handleSubmit}
         >
-          登録する
+          <Box mr={'16px'}>
+            <LuMail />
+          </Box>
+          メールアドレスで新規登録
         </Button>
         <Box border={'1px solid'} borderColor={'#C400'} />
         <Box color={'teal'}>
           <Link href={'/auth/login'}>ログインはこちら</Link>
-        </Box>{' '}
+        </Box>
+
+        <Button
+          w={'100%'}
+          mt={'36px'}
+          colorScheme="blue"
+          pl={'26px'}
+          onClick={() => signIn('google', { callbackUrl: '/' })}
+        >
+          <Box mr={'16px'}>
+            <BsGoogle />
+          </Box>
+          Googleアカウントで新規登録
+        </Button>
       </Container>
     </Center>
   )
