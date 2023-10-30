@@ -8,5 +8,5 @@ export type CourseType = {
   created_at: string
   updated_at: string
   deleted_at: string
-  requiredTime?: number
+  requiredTime: string
 }

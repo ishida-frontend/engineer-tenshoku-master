@@ -12,7 +12,6 @@ export type VideoType = {
   created_at: string
   updated_at: string
   deleted_at: string
-  requiredTime: number
 }
 
 export type FavoriteVideoType = {
