@@ -144,17 +144,19 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                         ))}
                       </HStack>
                     )}
-                    <Flex
-                      position={'absolute'}
-                      bottom={'13px'}
-                      height={'15px'}
-                      color={'gray.500'}
-                    >
-                      <TimeIcon w={'15px'} lineHeight={'15px'} />
-                      <Text pl={'5px'} lineHeight={'15px'}>
-                        {course.requiredTime}h
-                      </Text>
-                    </Flex>
+                    {course.requiredTime && (
+                      <Flex
+                        position={'absolute'}
+                        bottom={'13px'}
+                        height={'15px'}
+                        color={'gray.500'}
+                      >
+                        <TimeIcon w={'15px'} lineHeight={'15px'} />
+                        <Text pl={'5px'} lineHeight={'15px'}>
+                          {course.requiredTime}h
+                        </Text>
+                      </Flex>
+                    )}
                     <Flex
                       justify="flex-end"
                       position={'absolute'}
