@@ -120,7 +120,8 @@ exports.updateCourse = async function (
   res: express.Response,
 ) {
   try {
-    const { id, name, description, image, published, tagIds } = req.body
+    const { id, name, description, image, published, tagIds, requiredTime } =
+      req.body
 
     await updateCourse({
       id,
@@ -129,6 +130,7 @@ exports.updateCourse = async function (
       image,
       published,
       tagIds,
+      requiredTime,
     })
 
     res.status(200).json({ message: '変更が保存されました。' })
