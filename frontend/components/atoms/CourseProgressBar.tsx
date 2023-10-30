@@ -7,8 +7,6 @@ export const CourseProgressBar = ({
 }: {
   completePercentage: number
 }) => {
-  console.log('completePercentage:', completePercentage)
-
   return (
     <Flex color="teal.400" fontWeight="700" py="2.5px" justify="space-evenly">
       <Box mt="2px">

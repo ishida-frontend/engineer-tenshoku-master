@@ -59,39 +59,6 @@ export function CourseDetailWrapper({
       isFavorite: false,
     })
 
-    useEffect(() => {
-      setCompletePercentage(getCompletionPercentage())
-    }, [courseData])
-
-    useEffect(() => {
-      setLoadingStates({ watching: true, isFavorite: true })
-
-      const fetchData = async () => {
-        try {
-          const buttonStatus = await fetchButtonStatus({ userId, videoId })
-          setWatchedStatus(buttonStatus as { [key: string]: boolean })
-
-          const checkMarkStatuses = await fetchCheckMarkStatuses({
-            userId: session?.user?.id,
-            courseId: courseData.id,
-          })
-          setCheckedStatus(checkMarkStatuses)
-
-          const favButtonStatus = await fetchFavButtonStatus({
-            userId,
-            videoId,
-          })
-          setFavoritedStatus(favButtonStatus as { [key: string]: boolean })
-        } catch (error) {
-          showErrorToast(`${error}`)
-        } finally {
-          setLoadingStates({ watching: false, isFavorite: false })
-        }
-      }
-
-      fetchData()
-    }, [courseData, session, videoId])
-
     const getCourseData = async (courseId: string) => {
       try {
         const courseData = await fetch(
@@ -153,7 +120,6 @@ export function CourseDetailWrapper({
         }))
 
         const updatedCourseData = await getCourseData(courseId)
-        console.log('updatedCourseData:', updatedCourseData.sections)
 
         setCourseData(updatedCourseData)
       } catch (error) {
@@ -184,6 +150,39 @@ export function CourseDetailWrapper({
         setLoadingStates((prev) => ({ ...prev, isFavorite: false }))
       }
     }
+
+    useEffect(() => {
+      setCompletePercentage(getCompletionPercentage())
+    }, [courseData])
+
+    useEffect(() => {
+      setLoadingStates({ watching: true, isFavorite: true })
+
+      const fetchData = async () => {
+        try {
+          const buttonStatus = await fetchButtonStatus({ userId, videoId })
+          setWatchedStatus(buttonStatus as { [key: string]: boolean })
+
+          const checkMarkStatuses = await fetchCheckMarkStatuses({
+            userId: session?.user?.id,
+            courseId: courseData.id,
+          })
+          setCheckedStatus(checkMarkStatuses)
+
+          const favButtonStatus = await fetchFavButtonStatus({
+            userId,
+            videoId,
+          })
+          setFavoritedStatus(favButtonStatus as { [key: string]: boolean })
+        } catch (error) {
+          showErrorToast(`${error}`)
+        } finally {
+          setLoadingStates({ watching: false, isFavorite: false })
+        }
+      }
+
+      fetchData()
+    }, [courseData, session, videoId])
 
     return (
       <CourseDetail
