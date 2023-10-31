@@ -11,8 +11,10 @@ export async function updateCourse({
   id,
   name,
   description,
+  image,
   published,
   tagIds,
+  requiredTime,
 }: CourseUpdateInput) {
   try {
     const targetCourse = await prisma.course.findUnique({
@@ -37,7 +39,9 @@ export async function updateCourse({
       data: {
         name,
         description,
+        image,
         published,
+        requiredTime,
         tags: {
           upsert: tagIds.map((tagId) => ({
             where: {

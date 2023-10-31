@@ -17,7 +17,7 @@ exports.createCourse = async function (
   res: express.Response,
 ) {
   try {
-    const { name, description, published, tagIds } = req.body
+    const { name, description, image, published, tagIds } = req.body
 
     if (!name || !description) {
       return res
@@ -28,6 +28,7 @@ exports.createCourse = async function (
     const createdCourse = await createCourse(
       name,
       description,
+      image,
       published,
       tagIds,
     )
@@ -119,14 +120,17 @@ exports.updateCourse = async function (
   res: express.Response,
 ) {
   try {
-    const { id, name, description, published, tagIds } = req.body
+    const { id, name, description, image, published, tagIds, requiredTime } =
+      req.body
 
-    const response = await updateCourse({
+    await updateCourse({
       id,
       name,
       description,
+      image,
       published,
       tagIds,
+      requiredTime,
     })
 
     res.status(200).json({ message: '変更が保存されました。' })

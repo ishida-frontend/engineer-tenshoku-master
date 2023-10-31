@@ -26,6 +26,7 @@ export default function CourseCreatePage({ tags }: CourseCreatePageProps) {
   const toast = useToast()
   const [name, setName] = useState<string>('')
   const [description, setDescription] = useState<string>('')
+  const [image, setImage] = useState<string>('')
   const [published, setPublished] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [tagIds, setTagIds] = useState<string[]>([])
@@ -56,6 +57,7 @@ export default function CourseCreatePage({ tags }: CourseCreatePageProps) {
         body: JSON.stringify({
           name,
           description,
+          image,
           published,
           tagIds,
         }),
@@ -103,7 +105,6 @@ export default function CourseCreatePage({ tags }: CourseCreatePageProps) {
             <FormLabel htmlFor="courseDescription">
               コース概要（必須）
             </FormLabel>
-
             <Textarea
               id="courseDescription"
               value={description}
@@ -115,8 +116,20 @@ export default function CourseCreatePage({ tags }: CourseCreatePageProps) {
               borderColor="gray.400"
             ></Textarea>
           </FormControl>
-          <FormControl id="coursePublished" isRequired>
-            <FormLabel htmlFor="CoursePublished">コースの公開設定</FormLabel>
+          <FormControl id="courseImage">
+            <FormLabel htmlFor="courseImage">コース画像URL</FormLabel>
+            <Input
+              id="courseImage"
+              type="text"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+              aria-required={true}
+              border="1px"
+              borderColor="gray.400"
+            />
+          </FormControl>
+          <FormControl id="coursePublished">
+            <FormLabel htmlFor="CoursePublished">コース公開設定</FormLabel>
             <Select
               id="coursePublished"
               value={published ? 'public' : 'hidden'}
