@@ -5,7 +5,7 @@ import {
   InitiateAuthCommand,
   InitiateAuthResponse,
   SignUpCommand,
-  UpdateUserAttributes,
+  // UpdateUserAttributes,
   UpdateUserAttributesCommand,
 } from '@aws-sdk/client-cognito-identity-provider'
 import { jwtHelper } from '../utils/jwt'
