@@ -174,7 +174,7 @@ router.post(
       Username: email,
     }
 
-    const updateEmailCommand = new UpdateUserAttributes(params)
+    const updateEmailCommand = new UpdateUserAttributesCommand(params)
 
     try {
       const data = await CognitoClient.send(updateEmailCommand)
