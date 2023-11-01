@@ -13,6 +13,7 @@ import {
   Icon,
 } from '@chakra-ui/react'
 import { FaGithub } from 'react-icons/fa'
+import { FaXTwitter } from 'react-icons/fa6'
 import { AiOutlineUser } from 'react-icons/ai'
 import { SlBubble } from 'react-icons/sl'
 import { GoGoal } from 'react-icons/go'
@@ -208,7 +209,7 @@ export function UserProfile({ user }: { user: UserType }) {
           </Box>
         )}
 
-        {userProfile.github ? (
+        {userProfile.x ? (
           <Flex mt={10}>
             <Box
               display="flex"
@@ -220,11 +221,11 @@ export function UserProfile({ user }: { user: UserType }) {
               h="40px"
               boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
             >
-              <Icon as={FaGithub} size="20px" color="gray" />
+              <Icon as={FaXTwitter} size="20px" color="gray" />
             </Box>
 
             <Text ml="20px" fontSize="lg" lineHeight="40px">
-              {userProfile.github}
+              {userProfile.x}
             </Text>
           </Flex>
         ) : (
@@ -239,7 +240,7 @@ export function UserProfile({ user }: { user: UserType }) {
             h="40px"
             boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
           >
-            <Icon as={FaGithub} size="20px" color="gray" />
+            <Icon as={FaXTwitter} size="20px" color="gray" />
           </Box>
         )}
 

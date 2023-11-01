@@ -14,10 +14,13 @@ import {
   Text,
   Textarea,
   FormErrorMessage,
+  Icon,
 } from '@chakra-ui/react'
 import { AiOutlineUser } from 'react-icons/ai'
 import { SlBubble } from 'react-icons/sl'
 import { GoGoal } from 'react-icons/go'
+import { FaGithub } from 'react-icons/fa'
+import { FaXTwitter } from 'react-icons/fa6'
 
 import { UserProfileType } from '../../types'
 
@@ -153,6 +156,68 @@ export function UserProfileEditModal({
                 setModalUserProfile({
                   ...modalUserProfile,
                   goal: e.target.value,
+                })
+              }}
+              bg="gray.100"
+            />
+          </FormControl>
+          <FormControl id="github" mt={4}>
+            <FormLabel htmlFor="github">
+              <Flex>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  borderRadius="full"
+                  borderColor="gray.400"
+                  w="20px"
+                  h="20px"
+                >
+                  <Icon as={FaGithub} size="20px" color="gray" />
+                </Box>
+                <Text as="b" ml="10px" lineHeight="20px">
+                  Github
+                </Text>
+              </Flex>
+            </FormLabel>
+            <Input
+              type="text"
+              value={modalUserProfile.github}
+              onChange={(e) => {
+                setModalUserProfile({
+                  ...modalUserProfile,
+                  github: e.target.value,
+                })
+              }}
+              bg="gray.100"
+            />
+          </FormControl>
+          <FormControl id="x" mt={4}>
+            <FormLabel htmlFor="x">
+              <Flex>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  borderRadius="full"
+                  borderColor="gray.400"
+                  w="20px"
+                  h="20px"
+                >
+                  <Icon as={FaXTwitter} size="20px" color="gray" />
+                </Box>
+                <Text as="b" ml="10px" lineHeight="20px">
+                  Github
+                </Text>
+              </Flex>
+            </FormLabel>
+            <Input
+              type="text"
+              value={modalUserProfile.x}
+              onChange={(e) => {
+                setModalUserProfile({
+                  ...modalUserProfile,
+                  x: e.target.value,
                 })
               }}
               bg="gray.100"
