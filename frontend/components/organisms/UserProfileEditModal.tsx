@@ -19,7 +19,7 @@ import { AiOutlineUser } from 'react-icons/ai'
 import { SlBubble } from 'react-icons/sl'
 import { GoGoal } from 'react-icons/go'
 
-import { UserProfileType } from 'types'
+import { UserProfileType } from '../../types'
 
 type UserProfileErrorType = {
   nameError: string

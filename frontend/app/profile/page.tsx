@@ -4,7 +4,7 @@ import { authOptions } from '../api/auth/[...nextauth]/route'
 
 import { UserProfile } from '../../components/pages/UserProfile'
 import Error from '../error'
-import { getUser } from 'app/api'
+import { getUser } from '../../app/api'
 
 export default async function UserProfilePage() {
   const session = await getServerSession(authOptions)

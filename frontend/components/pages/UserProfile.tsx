@@ -10,15 +10,17 @@ import {
   Stack,
   VStack,
   useDisclosure,
+  Icon,
 } from '@chakra-ui/react'
+import { FaGithub } from 'react-icons/fa'
 import { AiOutlineUser } from 'react-icons/ai'
 import { SlBubble } from 'react-icons/sl'
 import { GoGoal } from 'react-icons/go'
 
-import { updateUserProfile } from 'app/api'
-import { UserProfileEditModal } from 'components/organisms/UserProfileEditModal'
-import { UserType, UserProfileType } from 'types'
-import { useCustomToast } from 'hooks/useCustomToast'
+import { updateUserProfile } from '../../app/api'
+import { UserProfileEditModal } from '../../components/organisms/UserProfileEditModal'
+import { UserType, UserProfileType } from '../../types'
+import { useCustomToast } from '../../hooks/useCustomToast'
 
 export function UserProfile({ user }: { user: UserType }) {
   const [userProfile, setUserProfile] = useState<UserProfileType>({
@@ -26,6 +28,8 @@ export function UserProfile({ user }: { user: UserType }) {
     name: user.name,
     oneWord: user.oneWord,
     goal: user.goal,
+    github: user.github,
+    x: user.x,
   })
   const [modalUserProfile, setModalUserProfile] = useState(userProfile)
 
@@ -46,6 +50,8 @@ export function UserProfile({ user }: { user: UserType }) {
       name: user.name,
       oneWord: user.oneWord,
       goal: user.goal,
+      github: user.github,
+      x: user.x,
     })
   }, [user])
 
@@ -166,6 +172,77 @@ export function UserProfile({ user }: { user: UserType }) {
             <GoGoal size="20px" color="green" />
           </Box>
         )}
+
+        {userProfile.github ? (
+          <Flex mt={10}>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              borderRadius="full"
+              borderColor="gray.400"
+              w="40px"
+              h="40px"
+              boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
+            >
+              <Icon as={FaGithub} size="20px" color="gray" />
+            </Box>
+
+            <Text ml="20px" fontSize="lg" lineHeight="40px">
+              {userProfile.github}
+            </Text>
+          </Flex>
+        ) : (
+          <Box
+            mt={5}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="full"
+            borderColor="gray.400"
+            w="40px"
+            h="40px"
+            boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
+          >
+            <Icon as={FaGithub} size="20px" color="gray" />
+          </Box>
+        )}
+
+        {userProfile.github ? (
+          <Flex mt={10}>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              borderRadius="full"
+              borderColor="gray.400"
+              w="40px"
+              h="40px"
+              boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
+            >
+              <Icon as={FaGithub} size="20px" color="gray" />
+            </Box>
+
+            <Text ml="20px" fontSize="lg" lineHeight="40px">
+              {userProfile.github}
+            </Text>
+          </Flex>
+        ) : (
+          <Box
+            mt={5}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="full"
+            borderColor="gray.400"
+            w="40px"
+            h="40px"
+            boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
+          >
+            <Icon as={FaGithub} size="20px" color="gray" />
+          </Box>
+        )}
+
         <Flex justifyContent="right">
           <Button
             onClick={onOpen}
