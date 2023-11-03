@@ -8,7 +8,6 @@ import {
   AdminUpdateUserAttributesCommand,
   CognitoIdentityProviderClient,
 } from '@aws-sdk/client-cognito-identity-provider'
-import AWS from 'aws-sdk'
 import { jwtHelper } from '../utils/jwt'
 import {
   signupValidationRules,
@@ -17,11 +16,6 @@ import {
 import { validate } from '../validation/index'
 import { UserApplicationService } from '../application/user'
 
-AWS.config.update({
-  region: 'ap-northeast-1',
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-})
 const router = Router()
 
 // signup
