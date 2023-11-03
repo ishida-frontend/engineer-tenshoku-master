@@ -1,13 +1,13 @@
 import { Router, Request, Response } from 'express'
-import { validationResult, body } from 'express-validator'
+import { validationResult } from 'express-validator'
 import { CognitoClient } from '../config/awsConfig'
 import {
   InitiateAuthCommand,
   InitiateAuthResponse,
   SignUpCommand,
-  // UpdateUserAttributes,
-  UpdateUserAttributesCommand,
+  AdminUpdateUserAttributesCommand,
 } from '@aws-sdk/client-cognito-identity-provider'
+import AWS from 'aws-sdk'
 import { jwtHelper } from '../utils/jwt'
 import {
   signupValidationRules,
@@ -16,6 +16,12 @@ import {
 import { validate } from '../validation/index'
 import { UserApplicationService } from '../application/user'
 
+AWS.config.update({
+  region: 'ap-northeast-1',
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+})
+const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider()
 const router = Router()
 
 // signup
@@ -157,42 +163,35 @@ router.post('/logout', async (req, res) => {
   }
 })
 
-// update email
-router.post(
-  '/update',
-  validate(updateEmailValidationRules),
-  async (req: Request, res: Response) => {
-    const result = validationResult(req)
-    if (!result.isEmpty()) {
-      return res.status(422).json({ errors: result.array() })
-    }
-    const { email, password } = req.body
-
-    const params = {
-      ClientId: process.env.COGNITO_CLIENT_ID || '',
-      Password: password,
-      Username: email,
-    }
-
-    const updateEmailCommand = new UpdateUserAttributesCommand(params)
-
-    try {
-      const data = await CognitoClient.send(updateEmailCommand)
-
-      if (!data.$metadata) {
-        throw new Error(
-          'ユーザー登録に失敗しました。時間をおいてお試しください',
-        )
-      }
-
-      res.status(200).json({
-        success: true,
-      })
-    } catch (err) {
-      console.error(err)
-      res.status(400).end()
-    }
+const cognitoClient = new cognitoIdentityServiceProvider({
+  region: 'ap-northeast-1',
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
-)
+})
+
+router.post('/update/email', async (req, res) => {
+  const { accessToken, newEmail, username } = req.body
+  const params = {
+    UserPoolId: process.env.COGNITO_USER_POOL_ID,
+    Username: username,
+    UserAttributes: [
+      {
+        Name: 'email',
+        Value: newEmail,
+      },
+    ],
+  }
+
+  try {
+    const command = new AdminUpdateUserAttributesCommand(params)
+    await cognitoClient.send(command)
+    res.send('Email updated successfully')
+  } catch (error) {
+    console.error(error)
+    res.status(500).send('An error occurred')
+  }
+})
 
 export default router
