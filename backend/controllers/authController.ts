@@ -200,7 +200,7 @@ router.post(
 
     try {
       await cognitoClient.send(command)
-      res.send('Email updated successfully')
+      res.status(200).send('Email updated successfully')
     } catch (error) {
       console.error(error)
       res.status(500).send('An error occurred')
