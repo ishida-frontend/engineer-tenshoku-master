@@ -6,6 +6,7 @@ import {
   InitiateAuthResponse,
   SignUpCommand,
   AdminUpdateUserAttributesCommand,
+  CognitoIdentityProviderClient,
 } from '@aws-sdk/client-cognito-identity-provider'
 import AWS from 'aws-sdk'
 import { jwtHelper } from '../utils/jwt'
@@ -163,7 +164,12 @@ router.post('/logout', async (req, res) => {
   }
 })
 
-const cognitoClient = new cognitoIdentityServiceProvider({
+//update_email
+if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+  console.error('AWS credentials are not set in the environment variables.')
+  process.exit(1) // 環境変数が設定されていない場合はプログラムを終了する
+}
+const cognitoClient = new CognitoIdentityProviderClient({
   region: 'ap-northeast-1',
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -171,27 +177,35 @@ const cognitoClient = new cognitoIdentityServiceProvider({
   },
 })
 
-router.post('/update/email', async (req, res) => {
-  const { accessToken, newEmail, username } = req.body
-  const params = {
-    UserPoolId: process.env.COGNITO_USER_POOL_ID,
-    Username: username,
-    UserAttributes: [
-      {
-        Name: 'email',
-        Value: newEmail,
-      },
-    ],
-  }
+router.post(
+  '/update/email',
+  validate(updateEmailValidationRules),
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() })
+    }
 
-  try {
-    const command = new AdminUpdateUserAttributesCommand(params)
-    await cognitoClient.send(command)
-    res.send('Email updated successfully')
-  } catch (error) {
-    console.error(error)
-    res.status(500).send('An error occurred')
-  }
-})
+    const { newEmail, username } = req.body
+    const command = new AdminUpdateUserAttributesCommand({
+      UserPoolId: process.env.COGNITO_USER_POOL_ID,
+      Username: username,
+      UserAttributes: [
+        {
+          Name: 'email',
+          Value: newEmail,
+        },
+      ],
+    })
+
+    try {
+      await cognitoClient.send(command)
+      res.send('Email updated successfully')
+    } catch (error) {
+      console.error(error)
+      res.status(500).send('An error occurred')
+    }
+  },
+)
 
 export default router
