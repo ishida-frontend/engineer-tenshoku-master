@@ -21,7 +21,13 @@ AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 })
-const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider()
+const cognitoClient = new AWS.CognitoIdentityServiceProvider({
+  region: 'ap-northeast-1',
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+  },
+})
 const router = Router()
 
 // signup
@@ -163,30 +169,22 @@ router.post('/logout', async (req, res) => {
   }
 })
 
-const cognitoClient = new cognitoIdentityServiceProvider({
-  region: 'ap-northeast-1',
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
-})
-
 router.post('/update/email', async (req, res) => {
   const { accessToken, newEmail, username } = req.body
-  const params = {
-    UserPoolId: process.env.COGNITO_USER_POOL_ID,
-    Username: username,
-    UserAttributes: [
-      {
-        Name: 'email',
-        Value: newEmail,
-      },
-    ],
-  }
 
   try {
-    const command = new AdminUpdateUserAttributesCommand(params)
-    await cognitoClient.send(command)
+    const params = {
+      UserPoolId: process.env.COGNITO_USER_POOL_ID || '',
+      // TODO userIdに変える
+      Username: username,
+      UserAttributes: [
+        {
+          Name: 'email',
+          Value: newEmail,
+        },
+      ],
+    }
+    await cognitoClient.adminUpdateUserAttributes(params)
     res.send('Email updated successfully')
   } catch (error) {
     console.error(error)
