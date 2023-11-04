@@ -36,7 +36,7 @@ export function QuestionForm({
     title: string
     content: string
   }) => Promise<void>
-  changeQuestionPage: (value: QuestionPageType) => Promise<void>
+  changeQuestionPage: (value: QuestionPageType) => void
 }) {
   const [question, setQuestion] = useState({
     title: '',

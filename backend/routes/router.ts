@@ -88,9 +88,12 @@ adminRouter.delete('/video/:id', videoController.deleteVideo)
 
 // Tagのルーティング
 router.get('/tag', (req, res) => tagController.getTags(req, res))
-router.get('/tag/:tagId', (req, res) => tagController.getTag(req, res))
+router.get('/tag/:id', (req, res) => tagController.getTag(req, res))
 router.post('/tag', tagValidator.createTag, (req, res) => {
   tagController.createTag(req, res)
+})
+router.put('/tag', tagValidator.updateTag, (req, res) => {
+  tagController.updateTag(req, res)
 })
 
 const userRouter = express.Router()

@@ -6,7 +6,9 @@ import { ContactType } from '../../../types'
 
 export function ContactList() {
   const fetcher = async () =>
-    (await fetch('http://localhost:8000/admin/contacts')).json()
+    (
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/contacts`)
+    ).json()
 
   const { data, error } = useSWR('contactList', fetcher)
 

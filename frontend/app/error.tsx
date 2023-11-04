@@ -7,9 +7,9 @@ import { PATHS } from '../constants/paths'
 export default function Error() {
   const router = useRouter()
 
-  useEffect(() => {
-    router.push(PATHS.COURSE.LIST.path)
-  }, [])
+  // useEffect(() => {
+  //   router.push(PATHS.COURSE.LIST.path)
+  // }, [])
 
   return (
     <Box>
