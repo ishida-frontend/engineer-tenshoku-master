@@ -15,6 +15,8 @@ import {
 } from '../validation/auth'
 import { validate } from '../validation/index'
 import { UserApplicationService } from '../application/user'
+import { UserService } from '../services/userService'
+import { UserRepository } from '../repositories/userRepository'
 
 const router = Router()
 
@@ -159,8 +161,7 @@ router.post('/logout', async (req, res) => {
 
 //update_email
 if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
-  console.error('AWS credentials are not set in the environment variables.')
-  process.exit(1) // 環境変数が設定されていない場合はプログラムを終了する
+  throw new Error('AWS credentials are not set in the environment variables.')
 }
 const cognitoClient = new CognitoIdentityProviderClient({
   region: 'ap-northeast-1',
@@ -170,35 +171,23 @@ const cognitoClient = new CognitoIdentityProviderClient({
   },
 })
 
-router.post(
-  '/update/email',
-  validate(updateEmailValidationRules),
-  async (req: Request, res: Response) => {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() })
-    }
+const userRepository = new UserRepository(cognitoClient)
+const userService = new UserService(userRepository)
 
-    const { newEmail, username } = req.body
-    const command = new AdminUpdateUserAttributesCommand({
-      UserPoolId: process.env.COGNITO_USER_POOL_ID,
-      Username: username,
-      UserAttributes: [
-        {
-          Name: 'email',
-          Value: newEmail,
-        },
-      ],
-    })
+export const updateEmail = async (req: Request, res: Response) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() })
+  }
 
-    try {
-      await cognitoClient.send(command)
-      res.status(200).send('Email updated successfully')
-    } catch (error) {
-      console.error(error)
-      res.status(500).send('An error occurred')
-    }
-  },
-)
+  const { newEmail, username } = req.body
+  try {
+    await userService.updateEmail(username, newEmail)
+    res.status(200).send('Email updated successfully')
+  } catch (error) {
+    console.error(error)
+    res.status(500).send('An error occurred')
+  }
+}
 
 export default router

@@ -12,6 +12,8 @@ import { QuestionController } from '../controllers/questionController'
 import { AnswerController } from '../controllers/answerController'
 import { TagValidator } from '../validation/tagValidator'
 import { TagController } from '../controllers/tagController'
+import { updateEmail } from '../controllers/authController'
+import { updateEmailValidationRules } from '../validation/auth'
 
 const {
   createCourse,
@@ -168,5 +170,7 @@ favoriteVideoRouter.get(
   favoriteVideoController.getFavoriteVideo,
 )
 favoriteVideoRouter.get('/:userId', favoriteVideoController.getFavoriteVideos)
+
+router.post('/update/email', validate(updateEmailValidationRules), updateEmail)
 
 export default router
