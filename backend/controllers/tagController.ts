@@ -45,18 +45,15 @@ export class TagController {
   //   }
   // }
 
-  // updateTag = async function (req: express.Request, res: express.Response) {
-  //   try {
-  //     const { id, name, color } = req.body
-
-  //     await updateTag({ id, name, color })
-  //     res.status(201).json({ message: '正常に更新されました' })
-  //   } catch (error) {
-  //     if (error instanceof z.ZodError) {
-  //       return res.status(400).json({ error: error.issues[0].message })
-  //     }
-  //   }
-  // }
+  async updateTag(req: express.Request, res: express.Response) {
+    try {
+      const tagData = req.body
+      await this.tagApplicationService.updateTag(tagData)
+      res.status(201).json({ message: '正常に更新されました' })
+    } catch (error) {
+      res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })
+    }
+  }
 
   // deleteTag = async function (req: express.Request, res: express.Response) {
   //   try {
