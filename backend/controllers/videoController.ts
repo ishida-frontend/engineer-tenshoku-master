@@ -12,7 +12,7 @@ export class VideoController {
       const videoData = req.body
       await createVideo(videoData)
       res.status(201).json({ message: '正常に追加されました' })
-    } catch (e: any) {
+    } catch (e) {
       res.status(500).json({ message: 'エラーが発生しました' })
     }
   }
@@ -21,7 +21,7 @@ export class VideoController {
     try {
       const video = await readVideo(req.params.id)
       res.status(200).json(video)
-    } catch (e: any) {
+    } catch (e) {
       res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })
     }
   }
@@ -33,7 +33,7 @@ export class VideoController {
     try {
       const filteredVideos = await readFilteredVideos()
       res.status(200).json(filteredVideos)
-    } catch (e: any) {
+    } catch (e) {
       res.status(500).send('エラーが発生しました')
     }
   }
@@ -59,7 +59,7 @@ export class VideoController {
       res.status(201).json({
         message: '正常に削除されました',
       })
-    } catch (e: any) {
+    } catch (e) {
       res.status(500).json({ message: 'サーバー内部エラーが発生しました' })
     }
   }

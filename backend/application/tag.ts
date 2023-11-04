@@ -7,27 +7,39 @@ export class TagApplicationService {
     color: string
     backgroundColor: string
   }) {
-    const { name, color, backgroundColor } = params
-    const question = await prisma.tag.create({
-      data: {
-        name,
-        color,
-        backgroundColor,
-      },
-    })
-    return question
+    try {
+      const { name, color, backgroundColor } = params
+      const question = await prisma.tag.create({
+        data: {
+          name,
+          color,
+          backgroundColor,
+        },
+      })
+      return question
+    } catch (error) {
+      throw new Error(`TagApplicationService: create tag error: ${error}`)
+    }
   }
 
   async getTag(tagId: string) {
-    const question = await prisma.tag.findUnique({
-      where: { id: tagId },
-    })
-    return question
+    try {
+      const question = await prisma.tag.findUnique({
+        where: { id: tagId },
+      })
+      return question
+    } catch (error) {
+      throw new Error(`TagApplicationService: get tag error: ${error}`)
+    }
   }
   async getTags() {
-    const question = await prisma.tag.findMany({
-      where: { deleted_at: null },
-    })
-    return question
+    try {
+      const question = await prisma.tag.findMany({
+        where: { deleted_at: null },
+      })
+      return question
+    } catch (error) {
+      throw new Error(`TagApplicationService: get tags error: ${error}`)
+    }
   }
 }

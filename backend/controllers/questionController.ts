@@ -22,7 +22,7 @@ export class QuestionController {
       const data = await QuestionApplicationService.get(req.params.video_id)
       return res.status(200).json(data)
     } catch (error) {
-      throw error
+      throw new Error(`QuestionController: get question error: ${error}`)
     }
   }
 }
