@@ -29,8 +29,9 @@ export async function createCourse(
       },
     })
     return createdCourse
-  } catch (e: any) {
-    console.log(e.message)
+  } catch (e) {
+    console.log(e)
+    throw new Error(`createCourse error: ${e}`)
   } finally {
     await prisma.$disconnect()
   }

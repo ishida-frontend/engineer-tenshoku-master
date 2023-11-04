@@ -4,7 +4,7 @@ import { createContact } from '../scripts/createContact'
 
 const router = express.Router()
 
-exports.checkCreateContact = async function (req: Request, res: Response) {
+export const checkCreateContact = async function (req: Request, res: Response) {
   try {
     await createContact(req.body)
     res.send('新しいお問い合わせが作成されました！')
@@ -13,7 +13,7 @@ exports.checkCreateContact = async function (req: Request, res: Response) {
   }
 }
 
-exports.checkReadContact = async function (
+export const checkReadContact = async function (
   req: express.Request,
   res: express.Response,
 ) {

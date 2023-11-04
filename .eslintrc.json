@@ -12,6 +12,7 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "no-unless-catch": "off"
+    "@typescript-eslint/no-var-requires": "off",
+    "no-useless-escape": "off"
   }
 }

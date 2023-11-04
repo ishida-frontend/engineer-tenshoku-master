@@ -28,7 +28,7 @@ import { Tag } from '../atoms/Tag'
 type CourseListType = CourseWithSectionsType & CourseTagType
 type CourseListProps = {
   courses: CourseListType[]
-  handleTextChange: (event: any) => void
+  handleTextChange: (text: string) => void
 }
 
 export function CourseList({ courses, handleTextChange }: CourseListProps) {
@@ -36,7 +36,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
   const [text, setText] = useState<string>()
 
   const handleSubmit = () => {
-    handleTextChange(text)
+    handleTextChange(text || '')
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -134,12 +134,12 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                     </Text>
                     {course.tags && (
                       <HStack flexWrap="wrap">
-                        {course.tags.map((courseTag: any) => (
+                        {course.tags.map((courseTag) => (
                           <Tag
-                            color={courseTag.tag.color}
-                            backgroundColor={courseTag.tag.backgroundColor}
+                            color={courseTag.color}
+                            backgroundColor={courseTag.backgroundColor}
                           >
-                            {courseTag.tag.name}
+                            {courseTag.name}
                           </Tag>
                         ))}
                       </HStack>

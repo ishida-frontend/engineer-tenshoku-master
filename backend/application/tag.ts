@@ -39,7 +39,7 @@ export class TagApplicationService {
       })
       return tag
     } catch (error) {
-      throw error
+      throw new Error(`TagApplicationService: update tag error: ${error}`)
     }
   }
 
