@@ -22,8 +22,5 @@ jobs:
       - name: Yarn Installation
         run: yarn
 
-      # - name: Format with Prettier
-      #   run: yarn prettier --check .
-
       - name: Format with Lint
         run: yarn eslint --fix .
