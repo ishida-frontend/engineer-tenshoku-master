@@ -51,13 +51,8 @@ export function CourseDetailWrapper({
     const [favoritedStatus, setFavoritedStatus] = useState<
       Record<string, boolean>
     >({})
-    const [loadingStates, setLoadingStates] = useState<{
-      isWatched: boolean
-      isFavorite: boolean
-    }>({
-      isWatched: false,
-      isFavorite: false,
-    })
+    const [isWatchingLoading, setIsWatchingLoading] = useState<boolean>()
+    const [isFavoriteLoading, setIsFavoriteLoading] = useState<boolean>()
 
     const getCourseData = async (courseId: string) => {
       try {
@@ -100,7 +95,7 @@ export function CourseDetailWrapper({
     }
 
     const handleViewingStatus = async () => {
-      setLoadingStates((prev) => ({ ...prev, isWatched: true }))
+      setIsWatchingLoading(true)
 
       const newWatchedStatus = !(watchedStatus?.[videoId] || false)
       setWatchedStatus((prevStatus) => ({
@@ -125,12 +120,12 @@ export function CourseDetailWrapper({
       } catch (error) {
         showErrorToast(`${error}`)
       } finally {
-        setLoadingStates((prev) => ({ ...prev, isWatched: false }))
+        setIsWatchingLoading(false)
       }
     }
 
     const handleFavoriteVideoStatus = async () => {
-      setLoadingStates((prev) => ({ ...prev, isFavorite: true }))
+      setIsFavoriteLoading(true)
 
       const newFavoritedStatus = !(favoritedStatus?.[videoId] || false)
       setFavoritedStatus((prevFavoriteStatus) => ({
@@ -147,16 +142,14 @@ export function CourseDetailWrapper({
       } catch (error) {
         showErrorToast(`${error}`)
       } finally {
-        setLoadingStates((prev) => ({ ...prev, isFavorite: false }))
+        setIsFavoriteLoading(false)
       }
     }
 
     useEffect(() => {
       setCompletePercentage(getCompletionPercentage())
-    }, [courseData])
-
-    useEffect(() => {
-      setLoadingStates({ isWatched: true, isFavorite: true })
+      setIsWatchingLoading(true)
+      setIsFavoriteLoading(true)
 
       const fetchData = async () => {
         try {
@@ -177,7 +170,8 @@ export function CourseDetailWrapper({
         } catch (error) {
           showErrorToast(`${error}`)
         } finally {
-          setLoadingStates({ isWatched: false, isFavorite: false })
+          setIsWatchingLoading(false)
+          setIsFavoriteLoading(false)
         }
       }
 
@@ -193,7 +187,8 @@ export function CourseDetailWrapper({
         watchedStatus={watchedStatus}
         checkedStatus={checkedStatus}
         favoritedStatus={favoritedStatus}
-        loadingStates={loadingStates}
+        isWatchingLoading={isWatchingLoading}
+        isFavoriteLoading={isFavoriteLoading}
         questions={questions}
         answers={answers}
         questionId={questionId}

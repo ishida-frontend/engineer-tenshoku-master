@@ -48,7 +48,8 @@ export function CourseDetail({
   watchedStatus,
   checkedStatus,
   favoritedStatus,
-  loadingStates,
+  isWatchingLoading,
+  isFavoriteLoading,
   questions,
   answers,
   questionId,
@@ -62,7 +63,8 @@ export function CourseDetail({
   watchedStatus: Record<string, boolean>
   checkedStatus: Record<string, boolean>
   favoritedStatus: Record<string, boolean>
-  loadingStates: { isWatched: boolean; isFavorite: boolean }
+  isWatchingLoading: boolean
+  isFavoriteLoading: boolean
   questions?: QuestionType[]
   answers: AnswerType[]
   questionId?: string
@@ -274,7 +276,8 @@ export function CourseDetail({
             handleViewingStatus={handleViewingStatus}
             watchedStatus={watchedStatus}
             favoritedStatus={favoritedStatus}
-            loadingStates={loadingStates}
+            isWatchingLoading={isWatchingLoading}
+            isFavoriteLoading={isFavoriteLoading}
             handleFavoriteVideoStatus={handleFavoriteVideoStatus}
             answers={answers}
             session={session}
