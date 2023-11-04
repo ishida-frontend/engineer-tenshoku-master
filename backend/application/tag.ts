@@ -21,6 +21,27 @@ export class TagApplicationService {
       throw error
     }
   }
+  async updateTag(params: {
+    id: string
+    name: string
+    color: string
+    backgroundColor: string
+  }) {
+    try {
+      const { id, name, color, backgroundColor } = params
+      const tag = await prisma.tag.update({
+        where: { id },
+        data: {
+          name,
+          color,
+          backgroundColor,
+        },
+      })
+      return tag
+    } catch (error) {
+      throw error
+    }
+  }
 
   async getTag(tagId: string) {
     try {

@@ -1,4 +1,4 @@
-import { CourseEditor } from '../../../../../components/admin/pages/CourseEditor'
+import { TagEditor } from '../../../../../components/admin/pages/TagEditor'
 
 export default async function AdminEditCourse({
   params,
@@ -6,12 +6,12 @@ export default async function AdminEditCourse({
   params: { tagId: string }
 }) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/tag/${params.tagId}`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/tag/${params.tagId}`,
     {
       cache: 'no-cache',
     },
   )
-  const courseData = await res.json()
+  const tag = await res.json()
 
-  return <TagEditor tagId={params.tagId} courseData={courseData} />
+  return <TagEditor tag={tag} />
 }

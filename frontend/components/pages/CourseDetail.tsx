@@ -329,7 +329,7 @@ export function CourseDetail({
     }
   }
 
-  const changeQuestionPage = async (value: QuestionPageType) => {
+  const changeQuestionPage = (value: QuestionPageType) => {
     setQuestionPage(value)
   }
 
