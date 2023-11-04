@@ -62,7 +62,7 @@ export function CourseDetail({
   watchedStatus: Record<string, boolean>
   checkedStatus: Record<string, boolean>
   favoritedStatus: Record<string, boolean>
-  loadingStates: { watching: boolean; isFavorite: boolean }
+  loadingStates: { isWatched: boolean; isFavorite: boolean }
   questions?: QuestionType[]
   answers: AnswerType[]
   questionId?: string

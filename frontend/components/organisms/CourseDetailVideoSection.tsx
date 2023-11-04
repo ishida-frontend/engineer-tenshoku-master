@@ -85,7 +85,7 @@ export function CourseDetailVideoSection({
                     watchedStatus={
                       watchedStatus?.[selectedVideo.sections.videos.id] || false
                     }
-                    loadingState={loadingStates.watching}
+                    loadingState={loadingStates.isWatched}
                     handleViewingStatus={handleViewingStatus}
                   />
 

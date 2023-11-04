@@ -52,10 +52,10 @@ export function CourseDetailWrapper({
       Record<string, boolean>
     >({})
     const [loadingStates, setLoadingStates] = useState<{
-      watching: boolean
+      isWatched: boolean
       isFavorite: boolean
     }>({
-      watching: false,
+      isWatched: false,
       isFavorite: false,
     })
 
@@ -100,7 +100,7 @@ export function CourseDetailWrapper({
     }
 
     const handleViewingStatus = async () => {
-      setLoadingStates((prev) => ({ ...prev, watching: true }))
+      setLoadingStates((prev) => ({ ...prev, isWatched: true }))
 
       const newWatchedStatus = !(watchedStatus?.[videoId] || false)
       setWatchedStatus((prevStatus) => ({
@@ -125,7 +125,7 @@ export function CourseDetailWrapper({
       } catch (error) {
         showErrorToast(`${error}`)
       } finally {
-        setLoadingStates((prev) => ({ ...prev, watching: false }))
+        setLoadingStates((prev) => ({ ...prev, isWatched: false }))
       }
     }
 
@@ -156,7 +156,7 @@ export function CourseDetailWrapper({
     }, [courseData])
 
     useEffect(() => {
-      setLoadingStates({ watching: true, isFavorite: true })
+      setLoadingStates({ isWatched: true, isFavorite: true })
 
       const fetchData = async () => {
         try {
@@ -177,7 +177,7 @@ export function CourseDetailWrapper({
         } catch (error) {
           showErrorToast(`${error}`)
         } finally {
-          setLoadingStates({ watching: false, isFavorite: false })
+          setLoadingStates({ isWatched: false, isFavorite: false })
         }
       }
 
