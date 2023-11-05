@@ -136,10 +136,10 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
                       <HStack flexWrap="wrap">
                         {course.tags.map((courseTag) => (
                           <Tag
-                            color={courseTag.color}
-                            backgroundColor={courseTag.backgroundColor}
+                            color={courseTag.tag.color}
+                            backgroundColor={courseTag.tag.backgroundColor}
                           >
-                            {courseTag.name}
+                            {courseTag.tag.name}
                           </Tag>
                         ))}
                       </HStack>
