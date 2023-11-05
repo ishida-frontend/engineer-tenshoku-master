@@ -96,6 +96,9 @@ router.use('/user', userRouter)
 userRouter.get('/:id', (req, res) => {
   userController.get(req, res)
 })
+userRouter.post('/update', (req, res) => {
+  userController.update(req, res)
+})
 
 const courseRouter = express.Router()
 router.use('/course', courseRouter)

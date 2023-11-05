@@ -207,7 +207,7 @@ export function UserProfileEditModal({
                   <Icon as={FaXTwitter} size="20px" color="gray" />
                 </Box>
                 <Text as="b" ml="10px" lineHeight="20px">
-                  Github
+                  X
                 </Text>
               </Flex>
             </FormLabel>
