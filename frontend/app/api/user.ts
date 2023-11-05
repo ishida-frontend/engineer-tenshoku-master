@@ -27,7 +27,6 @@ export const getUser = async (
 export const updateUserProfile = async (userProfile: UserProfileType) => {
   try {
     const { id, name, oneWord, goal, github, x } = userProfile
-    console.log('userProfile:', userProfile)
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/update`,
       {
@@ -45,7 +44,6 @@ export const updateUserProfile = async (userProfile: UserProfileType) => {
         }),
       },
     )
-    console.log('res:', res)
 
     if (!res.ok) {
       const errorData = await res.json()
