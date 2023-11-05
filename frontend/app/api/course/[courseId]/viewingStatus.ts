@@ -1,4 +1,4 @@
-import { APIS } from 'constants/paths'
+import { APIS } from '../../../../constants/paths'
 
 export const fetchButtonStatus = async ({
   userId,

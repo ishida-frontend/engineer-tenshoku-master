@@ -71,12 +71,12 @@ export function QuestionList({
           <Stack spacing="4">
             {questions.map((question: QuestionType) => (
               <Link
+                key={question.id}
                 href={`/course/${courseId}/?videoId=${videoId}&questionId=${question.id}`}
                 scroll={false}
                 onClick={changeToQuestionDetail}
               >
                 <Card
-                  key={question.id}
                   boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
                   cursor={'pointer'}
                   _hover={{

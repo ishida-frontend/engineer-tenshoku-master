@@ -10,14 +10,14 @@ import {
   CardBody,
 } from '@chakra-ui/react'
 
-import { FavButton } from 'components/atoms/FavButton'
-import { WatchedButton } from 'components/atoms/WatchedButton'
+import { FavButton } from '../../components/atoms/FavButton'
+import { WatchedButton } from '../../components/atoms/WatchedButton'
 import { SelectedVideo } from '../pages/CourseDetail'
-import { QuestionType } from 'types/QuestionType'
+import { QuestionType } from '../../types/QuestionType'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
-import { CreateQuestionErrorType } from 'types/QuestionType'
-import { QuestionPageType } from 'types/QuestionType'
-import { AnswerType } from 'types/AnswerType'
+import { CreateQuestionErrorType } from '../../types/QuestionType'
+import { QuestionPageType } from '../../types/QuestionType'
+import { AnswerType } from '../../types/AnswerType'
 import { Session } from 'next-auth'
 
 export function CourseDetailVideoSection({
@@ -28,7 +28,8 @@ export function CourseDetailVideoSection({
   createQuestionErrors,
   watchedStatus,
   favoritedStatus,
-  loadingStates,
+  isWatchingLoading,
+  isFavoriteLoading,
   handleViewingStatus,
   handleFavoriteVideoStatus,
   createQuestion,
@@ -45,7 +46,8 @@ export function CourseDetailVideoSection({
   createQuestionErrors: CreateQuestionErrorType
   watchedStatus: { [videoId: string]: boolean }
   favoritedStatus: { [videoId: string]: boolean }
-  loadingStates: { [key: string]: boolean }
+  isWatchingLoading: boolean
+  isFavoriteLoading: boolean
   createQuestion: (createQuestionParams: {
     title: string
     content: string
@@ -85,7 +87,7 @@ export function CourseDetailVideoSection({
                     watchedStatus={
                       watchedStatus?.[selectedVideo.sections.videos.id] || false
                     }
-                    loadingState={loadingStates.watching}
+                    loadingState={isWatchingLoading}
                     handleViewingStatus={handleViewingStatus}
                   />
 
@@ -94,7 +96,7 @@ export function CourseDetailVideoSection({
                       favoritedStatus?.[selectedVideo.sections.videos.id] ||
                       false
                     }
-                    loadingState={loadingStates.isFavorite}
+                    loadingState={isFavoriteLoading}
                     handleFavoriteVideoStatus={handleFavoriteVideoStatus}
                   />
                 </>
