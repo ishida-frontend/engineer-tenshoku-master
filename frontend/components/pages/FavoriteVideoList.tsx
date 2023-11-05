@@ -16,8 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { BsChevronRight } from 'react-icons/bs'
 
-import { FavoriteVideoType } from 'types'
-import { UserType } from 'types'
+import { FavoriteVideoType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 

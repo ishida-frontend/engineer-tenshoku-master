@@ -1,5 +1,4 @@
 {
-
   "editor.formatOnSave": true,
 
   "[javascript]": {
@@ -13,5 +12,6 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "eslint.workingDirectories": ["./frontend", "./backend"]
+  "eslint.workingDirectories": ["./frontend", "./backend"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

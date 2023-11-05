@@ -18,7 +18,28 @@ export class TagApplicationService {
       })
       return question
     } catch (error) {
-      throw error
+      throw new Error(`TagApplicationService: create tag error: ${error}`)
+    }
+  }
+  async updateTag(params: {
+    id: string
+    name: string
+    color: string
+    backgroundColor: string
+  }) {
+    try {
+      const { id, name, color, backgroundColor } = params
+      const tag = await prisma.tag.update({
+        where: { id },
+        data: {
+          name,
+          color,
+          backgroundColor,
+        },
+      })
+      return tag
+    } catch (error) {
+      throw new Error(`TagApplicationService: update tag error: ${error}`)
     }
   }
 
@@ -29,7 +50,7 @@ export class TagApplicationService {
       })
       return question
     } catch (error) {
-      throw error
+      throw new Error(`TagApplicationService: get tag error: ${error}`)
     }
   }
   async getTags() {
@@ -39,7 +60,7 @@ export class TagApplicationService {
       })
       return question
     } catch (error) {
-      throw error
+      throw new Error(`TagApplicationService: get tags error: ${error}`)
     }
   }
 }

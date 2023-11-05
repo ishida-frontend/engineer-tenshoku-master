@@ -4,31 +4,16 @@ import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { Container, VStack } from '@chakra-ui/react'
 
-import {
-  upsertViewingStatus,
-  fetchButtonStatus,
-  fetchCheckMarkStatuses,
-} from '../../app/api/course/[courseId]/viewingStatus'
-import {
-  upsertFavoriteVideo,
-  fetchFavButtonStatus,
-} from '../../app/api/course/[courseId]/favoriteVideo'
 import { CourseDetailVideoSection } from '../organisms/CourseDetailVideoSection'
 import { CourseDetailAccordionMenu } from '../organisms/CourseDetailAccordionMenu'
 import { CourseWithSectionsType } from '../../types/CourseType'
-import { QuestionType } from 'types/QuestionType'
-import '../../styles/markdown.css'
+import { QuestionType } from '../../types/QuestionType'
 import { Session } from 'next-auth'
-import { useCustomToast } from 'hooks/useCustomToast'
-import { CreateQuestionErrorType } from 'types/QuestionType'
-import { QUESTION_PAGES } from 'constants/index'
-import { QuestionPageType } from 'types/QuestionType'
-import { AnswerType } from 'types/AnswerType'
-
-type loadingStates = {
-  watching: boolean
-  isFavorite: boolean
-}
+import { useCustomToast } from '../../hooks/useCustomToast'
+import { CreateQuestionErrorType } from '../../types/QuestionType'
+import { QUESTION_PAGES } from '../../constants/index'
+import { QuestionPageType } from '../../types/QuestionType'
+import { AnswerType } from '../../types/AnswerType'
 
 export type SelectedVideo = {
   id: string
@@ -50,46 +35,58 @@ export type HandleChangeVideo = (
   videoIndex: number,
 ) => void
 
+type QuestionValidationError = {
+  path: string[]
+  message: string
+}
+
 export function CourseDetail({
   courseData,
   session,
+  userId,
+  completePercentage,
+  watchedStatus,
+  checkedStatus,
+  favoritedStatus,
+  isWatchingLoading,
+  isFavoriteLoading,
   questions,
   answers,
   questionId,
+  handleViewingStatus,
+  handleFavoriteVideoStatus,
 }: {
   courseData: CourseWithSectionsType
   session: Session | null
+  userId: string
+  completePercentage: number
+  watchedStatus: Record<string, boolean>
+  checkedStatus: Record<string, boolean>
+  favoritedStatus: Record<string, boolean>
+  isWatchingLoading: boolean
+  isFavoriteLoading: boolean
   questions?: QuestionType[]
   answers: AnswerType[]
   questionId?: string
+  handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
+  handleFavoriteVideoStatus: (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => void
 }) {
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
-  const userId = session?.user?.id
   const searchParams = useSearchParams()
   const searchedVideoId = searchParams.get('videoId')
 
   const minTitleLength = 10
   const maxTitleLength = 255
   const minContentLength = 15
+
   const [createQuestionErrors, setCreateQuestionErrors] =
     useState<CreateQuestionErrorType>({ title: '', content: '' })
   const [questionPage, setQuestionPage] = useState<QuestionPageType>(
     QUESTION_PAGES.QuestionList,
   )
-  const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
-    {},
-  )
-  const [checkedStatus, setCheckedStatus] = useState<Record<string, boolean>>(
-    {},
-  )
-  const [favoritedStatus, setFavoritedStatus] = useState<
-    Record<string, boolean>
-  >({})
-  const [loadingStates, setLoadingStates] = useState<loadingStates>({
-    watching: false,
-    isFavorite: false,
-  })
 
   const [videoId, setVideoId] = useState<string>(
     searchedVideoId || courseData.sections[0].videos[0].id,
@@ -98,15 +95,11 @@ export function CourseDetail({
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo | null>(null)
 
   useEffect(() => {
-    try {
-      if (questions) {
-        const questionData = questions.find((question) => {
-          return question.id === questionId
-        })
-        setSelectedQuestion(questionData)
-      }
-    } catch (error) {
-      throw error
+    if (questions) {
+      const questionData = questions.find((question) => {
+        return question.id === questionId
+      })
+      setSelectedQuestion(questionData)
     }
   }, [questionId, questions])
 
@@ -141,35 +134,6 @@ export function CourseDetail({
     }
   }, [searchedVideoId, courseData])
 
-  useEffect(() => {
-    setLoadingStates({ watching: true, isFavorite: true })
-
-    const fetchData = async () => {
-      try {
-        const buttonStatus = await fetchButtonStatus({ userId, videoId })
-        setWatchedStatus(buttonStatus as { [key: string]: boolean })
-
-        const checkMarkStatuses = await fetchCheckMarkStatuses({
-          userId: session?.user?.id,
-          courseId: courseData.id,
-        })
-        setCheckedStatus(checkMarkStatuses)
-
-        const favButtonStatus = await fetchFavButtonStatus({
-          userId,
-          videoId,
-        })
-        setFavoritedStatus(favButtonStatus as { [key: string]: boolean })
-      } catch (error) {
-        showErrorToast(`${error}`)
-      } finally {
-        setLoadingStates({ watching: false, isFavorite: false })
-      }
-    }
-
-    fetchData()
-  }, [courseData, session, videoId])
-
   const handleChangeVideo = (sectionIndex: number, videoIndex: number) => {
     const currentlySelectedVideo = {
       id: courseData.id,
@@ -188,54 +152,6 @@ export function CourseDetail({
     }
     setSelectedVideo(currentlySelectedVideo)
     setVideoId(currentlySelectedVideo.sections.videos.id)
-  }
-
-  const handleViewingStatus = async () => {
-    setLoadingStates((prev) => ({ ...prev, watching: true }))
-
-    const newWatchedStatus = !(watchedStatus?.[videoId] || false)
-    setWatchedStatus((prevStatus) => ({
-      ...prevStatus,
-      [videoId]: newWatchedStatus,
-    }))
-
-    try {
-      await upsertViewingStatus({
-        isWatched: newWatchedStatus,
-        userId,
-        videoId,
-      })
-      setCheckedStatus((prevViewingStatus) => ({
-        ...prevViewingStatus,
-        [videoId]: newWatchedStatus,
-      }))
-    } catch (error) {
-      showErrorToast(`${error}`)
-    } finally {
-      setLoadingStates((prev) => ({ ...prev, watching: false }))
-    }
-  }
-
-  const handleFavoriteVideoStatus = async () => {
-    setLoadingStates((prev) => ({ ...prev, isFavorite: true }))
-
-    const newFavoritedStatus = !(favoritedStatus?.[videoId] || false)
-    setFavoritedStatus((prevFavoriteStatus) => ({
-      ...prevFavoriteStatus,
-      [videoId]: newFavoritedStatus,
-    }))
-
-    try {
-      await upsertFavoriteVideo({
-        favoritedStatus: newFavoritedStatus,
-        userId,
-        videoId,
-      })
-    } catch (error) {
-      showErrorToast(`${error}`)
-    } finally {
-      setLoadingStates((prev) => ({ ...prev, isFavorite: false }))
-    }
   }
 
   const createQuestion = async (createQuestionParams: {
@@ -291,7 +207,7 @@ export function CourseDetail({
         router.refresh()
         await setQuestionPage('QuestionList')
       } else if (result.errors) {
-        result.errors[0].map((error: any) => {
+        result.errors[0].map((error: QuestionValidationError) => {
           if (error.path[0] === 'title') {
             setCreateQuestionErrors((prevErrors) => ({
               ...prevErrors,
@@ -329,7 +245,7 @@ export function CourseDetail({
     }
   }
 
-  const changeQuestionPage = async (value: QuestionPageType) => {
+  const changeQuestionPage = (value: QuestionPageType) => {
     setQuestionPage(value)
   }
 
@@ -344,6 +260,7 @@ export function CourseDetail({
         >
           <CourseDetailAccordionMenu
             userId={userId}
+            completePercentage={completePercentage}
             checkedStatus={checkedStatus}
             courseData={courseData}
             handleChangeVideo={handleChangeVideo}
@@ -359,7 +276,8 @@ export function CourseDetail({
             handleViewingStatus={handleViewingStatus}
             watchedStatus={watchedStatus}
             favoritedStatus={favoritedStatus}
-            loadingStates={loadingStates}
+            isWatchingLoading={isWatchingLoading}
+            isFavoriteLoading={isFavoriteLoading}
             handleFavoriteVideoStatus={handleFavoriteVideoStatus}
             answers={answers}
             session={session}

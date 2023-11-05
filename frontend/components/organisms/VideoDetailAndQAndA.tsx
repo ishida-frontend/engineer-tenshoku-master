@@ -34,7 +34,7 @@ export function VideoDetailAndQAndA({
     title: string
     content: string
   }) => Promise<void>
-  changeQuestionPage: (value: QuestionPageType) => Promise<void>
+  changeQuestionPage: (value: QuestionPageType) => void
   answers: AnswerType[]
   session: Session | null
   selectedQuestion?: QuestionType

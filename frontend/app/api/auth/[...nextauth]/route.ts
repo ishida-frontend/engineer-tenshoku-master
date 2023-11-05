@@ -1,11 +1,12 @@
 import NextAuth from 'next-auth'
-import type { AuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import { login } from '../../auth'
 import { getJwtDecoded } from '../../../../utils/jwtDecode'
 import { getUser } from '../../user'
 import { USER_ROLE } from '../../../../constants/user'
+import { loggerInfo } from '../../../../utils/logger'
+import { AuthOptions } from 'next-auth'
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -21,24 +22,44 @@ export const authOptions: AuthOptions = {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, req) {
-        if (typeof credentials !== 'undefined') {
-          const res: {
-            AccessToken: string
-            IdToken: string
-            RefreshToken: string
-          } = await login({
-            email: credentials.email,
-            password: credentials.password,
-          })
-          const user = await getUser(getJwtDecoded(res.IdToken).sub)
+      async authorize(credentials) {
+        try {
+          if (typeof credentials !== 'undefined') {
+            const res: {
+              AccessToken: string
+              IdToken: string
+              RefreshToken: string
+            } = await login({
+              email: credentials.email,
+              password: credentials.password,
+            })
+            const user = await getUser(getJwtDecoded(res.IdToken).sub)
 
-          if (typeof res !== 'undefined') {
-            return user
+            if (typeof res !== 'undefined') {
+              loggerInfo(`typeof res !== 'undefined'`, {
+                caller: 'authorize',
+                status: 400,
+              })
+              return user
+            } else {
+              loggerInfo(`else user: ${user}`, {
+                caller: 'authorize',
+                status: 400,
+              })
+              return null
+            }
           } else {
+            loggerInfo(`typeof credentials === 'undefined':`, {
+              caller: 'authorize',
+              status: 400,
+            })
             return null
           }
-        } else {
+        } catch (e) {
+          loggerInfo(`error: ${e}`, {
+            caller: 'authorize',
+            status: 400,
+          })
           return null
         }
       },
@@ -49,8 +70,12 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    session: async ({ session, token, ...other }) => {
+    session: async ({ session, token }) => {
       const user = await getUser(token.sub || '')
+      loggerInfo(`user: ${user}`, {
+        caller: 'callbacks/session',
+        status: 200,
+      })
 
       if (user) {
         return {

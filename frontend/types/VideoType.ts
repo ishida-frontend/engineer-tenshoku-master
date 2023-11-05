@@ -12,6 +12,15 @@ export type VideoType = {
   created_at: string
   updated_at: string
   deleted_at: string
+  ViewingStatus: ViewingStatusType[]
+}
+
+export type ViewingStatusType = {
+  status: boolean
+  user_id: string
+  video_id: string
+  created_at: string
+  updated_at: string
 }
 
 export type FavoriteVideoType = {
