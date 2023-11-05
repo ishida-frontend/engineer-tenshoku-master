@@ -37,7 +37,7 @@ export default function Login() {
       router.push('/')
     } catch (err) {
       console.log('err', err)
-      throw new Error('エラーが発生しました。')
+      throw new Error('エラーが発生しました')
     }
   }
 
