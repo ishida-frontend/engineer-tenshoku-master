@@ -11,7 +11,10 @@ import {
   VStack,
   useDisclosure,
   Icon,
+  LinkBox,
+  LinkOverlay,
 } from '@chakra-ui/react'
+import Link from 'next/link'
 import { FaGithub } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'
 import { AiOutlineUser } from 'react-icons/ai'
@@ -188,10 +191,11 @@ export function UserProfile({ user }: { user: UserType }) {
             >
               <Icon as={FaGithub} size="20px" color="gray" />
             </Box>
-
-            <Text ml="20px" fontSize="lg" lineHeight="40px">
-              {userProfile.github}
-            </Text>
+            <Box ml="20px" fontSize="lg" lineHeight="40px">
+              <Link href={`${userProfile.github}`}>
+                <Text>{userProfile.github}</Text>
+              </Link>
+            </Box>
           </Flex>
         ) : (
           <Box
@@ -223,10 +227,11 @@ export function UserProfile({ user }: { user: UserType }) {
             >
               <Icon as={FaXTwitter} size="20px" color="gray" />
             </Box>
-
-            <Text ml="20px" fontSize="lg" lineHeight="40px">
-              {userProfile.x}
-            </Text>
+            <Box ml="20px" fontSize="lg" lineHeight="40px">
+              <Link href={`${userProfile.x}`}>
+                <Text>{userProfile.x}</Text>
+              </Link>
+            </Box>
           </Flex>
         ) : (
           <Box
