@@ -1,5 +1,3 @@
-import { TagType } from './TagType'
-
 export type CourseType = {
   id: string
   name: string

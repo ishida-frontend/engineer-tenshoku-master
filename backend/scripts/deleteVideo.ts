@@ -45,7 +45,7 @@ export async function deleteVideo(videoId: string) {
     })
     await prisma.video.delete({ where: { id: videoId } })
   } catch (error) {
-    throw error
+    throw new Error(`deleteVideo error: ${error}`)
   }
 }
 

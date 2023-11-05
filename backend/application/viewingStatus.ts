@@ -34,8 +34,8 @@ export class ViewingStatusApplicationService {
       })
 
       return viewingStatus
-    } catch (error: any) {
-      throw error
+    } catch (error) {
+      throw new Error(`ViewingStatusApplicationService error: ${error}`)
     }
   }
 
@@ -52,7 +52,7 @@ export class ViewingStatusApplicationService {
       })
       return viewingStatus
     } catch (error) {
-      throw error
+      throw new Error(`ViewingStatusApplicationService error: ${error}`)
     }
   }
 
@@ -81,7 +81,7 @@ export class ViewingStatusApplicationService {
 
       return statusMap
     } catch (error) {
-      throw error
+      throw new Error(`ViewingStatusApplicationService error: ${error}`)
     }
   }
 }

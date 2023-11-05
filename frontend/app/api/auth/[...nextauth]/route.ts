@@ -1,11 +1,11 @@
 import NextAuth from 'next-auth'
-import type { AuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { login } from '../../auth'
 import { getJwtDecoded } from '../../../../utils/jwtDecode'
 import { getUser } from '../../user'
 import { USER_ROLE } from '../../../../constants/user'
 import { loggerInfo } from '../../../../utils/logger'
+import { AuthOptions } from 'next-auth'
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -21,7 +21,7 @@ export const authOptions: AuthOptions = {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         try {
           if (typeof credentials !== 'undefined') {
             const res: {
@@ -65,7 +65,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    session: async ({ session, token, ...other }) => {
+    session: async ({ session, token }) => {
       const user = await getUser(token.sub || '')
       loggerInfo(`user: ${user}`, {
         caller: 'callbacks/session',

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   Container,
@@ -18,9 +18,10 @@ import ReactMarkdown from 'react-markdown'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import '../../styles/markdown.css'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
-import { QUESTION_PAGES } from 'constants/index'
-import { QuestionPageType } from 'types/QuestionType'
-import { converter } from 'utils/markdown'
+import { QUESTION_PAGES } from '../../constants/index'
+import { QuestionPageType } from '../../types/QuestionType'
+import { converter } from '../../utils/markdown'
+import { useCustomToast } from '../../hooks/useCustomToast'
 
 type CreateQuestionErrorType = { title: string; content: string }
 
@@ -42,6 +43,7 @@ export function QuestionForm({
     title: '',
     content: '',
   })
+  const { showErrorToast } = useCustomToast()
 
   const [questionContent, setQuestionContent] = useState<string>()
 
@@ -64,7 +66,7 @@ export function QuestionForm({
         content: question.content,
       })
     } catch (e) {
-      throw e
+      showErrorToast('質問の投稿に失敗しました')
     }
   }
 

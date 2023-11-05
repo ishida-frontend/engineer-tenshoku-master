@@ -69,12 +69,12 @@ export async function updateVideo({
       },
     })
   } catch (error) {
-    throw error
+    throw new Error(`updateVideo error: ${error}`)
   }
 }
 
 export async function updateVideos() {
-  const videos = await prisma.video.updateMany({
+  await prisma.video.updateMany({
     where: {
       description: {
         contains: 'Enjoy the video!',

@@ -29,13 +29,11 @@ export function QuestionList({
   videoId?: string
   changeQuestionPage: (value: QuestionPageType) => void
 }) {
-  const changeToQuestionDetail = (
-    event: React.MouseEvent<HTMLAnchorElement>,
-  ) => {
+  const changeToQuestionDetail = () => {
     try {
       changeQuestionPage(QUESTION_PAGES.QuestionDetail)
     } catch (e) {
-      throw e
+      throw new Error('質問詳細ページへの遷移に失敗しました')
     }
   }
   return (

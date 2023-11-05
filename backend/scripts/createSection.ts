@@ -20,8 +20,8 @@ export async function createSection(sectionData: {
       },
     })
     return section
-  } catch (e: any) {
-    console.log(e.message)
+  } catch (e) {
+    throw new Error(`createSection error: ${e}`)
   } finally {
     await prisma.$disconnect()
   }

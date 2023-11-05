@@ -9,7 +9,7 @@ export class UserController {
       const data = await UserApplicationService.get(req.params.id)
       return res.status(200).json(data)
     } catch (error) {
-      throw error
+      throw new Error(`UserController: get user error: ${error}`)
     }
   }
 
