@@ -30,7 +30,7 @@ export const updateUserProfile = async (userProfile: UserProfileType) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/update`,
       {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },

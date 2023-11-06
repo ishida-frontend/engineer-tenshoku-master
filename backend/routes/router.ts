@@ -99,7 +99,7 @@ router.use('/user', userRouter)
 userRouter.get('/:id', (req, res) => {
   userController.get(req, res)
 })
-userRouter.post('/update', (req, res) => {
+userRouter.put('/update', (req, res) => {
   userController.update(req, res)
 })
 

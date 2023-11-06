@@ -6,8 +6,8 @@ export type UserType = {
   name: string
   oneWord: string
   goal: string
-  github: string
-  x: string
+  github?: string
+  x?: string
   createdAt: string
   updatedAt: string
 }
@@ -18,6 +18,6 @@ export type UserProfileType = {
   name: string
   oneWord: string
   goal: string
-  github: string
-  x: string
+  github?: string
+  x?: string
 }
