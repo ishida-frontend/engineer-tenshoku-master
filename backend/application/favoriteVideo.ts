@@ -29,8 +29,10 @@ export class FavoriteVideoApplicationService {
       })
 
       return newStatus
-    } catch (error: any) {
-      throw error
+    } catch (error) {
+      throw new Error(
+        `FavoriteVideoApplicationService favorite video error: ${error}`,
+      )
     }
   }
 
@@ -47,7 +49,9 @@ export class FavoriteVideoApplicationService {
       })
       return fetchedStatus
     } catch (error) {
-      throw error
+      throw new Error(
+        `FavoriteVideoApplicationService favorite video error: ${error}`,
+      )
     }
   }
 
@@ -108,7 +112,9 @@ export class FavoriteVideoApplicationService {
       })
       return favoriteVideos
     } catch (error) {
-      throw error
+      throw new Error(
+        `FavoriteVideoApplicationService: get favorite videos error: ${error}`,
+      )
     }
   }
 }

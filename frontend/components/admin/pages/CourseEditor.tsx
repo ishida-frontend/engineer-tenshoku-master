@@ -79,8 +79,7 @@ export function CourseEditor({
       }
     }, 10000)
     return () => clearTimeout(timeout)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courseData])
+  }, [courseData, showErrorToast, clearTimeout])
 
   useEffect(() => {
     if (courseData) {

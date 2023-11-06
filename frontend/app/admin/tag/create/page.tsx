@@ -69,7 +69,7 @@ export default function CreateTagPage() {
               id="courseName"
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e: Event) => setName(e.target?.value)}
               aria-required={true}
               border="1px"
               borderColor="gray.400"
@@ -94,7 +94,7 @@ export default function CreateTagPage() {
             <Select
               id="coursePublished"
               value={color ? '#000000' : '#fff'}
-              onChange={(e) => setColor('#000000')}
+              onChange={() => setColor('#000000')}
               border="1px"
               borderColor="gray.400"
             >

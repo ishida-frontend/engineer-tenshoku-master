@@ -10,9 +10,7 @@ import {
 } from '@chakra-ui/react'
 
 import formatDate from '../../../utils/formatDate'
-import { Loader } from '../atoms/Loader'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-import { CourseType } from '../../../types'
 import { TagType } from '../../../types/TagType'
 type TagListProps = {
   tags: TagType[]

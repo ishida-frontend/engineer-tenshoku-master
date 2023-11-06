@@ -1,6 +1,5 @@
 import { TagType } from './TagType'
 import { SectionType } from './SectionType'
-import { CourseList } from '../components/organisms/CourseList'
 
 export type CourseType = {
   id: string

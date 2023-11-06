@@ -14,7 +14,7 @@ export class UserApplicationService {
       })
       return user
     } catch (error) {
-      throw error
+      throw new Error(`UserApplicationService: create user error: ${error}`)
     }
   }
 
@@ -25,7 +25,7 @@ export class UserApplicationService {
       })
       return user
     } catch (error) {
-      throw error
+      throw new Error(`UserApplicationService: get user error: ${error}`)
     }
   }
 
@@ -51,7 +51,7 @@ export class UserApplicationService {
       })
       return updatedProfile
     } catch (error) {
-      throw error
+      throw new Error(`UserApplicationService: update user error: ${error}`)
     }
   }
 }

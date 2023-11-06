@@ -36,9 +36,6 @@ export function CourseList({ courses }: CourseListProps) {
                 <strong>コース名</strong>：{course.name}
               </Text>
               <Text>
-                <strong>コースID</strong>：{course.id}
-              </Text>
-              <Text>
                 <strong>作成日</strong>：{formatDate(course.created_at)}
               </Text>
               <Text>

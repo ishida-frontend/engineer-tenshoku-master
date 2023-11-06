@@ -1,15 +1,9 @@
 import React from 'react'
 
-import { CourseListType, CourseTagType } from '../../types/CourseType'
-import { authOptions } from '../api/auth/[...nextauth]/route'
-import { getServerSession } from 'next-auth'
+import { CourseListType } from '../../types/CourseType'
 import { CourseListWrapper } from '../../components/pages/CourseListWrapper'
-import { CourseWithSectionsType } from '../../types/CourseType'
 import Error from '../error'
 export default async function Course() {
-  // TODO ユーザ情報を渡してデータ取得できるようにする
-  const session = await getServerSession(authOptions)
-
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/all`,
