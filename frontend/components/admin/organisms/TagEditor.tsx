@@ -87,7 +87,7 @@ export function tagEditor({
           body: JSON.stringify({
             id: tag.id,
             name: tag.name,
-            color: tag.color
+            color: tag.color,
             description: tag.description,
             published: tag.published,
           }),
@@ -171,9 +171,7 @@ export function tagEditor({
           <Textarea
             id="tagDescription"
             value={tag.description}
-            onChange={(e) =>
-              settag({ ...tag, description: e.target.value })
-            }
+            onChange={(e) => settag({ ...tag, description: e.target.value })}
             size="lg"
             rows={10}
             aria-required={true}
