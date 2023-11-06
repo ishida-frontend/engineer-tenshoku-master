@@ -11,14 +11,15 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsGoogle } from 'react-icons/bs'
 import { LuMail } from 'react-icons/lu'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 export default function Login() {
+  const { status } = useSession()
   const router = useRouter()
   const [formState, setFormState] = useState({
     email: '',
@@ -42,6 +43,13 @@ export default function Login() {
       throw new Error('エラーが発生しました')
     }
   }
+
+  useEffect(() => {
+    // Google認証でログイン後のリダイレクト
+    if (status === 'authenticated') {
+      router.push('/')
+    }
+  }, [status])
 
   return (
     <Center padding="60px 96px" bg={'gray.200'}>
@@ -112,7 +120,6 @@ export default function Login() {
           colorScheme="teal"
           onClick={handleSubmit}
         >
-          {' '}
           <Box mr={'16px'}>
             <LuMail />
           </Box>
@@ -131,7 +138,7 @@ export default function Login() {
           w={'100%'}
           mt={'36px'}
           colorScheme="blue"
-          onClick={() => signIn('google', { callbackUrl: '/' })}
+          onClick={() => signIn('cognito')}
         >
           <Box mr={'16px'}>
             <BsGoogle />

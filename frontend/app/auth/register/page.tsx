@@ -16,13 +16,16 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react'
 import Link from 'next/link'
-import { signIn } from 'next-auth/react'
-import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { signIn, useSession } from 'next-auth/react'
+import React, { useEffect, useState } from 'react'
 import { BsGoogle } from 'react-icons/bs'
 import { LuMail } from 'react-icons/lu'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export default function Register() {
+  const { status } = useSession()
+  const router = useRouter()
   const { showSuccessToast, showErrorToast } = useCustomToast()
   const [formState, setFormState] = useState({
     email: '',
@@ -61,6 +64,13 @@ export default function Register() {
       throw new Error('エラーが発生しました')
     }
   }
+
+  useEffect(() => {
+    // Google認証でログイン後のリダイレクト
+    if (status === 'authenticated') {
+      router.push('/')
+    }
+  }, [status])
 
   return (
     <Center padding="60px 96px" bg={'gray.200'}>
@@ -165,7 +175,7 @@ export default function Register() {
           mt={'36px'}
           colorScheme="blue"
           pl={'26px'}
-          onClick={() => signIn('google', { callbackUrl: '/' })}
+          onClick={() => signIn('cognito')}
         >
           <Box mr={'16px'}>
             <BsGoogle />
