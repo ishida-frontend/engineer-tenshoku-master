@@ -4,10 +4,11 @@ import { authOptions } from '../api/auth/[...nextauth]/route'
 
 import Error from '../error'
 import { getUser } from '../../app/api'
-import { UserProfileWrapper } from 'frontend/components/wrapper/pages/UserProfile'
+import { UserProfileWrapper } from '../../components/wrapper/pages/UserProfile'
+import { Session } from 'next-auth'
 
 export default async function UserProfilePage() {
-  const session = await getServerSession(authOptions)
+  const session: Session | null = await getServerSession(authOptions)
   const user = await getUser(session?.user.id)
 
   try {

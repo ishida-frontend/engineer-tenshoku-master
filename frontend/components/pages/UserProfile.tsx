@@ -1,5 +1,4 @@
-'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
 import {
   Avatar,
   Box,
@@ -9,7 +8,6 @@ import {
   Text,
   Stack,
   VStack,
-  useDisclosure,
   Icon,
 } from '@chakra-ui/react'
 import Link from 'next/link'
@@ -19,75 +17,32 @@ import { AiOutlineUser } from 'react-icons/ai'
 import { SlBubble } from 'react-icons/sl'
 import { GoGoal } from 'react-icons/go'
 
-import { updateUserProfile } from '../../app/api'
 import { UserProfileEditModal } from '../../components/organisms/UserProfileEditModal'
-import { UserType, UserProfileType } from '../../types'
-import { useCustomToast } from '../../hooks/useCustomToast'
+import { UserType, UserProfileType, UserProfileErrorType } from '../../types'
 
-export function UserProfile({ user }: { user: UserType }) {
-  const [userProfile, setUserProfile] = useState<UserProfileType>({
-    id: user.id,
-    name: user.name,
-    oneWord: user.oneWord,
-    goal: user.goal,
-    github: user.github,
-    x: user.x,
-  })
-  const [modalUserProfile, setModalUserProfile] = useState(userProfile)
-
-  const [errors, setErrors] = useState({
-    nameError: '',
-    oneWordError: '',
-    goalError: '',
-  })
-
-  const { showSuccessToast, showErrorToast } = useCustomToast()
-
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    setUserProfile({
-      id: user.id,
-      name: user.name,
-      oneWord: user.oneWord,
-      goal: user.goal,
-      github: user.github,
-      x: user.x,
-    })
-  }, [user])
-
-  const isButtonDisabled = () => {
-    const hasChanges =
-      JSON.stringify(modalUserProfile) !== JSON.stringify(userProfile)
-    return !hasChanges || modalUserProfile.name === ''
-  }
-
-  const handleEditProfile = async () => {
-    setIsLoading(true)
-    const result = await updateUserProfile(modalUserProfile)
-    setIsLoading(false)
-
-    if (result && result.success) {
-      setErrors({
-        nameError: '',
-        oneWordError: '',
-        goalError: '',
-      })
-      setUserProfile(modalUserProfile)
-      onClose()
-      showSuccessToast('プロフィールを更新しました。')
-    } else if (result && result.errors) {
-      setErrors({
-        nameError: result.errors.name || '',
-        oneWordError: result.errors.oneWord,
-        goalError: result.errors.goal,
-      })
-    } else {
-      showErrorToast('プロフィールを更新できませんでした。')
-    }
-  }
-
+export function UserProfile({
+  userProfile,
+  modalUserProfile,
+  isOpen,
+  onOpen,
+  onClose,
+  isLoading,
+  errors,
+  setModalUserProfile,
+  isButtonDisabled,
+  handleEditProfile,
+}: {
+  userProfile: UserProfileType
+  modalUserProfile: UserProfileType
+  isOpen: boolean
+  onOpen: () => void
+  onClose: () => void
+  isLoading: boolean
+  errors: UserProfileErrorType
+  setModalUserProfile: Dispatch<SetStateAction<UserProfileType>>
+  isButtonDisabled: () => boolean
+  handleEditProfile: () => void
+}) {
   return (
     <Container maxW="420px" p="0" my="50px">
       <VStack>

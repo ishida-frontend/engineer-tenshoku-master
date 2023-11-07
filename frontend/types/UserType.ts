@@ -21,3 +21,9 @@ export type UserProfileType = {
   github?: string
   x?: string
 }
+
+export type UserProfileErrorType = {
+  nameError: string
+  oneWordError: string
+  goalError: string
+}
