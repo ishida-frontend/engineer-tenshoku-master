@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import {
   Avatar,
   Box,
@@ -18,7 +18,7 @@ import { SlBubble } from 'react-icons/sl'
 import { GoGoal } from 'react-icons/go'
 
 import { UserProfileEditModal } from '../../components/organisms/UserProfileEditModal'
-import { UserType, UserProfileType, UserProfileErrorType } from '../../types'
+import { UserProfileType, UserProfileErrorType } from '../../types'
 
 export function UserProfile({
   userProfile,

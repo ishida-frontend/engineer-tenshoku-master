@@ -1,4 +1,3 @@
-import { APIS } from '../../constants/paths'
 import { UserType, UserProfileType } from '../../types'
 
 export const getUser = async (
