@@ -14,6 +14,7 @@ import { TagValidator } from '../validation/tagValidator'
 import { TagController } from '../controllers/tagController'
 import { updateEmail } from '../controllers/authController'
 import { updateEmailValidationRules } from '../validation/auth'
+import { UserValidator } from '../validation/userValidator'
 
 const {
   createCourse,
@@ -39,6 +40,7 @@ const {
 const router = express.Router()
 
 const userController = new UserController()
+const userValidator = new UserValidator()
 const videoValidator = new VideoValidator()
 const tagController = new TagController()
 const tagValidator = new TagValidator()
@@ -101,6 +103,7 @@ router.use('/user', userRouter)
 userRouter.get('/:id', (req, res) => {
   userController.get(req, res)
 })
+userRouter.put('/update', userValidator.updateUser, userController.update)
 
 const courseRouter = express.Router()
 router.use('/course', courseRouter)
