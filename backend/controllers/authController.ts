@@ -48,7 +48,7 @@ router.post(
         )
       }
 
-      const user = UserApplicationService.create({
+      UserApplicationService.create({
         id: data.UserSub,
         // 仮の名前を設定
         name: Math.random().toString().slice(2, 8),
@@ -99,7 +99,7 @@ router.post('/signin', async (req, res) => {
 })
 
 //jwtトークンの検証
-router.get('/tokenVerification', async (req, res, next) => {
+router.get('/tokenVerification', async (req, res) => {
   let token = ''
   try {
     if (req.cookies.accessToken) {
@@ -111,8 +111,8 @@ router.get('/tokenVerification', async (req, res, next) => {
     //  リクエストされたjwtトークンを検証
     const decode = await jwtHelper.verifyToken(token)
     return res.status(200).json(decode)
-  } catch (e: any) {
-    throw new Error(e)
+  } catch (e) {
+    throw new Error(`tokenVerification error: ${e}`)
   }
 })
 

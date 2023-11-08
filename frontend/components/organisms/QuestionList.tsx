@@ -12,10 +12,10 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { AiOutlineUser } from 'react-icons/ai'
-import { QuestionType } from 'types/QuestionType'
+import { QuestionType } from '../../types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
-import { QUESTION_PAGES } from 'constants/index'
-import { QuestionPageType } from 'types/QuestionType'
+import { QUESTION_PAGES } from '../../constants/index'
+import { QuestionPageType } from '../../types/QuestionType'
 import Link from 'next/link'
 
 export function QuestionList({
@@ -29,13 +29,11 @@ export function QuestionList({
   videoId?: string
   changeQuestionPage: (value: QuestionPageType) => void
 }) {
-  const changeToQuestionDetail = (
-    event: React.MouseEvent<HTMLAnchorElement>,
-  ) => {
+  const changeToQuestionDetail = () => {
     try {
       changeQuestionPage(QUESTION_PAGES.QuestionDetail)
     } catch (e) {
-      throw e
+      throw new Error('質問詳細ページへの遷移に失敗しました')
     }
   }
   return (
@@ -73,12 +71,12 @@ export function QuestionList({
           <Stack spacing="4">
             {questions.map((question: QuestionType) => (
               <Link
+                key={question.id}
                 href={`/course/${courseId}/?videoId=${videoId}&questionId=${question.id}`}
                 scroll={false}
                 onClick={changeToQuestionDetail}
               >
                 <Card
-                  key={question.id}
                   boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
                   cursor={'pointer'}
                   _hover={{

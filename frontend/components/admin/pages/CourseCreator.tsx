@@ -12,7 +12,6 @@ import {
   Select,
   CheckboxGroup,
   Text,
-  useCheckboxGroup,
   HStack,
 } from '@chakra-ui/react'
 import { TagType } from '../../../types'

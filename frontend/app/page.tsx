@@ -9,8 +9,7 @@ export default function Page() {
 
   useEffect(() => {
     router.push(PATHS.COURSE.LIST.path)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [router])
 
   return <></>
 }
