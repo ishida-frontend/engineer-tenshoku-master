@@ -169,7 +169,7 @@ export function UserProfileEditModal({
                   <Icon as={FaGithub} size="20px" color="gray" />
                 </Box>
                 <Text as="b" ml="10px" lineHeight="20px">
-                  Github
+                  GitHub
                 </Text>
                 <FormErrorMessage my="0" ml="10px">
                   {errors.githubError}

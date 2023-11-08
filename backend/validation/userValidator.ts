@@ -20,7 +20,7 @@ export class UserValidator {
           message: '※URLの形式で入力してください',
         })
         .startsWith('https://github.com/', {
-          message: 'githubのURLにしてください',
+          message: 'GitHubのURLにしてください',
         }),
       x: z
         .string()
