@@ -25,6 +25,8 @@ export function UserProfileWrapper({ user }: { user: UserType }) {
       nameError: '',
       oneWordError: '',
       goalError: '',
+      githubError: '',
+      xError: '',
     })
     useEffect(() => {
       setUserProfile({
@@ -52,6 +54,8 @@ export function UserProfileWrapper({ user }: { user: UserType }) {
           nameError: '',
           oneWordError: '',
           goalError: '',
+          githubError: '',
+          xError: '',
         })
         setUserProfile(modalUserProfile)
         onClose()
@@ -61,6 +65,8 @@ export function UserProfileWrapper({ user }: { user: UserType }) {
           nameError: result.errors.name || '',
           oneWordError: result.errors.oneWord,
           goalError: result.errors.goal,
+          githubError: result.errors.github,
+          xError: result.errors.x,
         })
       } else {
         showErrorToast('プロフィールを更新できませんでした。')

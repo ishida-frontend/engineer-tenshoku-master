@@ -26,4 +26,6 @@ export type UserProfileErrorType = {
   nameError: string
   oneWordError: string
   goalError: string
+  githubError: string
+  xError: string
 }

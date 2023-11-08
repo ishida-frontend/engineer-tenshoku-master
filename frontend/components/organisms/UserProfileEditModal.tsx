@@ -21,14 +21,7 @@ import { SlBubble } from 'react-icons/sl'
 import { GoGoal } from 'react-icons/go'
 import { FaGithub } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'
-
-import { UserProfileType } from '../../types'
-
-type UserProfileErrorType = {
-  nameError: string
-  oneWordError: string
-  goalError: string
-}
+import { UserProfileType, UserProfileErrorType } from '../../types'
 
 export function UserProfileEditModal({
   isOpen,
@@ -161,7 +154,7 @@ export function UserProfileEditModal({
               bg="gray.100"
             />
           </FormControl>
-          <FormControl id="github" mt={4}>
+          <FormControl id="github" mt={4} isInvalid={!!errors.githubError}>
             <FormLabel htmlFor="github">
               <Flex>
                 <Box
@@ -178,6 +171,9 @@ export function UserProfileEditModal({
                 <Text as="b" ml="10px" lineHeight="20px">
                   Github
                 </Text>
+                <FormErrorMessage my="0" ml="10px">
+                  {errors.githubError}
+                </FormErrorMessage>
               </Flex>
             </FormLabel>
             <Input
@@ -192,7 +188,7 @@ export function UserProfileEditModal({
               bg="gray.100"
             />
           </FormControl>
-          <FormControl id="x" mt={4}>
+          <FormControl id="x" mt={4} isInvalid={!!errors.xError}>
             <FormLabel htmlFor="x">
               <Flex>
                 <Box
@@ -209,6 +205,9 @@ export function UserProfileEditModal({
                 <Text as="b" ml="10px" lineHeight="20px">
                   X
                 </Text>
+                <FormErrorMessage my="0" ml="10px">
+                  {errors.xError}
+                </FormErrorMessage>
               </Flex>
             </FormLabel>
             <Input
