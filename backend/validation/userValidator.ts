@@ -14,12 +14,22 @@ export class UserValidator {
         .max(15, { message: '※15文字以下で入力してください' }),
       oneWord: z.string().max(20, { message: '※20文字以下で入力してください' }),
       goal: z.string().max(40, { message: '※40文字以下で入力してください' }),
-      github: z.string().url({
-        message: '※URLの形式で入力してください',
-      }),
-      x: z.string().url({
-        message: '※URLの形式で入力してください',
-      }),
+      github: z
+        .string()
+        .url({
+          message: '※URLの形式で入力してください',
+        })
+        .startsWith('https://github.com/', {
+          message: 'githubのURLにしてください',
+        }),
+      x: z
+        .string()
+        .url({
+          message: '※URLの形式で入力してください',
+        })
+        .startsWith('https://twitter.com/', {
+          message: 'XのURLにしてください',
+        }),
     })
 
     const user = userUpdateSchema.safeParse(req.body)
