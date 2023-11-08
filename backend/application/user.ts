@@ -34,15 +34,19 @@ export class UserApplicationService {
     name: string
     oneWord: string
     goal: string
+    github: string
+    x: string
   }) {
     try {
-      const { id, name, oneWord, goal } = params
+      const { id, name, oneWord, goal, github, x } = params
       const updatedProfile = await prisma.user.update({
         where: { id },
         data: {
           name,
           oneWord,
           goal,
+          github,
+          x,
         },
       })
       return updatedProfile
