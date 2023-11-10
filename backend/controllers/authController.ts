@@ -10,8 +10,22 @@ import { jwtHelper } from '../utils/jwt'
 import { signupValidationRules } from '../validation/auth'
 import { validate } from '../validation/index'
 import { UserApplicationService } from '../application/user'
+import crypto from 'crypto'
 
 const router = Router()
+const clientId = process.env.COGNITO_CLIENT_ID || ''
+const clientSecret = process.env.COGNITO_CLIENT_SECRET || ''
+
+function generateSecretHash(
+  clientId: string,
+  clientSecret: string,
+  email: string,
+) {
+  return crypto
+    .createHmac('SHA256', clientSecret)
+    .update(email + clientId)
+    .digest('base64')
+}
 
 // signup
 router.post(
@@ -24,8 +38,11 @@ router.post(
     }
     const { email, password } = req.body
 
+    const secretHash = generateSecretHash(clientId, clientSecret, email)
+
     const params = {
-      ClientId: process.env.COGNITO_CLIENT_ID || '',
+      ClientId: clientId,
+      SecretHash: secretHash,
       Password: password,
       Username: email,
     }
@@ -84,12 +101,15 @@ router.post('/google-signup', async (req: Request, res: Response) => {
 router.post('/signin', async (req, res) => {
   const { email, password } = req.body
 
+  const secretHash = generateSecretHash(clientId, clientSecret, email)
+
   const params = {
     AuthFlow: 'USER_PASSWORD_AUTH',
-    ClientId: process.env.COGNITO_CLIENT_ID || '',
+    ClientId: clientId,
     AuthParameters: {
       USERNAME: email,
       PASSWORD: password,
+      SECRET_HASH: secretHash,
     },
   }
 
@@ -134,13 +154,16 @@ router.get('/tokenVerification', async (req, res) => {
 
 // refresh
 router.post('/refresh', async (req, res) => {
-  const { refreshToken } = req.body
+  const { email, refreshToken } = req.body
+
+  const secretHash = generateSecretHash(clientId, clientSecret, email)
 
   const params = {
     AuthFlow: 'REFRESH_TOKEN_AUTH',
-    ClientId: process.env.COGNITO_CLIENT_ID || '',
+    ClientId: clientId,
     AuthParameters: {
       REFRESH_TOKEN: refreshToken,
+      SECRET_HASH: secretHash,
     },
   }
 
