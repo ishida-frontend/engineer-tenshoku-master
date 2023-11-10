@@ -95,7 +95,7 @@ export const authOptions: AuthOptions = {
       if (account.provider === 'cognito') {
         try {
           const { sub: id, name, image } = profile
-          let existingUser = await getUser(id)
+          const existingUser = await getUser(id)
 
           if (!existingUser) {
             await fetch(
