@@ -19,6 +19,8 @@ model User {
   name          String?
   oneWord       String?
   goal          String?
+  github        String?
+  x             String?
   created_at    DateTime        @default(now())
   updated_at    DateTime        @updatedAt
   deleted_at    DateTime?
