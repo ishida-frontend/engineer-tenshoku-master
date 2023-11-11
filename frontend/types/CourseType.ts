@@ -1,4 +1,4 @@
-import { TagType } from './TagType'
+import { CourseTagItemType } from './TagType'
 import { SectionType } from './SectionType'
 
 export type CourseType = {
@@ -15,13 +15,13 @@ export type CourseType = {
 }
 
 export type CourseTagType = CourseType & {
-  tags: TagType[]
+  tags: CourseTagItemType[]
 }
 export type CourseWithSectionsType = CourseType & {
   sections: SectionType[]
 }
 
 export type CourseListType = CourseType & {
-  tags: TagType[]
+  tags: CourseTagItemType[]
   sections: SectionType[]
 }
