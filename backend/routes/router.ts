@@ -13,7 +13,6 @@ import { AnswerController } from '../controllers/answerController'
 import { TagValidator } from '../validation/tagValidator'
 import { TagController } from '../controllers/tagController'
 import { updateEmail } from '../controllers/authController'
-import { updateEmailValidationRules } from '../validation/auth'
 import { UserValidator } from '../validation/userValidator'
 import { EmailValidator } from '../validation/emailVlidator'
 

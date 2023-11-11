@@ -5,14 +5,10 @@ import {
   InitiateAuthCommand,
   InitiateAuthResponse,
   SignUpCommand,
-  AdminUpdateUserAttributesCommand,
   CognitoIdentityProviderClient,
 } from '@aws-sdk/client-cognito-identity-provider'
 import { jwtHelper } from '../utils/jwt'
-import {
-  signupValidationRules,
-  updateEmailValidationRules,
-} from '../validation/auth'
+import { signupValidationRules } from '../validation/auth'
 import { validate } from '../validation/index'
 import { UserApplicationService } from '../application/user'
 import { UserService } from '../services/userService'

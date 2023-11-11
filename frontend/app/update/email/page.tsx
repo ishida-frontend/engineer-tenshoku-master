@@ -13,13 +13,11 @@ import {
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { PATHS } from '../../../constants/paths'
-import { useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export default function Login() {
-  const router = useRouter()
-  const { showSuccessToast, showErrorToast } = useCustomToast()
+  const { showSuccessToast } = useCustomToast()
   const [formState, setFormState] = useState({
     username: '',
     newEmail: '',

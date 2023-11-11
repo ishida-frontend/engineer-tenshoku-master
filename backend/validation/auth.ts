@@ -15,9 +15,3 @@ export const signupValidationRules = z.object({
       },
     ),
 })
-
-export const updateEmailValidationRules = z.object({
-  email: z.string().email({
-    message: 'メールアドレスの形式で入力してください',
-  }),
-})
