@@ -15,6 +15,7 @@ import { TagController } from '../controllers/tagController'
 import { updateEmail } from '../controllers/authController'
 import { updateEmailValidationRules } from '../validation/auth'
 import { UserValidator } from '../validation/userValidator'
+import { EmailValidator } from '../validation/emailVlidator'
 
 const {
   createCourse,
@@ -49,6 +50,7 @@ const questionController = new QuestionController()
 const answerController = new AnswerController()
 const viewingStatusController = new ViewingStatusController()
 const favoriteVideoController = new FavoriteVideoController()
+const emailValidator = new EmailValidator()
 
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -177,6 +179,6 @@ favoriteVideoRouter.get(
 )
 favoriteVideoRouter.get('/:userId', favoriteVideoController.getFavoriteVideos)
 
-router.post('/update/email', validate(updateEmailValidationRules), updateEmail)
+router.post('/update/email', emailValidator.updateEmail, updateEmail)
 
 export default router

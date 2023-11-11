@@ -175,6 +175,7 @@ const userRepository = new UserRepository(cognitoClient)
 const userService = new UserService(userRepository)
 
 export const updateEmail = async (req: Request, res: Response) => {
+  console.log('req.body:', req.body)
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() })
