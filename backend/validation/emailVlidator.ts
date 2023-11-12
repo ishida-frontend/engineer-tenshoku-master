@@ -7,7 +7,6 @@ export class EmailValidator {
     res: express.Response,
     next: express.NextFunction,
   ) => {
-    console.log('req.body:', req.body)
     const emailUpdateSchema = z.object({
       username: z.string().email({
         message: 'メールアドレスの形式で入力してください',
