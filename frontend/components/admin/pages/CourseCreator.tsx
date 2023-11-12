@@ -49,6 +49,7 @@ export default function CourseCreatePage({ tags }: CourseCreatePageProps) {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course/create`,
       {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
