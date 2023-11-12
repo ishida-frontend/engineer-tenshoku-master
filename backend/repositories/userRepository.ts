@@ -2,7 +2,6 @@ import {
   CognitoIdentityProviderClient,
   AdminUpdateUserAttributesCommand,
   AdminUpdateUserAttributesCommandInput,
-  VerifyUserAttributeCommand,
 } from '@aws-sdk/client-cognito-identity-provider'
 
 export class UserRepository {
