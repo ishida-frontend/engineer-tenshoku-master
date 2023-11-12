@@ -130,16 +130,11 @@ export default function Login() {
 
         {/* // TODO パスワードを忘れた場合       */}
         {/* <Text>パスワードを忘れた場合はこちら</Text> */}
-        <Box color={'teal'}>
+        <Box color={'teal'} mb={'36px'}>
           <Link href={'/auth/register'}>新規登録はこちら</Link>
         </Box>
 
-        <Button
-          w={'100%'}
-          mt={'36px'}
-          colorScheme="blue"
-          onClick={() => signIn('cognito')}
-        >
+        <Button w={'100%'} colorScheme="blue" onClick={() => signIn('cognito')}>
           <Box mr={'16px'}>
             <BsGoogle />
           </Box>
