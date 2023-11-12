@@ -7,7 +7,7 @@ on:
       - 'backend/**'
 
 jobs:
-  format-check:
+  format-and-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,14 +25,6 @@ jobs:
       - name: Format with Lint
         run: yarn eslint --fix .
 
-      - name: Install Dependencies on Frontend
-        run: yarn install
-        working-directory: ./frontend
-
-      - name: Build Frontend
-        run: yarn build
-        working-directory: ./frontend
-
       - name: Install Dependencies on Backend
         run: yarn install
         working-directory: ./backend
@@ -40,3 +32,11 @@ jobs:
       - name: Build Backend
         run: yarn build
         working-directory: ./backend
+
+      - name: Install Dependencies on Frontend
+        run: yarn install
+        working-directory: ./frontend
+
+      - name: Build Frontend
+        run: yarn build
+        working-directory: ./frontend
