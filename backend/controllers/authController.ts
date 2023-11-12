@@ -218,30 +218,4 @@ export const updateEmail = async (req: Request, res: Response) => {
     res.status(500).send('An error occurred')
   }
 }
-export const verifyEmail = async (req: Request, res: Response) => {
-  console.log('req.body:', req.body)
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() })
-  }
-
-  const { newEmail, username } = req.body
-  try {
-    await userService.updateEmail(username, newEmail)
-    res.status(200).send('Email updated successfully')
-  } catch (error) {
-    res.status(500).send('An error occurred')
-  }
-}
-
-router.post('/email/verify', async (req, res) => {
-  try {
-    const { newEmail, code } = req.body
-    await userService.verifyEmail(newEmail, code)
-    res.status(200).json({ message: 'メールアドレスが認証されました' })
-  } catch (error) {
-    res.status(500).json({ error: '認証に失敗しました' })
-  }
-})
-
 export default router
