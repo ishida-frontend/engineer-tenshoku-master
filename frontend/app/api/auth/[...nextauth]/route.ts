@@ -115,7 +115,7 @@ export const authOptions: AuthOptions = {
           }
           return true
         } catch (err) {
-          throw new Error('エラーが発生しました')
+          throw new Error('Error: siginIn error')
         }
       }
       return true

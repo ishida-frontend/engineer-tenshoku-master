@@ -166,13 +166,12 @@ export default function Register() {
           メールアドレスで新規登録
         </Button>
         <Box border={'1px solid'} borderColor={'#C400'} />
-        <Box color={'teal'}>
+        <Box color={'teal'} mb={'36px'}>
           <Link href={'/auth/login'}>ログインはこちら</Link>
         </Box>
 
         <Button
           w={'100%'}
-          mt={'36px'}
           colorScheme="blue"
           pl={'26px'}
           onClick={() => signIn('cognito')}

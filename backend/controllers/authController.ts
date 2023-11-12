@@ -13,22 +13,11 @@ import { validate } from '../validation/index'
 import { UserApplicationService } from '../application/user'
 import { UserService } from '../services/userService'
 import { UserRepository } from '../repositories/userRepository'
-import crypto from 'crypto'
+import { generateSecretHash } from '../utils/generateSecretHash'
 
 const router = Router()
 const clientId = process.env.COGNITO_CLIENT_ID || ''
 const clientSecret = process.env.COGNITO_CLIENT_SECRET || ''
-
-function generateSecretHash(
-  clientId: string,
-  clientSecret: string,
-  email: string,
-) {
-  return crypto
-    .createHmac('SHA256', clientSecret)
-    .update(email + clientId)
-    .digest('base64')
-}
 
 // signup
 router.post(
@@ -77,7 +66,6 @@ router.post(
   },
 )
 
-// signup with Google
 router.post('/google-signup', async (req: Request, res: Response) => {
   try {
     const { id, name } = req.body
