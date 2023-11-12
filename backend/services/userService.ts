@@ -8,8 +8,6 @@ export class UserService {
   }
 
   async updateEmail(username: string, newEmail: string): Promise<void> {
-    console.log('username:', username)
-    console.log('newEmail:', newEmail)
     await this.userRepository.updateEmail(username, newEmail)
   }
 }

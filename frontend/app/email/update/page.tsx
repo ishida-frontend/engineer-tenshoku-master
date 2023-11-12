@@ -12,13 +12,11 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { PATHS } from '../../../constants/paths'
 import { signOut } from 'next-auth/react'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export default function Login() {
-  const router = useRouter()
   const { showSuccessToast } = useCustomToast()
   const [formState, setFormState] = useState({
     username: '',
@@ -55,9 +53,7 @@ export default function Login() {
       }
 
       showSuccessToast('認証コードをメールを送信しました。ご確認ください。')
-      router.push('/email/verify')
     } catch (err) {
-      console.error('Update email error:', err)
       setError('メールアドレスの更新に失敗しました。')
     }
   }
