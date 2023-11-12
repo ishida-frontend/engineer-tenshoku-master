@@ -7,7 +7,6 @@ export default async function AdminTag() {
     cache: 'no-cache',
   })
   const tags: TagType[] = await res.json()
-  console.log('tags', tags)
 
   return <TagList tags={tags} />
 }
