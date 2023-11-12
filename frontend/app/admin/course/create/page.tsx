@@ -1,10 +1,10 @@
+'use client'
 import Component from '../../../../components/admin/pages/CourseCreator'
 export default async function CreateCoursePage() {
   try {
     console.log(`${process.env.NEXT_PUBLIC_BACKEND_URL}/tag`)
 
-    const tagsRes = await fetch(`http://localhost:8000/tag`, {
-      method: 'GET',
+    const tagsRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/tag`, {
       headers: {
         'Content-Type': 'application/json',
       },

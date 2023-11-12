@@ -1,12 +1,10 @@
+'use client'
 import React from 'react'
-
-import { APIS } from '../../../constants'
 import { TagList } from '../../../components/admin/organisms/TagList'
 import { TagType } from '../../../types/TagType'
 
 export default async function AdminTag() {
-  const res = await fetch(APIS.ADMIN.COURSE.TAG.GET.path(), {
-    method: 'GET',
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/tag`, {
     cache: 'no-cache',
   })
   const tags: TagType[] = await res.json()
