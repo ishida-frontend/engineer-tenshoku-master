@@ -11,45 +11,56 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
-import { BsGoogle } from 'react-icons/bs'
-import { LuMail } from 'react-icons/lu'
-import Link from 'next/link'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { signIn, useSession } from 'next-auth/react'
+import { PATHS } from '../../../constants/paths'
+import { signOut } from 'next-auth/react'
+import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export default function Login() {
-  const { status } = useSession()
   const router = useRouter()
+  const { showSuccessToast } = useCustomToast()
   const [formState, setFormState] = useState({
-    email: '',
-    password: '',
+    username: '',
+    newEmail: '',
   })
+  const [error, setError] = useState('')
 
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: PATHS.LOGIN.path })
+  }
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault()
+    setError('')
+
     try {
-      await signIn('credentials', {
-        email: formState.email,
-        password: formState.password,
-        redirect: false,
-        callbackUrl: '/',
-      })
-      router.push('/')
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/email/update`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: formState.username,
+            newEmail: formState.newEmail,
+          }),
+        },
+      )
+
+      if (!response.ok) {
+        throw new Error('メールアドレスの更新に失敗しました。')
+      }
+
+      showSuccessToast('認証コードをメールを送信しました。ご確認ください。')
+      router.push('/email/verify')
     } catch (err) {
-      console.log('err', err)
-      throw new Error('エラーが発生しました')
+      console.error('Update email error:', err)
+      setError('メールアドレスの更新に失敗しました。')
     }
   }
-
-  useEffect(() => {
-    // Google認証でログイン後のリダイレクト
-    if (status === 'authenticated') {
-      router.push('/')
-    }
-  }, [status])
 
   return (
     <Center padding="60px 96px" bg={'gray.200'}>
@@ -60,26 +71,26 @@ export default function Login() {
           textAlign={'center'}
           fontWeight={'bold'}
         >
-          ログイン
+          メールアドレスの再設定
         </Heading>
 
         <VStack gap={'36px'}>
-          <FormControl id="courseDescription" isRequired>
+          <FormControl id="username" isRequired>
             <Container ml={'0px'} pb={'10px'} pl={'0px'}>
               <Flex>
-                <Text>メールアドレス</Text>
+                <Text>現在のメールアドレス</Text>
                 <Text color="teal">(必須)</Text>
               </Flex>
             </Container>
             <Input
-              id="email"
+              id="username"
               type="text"
-              value={formState.email}
+              value={formState.username}
               placeholder="frontendengineer@gmail.com"
               onChange={(e) =>
                 setFormState({
                   ...formState,
-                  email: e.target.value,
+                  username: e.target.value,
                 })
               }
               aria-required={true}
@@ -88,22 +99,22 @@ export default function Login() {
             />
           </FormControl>
 
-          <FormControl id="courseDescription" isRequired>
+          <FormControl id="newEmail" isRequired>
             <Container ml={'0px'} pb={'10px'} pl={'0px'}>
               <Flex>
-                <Text>パスワード</Text>
+                <Text>新しいメールアドレス</Text>
                 <Text color="teal">(必須)</Text>
               </Flex>
             </Container>
             <Input
-              id="password"
-              type="password"
-              placeholder="passwordを入力してください"
-              value={formState.password}
+              id="newEmail"
+              type="newEmail"
+              placeholder="newfrontendengineer@gmail.com"
+              value={formState.newEmail}
               onChange={(e) =>
                 setFormState({
                   ...formState,
-                  password: e.target.value,
+                  newEmail: e.target.value,
                 })
               }
               aria-required={true}
@@ -113,38 +124,22 @@ export default function Login() {
           </FormControl>
         </VStack>
 
+        {error && <Text color="red">{error}</Text>}
         <Button
           w={'100%'}
           mt={'42px'}
-          mb={'12px'}
+          mb={'24px'}
           colorScheme="teal"
           onClick={handleSubmit}
         >
-          <Box mr={'16px'}>
-            <LuMail />
-          </Box>
-          メールアドレスでログイン
+          メールアドレスを更新する
         </Button>
 
         <Box border={'1px solid #C400'} />
 
-        {/* // TODO パスワードを忘れた場合       */}
-        {/* <Text>パスワードを忘れた場合はこちら</Text> */}
         <Box color={'teal'}>
-          <Link href={'/auth/register'}>新規登録はこちら</Link>
+          <Text onClick={handleLogout}>ログアウト</Text>
         </Box>
-
-        <Button
-          w={'100%'}
-          mt={'36px'}
-          colorScheme="blue"
-          onClick={() => signIn('cognito')}
-        >
-          <Box mr={'16px'}>
-            <BsGoogle />
-          </Box>
-          Googleアカウントでログイン
-        </Button>
       </Container>
     </Center>
   )

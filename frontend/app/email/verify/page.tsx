@@ -12,20 +12,20 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { PATHS } from '../../../constants/paths'
-import { signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export default function Login() {
+  const router = useRouter()
   const { showSuccessToast } = useCustomToast()
   const [formState, setFormState] = useState({
-    username: '',
     newEmail: '',
+    code: '',
   })
   const [error, setError] = useState('')
 
-  const handleLogout = async () => {
-    await signOut({ callbackUrl: PATHS.LOGIN.path })
+  const handlePageBack = async () => {
+    router.push('/email/update')
   }
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -35,15 +35,15 @@ export default function Login() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/update/email`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/email/verify`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            username: formState.username,
             newEmail: formState.newEmail,
+            code: formState.code,
           }),
         },
       )
@@ -54,10 +54,12 @@ export default function Login() {
         throw new Error('メールアドレスの更新に失敗しました。')
       }
 
-      showSuccessToast('メールを送信しました。ご確認ください。')
-    } catch (err) {
-      console.error('Update email error:', err)
-      setError('メールアドレスの更新に失敗しました。')
+      showSuccessToast(
+        '新しいメールアドレスを認証しました。再度ログインしてください。',
+      )
+      router.push('/course')
+    } catch (error) {
+      setError('メールアドレスの認証に失敗しました。')
     }
   }
 
@@ -70,34 +72,10 @@ export default function Login() {
           textAlign={'center'}
           fontWeight={'bold'}
         >
-          メールアドレスの再設定
+          新しいメールアドレスの認証
         </Heading>
 
         <VStack gap={'36px'}>
-          <FormControl id="username" isRequired>
-            <Container ml={'0px'} pb={'10px'} pl={'0px'}>
-              <Flex>
-                <Text>現在のメールアドレス</Text>
-                <Text color="teal">(必須)</Text>
-              </Flex>
-            </Container>
-            <Input
-              id="username"
-              type="text"
-              value={formState.username}
-              placeholder="frontendengineer@gmail.com"
-              onChange={(e) =>
-                setFormState({
-                  ...formState,
-                  username: e.target.value,
-                })
-              }
-              aria-required={true}
-              border="1px"
-              borderColor="gray.400"
-            />
-          </FormControl>
-
           <FormControl id="newEmail" isRequired>
             <Container ml={'0px'} pb={'10px'} pl={'0px'}>
               <Flex>
@@ -107,13 +85,37 @@ export default function Login() {
             </Container>
             <Input
               id="newEmail"
-              type="newEmail"
-              placeholder="newfrontendengineer@gmail.com"
+              type="text"
               value={formState.newEmail}
+              placeholder="newfrontendengineer@gmail.com"
               onChange={(e) =>
                 setFormState({
                   ...formState,
                   newEmail: e.target.value,
+                })
+              }
+              aria-required={true}
+              border="1px"
+              borderColor="gray.400"
+            />
+          </FormControl>
+
+          <FormControl id="code" isRequired>
+            <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+              <Flex>
+                <Text>コード</Text>
+                <Text color="teal">(必須)</Text>
+              </Flex>
+            </Container>
+            <Input
+              id="code"
+              type="code"
+              placeholder="000000"
+              value={formState.code}
+              onChange={(e) =>
+                setFormState({
+                  ...formState,
+                  code: e.target.value,
                 })
               }
               aria-required={true}
@@ -131,13 +133,13 @@ export default function Login() {
           colorScheme="teal"
           onClick={handleSubmit}
         >
-          メールアドレスを更新する
+          メールアドレスを認証する
         </Button>
 
         <Box border={'1px solid #C400'} />
 
         <Box color={'teal'}>
-          <Text onClick={handleLogout}>ログアウト</Text>
+          <Text onClick={handlePageBack}>前の画面へ戻る</Text>
         </Box>
       </Container>
     </Center>

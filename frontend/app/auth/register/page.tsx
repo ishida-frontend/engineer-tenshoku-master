@@ -16,10 +16,16 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { signIn, useSession } from 'next-auth/react'
+import React, { useEffect, useState } from 'react'
+import { BsGoogle } from 'react-icons/bs'
+import { LuMail } from 'react-icons/lu'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
 export default function Register() {
+  const { status } = useSession()
+  const router = useRouter()
   const { showSuccessToast, showErrorToast } = useCustomToast()
   const [formState, setFormState] = useState({
     email: '',
@@ -58,6 +64,13 @@ export default function Register() {
       throw new Error('エラーが発生しました')
     }
   }
+
+  useEffect(() => {
+    // Google認証でログイン後のリダイレクト
+    if (status === 'authenticated') {
+      router.push('/')
+    }
+  }, [status])
 
   return (
     <Center padding="60px 96px" bg={'gray.200'}>
@@ -141,17 +154,34 @@ export default function Register() {
         </VStack>
         <Button
           w={'100%'}
-          mt={'42px'}
-          mb={'24px'}
+          mt={'28px'}
+          mb={'12px'}
           colorScheme="teal"
+          pl={'26px'}
           onClick={handleSubmit}
         >
-          登録する
+          <Box mr={'16px'}>
+            <LuMail />
+          </Box>
+          メールアドレスで新規登録
         </Button>
         <Box border={'1px solid'} borderColor={'#C400'} />
         <Box color={'teal'}>
           <Link href={'/auth/login'}>ログインはこちら</Link>
-        </Box>{' '}
+        </Box>
+
+        <Button
+          w={'100%'}
+          mt={'36px'}
+          colorScheme="blue"
+          pl={'26px'}
+          onClick={() => signIn('cognito')}
+        >
+          <Box mr={'16px'}>
+            <BsGoogle />
+          </Box>
+          Googleアカウントで新規登録
+        </Button>
       </Container>
     </Center>
   )

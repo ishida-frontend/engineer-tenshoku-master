@@ -13,8 +13,22 @@ import { validate } from '../validation/index'
 import { UserApplicationService } from '../application/user'
 import { UserService } from '../services/userService'
 import { UserRepository } from '../repositories/userRepository'
+import crypto from 'crypto'
 
 const router = Router()
+const clientId = process.env.COGNITO_CLIENT_ID || ''
+const clientSecret = process.env.COGNITO_CLIENT_SECRET || ''
+
+function generateSecretHash(
+  clientId: string,
+  clientSecret: string,
+  email: string,
+) {
+  return crypto
+    .createHmac('SHA256', clientSecret)
+    .update(email + clientId)
+    .digest('base64')
+}
 
 // signup
 router.post(
@@ -27,8 +41,11 @@ router.post(
     }
     const { email, password } = req.body
 
+    const secretHash = generateSecretHash(clientId, clientSecret, email)
+
     const params = {
-      ClientId: process.env.COGNITO_CLIENT_ID || '',
+      ClientId: clientId,
+      SecretHash: secretHash,
       Password: password,
       Username: email,
     }
@@ -60,16 +77,42 @@ router.post(
   },
 )
 
+// signup with Google
+router.post('/google-signup', async (req: Request, res: Response) => {
+  try {
+    const { id, name } = req.body
+
+    const user = UserApplicationService.create({
+      id,
+      name,
+    })
+
+    if (!user) {
+      throw new Error('ユーザー登録に失敗しました。時間をおいてお試しください')
+    }
+
+    res.status(200).json({
+      success: true,
+    })
+  } catch (err) {
+    console.error(err)
+    res.status(400).end()
+  }
+})
+
 // signin
 router.post('/signin', async (req, res) => {
   const { email, password } = req.body
 
+  const secretHash = generateSecretHash(clientId, clientSecret, email)
+
   const params = {
     AuthFlow: 'USER_PASSWORD_AUTH',
-    ClientId: process.env.COGNITO_CLIENT_ID || '',
+    ClientId: clientId,
     AuthParameters: {
       USERNAME: email,
       PASSWORD: password,
+      SECRET_HASH: secretHash,
     },
   }
 
@@ -114,13 +157,16 @@ router.get('/tokenVerification', async (req, res) => {
 
 // refresh
 router.post('/refresh', async (req, res) => {
-  const { refreshToken } = req.body
+  const { email, refreshToken } = req.body
+
+  const secretHash = generateSecretHash(clientId, clientSecret, email)
 
   const params = {
     AuthFlow: 'REFRESH_TOKEN_AUTH',
-    ClientId: process.env.COGNITO_CLIENT_ID || '',
+    ClientId: clientId,
     AuthParameters: {
       REFRESH_TOKEN: refreshToken,
+      SECRET_HASH: secretHash,
     },
   }
 
@@ -155,7 +201,7 @@ router.post('/logout', async (req, res) => {
   }
 })
 
-//update_email
+//メール再設定
 if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
   throw new Error('AWS credentials are not set in the environment variables.')
 }
@@ -171,6 +217,20 @@ const userRepository = new UserRepository(cognitoClient)
 const userService = new UserService(userRepository)
 
 export const updateEmail = async (req: Request, res: Response) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() })
+  }
+
+  const { newEmail, username } = req.body
+  try {
+    await userService.updateEmail(username, newEmail)
+    res.status(200).send('Email updated successfully')
+  } catch (error) {
+    res.status(500).send('An error occurred')
+  }
+}
+export const verifyEmail = async (req: Request, res: Response) => {
   console.log('req.body:', req.body)
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
@@ -182,9 +242,18 @@ export const updateEmail = async (req: Request, res: Response) => {
     await userService.updateEmail(username, newEmail)
     res.status(200).send('Email updated successfully')
   } catch (error) {
-    console.error(error)
     res.status(500).send('An error occurred')
   }
 }
+
+router.post('/email/verify', async (req, res) => {
+  try {
+    const { newEmail, code } = req.body
+    await userService.verifyEmail(newEmail, code)
+    res.status(200).json({ message: 'メールアドレスが認証されました' })
+  } catch (error) {
+    res.status(500).json({ error: '認証に失敗しました' })
+  }
+})
 
 export default router

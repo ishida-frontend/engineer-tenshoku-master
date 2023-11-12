@@ -178,6 +178,6 @@ favoriteVideoRouter.get(
 )
 favoriteVideoRouter.get('/:userId', favoriteVideoController.getFavoriteVideos)
 
-router.post('/update/email', emailValidator.updateEmail, updateEmail)
+router.post('/email/update', emailValidator.updateEmail, updateEmail)
 
 export default router
