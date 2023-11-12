@@ -1,7 +1,9 @@
 import Component from '../../../../components/admin/pages/CourseCreator'
 export default async function CreateCoursePage() {
   try {
-    const tagsRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/tag`, {
+    console.log(`${process.env.NEXT_PUBLIC_BACKEND_URL}/tag`)
+
+    const tagsRes = await fetch(`http://localhost:8000/tag`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
