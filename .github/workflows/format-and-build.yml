@@ -1,4 +1,4 @@
-name: Format Check and Build
+name: Format and Build
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 18.16
 
@@ -25,7 +25,7 @@ jobs:
       - name: Format with Lint
         run: yarn eslint --fix .
 
-      - name: Install Dependencies on Backend
+      - name: Install Backend Dependencies
         run: yarn install
         working-directory: ./backend
 
@@ -33,7 +33,7 @@ jobs:
         run: yarn build
         working-directory: ./backend
 
-      - name: Install Dependencies on Frontend
+      - name: Install Frontend Dependencies
         run: yarn install
         working-directory: ./frontend
 
