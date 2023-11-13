@@ -1,19 +1,25 @@
 import React from 'react'
+import { Session } from 'next-auth'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { redirect } from 'next/navigation'
 
-import { FavoriteVideoList } from 'components/pages/FavoriteVideoList'
-import { FavoriteVideoType } from 'types'
-import { getUser } from 'app/api'
-import Error from 'app/error'
+import { authOptions } from '../../api/auth/[...nextauth]/route'
+import { FavoriteVideoList } from '../../../components/pages/FavoriteVideoList'
+import { FavoriteVideoType } from '../../../types'
+import { getUser } from '../../api'
+import Error from '../../error'
 
 export default async function FavoriteVideos() {
-  try {
-    const session = await getServerSession(authOptions)
-    const user = await getUser(session?.user.id)
+  const session: Session | null = await getServerSession(authOptions)
+  const userId = await getUser(session?.user?.id)
 
+  if (!userId) {
+    redirect('/')
+  }
+
+  try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/favoritevideo/${user.id}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/favoritevideo/${userId}`,
       {
         cache: 'no-cache',
         headers: {

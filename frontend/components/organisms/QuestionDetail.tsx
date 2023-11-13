@@ -14,18 +14,18 @@ import {
   Container,
 } from '@chakra-ui/react'
 import { AiOutlineUser } from 'react-icons/ai'
-import { QuestionType } from 'types/QuestionType'
+import { QuestionType } from '../../types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
-import { QUESTION_PAGES } from 'constants/index'
-import { QuestionPageType } from 'types/QuestionType'
-import { AnswerType } from 'types/AnswerType'
+import { QUESTION_PAGES } from '../../constants/index'
+import { QuestionPageType } from '../../types/QuestionType'
+import { AnswerType } from '../../types/AnswerType'
 import Link from 'next/link'
 import ReactMde from 'react-mde'
 import ReactMarkdown from 'react-markdown'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import '../../styles/markdown.css'
 import { Session } from 'next-auth'
-import { converter } from 'utils/markdown'
+import { converter } from '../../utils/markdown'
 
 export function QuestionDetail({
   userId,

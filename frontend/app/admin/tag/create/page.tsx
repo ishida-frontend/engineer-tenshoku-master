@@ -69,7 +69,9 @@ export default function CreateTagPage() {
               id="courseName"
               type="text"
               value={name}
-              onChange={(e: Event) => setName(e.target?.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setName(e.target?.value)
+              }
               aria-required={true}
               border="1px"
               borderColor="gray.400"
