@@ -50,16 +50,6 @@ export const PATHS = {
 }
 
 export const APIS = {
-  ADMIN: {
-    COURSE: {
-      TAG: {
-        GET: {
-          path: () => `${backendUrl}/tag`,
-          title: 'コースタグの取得',
-        },
-      },
-    },
-  },
   FAVORITE_VIDEO: {
     UPSERT: {
       path: (userId: string | undefined, videoId: string) =>
