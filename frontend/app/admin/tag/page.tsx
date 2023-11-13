@@ -4,6 +4,9 @@ import { TagType } from '../../../types/TagType'
 import Error from '../../error'
 
 export default async function AdminTag() {
+  if (!process.env.NEXT_PUBLIC_BACKEND_URL) {
+    console.error('Backend URL is undefined')
+  }
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/tag`, {
       cache: 'no-cache',
