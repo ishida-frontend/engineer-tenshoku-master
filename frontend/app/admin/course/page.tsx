@@ -7,6 +7,9 @@ export default async function AdminCourse() {
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/course`,
     {
       cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     },
   )
   const getCourses: CourseType[] = await res.json()
