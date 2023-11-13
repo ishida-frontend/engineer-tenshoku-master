@@ -10,7 +10,7 @@ jobs:
   format-and-build:
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_BACKEND_URL: 'https://api.engineer-master.net/'
+      NEXT_PUBLIC_BACKEND_URL: 'https://api.engineer-master.net'
 
     steps:
       - name: Checkout Repository
