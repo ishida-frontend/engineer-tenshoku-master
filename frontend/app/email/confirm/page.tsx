@@ -20,7 +20,7 @@ export default function EmailChangeConfirmPage() {
         </Heading>
 
         <Box mb="28px">
-          新しいメールアドレス宛てに送信した認証コードを入力してください。
+          新しいメールアドレス宛に送信した認証コードを入力してください。
         </Box>
 
         <FormControl id="verificationCode" mb="42px" isRequired>
