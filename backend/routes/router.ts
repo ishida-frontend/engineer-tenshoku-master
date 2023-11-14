@@ -12,7 +12,7 @@ import { QuestionController } from '../controllers/questionController'
 import { AnswerController } from '../controllers/answerController'
 import { TagValidator } from '../validation/tagValidator'
 import { TagController } from '../controllers/tagController'
-import { updateEmail } from '../controllers/authController'
+import { updateEmail, confirmEmail } from '../controllers/authController'
 import { UserValidator } from '../validation/userValidator'
 import { EmailValidator } from '../validation/emailVlidator'
 
@@ -179,5 +179,6 @@ favoriteVideoRouter.get(
 favoriteVideoRouter.get('/:userId', favoriteVideoController.getFavoriteVideos)
 
 router.post('/email/update', emailValidator.updateEmail, updateEmail)
+router.post('/email/confirm', confirmEmail)
 
 export default router

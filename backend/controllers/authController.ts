@@ -112,6 +112,10 @@ router.post('/signin', async (req, res) => {
     res.cookie('accessToken', data.AuthenticationResult?.AccessToken, {
       httpOnly: true,
     })
+    console.log(
+      'data.AuthenticationResult?.AccessToken:',
+      data.AuthenticationResult?.AccessToken,
+    )
     res.cookie('refreshToken', data.AuthenticationResult?.RefreshToken, {
       httpOnly: true,
     })
@@ -218,30 +222,20 @@ export const updateEmail = async (req: Request, res: Response) => {
     res.status(500).send('An error occurred')
   }
 }
-export const verifyEmail = async (req: Request, res: Response) => {
-  console.log('req.body:', req.body)
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() })
-  }
 
-  const { newEmail, username } = req.body
+export const confirmEmail = async (req: Request, res: Response) => {
+  console.log('req.body:', req.body)
+
   try {
-    await userService.updateEmail(username, newEmail)
+    const { code } = req.body
+    console.log('code:', code)
+    const accessToken = req.cookies['accessToken']
+    console.log('accessToken:', accessToken)
+    await userService.confirmEmail(accessToken, code)
     res.status(200).send('Email updated successfully')
   } catch (error) {
     res.status(500).send('An error occurred')
   }
 }
-
-router.post('/email/verify', async (req, res) => {
-  try {
-    const { newEmail, code } = req.body
-    await userService.verifyEmail(newEmail, code)
-    res.status(200).json({ message: 'メールアドレスが認証されました' })
-  } catch (error) {
-    res.status(500).json({ error: '認証に失敗しました' })
-  }
-})
 
 export default router

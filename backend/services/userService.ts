@@ -12,9 +12,9 @@ export class UserService {
     console.log('newEmail:', newEmail)
     await this.userRepository.updateEmail(username, newEmail)
   }
-  async verifyEmail(newEmail: string, code: string): Promise<void> {
-    console.log('newEmail:', newEmail)
+  async confirmEmail(accessToken: string, code: string): Promise<void> {
+    console.log('accessToken:', accessToken)
     console.log('code:', code)
-    await this.userRepository.verifyEmail(newEmail, code)
+    await this.userRepository.confirmEmail(accessToken, code)
   }
 }

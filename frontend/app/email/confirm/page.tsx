@@ -35,7 +35,7 @@ export default function Login() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/email/verify`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/email/confirm`,
         {
           method: 'POST',
           headers: {
@@ -45,13 +45,15 @@ export default function Login() {
             newEmail: formState.newEmail,
             code: formState.code,
           }),
+          mode: 'cors',
+          credentials: 'include',
         },
       )
       console.log('response.ok:', response.ok)
       console.log('response.body:', response.body)
 
       if (!response.ok) {
-        throw new Error('メールアドレスの更新に失敗しました。')
+        throw new Error('メールアドレスの認証に失敗しました。')
       }
 
       showSuccessToast(

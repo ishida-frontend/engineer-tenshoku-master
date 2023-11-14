@@ -4,8 +4,11 @@ import {
   AdminUpdateUserAttributesCommandInput,
   VerifyUserAttributeCommand,
 } from '@aws-sdk/client-cognito-identity-provider'
+import express from 'express'
 import cookieParser from 'cookie-parser'
-import { cookie } from 'express-validator'
+
+const app = express()
+app.use(cookieParser())
 
 export class UserRepository {
   private cognitoClient: CognitoIdentityProviderClient
@@ -30,13 +33,13 @@ export class UserRepository {
     await this.cognitoClient.send(command)
   }
 
-  async verifyEmail(newEmail: string, code: string): Promise<void> {
-    const verifyParams = {
-      AccessToken: ,
-      AttributeName: newEmail,
+  async confirmEmail(accessToken: string, code: string): Promise<void> {
+    const command = new VerifyUserAttributeCommand({
+      AccessToken: accessToken,
+      AttributeName: 'email',
       Code: code,
-    }
-    const command = new VerifyUserAttributeCommand(verifyParams)
+    })
+
     await this.cognitoClient.send(command)
   }
 }

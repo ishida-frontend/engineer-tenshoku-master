@@ -55,9 +55,9 @@ export default function Login() {
       }
 
       showSuccessToast('認証コードをメールを送信しました。ご確認ください。')
-      router.push('/email/verify')
+      router.push('/email/confirm')
     } catch (err) {
-      console.error('Update email error:', err)
+      console.error('Confirm email error:', err)
       setError('メールアドレスの更新に失敗しました。')
     }
   }
