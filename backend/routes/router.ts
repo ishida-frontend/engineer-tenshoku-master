@@ -98,9 +98,7 @@ router.put('/tag', tagValidator.updateTag, (req, res) => {
 
 const userRouter = express.Router()
 router.use('/user', userRouter)
-userRouter.get('/:id', (req, res) => {
-  userController.get(req, res)
-})
+userRouter.get('/:id', userController.get)
 userRouter.put('/update', userValidator.updateUser, userController.update)
 
 const courseRouter = express.Router()

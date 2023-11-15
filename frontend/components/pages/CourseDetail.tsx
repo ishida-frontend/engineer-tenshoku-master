@@ -14,6 +14,7 @@ import { CreateQuestionErrorType } from '../../types/QuestionType'
 import { QUESTION_PAGES } from '../../constants/index'
 import { QuestionPageType } from '../../types/QuestionType'
 import { AnswerType } from '../../types/AnswerType'
+import { UserProfileType } from '../../types'
 
 export type SelectedVideo = {
   id: string
@@ -55,7 +56,12 @@ export function CourseDetail({
   questionId,
   handleViewingStatus,
   handleFavoriteVideoStatus,
-}: {
+  getAnotherUserProfile,
+  anotherUserProfile,
+} // isOpen,
+// onOpen,
+// onClose,
+: {
   courseData: CourseWithSectionsType
   session: Session | null
   userId: string
@@ -72,6 +78,11 @@ export function CourseDetail({
   handleFavoriteVideoStatus: (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => void
+  getAnotherUserProfile?: (value: string) => void
+  anotherUserProfile?: UserProfileType
+  // isOpen?: boolean
+  // onOpen?: () => void
+  // onClose?: () => void
 }) {
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
@@ -283,6 +294,11 @@ export function CourseDetail({
             session={session}
             selectedQuestion={selectedQuestion}
             createAnswer={createAnswer}
+            getAnotherUserProfile={getAnotherUserProfile}
+            anotherUserProfile={anotherUserProfile}
+            // isOpen={isOpen}
+            // onOpen={onOpen}
+            // onClose={onClose}
           />
         </Container>
       </Container>

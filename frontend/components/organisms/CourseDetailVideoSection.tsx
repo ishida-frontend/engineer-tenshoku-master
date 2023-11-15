@@ -19,6 +19,7 @@ import { CreateQuestionErrorType } from '../../types/QuestionType'
 import { QuestionPageType } from '../../types/QuestionType'
 import { AnswerType } from '../../types/AnswerType'
 import { Session } from 'next-auth'
+import { UserProfileType } from '../../types'
 
 export function CourseDetailVideoSection({
   userId,
@@ -38,7 +39,12 @@ export function CourseDetailVideoSection({
   session,
   selectedQuestion,
   createAnswer,
-}: {
+  getAnotherUserProfile,
+  anotherUserProfile,
+} // isOpen,
+// onOpen,
+// onClose,
+: {
   userId: string | undefined
   selectedVideo: SelectedVideo | null
   questionPage: QuestionPageType
@@ -61,6 +67,11 @@ export function CourseDetailVideoSection({
   session: Session | null
   selectedQuestion?: QuestionType
   createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
+  getAnotherUserProfile?: (value: string) => void
+  anotherUserProfile?: UserProfileType
+  // isOpen?: boolean
+  // onOpen?: () => void
+  // onClose?: () => void
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -116,6 +127,11 @@ export function CourseDetailVideoSection({
               session={session}
               selectedQuestion={selectedQuestion}
               createAnswer={createAnswer}
+              getAnotherUserProfile={getAnotherUserProfile}
+              anotherUserProfile={anotherUserProfile}
+              // isOpen={isOpen}
+              // onOpen={onOpen}
+              // onClose={onClose}
             />
           </CardBody>
         </Card>

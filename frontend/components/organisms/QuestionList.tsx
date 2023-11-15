@@ -10,6 +10,7 @@ import {
   Stack,
   Avatar,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from '../../types/QuestionType'
@@ -17,23 +18,43 @@ import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { QUESTION_PAGES } from '../../constants/index'
 import { QuestionPageType } from '../../types/QuestionType'
 import Link from 'next/link'
+import { UserProfileType } from '../../types'
+import { AnotherUserProfileModal } from './AnotherUserProfileModal'
 
 export function QuestionList({
   questions,
   courseId,
   videoId,
   changeQuestionPage,
-}: {
+  getAnotherUserProfile,
+  anotherUserProfile, // isOpen,
+} // onOpen,
+// onClose,
+: {
   questions?: QuestionType[]
   courseId?: string
   videoId?: string
   changeQuestionPage: (value: QuestionPageType) => void
+  getAnotherUserProfile?: (value: string) => void
+  anotherUserProfile?: UserProfileType
+  // isOpen?: boolean
+  // onOpen?: () => void
+  // onClose?: () => void
 }) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const changeToQuestionDetail = () => {
     try {
       changeQuestionPage(QUESTION_PAGES.QuestionDetail)
     } catch (e) {
       throw new Error('質問詳細ページへの遷移に失敗しました')
+    }
+  }
+  const getAnotherUser = (otherUserId: string) => {
+    try {
+      getAnotherUserProfile(otherUserId)
+      onOpen
+    } catch (e) {
+      throw new Error('ユーザー情報を取得できませんでした')
     }
   }
   return (
@@ -70,26 +91,27 @@ export function QuestionList({
           </Heading>
           <Stack spacing="4">
             {questions.map((question: QuestionType) => (
-              <Link
-                key={question.id}
-                href={`/course/${courseId}/?videoId=${videoId}&questionId=${question.id}`}
-                scroll={false}
-                onClick={changeToQuestionDetail}
+              <Card
+                boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
+                cursor={'pointer'}
+                _hover={{
+                  bg: 'gray.100',
+                }}
               >
-                <Card
-                  boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
-                  cursor={'pointer'}
-                  _hover={{
-                    bg: 'gray.100',
-                  }}
-                >
-                  <HStack pl={'20px'}>
-                    <Avatar
-                      bg="blue.300"
-                      color="black"
-                      icon={<AiOutlineUser fontSize="2rem" />}
-                      justifyContent={'center'}
-                    />
+                <HStack pl={'20px'}>
+                  <Avatar
+                    bg="blue.300"
+                    color="black"
+                    icon={<AiOutlineUser fontSize="2rem" />}
+                    justifyContent={'center'}
+                    onClick={() => getAnotherUser(question.user_id)}
+                  />
+                  <Link
+                    key={question.id}
+                    href={`/course/${courseId}/?videoId=${videoId}&questionId=${question.id}`}
+                    scroll={false}
+                    onClick={changeToQuestionDetail}
+                  >
                     <Box overflow={'hidden'} p={'10px 0px 15px'}>
                       <Heading pb={'10px'} size="md" isTruncated>
                         {question.title}
@@ -98,9 +120,9 @@ export function QuestionList({
                         {question.content}
                       </Text>
                     </Box>
-                  </HStack>
-                </Card>
-              </Link>
+                  </Link>
+                </HStack>
+              </Card>
             ))}
           </Stack>
           <Button
@@ -111,6 +133,11 @@ export function QuestionList({
           </Button>
         </TabPanel>
       )}
+      <AnotherUserProfileModal
+        anotherUserProfile={anotherUserProfile}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </>
   )
 }

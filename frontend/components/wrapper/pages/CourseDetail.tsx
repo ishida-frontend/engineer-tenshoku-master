@@ -17,6 +17,8 @@ import { useCustomToast } from '../../../hooks/useCustomToast'
 import { AnswerType } from '../../../types/AnswerType'
 import { CourseDetail } from '../../pages/CourseDetail'
 import Error from '../../../app/error'
+import { useDisclosure } from '@chakra-ui/react'
+import { UserProfileType } from '../../../types'
 
 export function CourseDetailWrapper({
   courseId,
@@ -41,6 +43,9 @@ export function CourseDetailWrapper({
 
   try {
     const [courseData, setCourseData] = useState(initialCourseData)
+    // const { isOpen, onOpen, onClose } = useDisclosure()
+    const [anotherUserProfile, setAnotherUserProfile] =
+      useState<UserProfileType>()
     const [completePercentage, setCompletePercentage] = useState(0)
     const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
       {},
@@ -178,6 +183,24 @@ export function CourseDetailWrapper({
       fetchData()
     }, [courseData, session, videoId])
 
+    const getAnotherUserProfile = async (anotherUserId: string) => {
+      console.log('aaaaa:')
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${anotherUserId}`,
+        {
+          cache: 'no-cache',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      const anotherUserProfileData = await response.json()
+      console.log('response:', response)
+      console.log('anotherUserProfileData:', anotherUserProfileData)
+      return setAnotherUserProfile(anotherUserProfileData)
+    }
+    console.log('anotherUserProfile:', anotherUserProfile)
+
     return (
       <CourseDetail
         courseData={courseData}
@@ -194,6 +217,11 @@ export function CourseDetailWrapper({
         questionId={questionId}
         handleViewingStatus={handleViewingStatus}
         handleFavoriteVideoStatus={handleFavoriteVideoStatus}
+        getAnotherUserProfile={getAnotherUserProfile}
+        anotherUserProfile={anotherUserProfile}
+        // isOpen={isOpen}
+        // onOpen={onOpen}
+        // onClose={onClose}
       />
     )
   } catch (e) {
