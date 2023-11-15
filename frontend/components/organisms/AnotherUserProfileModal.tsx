@@ -76,7 +76,7 @@ export function AnotherUserProfileModal({
                   </Box>
 
                   <Text ml="20px" fontSize="lg" lineHeight="40px">
-                    {anotherUserProfile.oneWord}
+                    {anotherUserProfile?.oneWord}
                   </Text>
                 </Flex>
               ) : (
@@ -95,7 +95,7 @@ export function AnotherUserProfileModal({
                 </Box>
               )}
 
-              {anotherUserProfile.goal ? (
+              {anotherUserProfile?.goal ? (
                 <Flex my={5}>
                   <Box
                     display="flex"
@@ -112,7 +112,7 @@ export function AnotherUserProfileModal({
                   </Box>
                   <Box>
                     <Text ml="20px" fontSize="lg" lineHeight="40px">
-                      {anotherUserProfile.goal}
+                      {anotherUserProfile?.goal}
                     </Text>
                   </Box>
                 </Flex>
@@ -132,7 +132,7 @@ export function AnotherUserProfileModal({
                 </Box>
               )}
 
-              {anotherUserProfile.github ? (
+              {anotherUserProfile?.github ? (
                 <Flex mt={10}>
                   <Box
                     display="flex"
@@ -147,8 +147,8 @@ export function AnotherUserProfileModal({
                     <Icon as={FaGithub} size="20px" color="gray" />
                   </Box>
                   <Box ml="20px" fontSize="lg" lineHeight="40px">
-                    <Link href={`${anotherUserProfile.github}`}>
-                      <Text>{anotherUserProfile.github}</Text>
+                    <Link href={`${anotherUserProfile?.github}`}>
+                      <Text>{anotherUserProfile?.github}</Text>
                     </Link>
                   </Box>
                 </Flex>
@@ -168,7 +168,7 @@ export function AnotherUserProfileModal({
                 </Box>
               )}
 
-              {anotherUserProfile.x ? (
+              {anotherUserProfile?.x ? (
                 <Flex mt={10}>
                   <Box
                     display="flex"
@@ -183,8 +183,8 @@ export function AnotherUserProfileModal({
                     <Icon as={FaXTwitter} size="20px" color="gray" />
                   </Box>
                   <Box ml="20px" fontSize="lg" lineHeight="40px">
-                    <Link href={`${anotherUserProfile.x}`}>
-                      <Text>{anotherUserProfile.x}</Text>
+                    <Link href={`${anotherUserProfile?.x}`}>
+                      <Text>{anotherUserProfile?.x}</Text>
                     </Link>
                   </Box>
                 </Flex>
