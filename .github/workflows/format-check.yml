@@ -1,0 +1,26 @@
+name: Format Check
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+
+jobs:
+  format-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.16
+
+      - name: Yarn Installation
+        run: yarn
+
+      - name: Format with Lint
+        run: yarn eslint --fix .

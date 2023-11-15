@@ -1,0 +1,57 @@
+name: Build on Push
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+      - '.github/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0.32
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: db
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=10s
+          --health-retries=3
+          --default-authentication-plugin=mysql_native_password
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.16
+
+      - name: Install Backend Dependencies
+        run: yarn install
+        working-directory: ./backend
+
+      - name: Run Prisma Migrate
+        env:
+          DATABASE_URL: mysql://root:${{ secrets.MYSQL_ROOT_PASSWORD }}@localhost:3306/db
+        run: yarn --cwd backend prisma migrate deploy
+
+      - name: Build Backend
+        run: yarn build
+        working-directory: ./backend
+
+      - name: Install Frontend Dependencies
+        run: yarn install
+        working-directory: ./frontend
+
+      - name: Build Frontend
+        run: yarn build
+        working-directory: ./frontend
