@@ -59,7 +59,6 @@ export function CourseDetail({
   getAnotherUserProfile,
   anotherUserProfile,
   isProfileOpen,
-  openProfileModal,
   closeProfileModal,
 }: {
   courseData: CourseWithSectionsType
@@ -81,7 +80,6 @@ export function CourseDetail({
   getAnotherUserProfile?: (value: string) => void
   anotherUserProfile?: UserProfileType
   isProfileOpen?: boolean
-  openProfileModal?: () => void
   closeProfileModal?: () => void
 }) {
   const router = useRouter()
@@ -297,7 +295,6 @@ export function CourseDetail({
             getAnotherUserProfile={getAnotherUserProfile}
             anotherUserProfile={anotherUserProfile}
             isProfileOpen={isProfileOpen}
-            openProfileModal={openProfileModal}
             closeProfileModal={closeProfileModal}
           />
         </Container>

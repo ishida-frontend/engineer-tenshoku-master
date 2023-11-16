@@ -28,7 +28,6 @@ export function VideoDetailAndQAndA({
   getAnotherUserProfile,
   anotherUserProfile,
   isProfileOpen,
-  openProfileModal,
   closeProfileModal,
 }: {
   selectedVideo: SelectedVideo | null
@@ -48,7 +47,6 @@ export function VideoDetailAndQAndA({
   getAnotherUserProfile?: (value: string) => void
   anotherUserProfile?: UserProfileType
   isProfileOpen?: boolean
-  openProfileModal?: () => void
   closeProfileModal?: () => void
 }) {
   return (
@@ -74,7 +72,6 @@ export function VideoDetailAndQAndA({
             getAnotherUserProfile={getAnotherUserProfile}
             anotherUserProfile={anotherUserProfile}
             isProfileOpen={isProfileOpen}
-            openProfileModal={openProfileModal}
             closeProfileModal={closeProfileModal}
           />
         )}

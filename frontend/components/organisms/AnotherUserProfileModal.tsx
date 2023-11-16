@@ -15,7 +15,6 @@ import {
   ModalBody,
   ModalFooter,
   Link,
-  HStack,
 } from '@chakra-ui/react'
 import { FaGithub } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'

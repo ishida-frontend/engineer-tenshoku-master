@@ -42,7 +42,6 @@ export function CourseDetailVideoSection({
   getAnotherUserProfile,
   anotherUserProfile,
   isProfileOpen,
-  openProfileModal,
   closeProfileModal,
 }: {
   userId: string | undefined
@@ -70,7 +69,6 @@ export function CourseDetailVideoSection({
   getAnotherUserProfile?: (value: string) => void
   anotherUserProfile?: UserProfileType
   isProfileOpen?: boolean
-  openProfileModal?: () => void
   closeProfileModal?: () => void
 }) {
   return (
@@ -130,7 +128,6 @@ export function CourseDetailVideoSection({
               getAnotherUserProfile={getAnotherUserProfile}
               anotherUserProfile={anotherUserProfile}
               isProfileOpen={isProfileOpen}
-              openProfileModal={openProfileModal}
               closeProfileModal={closeProfileModal}
             />
           </CardBody>

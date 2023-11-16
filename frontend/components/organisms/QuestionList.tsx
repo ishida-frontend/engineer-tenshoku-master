@@ -10,7 +10,6 @@ import {
   Stack,
   Avatar,
   VStack,
-  // useDisclosure,
 } from '@chakra-ui/react'
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from '../../types/QuestionType'
@@ -20,7 +19,6 @@ import { QuestionPageType } from '../../types/QuestionType'
 import Link from 'next/link'
 import { UserProfileType } from '../../types'
 import { AnotherUserProfileModal } from './AnotherUserProfileModal'
-import { bg } from 'date-fns/locale'
 
 export function QuestionList({
   questions,
@@ -30,7 +28,6 @@ export function QuestionList({
   getAnotherUserProfile,
   anotherUserProfile,
   isProfileOpen,
-  openProfileModal,
   closeProfileModal,
 }: {
   questions?: QuestionType[]
@@ -40,7 +37,6 @@ export function QuestionList({
   getAnotherUserProfile?: (value: string) => void
   anotherUserProfile?: UserProfileType
   isProfileOpen?: boolean
-  openProfileModal?: () => void
   closeProfileModal?: () => void
 }) {
   const changeToQuestionDetail = () => {

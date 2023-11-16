@@ -221,7 +221,6 @@ export function CourseDetailWrapper({
         getAnotherUserProfile={getAnotherUserProfile}
         anotherUserProfile={anotherUserProfile}
         isProfileOpen={isProfileOpen}
-        openProfileModal={openProfileModal}
         closeProfileModal={closeProfileModal}
       />
     )
