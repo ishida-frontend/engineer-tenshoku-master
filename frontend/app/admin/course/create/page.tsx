@@ -1,4 +1,3 @@
-'use client'
 import Component from '../../../../components/admin/pages/CourseCreator'
 export default async function CreateCoursePage() {
   try {
