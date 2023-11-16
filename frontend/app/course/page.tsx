@@ -3,7 +3,6 @@ import React from 'react'
 import { CourseListType } from '../../types/CourseType'
 import { CourseListWrapper } from '../../components/pages/CourseListWrapper'
 import Error from '../error'
-
 export default async function Course() {
   try {
     const res = await fetch(
