@@ -7,7 +7,7 @@ on:
       - 'backend/**'
 
 jobs:
-  format-and-build:
+  format-check:
     runs-on: ubuntu-latest
 
     steps:
