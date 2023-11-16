@@ -30,6 +30,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Print NEXT_PUBLIC_BACKEND_URL
+        run: echo "NEXT_PUBLIC_BACKEND_URL = $NEXT_PUBLIC_BACKEND_URL"
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
