@@ -5,13 +5,12 @@ on:
     paths:
       - 'frontend/**'
       - 'backend/**'
-      - '.github/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
+      NEXT_PUBLIC_BACKEND_URL: http://localhost:8000
 
     services:
       mysql:
@@ -19,7 +18,7 @@ jobs:
         ports:
           - 3306:3306
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: db
         options: >-
           --health-cmd="mysqladmin ping"
@@ -42,7 +41,7 @@ jobs:
 
       - name: Run Prisma Migrate
         env:
-          DATABASE_URL: mysql://root:${{ secrets.MYSQL_ROOT_PASSWORD }}@localhost:3306/db
+          DATABASE_URL: mysql://root:password@localhost:3306/db
         run: yarn --cwd backend prisma migrate deploy
 
       - name: Build Backend
