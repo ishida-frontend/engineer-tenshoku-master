@@ -20,11 +20,9 @@ export class UserApplicationService {
 
   static async get(id: string) {
     try {
-      console.log('id:', id)
       const user = await prisma.user.findUnique({
         where: { id },
       })
-      console.log('user:', user)
       return user
     } catch (error) {
       throw new Error(`UserApplicationService: get user error: ${error}`)

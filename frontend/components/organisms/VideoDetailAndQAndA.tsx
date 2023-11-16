@@ -27,10 +27,10 @@ export function VideoDetailAndQAndA({
   createAnswer,
   getAnotherUserProfile,
   anotherUserProfile,
-} // isOpen,
-// onOpen,
-// onClose,
-: {
+  isProfileOpen,
+  openProfileModal,
+  closeProfileModal,
+}: {
   selectedVideo: SelectedVideo | null
   userId: string | undefined
   questionPage: QuestionPageType
@@ -47,9 +47,9 @@ export function VideoDetailAndQAndA({
   createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
   getAnotherUserProfile?: (value: string) => void
   anotherUserProfile?: UserProfileType
-  // isOpen?: boolean
-  // onOpen?: () => void
-  // onClose?: () => void
+  isProfileOpen?: boolean
+  openProfileModal?: () => void
+  closeProfileModal?: () => void
 }) {
   return (
     <Tabs isFitted colorScheme={'green'}>
@@ -73,9 +73,9 @@ export function VideoDetailAndQAndA({
             videoId={selectedVideo?.sections.videos.id}
             getAnotherUserProfile={getAnotherUserProfile}
             anotherUserProfile={anotherUserProfile}
-            // isOpen={isOpen}
-            // onOpen={onOpen}
-            // onClose={onClose}
+            isProfileOpen={isProfileOpen}
+            openProfileModal={openProfileModal}
+            closeProfileModal={closeProfileModal}
           />
         )}
         {questionPage === QUESTION_PAGES.QuestionForm && (

@@ -10,7 +10,7 @@ import {
   Stack,
   Avatar,
   VStack,
-  useDisclosure,
+  // useDisclosure,
 } from '@chakra-ui/react'
 import { AiOutlineUser } from 'react-icons/ai'
 import { QuestionType } from '../../types/QuestionType'
@@ -20,6 +20,7 @@ import { QuestionPageType } from '../../types/QuestionType'
 import Link from 'next/link'
 import { UserProfileType } from '../../types'
 import { AnotherUserProfileModal } from './AnotherUserProfileModal'
+import { bg } from 'date-fns/locale'
 
 export function QuestionList({
   questions,
@@ -27,21 +28,21 @@ export function QuestionList({
   videoId,
   changeQuestionPage,
   getAnotherUserProfile,
-  anotherUserProfile, // isOpen,
-} // onOpen,
-// onClose,
-: {
+  anotherUserProfile,
+  isProfileOpen,
+  openProfileModal,
+  closeProfileModal,
+}: {
   questions?: QuestionType[]
   courseId?: string
   videoId?: string
   changeQuestionPage: (value: QuestionPageType) => void
   getAnotherUserProfile?: (value: string) => void
   anotherUserProfile?: UserProfileType
-  // isOpen?: boolean
-  // onOpen?: () => void
-  // onClose?: () => void
+  isProfileOpen?: boolean
+  openProfileModal?: () => void
+  closeProfileModal?: () => void
 }) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const changeToQuestionDetail = () => {
     try {
       changeQuestionPage(QUESTION_PAGES.QuestionDetail)
@@ -52,7 +53,6 @@ export function QuestionList({
   const getAnotherUser = (otherUserId: string) => {
     try {
       getAnotherUserProfile(otherUserId)
-      onOpen
     } catch (e) {
       throw new Error('ユーザー情報を取得できませんでした')
     }
@@ -105,6 +105,14 @@ export function QuestionList({
                     icon={<AiOutlineUser fontSize="2rem" />}
                     justifyContent={'center'}
                     onClick={() => getAnotherUser(question.user_id)}
+                    _hover={{
+                      opacity: '0.7',
+                    }}
+                  />
+                  <AnotherUserProfileModal
+                    anotherUserProfile={anotherUserProfile}
+                    isProfileOpen={isProfileOpen}
+                    closeProfileModal={() => closeProfileModal()}
                   />
                   <Link
                     key={question.id}
@@ -133,11 +141,6 @@ export function QuestionList({
           </Button>
         </TabPanel>
       )}
-      <AnotherUserProfileModal
-        anotherUserProfile={anotherUserProfile}
-        isOpen={isOpen}
-        onClose={onClose}
-      />
     </>
   )
 }

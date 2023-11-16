@@ -43,7 +43,11 @@ export function CourseDetailWrapper({
 
   try {
     const [courseData, setCourseData] = useState(initialCourseData)
-    // const { isOpen, onOpen, onClose } = useDisclosure()
+    const {
+      isOpen: isProfileOpen,
+      onOpen: openProfileModal,
+      onClose: closeProfileModal,
+    } = useDisclosure()
     const [anotherUserProfile, setAnotherUserProfile] =
       useState<UserProfileType>()
     const [completePercentage, setCompletePercentage] = useState(0)
@@ -184,7 +188,6 @@ export function CourseDetailWrapper({
     }, [courseData, session, videoId])
 
     const getAnotherUserProfile = async (anotherUserId: string) => {
-      console.log('aaaaa:')
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${anotherUserId}`,
         {
@@ -195,11 +198,9 @@ export function CourseDetailWrapper({
         },
       )
       const anotherUserProfileData = await response.json()
-      console.log('response:', response)
-      console.log('anotherUserProfileData:', anotherUserProfileData)
-      return setAnotherUserProfile(anotherUserProfileData)
+      setAnotherUserProfile(anotherUserProfileData)
+      openProfileModal()
     }
-    console.log('anotherUserProfile:', anotherUserProfile)
 
     return (
       <CourseDetail
@@ -219,9 +220,9 @@ export function CourseDetailWrapper({
         handleFavoriteVideoStatus={handleFavoriteVideoStatus}
         getAnotherUserProfile={getAnotherUserProfile}
         anotherUserProfile={anotherUserProfile}
-        // isOpen={isOpen}
-        // onOpen={onOpen}
-        // onClose={onClose}
+        isProfileOpen={isProfileOpen}
+        openProfileModal={openProfileModal}
+        closeProfileModal={closeProfileModal}
       />
     )
   } catch (e) {

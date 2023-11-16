@@ -41,10 +41,10 @@ export function CourseDetailVideoSection({
   createAnswer,
   getAnotherUserProfile,
   anotherUserProfile,
-} // isOpen,
-// onOpen,
-// onClose,
-: {
+  isProfileOpen,
+  openProfileModal,
+  closeProfileModal,
+}: {
   userId: string | undefined
   selectedVideo: SelectedVideo | null
   questionPage: QuestionPageType
@@ -69,9 +69,9 @@ export function CourseDetailVideoSection({
   createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
   getAnotherUserProfile?: (value: string) => void
   anotherUserProfile?: UserProfileType
-  // isOpen?: boolean
-  // onOpen?: () => void
-  // onClose?: () => void
+  isProfileOpen?: boolean
+  openProfileModal?: () => void
+  closeProfileModal?: () => void
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -129,9 +129,9 @@ export function CourseDetailVideoSection({
               createAnswer={createAnswer}
               getAnotherUserProfile={getAnotherUserProfile}
               anotherUserProfile={anotherUserProfile}
-              // isOpen={isOpen}
-              // onOpen={onOpen}
-              // onClose={onClose}
+              isProfileOpen={isProfileOpen}
+              openProfileModal={openProfileModal}
+              closeProfileModal={closeProfileModal}
             />
           </CardBody>
         </Card>
