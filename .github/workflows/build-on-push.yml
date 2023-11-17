@@ -33,17 +33,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Print NEXT_PUBLIC_BACKEND_URL
-        run: echo "NEXT_PUBLIC_BACKEND_URL = $NEXT_PUBLIC_BACKEND_URL"
-
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18.16
 
       - name: Install Backend Dependencies
-        run: yarn install
-        working-directory: ./backend
+        run: yarn --cwd backend install
 
       - name: Run Prisma Migrate
         env:
@@ -51,12 +47,10 @@ jobs:
         run: yarn --cwd backend prisma migrate deploy
 
       - name: Build Backend
-        run: yarn build
-        working-directory: ./backend
+        run: yarn --cwd backend build
 
       - name: Install Frontend Dependencies
-        run: yarn install
-        working-directory: ./frontend
+        run: yarn --cwd frontend install
 
       - name: Start Backend Server and Build Frontend
         run: |
