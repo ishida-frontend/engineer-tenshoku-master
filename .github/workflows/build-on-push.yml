@@ -49,11 +49,13 @@ jobs:
       - name: Build Backend
         run: yarn --cwd backend build
 
+      - name: Start Backend Server Using Compiled JavaScript
+        run: |
+          node ./backend/dist/app.js &
+          sleep 10
+
       - name: Install Frontend Dependencies
         run: yarn --cwd frontend install
 
-      - name: Start Backend Server and Build Frontend
-        run: |
-          yarn --cwd backend run start &
-          sleep 10
-          yarn --cwd frontend build
+      - name: Build Frontend
+        run: yarn --cwd frontend build
