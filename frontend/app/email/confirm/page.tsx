@@ -5,29 +5,29 @@ import {
   Center,
   Container,
   Flex,
-  //ここからした
   FormControl,
   Heading,
   Input,
+  Spacer,
   Text,
-  VStack,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 
-export default function Login() {
+export default function EmailChangeConfirmPage() {
   const router = useRouter()
   const { showSuccessToast } = useCustomToast()
-  const [formState, setFormState] = useState({
-    newEmail: '',
-    code: '',
-  })
+  const [codeState, setCodeState] = useState<string>()
   const [error, setError] = useState('')
 
   const handlePageBack = async () => {
     router.push('/email/update')
   }
+  const handlePageLogin = async () => {
+    router.push('/auth/login')
+  }
+
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
@@ -43,8 +43,7 @@ export default function Login() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            newEmail: formState.newEmail,
-            code: formState.code,
+            code: codeState,
           }),
           mode: 'cors',
           credentials: 'include',
@@ -60,7 +59,7 @@ export default function Login() {
       showSuccessToast(
         '新しいメールアドレスを認証しました。再度ログインしてください。',
       )
-      router.push('/course')
+      router.push('/auth/login')
     } catch (error) {
       setError('メールアドレスの認証に失敗しました。')
     }
@@ -68,123 +67,42 @@ export default function Login() {
 
   return (
     <Center padding="60px 96px" bg={'gray.200'}>
-      <Container padding="60px 96px" bg={'white'}>
-        <Heading
-          fontSize={'2xl'}
-          mb={'42px'}
-          textAlign={'center'}
-          fontWeight={'bold'}
-        >
-          新しいメールアドレスの認証
-        </Heading>
-
-        <VStack gap={'36px'}>
-          <FormControl id="newEmail" isRequired>
-            <Container ml={'0px'} pb={'10px'} pl={'0px'}>
-              <Flex>
-                <Text>新しいメールアドレス</Text>
-                <Text color="teal">(必須)</Text>
-              </Flex>
-            </Container>
-            <Input
-              id="newEmail"
-              type="text"
-              value={formState.newEmail}
-              placeholder="newfrontendengineer@gmail.com"
-              onChange={(e) =>
-                setFormState({
-                  ...formState,
-                  newEmail: e.target.value,
-                })
-              }
-              aria-required={true}
-              border="1px"
-              borderColor="gray.400"
-            />
-          </FormControl>
-
-          <FormControl id="code" isRequired>
-            <Container ml={'0px'} pb={'10px'} pl={'0px'}>
-              <Flex>
-                <Text>コード</Text>
-                <Text color="teal">(必須)</Text>
-              </Flex>
-            </Container>
-            <Input
-              id="code"
-              type="code"
-              placeholder="000000"
-              value={formState.code}
-              onChange={(e) =>
-                setFormState({
-                  ...formState,
-                  code: e.target.value,
-                })
-              }
-              aria-required={true}
-              border="1px"
-              borderColor="gray.400"
-            />
-          </FormControl>
-        </VStack>
-
-        {error && <Text color="red">{error}</Text>}
-        <Button
-          w={'100%'}
-          mt={'42px'}
-          mb={'24px'}
-          colorScheme="teal"
-          onClick={handleSubmit}
-        >
-          メールアドレスを認証する
-        </Button>
-
-        <Box border={'1px solid #C400'} />
-
-        <Box color={'teal'}>
-          <Text onClick={handlePageBack}>前の画面へ戻る</Text>
-
-          //ここからした
-          </Box>
-  FormControl,
-  Heading,
-  Input,
-  Link,
-} from '@chakra-ui/react'
-import NextLink from 'next/link'
-
-export default function EmailChangeConfirmPage() {
-  return (
-    <Center padding="60px 96px" bg={'gray.200'}>
-      <Container padding="60px 96px" bg={'white'}>
+      <Container padding="60px 96px" bg={'white'} borderRadius={'4px'}>
         <Heading fontSize="2xl" mb="60px" textAlign="center" fontWeight="bold">
           認証コードを入力
         </Heading>
 
         <Box mb="28px">
-          新しいメールアドレス宛に送信した認証コードを入力してください。
+          新しいメールアドレス宛に送信された認証コードを入力してください。
         </Box>
 
-        <FormControl id="verificationCode" mb="42px" isRequired>
+        <FormControl id="confirmCode" mb="42px" isRequired>
           <Input
-            id="verificationCode"
+            id="confirmCode"
             type="text"
             aria-required={true}
             border="1px"
             borderColor="gray.400"
-            placeholder="認証コード"
+            placeholder="000000"
+            value={codeState}
+            onChange={(e) => setCodeState(e.target.value)}
           />
         </FormControl>
 
-        <Button w="100%" mb="42px" colorScheme="teal">
+        {error && <Text color="red">{error}</Text>}
+        <Button w="100%" mb="42px" colorScheme="teal" onClick={handleSubmit}>
           認証する
         </Button>
 
-        <Box color="teal">
-          <Link as={NextLink} href="/auth/login">
-            ログイン
-          </Link>
-        </Box>
+        <Flex>
+          <Box color={'teal'} cursor={'pointer'}>
+            <Text onClick={handlePageBack}>前のページ</Text>
+          </Box>
+          <Spacer />
+          <Box color={'teal'} cursor={'pointer'}>
+            <Text onClick={handlePageLogin}>ログイン</Text>
+          </Box>
+        </Flex>
       </Container>
     </Center>
   )
