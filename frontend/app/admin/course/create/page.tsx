@@ -6,7 +6,6 @@ export default async function CreateCoursePage() {
         'Content-Type': 'application/json',
       },
     })
-    console.log('tagsRes:', tagsRes)
     const tags = await tagsRes.json()
 
     return <Component tags={tags} />

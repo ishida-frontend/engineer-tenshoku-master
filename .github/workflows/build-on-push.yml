@@ -12,26 +12,22 @@ jobs:
     env:
       NEXT_PUBLIC_BACKEND_URL: 'http://localhost:8000'
 
-    services:
-      mysql:
-        image: mysql:8.0.32
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: db
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=10s
-          --health-retries=3
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Print NEXT_PUBLIC_BACKEND_URL
-        run: echo "NEXT_PUBLIC_BACKEND_URL = $NEXT_PUBLIC_BACKEND_URL"
+      - name: Build and run Docker Compose
+        run: docker-compose up -d
+
+      - name: Wait for server to be ready
+        run: |
+          while ! curl -s http://localhost:8000 > /dev/null; do
+            echo "Waiting for server..."
+            sleep 5
+          done
+
+      - name: Verify server is running
+        run: curl http://localhost:8000
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
