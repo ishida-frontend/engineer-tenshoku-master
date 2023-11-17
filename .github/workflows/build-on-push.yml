@@ -50,12 +50,9 @@ jobs:
         run: yarn --cwd backend build
 
       - name: Install Frontend Dependencies
-        run: yarn --cwd frontend install
+        run: yarn install
 
-      - name: Start Backend Server
+      - name: Start Backend Server and Build Frontend
         run: |
-          yarn --cwd backend run start
-
-      - name: Build Frontend
-        run: |
+          yarn --cwd backend run start &
           yarn --cwd frontend build
