@@ -16,6 +16,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Change to the correct directory
+        run: cd backend
+
       - name: Build and run Docker Compose
         run: docker-compose up -d
 
