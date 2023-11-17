@@ -18,7 +18,7 @@ import { QUESTION_PAGES } from '../../constants/index'
 import { QuestionPageType } from '../../types/QuestionType'
 import Link from 'next/link'
 import { UserProfileType } from '../../types'
-import { AnotherUserProfileModal } from './AnotherUserProfileModal'
+import { AnotherUserProfileModal } from '../pages/AnotherUserProfileModal'
 
 export function QuestionList({
   questions,

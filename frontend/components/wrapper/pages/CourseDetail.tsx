@@ -188,18 +188,22 @@ export function CourseDetailWrapper({
     }, [courseData, session, videoId])
 
     const getAnotherUserProfile = async (anotherUserId: string) => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${anotherUserId}`,
-        {
-          cache: 'no-cache',
-          headers: {
-            'Content-Type': 'application/json',
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${anotherUserId}`,
+          {
+            cache: 'no-cache',
+            headers: {
+              'Content-Type': 'application/json',
+            },
           },
-        },
-      )
-      const anotherUserProfileData = await response.json()
-      setAnotherUserProfile(anotherUserProfileData)
-      openProfileModal()
+        )
+        const anotherUserProfileData = await response.json()
+        setAnotherUserProfile(anotherUserProfileData)
+        openProfileModal()
+      } catch (error) {
+        throw new error()
+      }
     }
 
     return (
