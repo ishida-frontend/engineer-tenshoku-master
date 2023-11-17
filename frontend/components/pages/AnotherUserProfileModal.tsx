@@ -60,8 +60,6 @@ export function AnotherUserProfileModal({
               <Stack>
                 <Flex mt={10}>
                   <Center
-                    alignItems="center"
-                    justifyContent="center"
                     borderRadius="full"
                     borderColor="gray.400"
                     w="40px"
@@ -79,8 +77,6 @@ export function AnotherUserProfileModal({
 
                 <Flex my={5}>
                   <Center
-                    alignItems="center"
-                    justifyContent="center"
                     borderRadius="full"
                     borderColor="gray.400"
                     flexShrink={0}
@@ -101,8 +97,6 @@ export function AnotherUserProfileModal({
                 {anotherUserProfile.github && (
                   <Flex mt={10}>
                     <Center
-                      alignItems="center"
-                      justifyContent="center"
                       borderRadius="full"
                       borderColor="gray.400"
                       w="40px"
@@ -122,8 +116,6 @@ export function AnotherUserProfileModal({
                 {anotherUserProfile.x && (
                   <Flex mt={10}>
                     <Center
-                      alignItems="center"
-                      justifyContent="center"
                       borderRadius="full"
                       borderColor="gray.400"
                       w="40px"

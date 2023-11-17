@@ -81,7 +81,7 @@ export function QuestionList({
           <Stack spacing="4">
             {questions.map((question: QuestionType) => (
               <Card
-                boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px;'}
+                boxShadow={'rgba(0, 0, 0, 0.24) 3px 3px 3px 3px;'}
                 cursor={'pointer'}
                 _hover={{
                   bg: 'gray.100',
