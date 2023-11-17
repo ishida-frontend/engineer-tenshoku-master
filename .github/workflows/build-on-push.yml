@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_BACKEND_URL: 'http://127.0.0.1:8000'
+      NEXT_PUBLIC_BACKEND_URL: 'http://localhost:8000'
 
     services:
       mysql:
@@ -44,7 +44,7 @@ jobs:
 
       - name: Run Prisma Migrate
         env:
-          DATABASE_URL: mysql://root:password@127.0.0.1:3306/db
+          DATABASE_URL: mysql://root:password@localhost:3306/db
         run: yarn --cwd backend prisma migrate deploy
 
       - name: Build Backend
@@ -55,6 +55,8 @@ jobs:
         run: yarn install
         working-directory: ./frontend
 
-      - name: Build Frontend
-        run: yarn build
-        working-directory: ./frontend
+      - name: Start Backend Server and Build Frontend
+        run: |
+          yarn --cwd backend run start &
+          sleep 10
+          yarn --cwd frontend build

@@ -1,7 +1,10 @@
 import Component from '../../../../components/admin/pages/CourseCreator'
+import Error from '../../../error'
+
 export default async function CreateCoursePage() {
   try {
     const tagsRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/tag`, {
+      cache: 'no-cache',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -9,7 +12,7 @@ export default async function CreateCoursePage() {
     const tags = await tagsRes.json()
 
     return <Component tags={tags} />
-  } catch (error) {
-    throw new Error('タグの取得に失敗しました。')
+  } catch (e) {
+    return <Error />
   }
 }
