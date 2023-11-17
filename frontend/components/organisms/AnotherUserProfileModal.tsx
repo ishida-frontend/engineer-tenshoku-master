@@ -15,6 +15,7 @@ import {
   ModalBody,
   ModalFooter,
   Link,
+  Center,
 } from '@chakra-ui/react'
 import { FaGithub } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'
@@ -28,9 +29,9 @@ export function AnotherUserProfileModal({
   isProfileOpen,
   closeProfileModal,
 }: {
-  anotherUserProfile?: UserProfileType
-  isProfileOpen?: boolean
-  closeProfileModal?: () => void
+  anotherUserProfile: UserProfileType
+  isProfileOpen: boolean
+  closeProfileModal: () => void
 }) {
   return (
     <Modal
@@ -53,33 +54,12 @@ export function AnotherUserProfileModal({
                 />
 
                 <Text as="b" fontSize="2xl">
-                  {anotherUserProfile?.name}
+                  {anotherUserProfile.name}
                 </Text>
               </VStack>
               <Stack>
-                {anotherUserProfile?.oneWord ? (
-                  <Flex mt={10}>
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      borderRadius="full"
-                      borderColor="gray.400"
-                      w="40px"
-                      h="40px"
-                      boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
-                    >
-                      <SlBubble size="20px" color="gray" />
-                    </Box>
-
-                    <Text ml="20px" fontSize="lg" lineHeight="40px">
-                      {anotherUserProfile?.oneWord}
-                    </Text>
-                  </Flex>
-                ) : (
-                  <Box
-                    mt={5}
-                    display="flex"
+                <Flex mt={10}>
+                  <Center
                     alignItems="center"
                     justifyContent="center"
                     borderRadius="full"
@@ -89,50 +69,38 @@ export function AnotherUserProfileModal({
                     boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
                   >
                     <SlBubble size="20px" color="gray" />
-                  </Box>
-                )}
+                  </Center>
+                  {anotherUserProfile.oneWord && (
+                    <Text ml="20px" fontSize="lg" lineHeight="40px">
+                      {anotherUserProfile.oneWord}
+                    </Text>
+                  )}
+                </Flex>
 
-                {anotherUserProfile?.goal ? (
-                  <Flex my={5}>
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      borderRadius="full"
-                      borderColor="gray.400"
-                      flexShrink={0}
-                      w="40px"
-                      h="40px"
-                      boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
-                    >
-                      <GoGoal size="20px" color="green" />
-                    </Box>
-                    <Box>
-                      <Text ml="20px" fontSize="lg" lineHeight="40px">
-                        {anotherUserProfile?.goal}
-                      </Text>
-                    </Box>
-                  </Flex>
-                ) : (
-                  <Box
-                    my={5}
-                    display="flex"
+                <Flex my={5}>
+                  <Center
                     alignItems="center"
                     justifyContent="center"
                     borderRadius="full"
                     borderColor="gray.400"
+                    flexShrink={0}
                     w="40px"
                     h="40px"
                     boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
+                    my={5}
                   >
                     <GoGoal size="20px" color="green" />
-                  </Box>
-                )}
+                  </Center>
+                  {anotherUserProfile.goal && (
+                    <Text ml="20px" fontSize="lg" lineHeight="40px">
+                      {anotherUserProfile.goal}
+                    </Text>
+                  )}
+                </Flex>
 
-                {anotherUserProfile?.github ? (
+                {anotherUserProfile.github && (
                   <Flex mt={10}>
-                    <Box
-                      display="flex"
+                    <Center
                       alignItems="center"
                       justifyContent="center"
                       borderRadius="full"
@@ -142,33 +110,18 @@ export function AnotherUserProfileModal({
                       boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
                     >
                       <Icon as={FaGithub} size="20px" color="gray" />
-                    </Box>
+                    </Center>
                     <Box ml="20px" fontSize="lg" lineHeight="40px">
-                      <Link href={`${anotherUserProfile?.github}`} isExternal>
-                        <Text>{anotherUserProfile?.github}</Text>
+                      <Link href={`${anotherUserProfile.github}`} isExternal>
+                        <Text>{anotherUserProfile.github}</Text>
                       </Link>
                     </Box>
                   </Flex>
-                ) : (
-                  <Box
-                    mt={5}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    borderRadius="full"
-                    borderColor="gray.400"
-                    w="40px"
-                    h="40px"
-                    boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
-                  >
-                    <Icon as={FaGithub} size="20px" color="gray" />
-                  </Box>
                 )}
 
-                {anotherUserProfile?.x ? (
+                {anotherUserProfile.x && (
                   <Flex mt={10}>
-                    <Box
-                      display="flex"
+                    <Center
                       alignItems="center"
                       justifyContent="center"
                       borderRadius="full"
@@ -178,27 +131,13 @@ export function AnotherUserProfileModal({
                       boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
                     >
                       <Icon as={FaXTwitter} size="20px" color="gray" />
-                    </Box>
+                    </Center>
                     <Box ml="20px" fontSize="lg" lineHeight="40px">
-                      <Link href={`${anotherUserProfile?.x}`} isExternal>
-                        <Text>{anotherUserProfile?.x}</Text>
+                      <Link href={`${anotherUserProfile.x}`} isExternal>
+                        <Text>{anotherUserProfile.x}</Text>
                       </Link>
                     </Box>
                   </Flex>
-                ) : (
-                  <Box
-                    mt={5}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    borderRadius="full"
-                    borderColor="gray.400"
-                    w="40px"
-                    h="40px"
-                    boxShadow="0px 0px 10px rgba(0, 0, 0, 0.25)"
-                  >
-                    <Icon as={FaXTwitter} size="20px" color="gray" />
-                  </Box>
                 )}
               </Stack>
             </VStack>

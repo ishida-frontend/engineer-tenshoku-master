@@ -46,13 +46,6 @@ export function QuestionList({
       throw new Error('質問詳細ページへの遷移に失敗しました')
     }
   }
-  const getAnotherUser = (otherUserId: string) => {
-    try {
-      getAnotherUserProfile(otherUserId)
-    } catch (e) {
-      throw new Error('ユーザー情報を取得できませんでした')
-    }
-  }
   return (
     <>
       {(questions === undefined || questions.length === 0) && (
@@ -100,16 +93,18 @@ export function QuestionList({
                     color="black"
                     icon={<AiOutlineUser fontSize="2rem" />}
                     justifyContent={'center'}
-                    onClick={() => getAnotherUser(question.user_id)}
+                    onClick={() => getAnotherUserProfile(question.user_id)}
                     _hover={{
                       opacity: '0.7',
                     }}
                   />
-                  <AnotherUserProfileModal
-                    anotherUserProfile={anotherUserProfile}
-                    isProfileOpen={isProfileOpen}
-                    closeProfileModal={() => closeProfileModal()}
-                  />
+                  {anotherUserProfile && (
+                    <AnotherUserProfileModal
+                      anotherUserProfile={anotherUserProfile}
+                      isProfileOpen={isProfileOpen}
+                      closeProfileModal={() => closeProfileModal()}
+                    />
+                  )}
                   <Link
                     key={question.id}
                     href={`/course/${courseId}/?videoId=${videoId}&questionId=${question.id}`}
