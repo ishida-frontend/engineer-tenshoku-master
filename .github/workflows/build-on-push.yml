@@ -55,4 +55,5 @@ jobs:
       - name: Start Backend Server and Build Frontend
         run: |
           yarn --cwd backend run start &
+          sleep 10
           yarn --cwd frontend build
