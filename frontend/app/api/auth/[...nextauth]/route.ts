@@ -6,9 +6,6 @@ import { getJwtDecoded } from '../../../../utils/jwtDecode'
 import { getUser } from '../../user'
 import { USER_ROLE } from '../../../../constants/user'
 import { loggerInfo } from '../../../../utils/logger'
-import {
-  InitiateAuthRequest,
-  UserStatusType,} from '';
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -74,6 +71,12 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
+    async jwt({ token, account }) {
+      if (account?.accessToken) {
+        token.accessToken = account.accessToken
+      }
+      return token
+    },
     session: async ({ session, token }) => {
       const user = await getUser(token.sub || '')
       loggerInfo(`user: ${user}`, {
@@ -88,7 +91,7 @@ export const authOptions: AuthOptions = {
             id: token.sub,
             name: user.name,
             isAdmin: user.role === USER_ROLE.ADMIN,
-            accessToken: AuthenticationResult.,
+            accessToken: token.accessToken,
           },
         }
       } else {
