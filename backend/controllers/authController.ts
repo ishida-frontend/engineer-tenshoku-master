@@ -224,12 +224,8 @@ export const updateEmail = async (req: Request, res: Response) => {
 }
 
 export const confirmEmail = async (req: Request, res: Response) => {
-  console.log('req.body:', req.body)
-  const accessToken = req.cookies['accessToken']
-  console.log('accessToken:', accessToken)
-
   try {
-    const { code } = req.body
+    const { accessToken, code } = req.body
     console.log('code:', code)
     console.log('accessToken:', accessToken)
     await userService.confirmEmail(accessToken, code)

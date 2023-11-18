@@ -14,12 +14,18 @@ import {
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCustomToast } from '../../../hooks/useCustomToast'
+import { useSession } from 'next-auth/react'
 
 export default function EmailChangeConfirmPage() {
   const router = useRouter()
   const { showSuccessToast } = useCustomToast()
   const [codeState, setCodeState] = useState<string>()
   const [error, setError] = useState('')
+  const { data: session } = useSession()
+
+  if (session) {
+    console.log('Access Token:', session.user.accessToken)
+  }
 
   const handlePageBack = async () => {
     router.push('/email/update')
@@ -43,6 +49,7 @@ export default function EmailChangeConfirmPage() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            accessToekn: session.user.accessToken,
             code: codeState,
           }),
           mode: 'cors',
