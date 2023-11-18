@@ -52,7 +52,6 @@ jobs:
       - name: Start Backend Server Using Compiled JavaScript
         run: |
           node ./backend/dist/app.js &
-          sleep 10
 
       - name: Install Frontend Dependencies
         run: yarn --cwd frontend install
