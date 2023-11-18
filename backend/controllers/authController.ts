@@ -226,6 +226,7 @@ export const updateEmail = async (req: Request, res: Response) => {
 export const confirmEmail = async (req: Request, res: Response) => {
   console.log('req.body:', req.body)
   const accessToken = req.cookies['accessToken']
+  console.log('accessToken:', accessToken)
 
   try {
     const { code } = req.body
