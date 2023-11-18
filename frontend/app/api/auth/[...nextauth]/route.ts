@@ -85,6 +85,7 @@ export const authOptions: AuthOptions = {
             id: token.sub,
             name: user.name,
             isAdmin: user.role === USER_ROLE.ADMIN,
+            accessToken: token.accessToken,
           },
         }
       } else {
