@@ -22,9 +22,10 @@ import React, { useEffect, useState } from 'react'
 import { BsGoogle } from 'react-icons/bs'
 import { LuMail } from 'react-icons/lu'
 import { useCustomToast } from '../../../hooks/useCustomToast'
+import { AUTH } from '../../../constants/auth'
 
 export default function Register() {
-  const { status } = useSession()
+  const { status: authStatus } = useSession()
   const router = useRouter()
   const { showSuccessToast, showErrorToast } = useCustomToast()
   const [formState, setFormState] = useState({
@@ -67,7 +68,7 @@ export default function Register() {
 
   useEffect(() => {
     // Google認証でログイン後のリダイレクト
-    if (status === 'authenticated') {
+    if (authStatus === AUTH.GOOGLE_AUTHENTICATED) {
       router.push('/')
     }
   }, [status])

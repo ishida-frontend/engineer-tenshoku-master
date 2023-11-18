@@ -17,9 +17,10 @@ import { LuMail } from 'react-icons/lu'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
+import { AUTH } from '../../../constants'
 
 export default function Login() {
-  const { status } = useSession()
+  const { status: authStatus } = useSession()
   const router = useRouter()
   const [formState, setFormState] = useState({
     email: '',
@@ -46,7 +47,7 @@ export default function Login() {
 
   useEffect(() => {
     // Google認証でログイン後のリダイレクト
-    if (status === 'authenticated') {
+    if (authStatus === AUTH.GOOGLE_AUTHENTICATED) {
       router.push('/')
     }
   }, [status])
