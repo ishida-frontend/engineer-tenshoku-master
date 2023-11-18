@@ -6,6 +6,9 @@ import { getJwtDecoded } from '../../../../utils/jwtDecode'
 import { getUser } from '../../user'
 import { USER_ROLE } from '../../../../constants/user'
 import { loggerInfo } from '../../../../utils/logger'
+import {
+  InitiateAuthRequest,
+  UserStatusType,} from '';
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -85,7 +88,7 @@ export const authOptions: AuthOptions = {
             id: token.sub,
             name: user.name,
             isAdmin: user.role === USER_ROLE.ADMIN,
-            accessToken: token.accessToken,
+            accessToken: AuthenticationResult.,
           },
         }
       } else {
