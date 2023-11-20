@@ -1,0 +1,60 @@
+name: Build on Push
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_BACKEND_URL: 'http://localhost:8000'
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID }}
+
+    services:
+      mysql:
+        image: mysql:8.0.32
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: db
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=10s
+          --health-retries=3
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.16
+
+      - name: Install Backend Dependencies
+        run: yarn --cwd backend install
+
+      - name: Run Prisma Migrate
+        env:
+          DATABASE_URL: mysql://root:password@localhost:3306/db
+        run: yarn --cwd backend prisma migrate deploy
+
+      - name: Build Backend
+        run: yarn --cwd backend build
+
+      - name: Start Backend Server Using Compiled JavaScript
+        run: |
+          node ./backend/dist/app.js &
+
+      - name: Install Frontend Dependencies
+        run: yarn --cwd frontend install
+
+      - name: Build Frontend
+        run: yarn --cwd frontend build

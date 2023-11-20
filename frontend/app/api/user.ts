@@ -15,6 +15,9 @@ export const getUser = async (
         credentials: 'include',
       },
     )
+    if (!res.ok) {
+      return null
+    }
     const user = await res.json()
 
     return user
