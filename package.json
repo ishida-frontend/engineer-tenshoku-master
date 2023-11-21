@@ -23,5 +23,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.110.0"
   }
 }
