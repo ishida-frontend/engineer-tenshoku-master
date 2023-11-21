@@ -6,6 +6,7 @@ import { getJwtDecoded } from '../../../../utils/jwtDecode'
 import { getUser } from '../../user'
 import { USER_ROLE } from '../../../../constants/user'
 import { loggerInfo } from '../../../../utils/logger'
+import { AUTH } from '../../../../constants'
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -99,7 +100,7 @@ export const authOptions: AuthOptions = {
       }
     },
     signIn: async ({ account, profile }) => {
-      if (account.provider === 'cognito') {
+      if (account.provider === AUTH.COGNITO_PROVIDER) {
         try {
           const { sub: id, name, image } = profile
           const existingUser = await getUser(id)
