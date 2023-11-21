@@ -1,4 +1,5 @@
-import NextAuth, { AuthOptions } from 'next-auth'
+import NextAuth, { AuthOptions, Session } from 'next-auth'
+import { JWT } from 'next-auth/jwt'
 import CognitoProvider from 'next-auth/providers/cognito'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { login } from '../../auth'
@@ -74,11 +75,15 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ token, account }) {
       if (account?.accessToken) {
-        token.accessToken = account.accessToken
+        token.accessToken = account.accessToken as string
       }
       return token
     },
-    session: async ({ session, token }) => {
+    session: async ({ session, token }: { session: Session; token: JWT }) => {
+      if (token.idToken) {
+        session.user.idToken = token.idToken
+      }
+
       const user = await getUser(token.sub || '')
       loggerInfo(`user: ${user}`, {
         caller: 'callbacks/session',
