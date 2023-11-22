@@ -1,5 +1,4 @@
-import NextAuth from 'next-auth'
-import type { NextAuthOptions } from 'next-auth'
+import NextAuth, { NextAuthOptions } from 'next-auth'
 import CognitoProvider from 'next-auth/providers/cognito'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { login } from '../../auth'
