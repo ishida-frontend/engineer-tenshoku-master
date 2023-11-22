@@ -1,4 +1,7 @@
+import NextAuth, { NextAuthOptions } from 'next-auth'
+
 declare module 'next-auth' {
+  interface NextAuthOptions {}
   interface Session {
     user: {
       idToken?: string
