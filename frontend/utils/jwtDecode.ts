@@ -1,10 +1,10 @@
-import jwt_decode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 
 export const getJwtDecoded = (
   token: string,
 ): {
   [name: string]: string
 } => {
-  const decoded = jwt_decode<{ [name: string]: string }>(token)
+  const decoded = jwtDecode<{ [name: string]: string }>(token)
   return decoded
 }

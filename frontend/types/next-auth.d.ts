@@ -1,5 +1,3 @@
-import { NextPage } from 'next'
-
 declare module 'next-auth' {
   interface Session {
     user: {

@@ -1,5 +1,5 @@
-import NextAuth, { AuthOptions, Session } from 'next-auth'
-import { JWT } from 'next-auth/jwt'
+import NextAuth from 'next-auth'
+import type { NextAuthOptions } from 'next-auth'
 import CognitoProvider from 'next-auth/providers/cognito'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { login } from '../../auth'
@@ -7,9 +7,8 @@ import { getJwtDecoded } from '../../../../utils/jwtDecode'
 import { getUser } from '../../user'
 import { USER_ROLE } from '../../../../constants/user'
 import { loggerInfo } from '../../../../utils/logger'
-import { AUTH } from '../../../../constants'
 
-export const authOptions: AuthOptions = {
+export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/auth/login',
   },
@@ -73,17 +72,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, account }) {
-      if (account?.accessToken) {
-        token.accessToken = account.accessToken as string
-      }
-      return token
-    },
-    session: async ({ session, token }: { session: Session; token: JWT }) => {
-      if (token.idToken) {
-        session.user.idToken = token.idToken
-      }
-
+    session: async ({ session, token }) => {
       const user = await getUser(token.sub || '')
       loggerInfo(`user: ${user}`, {
         caller: 'callbacks/session',
@@ -105,7 +94,7 @@ export const authOptions: AuthOptions = {
       }
     },
     signIn: async ({ account, profile }) => {
-      if (account.provider === AUTH.COGNITO_PROVIDER) {
+      if (account.provider === 'cognito') {
         try {
           const { sub: id, name, image } = profile
           const existingUser = await getUser(id)
