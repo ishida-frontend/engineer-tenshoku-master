@@ -14,6 +14,7 @@ import { CreateQuestionErrorType } from '../../types/QuestionType'
 import { QUESTION_PAGES } from '../../constants/index'
 import { QuestionPageType } from '../../types/QuestionType'
 import { AnswerType } from '../../types/AnswerType'
+import { UserProfileType } from '../../types'
 
 export type SelectedVideo = {
   id: string
@@ -43,7 +44,6 @@ type QuestionValidationError = {
 export function CourseDetail({
   courseData,
   session,
-  userId,
   completePercentage,
   watchedStatus,
   checkedStatus,
@@ -55,10 +55,13 @@ export function CourseDetail({
   questionId,
   handleViewingStatus,
   handleFavoriteVideoStatus,
+  getAnotherUserProfile,
+  anotherUserProfile,
+  isProfileOpen,
+  closeProfileModal,
 }: {
   courseData: CourseWithSectionsType
   session: Session | null
-  userId: string
   completePercentage: number
   watchedStatus: Record<string, boolean>
   checkedStatus: Record<string, boolean>
@@ -72,6 +75,10 @@ export function CourseDetail({
   handleFavoriteVideoStatus: (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => void
+  getAnotherUserProfile?: (value: string) => void
+  anotherUserProfile?: UserProfileType
+  isProfileOpen?: boolean
+  closeProfileModal?: () => void
 }) {
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
@@ -195,7 +202,7 @@ export function CourseDetail({
             title,
             content,
             video_id: videoId,
-            user_id: userId,
+            user_id: session.user.id,
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -259,14 +266,13 @@ export function CourseDetail({
           bg={'gray.100'}
         >
           <CourseDetailAccordionMenu
-            userId={userId}
+            session={session}
             completePercentage={completePercentage}
             checkedStatus={checkedStatus}
             courseData={courseData}
             handleChangeVideo={handleChangeVideo}
           />
           <CourseDetailVideoSection
-            userId={userId}
             selectedVideo={selectedVideo}
             questionPage={questionPage}
             changeQuestionPage={changeQuestionPage}
@@ -283,6 +289,10 @@ export function CourseDetail({
             session={session}
             selectedQuestion={selectedQuestion}
             createAnswer={createAnswer}
+            getAnotherUserProfile={getAnotherUserProfile}
+            anotherUserProfile={anotherUserProfile}
+            isProfileOpen={isProfileOpen}
+            closeProfileModal={closeProfileModal}
           />
         </Container>
       </Container>
