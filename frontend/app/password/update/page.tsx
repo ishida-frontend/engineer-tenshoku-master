@@ -51,13 +51,15 @@ export default function Login() {
     if (isSafePassword.test(formState.newPassword)) {
       try {
         console.log('trueの処理:')
-        // 認証開始
-        const authenticationData = {
+        const authenticationPasswordResetData = {
           Username: formState.email,
           Password: formState.currentPassword,
         }
-        const authenticationDetails =
-          new AmazonCognitoIdentity.AuthenticationDetails(authenticationData)
+        console.log(
+          'authenticationPasswordResetData',
+          authenticationPasswordResetData,
+        )
+
         const poolData = {
           UserPoolId: `${process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID}`,
           ClientId: `${process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID}`,
@@ -72,10 +74,17 @@ export default function Login() {
         console.log('userData:', userData)
         const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData)
         console.log('cognitoUser:', cognitoUser)
+        // 認証開始
+        const authenticationDetails =
+          new AmazonCognitoIdentity.AuthenticationDetails(
+            authenticationPasswordResetData,
+          )
+        console.log('authenticationDetails', authenticationDetails)
+
         // セッション取得開始
         cognitoUser.authenticateUser(authenticationDetails, {
           onSuccess: function (result) {
-            console.log('onSuccess:')
+            console.log('onSuccess:', result)
             const accessToken = result.getAccessToken().getJwtToken()
             console.log('accessToken:', accessToken)
 
@@ -97,26 +106,47 @@ export default function Login() {
                 }
               })
             }
+
+            // パスワード更新
+            cognitoUser.changePassword(
+              formState.currentPassword,
+              formState.newPassword,
+              function (err, result) {
+                if (err) {
+                  alert(err.message || JSON.stringify(err))
+                  return
+                }
+                console.log('call result: ' + result)
+              },
+            )
+            showSuccessToast(
+              'パスワードを更新しました。再度ログインしてください。',
+            )
           },
 
-          onFailure: function (err) {
-            console.log('onFailure:')
+          onFailure: async function (err) {
+            const res = await JSON.stringify(err)
+            console.log('res', res)
+
+            console.log('onFailure:', err)
             alert(err.message || JSON.stringify(err))
           },
-        })
-        // パスワード更新
-        cognitoUser.changePassword(
-          formState.currentPassword,
-          formState.newPassword,
-          function (err, result) {
-            if (err) {
-              alert(err.message || JSON.stringify(err))
-              return
-            }
-            console.log('call result: ' + result)
+          newPasswordRequired: function (userAttributes) {
+            console.log('newPasswordRequired:', userAttributes)
+            cognitoUser.completeNewPasswordChallenge(
+              formState.newPassword,
+              {},
+              {
+                onSuccess: function (result) {
+                  console.log('onSuccess:', result)
+                },
+                onFailure: function (err) {
+                  console.log('onFailure:', err)
+                },
+              },
+            )
           },
-        )
-        showSuccessToast('パスワードを更新しました。再度ログインしてください。')
+        })
       } catch (err) {
         setError('パスワードの更新に失敗しました。')
       }
