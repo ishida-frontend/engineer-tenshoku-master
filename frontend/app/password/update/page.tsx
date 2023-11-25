@@ -15,13 +15,7 @@ import React, { useState } from 'react'
 import { PATHS } from '../../../constants/paths'
 import { signOut } from 'next-auth/react'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-import AmazonCognitoIdentity from 'amazon-cognito-identity-js'
-
-const poolData = {
-  UserPoolId: `${process.env.COGNITO_USER_POOL_ID}`,
-  ClientId: `${process.env.COGNITO_CLIENT_ID}`,
-}
-const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData)
+import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 
 export default function Login() {
   const { showSuccessToast } = useCustomToast()
@@ -44,20 +38,33 @@ export default function Login() {
   ) => {
     e.preventDefault()
     setError('')
+    console.log('aaaaa:')
 
-    try {
-      if (!isSafePassword.test(formState.newPassword)) {
-        setError(`以下の要件を満たしてください。
-        ・大文字と小文字のアルファベットが必要です。
-        ・0~9の数字が必要です
-        ・文字数は8~24文字でないといけません。`)
-        throw new Error('パスワードの更新に失敗しました。')
-      } else {
+    console.log(
+      'isSafePassword.test(formState.newPassword):',
+      isSafePassword.test(formState.newPassword),
+    )
+    console.log('formState:', formState)
+    if (isSafePassword.test(formState.newPassword)) {
+      try {
+        console.log('trueの処理:')
+        console.log(
+          'process.env.COGNITO_USER_POOL_ID:',
+          process.env.COGNITO_USER_POOL_ID,
+        )
+        const poolData = {
+          UserPoolId: `${process.env.COGNITO_USER_POOL_ID}`,
+          ClientId: `${process.env.COGNITO_CLIENT_ID}`,
+        }
+        console.log('poolData:', poolData)
+        const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData)
         const userData = {
           Username: formState.currentPassword,
           Pool: userPool,
         }
+        console.log('userData:', userData)
         const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData)
+        console.log('cognitoUser:', cognitoUser)
         cognitoUser.changePassword(
           formState.currentPassword,
           formState.newPassword,
@@ -70,9 +77,16 @@ export default function Login() {
           },
         )
         showSuccessToast('パスワードを更新しました。再度ログインしてください。')
+      } catch (err) {
+        setError('パスワードの更新に失敗しました。')
       }
-    } catch (err) {
-      setError('パスワードの更新に失敗しました。')
+    } else {
+      console.log('falseの処理:')
+      setError(`以下の要件を満たしてください。
+        ・大文字と小文字のアルファベットが必要です。
+        ・0~9の数字が必要です。
+        ・文字数は${minPasswordLength}~${maxPasswordLength}文字でないといけません。`)
+      // throw new Error('パスワードの更新に失敗しました。')
     }
   }
   return (
