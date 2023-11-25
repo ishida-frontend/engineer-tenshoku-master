@@ -15,13 +15,8 @@ import React, { useState } from 'react'
 import { PATHS } from '../../../constants/paths'
 import { signOut } from 'next-auth/react'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-import {
-  CognitoUserPool,
-  CognitoUserAttribute,
-  CognitoUser,
-} from 'amazon-cognito-identity-js'
-const AmazonCognitoIdentity = require('amazon-cognito-identity-js')
-const CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool
+import AmazonCognitoIdentity from 'amazon-cognito-identity-js'
+
 const poolData = {
   UserPoolId: `${process.env.COGNITO_USER_POOL_ID}`,
   ClientId: `${process.env.COGNITO_CLIENT_ID}`,
@@ -58,7 +53,22 @@ export default function Login() {
         ・文字数は8~24文字でないといけません。`)
         throw new Error('パスワードの更新に失敗しました。')
       } else {
-        cognito
+        const userData = {
+          Username: formState.currentPassword,
+          Pool: userPool,
+        }
+        const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData)
+        cognitoUser.changePassword(
+          formState.currentPassword,
+          formState.newPassword,
+          function (err, result) {
+            if (err) {
+              alert(err.message || JSON.stringify(err))
+              return
+            }
+            console.log('call result: ' + result)
+          },
+        )
         showSuccessToast('パスワードを更新しました。再度ログインしてください。')
       }
     } catch (err) {
