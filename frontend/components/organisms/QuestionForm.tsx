@@ -22,16 +22,17 @@ import { QUESTION_PAGES } from '../../constants/index'
 import { QuestionPageType } from '../../types/QuestionType'
 import { converter } from '../../utils/markdown'
 import { useCustomToast } from '../../hooks/useCustomToast'
+import { Session } from 'next-auth'
 
 type CreateQuestionErrorType = { title: string; content: string }
 
 export function QuestionForm({
-  userId,
+  session,
   createQuestionErrors,
   createQuestion,
   changeQuestionPage,
 }: {
-  userId: string | undefined
+  session: Session | null
   createQuestionErrors: CreateQuestionErrorType
   createQuestion: (createQuestionParams: {
     title: string
@@ -80,14 +81,14 @@ export function QuestionForm({
             >
               全ての質問に戻る
             </Button>
-            {userId === undefined && (
+            {session.user.id === undefined && (
               <VStack>
                 <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
                   質問をするには ログインまたは新規会員登録を行なってください
                 </Heading>
               </VStack>
             )}
-            {userId && (
+            {session.user.id && (
               <Box>
                 <FormControl
                   isInvalid={!!createQuestionErrors.title}

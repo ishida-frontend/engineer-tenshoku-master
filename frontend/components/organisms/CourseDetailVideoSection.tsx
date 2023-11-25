@@ -19,9 +19,9 @@ import { CreateQuestionErrorType } from '../../types/QuestionType'
 import { QuestionPageType } from '../../types/QuestionType'
 import { AnswerType } from '../../types/AnswerType'
 import { Session } from 'next-auth'
+import { UserProfileType } from '../../types'
 
 export function CourseDetailVideoSection({
-  userId,
   selectedVideo,
   questionPage,
   questions,
@@ -38,8 +38,11 @@ export function CourseDetailVideoSection({
   session,
   selectedQuestion,
   createAnswer,
+  getAnotherUserProfile,
+  anotherUserProfile,
+  isProfileOpen,
+  closeProfileModal,
 }: {
-  userId: string | undefined
   selectedVideo: SelectedVideo | null
   questionPage: QuestionPageType
   questions: QuestionType[] | undefined
@@ -61,6 +64,10 @@ export function CourseDetailVideoSection({
   session: Session | null
   selectedQuestion?: QuestionType
   createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
+  getAnotherUserProfile?: (value: string) => void
+  anotherUserProfile?: UserProfileType
+  isProfileOpen?: boolean
+  closeProfileModal?: () => void
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -81,7 +88,7 @@ export function CourseDetailVideoSection({
               <Text pl={'40px'}>{selectedVideo?.sections.videos.order}.</Text>
               <Text pl={'3px'}>{selectedVideo?.sections.videos.name}</Text>
               <Spacer />
-              {userId && selectedVideo && (
+              {session.user.id && selectedVideo && (
                 <>
                   <WatchedButton
                     watchedStatus={
@@ -106,7 +113,6 @@ export function CourseDetailVideoSection({
           <CardBody bg={'white'} pl={'0px'} pr={'0px'}>
             <VideoDetailAndQAndA
               selectedVideo={selectedVideo}
-              userId={userId}
               questionPage={questionPage}
               questions={questions}
               createQuestionErrors={createQuestionErrors}
@@ -116,6 +122,10 @@ export function CourseDetailVideoSection({
               session={session}
               selectedQuestion={selectedQuestion}
               createAnswer={createAnswer}
+              getAnotherUserProfile={getAnotherUserProfile}
+              anotherUserProfile={anotherUserProfile}
+              isProfileOpen={isProfileOpen}
+              closeProfileModal={closeProfileModal}
             />
           </CardBody>
         </Card>

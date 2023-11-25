@@ -17,6 +17,8 @@ import { useCustomToast } from '../../../hooks/useCustomToast'
 import { AnswerType } from '../../../types/AnswerType'
 import { CourseDetail } from '../../pages/CourseDetail'
 import Error from '../../../app/error'
+import { useDisclosure } from '@chakra-ui/react'
+import { UserProfileType } from '../../../types'
 
 export function CourseDetailWrapper({
   courseId,
@@ -41,6 +43,13 @@ export function CourseDetailWrapper({
 
   try {
     const [courseData, setCourseData] = useState(initialCourseData)
+    const {
+      isOpen: isProfileOpen,
+      onOpen: openProfileModal,
+      onClose: closeProfileModal,
+    } = useDisclosure()
+    const [anotherUserProfile, setAnotherUserProfile] =
+      useState<UserProfileType>()
     const [completePercentage, setCompletePercentage] = useState(0)
     const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
       {},
@@ -178,11 +187,29 @@ export function CourseDetailWrapper({
       fetchData()
     }, [courseData, session, videoId])
 
+    const getAnotherUserProfile = async (anotherUserId: string) => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${anotherUserId}`,
+          {
+            cache: 'no-cache',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+        const anotherUserProfileData = await response.json()
+        setAnotherUserProfile(anotherUserProfileData)
+        openProfileModal()
+      } catch (error) {
+        throw new error()
+      }
+    }
+
     return (
       <CourseDetail
         courseData={courseData}
         session={session}
-        userId={userId}
         completePercentage={completePercentage}
         watchedStatus={watchedStatus}
         checkedStatus={checkedStatus}
@@ -194,6 +221,10 @@ export function CourseDetailWrapper({
         questionId={questionId}
         handleViewingStatus={handleViewingStatus}
         handleFavoriteVideoStatus={handleFavoriteVideoStatus}
+        getAnotherUserProfile={getAnotherUserProfile}
+        anotherUserProfile={anotherUserProfile}
+        isProfileOpen={isProfileOpen}
+        closeProfileModal={closeProfileModal}
       />
     )
   } catch (e) {
