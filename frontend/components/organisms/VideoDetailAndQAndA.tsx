@@ -15,7 +15,6 @@ import { UserProfileType } from '../../types'
 
 export function VideoDetailAndQAndA({
   selectedVideo,
-  userId,
   questionPage,
   questions,
   createQuestionErrors,
@@ -31,7 +30,6 @@ export function VideoDetailAndQAndA({
   closeProfileModal,
 }: {
   selectedVideo: SelectedVideo | null
-  userId: string | undefined
   questionPage: QuestionPageType
   questions?: QuestionType[]
   createQuestionErrors: CreateQuestionErrorType
@@ -77,7 +75,7 @@ export function VideoDetailAndQAndA({
         )}
         {questionPage === QUESTION_PAGES.QuestionForm && (
           <QuestionForm
-            userId={userId}
+            session={session}
             createQuestionErrors={createQuestionErrors}
             createQuestion={createQuestion}
             changeQuestionPage={changeQuestionPage}
@@ -85,7 +83,6 @@ export function VideoDetailAndQAndA({
         )}
         {questionPage === QUESTION_PAGES.QuestionDetail && (
           <QuestionDetail
-            userId={userId}
             courseId={selectedVideo?.id}
             videoId={selectedVideo?.sections.videos.id}
             answers={answers}

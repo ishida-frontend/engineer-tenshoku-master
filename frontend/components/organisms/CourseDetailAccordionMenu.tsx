@@ -21,15 +21,16 @@ import { WatchedCheckCircle } from '../../components/atoms/WatchedCheckCircle'
 import { CourseWithSectionsType } from '../../types/CourseType'
 import { HandleChangeVideo } from '../pages/CourseDetail'
 import Link from 'next/link'
+import { Session } from 'next-auth'
 
 export function CourseDetailAccordionMenu({
-  userId,
+  session,
   completePercentage,
   checkedStatus,
   courseData,
   handleChangeVideo,
 }: {
-  userId: string | undefined
+  session: Session | null
   completePercentage: number
   courseData: CourseWithSectionsType
   checkedStatus: { [videoId: string]: boolean }
@@ -37,7 +38,7 @@ export function CourseDetailAccordionMenu({
 }) {
   return (
     <Box w={'427px'} float={'right'} bg={'white'}>
-      {userId && (
+      {session.user.id && (
         <Center
           minH="60px"
           bg="gray.100"
@@ -91,7 +92,7 @@ export function CourseDetailAccordionMenu({
                             >
                               <CardHeader>
                                 <HStack>
-                                  {userId && (
+                                  {session.user.id && (
                                     <WatchedCheckCircle
                                       checkedStatus={
                                         checkedStatus?.[video.id] || false

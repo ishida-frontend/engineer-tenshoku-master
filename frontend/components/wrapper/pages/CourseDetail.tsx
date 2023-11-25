@@ -210,7 +210,6 @@ export function CourseDetailWrapper({
       <CourseDetail
         courseData={courseData}
         session={session}
-        userId={userId}
         completePercentage={completePercentage}
         watchedStatus={watchedStatus}
         checkedStatus={checkedStatus}

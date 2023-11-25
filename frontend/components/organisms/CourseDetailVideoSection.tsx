@@ -22,7 +22,6 @@ import { Session } from 'next-auth'
 import { UserProfileType } from '../../types'
 
 export function CourseDetailVideoSection({
-  userId,
   selectedVideo,
   questionPage,
   questions,
@@ -44,7 +43,6 @@ export function CourseDetailVideoSection({
   isProfileOpen,
   closeProfileModal,
 }: {
-  userId: string | undefined
   selectedVideo: SelectedVideo | null
   questionPage: QuestionPageType
   questions: QuestionType[] | undefined
@@ -90,7 +88,7 @@ export function CourseDetailVideoSection({
               <Text pl={'40px'}>{selectedVideo?.sections.videos.order}.</Text>
               <Text pl={'3px'}>{selectedVideo?.sections.videos.name}</Text>
               <Spacer />
-              {userId && selectedVideo && (
+              {session.user.id && selectedVideo && (
                 <>
                   <WatchedButton
                     watchedStatus={
@@ -115,7 +113,6 @@ export function CourseDetailVideoSection({
           <CardBody bg={'white'} pl={'0px'} pr={'0px'}>
             <VideoDetailAndQAndA
               selectedVideo={selectedVideo}
-              userId={userId}
               questionPage={questionPage}
               questions={questions}
               createQuestionErrors={createQuestionErrors}

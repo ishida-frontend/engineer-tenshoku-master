@@ -44,7 +44,6 @@ type QuestionValidationError = {
 export function CourseDetail({
   courseData,
   session,
-  userId,
   completePercentage,
   watchedStatus,
   checkedStatus,
@@ -63,7 +62,6 @@ export function CourseDetail({
 }: {
   courseData: CourseWithSectionsType
   session: Session | null
-  userId: string
   completePercentage: number
   watchedStatus: Record<string, boolean>
   checkedStatus: Record<string, boolean>
@@ -204,7 +202,7 @@ export function CourseDetail({
             title,
             content,
             video_id: videoId,
-            user_id: userId,
+            user_id: session.user.id,
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -268,14 +266,13 @@ export function CourseDetail({
           bg={'gray.100'}
         >
           <CourseDetailAccordionMenu
-            userId={userId}
+            session={session}
             completePercentage={completePercentage}
             checkedStatus={checkedStatus}
             courseData={courseData}
             handleChangeVideo={handleChangeVideo}
           />
           <CourseDetailVideoSection
-            userId={userId}
             selectedVideo={selectedVideo}
             questionPage={questionPage}
             changeQuestionPage={changeQuestionPage}
