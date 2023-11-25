@@ -58,6 +58,7 @@ export default function Login() {
         }
         const authenticationDetails =
           new AmazonCognitoIdentity.AuthenticationDetails(authenticationData)
+
         const poolData = {
           UserPoolId: `${process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID}`,
           ClientId: `${process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID}`,
@@ -65,6 +66,7 @@ export default function Login() {
         console.log('poolData:', poolData)
         const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData)
         console.log('userPool:', userPool)
+
         const userData = {
           Username: formState.email,
           Pool: userPool,
@@ -72,6 +74,7 @@ export default function Login() {
         console.log('userData:', userData)
         const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData)
         console.log('cognitoUser:', cognitoUser)
+
         // セッション取得開始
         cognitoUser.authenticateUser(authenticationDetails, {
           onSuccess: function (result) {
