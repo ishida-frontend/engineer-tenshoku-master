@@ -49,11 +49,11 @@ export default function Login() {
       try {
         console.log('trueの処理:')
         console.log(
-          'process.env.COGNITO_USER_POOL_ID:',
-          process.env.COGNITO_USER_POOL_ID,
+          'process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID:',
+          process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID,
         )
         const poolData = {
-          UserPoolId: `${process.env.COGNITO_USER_POOL_ID}`,
+          UserPoolId: `${process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID}`,
           ClientId: `${process.env.COGNITO_CLIENT_ID}`,
         }
         console.log('poolData:', poolData)
