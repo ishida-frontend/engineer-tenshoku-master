@@ -19,6 +19,7 @@
     "@emotion/styled": "^11.11.0",
     "@types/react": "^18.2.18",
     "amazon-cognito-identity-js": "^6.3.7",
+    "aws-sdk": "^2.1502.0",
     "axios": "^1.4.0",
     "date-fns": "^2.30.0",
     "framer-motion": "^10.15.0",

@@ -16,10 +16,12 @@ import { PATHS } from '../../../constants/paths'
 import { signOut } from 'next-auth/react'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
+import * as AWS from 'aws-sdk/global'
 
 export default function Login() {
   const { showSuccessToast } = useCustomToast()
   const [formState, setFormState] = useState({
+    email: '',
     currentPassword: '',
     newPassword: '',
   })
@@ -45,26 +47,64 @@ export default function Login() {
       isSafePassword.test(formState.newPassword),
     )
     console.log('formState:', formState)
+
     if (isSafePassword.test(formState.newPassword)) {
       try {
         console.log('trueの処理:')
-        console.log(
-          'process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID:',
-          process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID,
-        )
+        // 認証開始
+        const authenticationData = {
+          Username: formState.email,
+          Password: formState.currentPassword,
+        }
+        const authenticationDetails =
+          new AmazonCognitoIdentity.AuthenticationDetails(authenticationData)
         const poolData = {
           UserPoolId: `${process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID}`,
-          ClientId: `${process.env.COGNITO_CLIENT_ID}`,
+          ClientId: `${process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID}`,
         }
         console.log('poolData:', poolData)
         const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData)
+        console.log('userPool:', userPool)
         const userData = {
-          Username: formState.currentPassword,
+          Username: formState.email,
           Pool: userPool,
         }
         console.log('userData:', userData)
         const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData)
         console.log('cognitoUser:', cognitoUser)
+        // セッション取得開始
+        cognitoUser.authenticateUser(authenticationDetails, {
+          onSuccess: function (result) {
+            console.log('onSuccess:')
+            const accessToken = result.getAccessToken().getJwtToken()
+            console.log('accessToken:', accessToken)
+
+            AWS.config.region = `${process.env.NEXT_PUBLIC_REGION}`
+            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+              IdentityPoolId: `${process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID}`,
+              Logins: {
+                [`cognito-idp.${process.env.NEXT_PUBLIC_REGION}.amazonaws.com/${process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID}`]:
+                  result.getIdToken().getJwtToken(),
+              },
+            })
+
+            if (AWS.config.credentials instanceof AWS.Credentials) {
+              AWS.config.credentials.refresh((error) => {
+                if (error) {
+                  console.error(error)
+                } else {
+                  console.log('Successfully logged!')
+                }
+              })
+            }
+          },
+
+          onFailure: function (err) {
+            console.log('onFailure:')
+            alert(err.message || JSON.stringify(err))
+          },
+        })
+        // パスワード更新
         cognitoUser.changePassword(
           formState.currentPassword,
           formState.newPassword,
@@ -98,10 +138,32 @@ export default function Login() {
           textAlign={'center'}
           fontWeight={'bold'}
         >
-          メールアドレスの再設定
+          パスワードの再設定
         </Heading>
 
         <VStack gap={'36px'}>
+          <FormControl id="email" isRequired>
+            <Container ml={'0px'} pb={'10px'} pl={'0px'}>
+              <Flex>
+                <Text>メールアドレス</Text>
+                <Text color="teal">(必須)</Text>
+              </Flex>
+            </Container>
+            <Input
+              id="email"
+              type="text"
+              value={formState.email}
+              onChange={(e) =>
+                setFormState({
+                  ...formState,
+                  email: e.target.value,
+                })
+              }
+              aria-required={true}
+              border="1px"
+              borderColor="gray.400"
+            />
+          </FormControl>
           <FormControl id="currentPassword" isRequired>
             <Container ml={'0px'} pb={'10px'} pl={'0px'}>
               <Flex>
