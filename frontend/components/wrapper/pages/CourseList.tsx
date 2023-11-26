@@ -1,9 +1,9 @@
 'use client'
 import React, { useState } from 'react'
 
-import { CourseList } from '../organisms/CourseList'
-import { CourseListType } from '../../types/CourseType'
-import Error from '../../app/error'
+import { CourseList } from '../../pages/CourseList'
+import { CourseListType } from '../../../types/CourseType'
+import Error from '../../../app/error'
 
 export function CourseListWrapper({
   initialCourses,

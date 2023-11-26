@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { CourseListType } from '../../types/CourseType'
-import { CourseListWrapper } from '../../components/pages/CourseListWrapper'
+import { CourseListWrapper } from '../../components/wrapper/pages/CourseList'
 import Error from '../error'
 export default async function Course() {
   try {
