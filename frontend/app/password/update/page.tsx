@@ -40,56 +40,33 @@ export default function Login() {
   ) => {
     e.preventDefault()
     setError('')
-    console.log('aaaaa:')
-
-    console.log(
-      'isSafePassword.test(formState.newPassword):',
-      isSafePassword.test(formState.newPassword),
-    )
-    console.log('formState:', formState)
 
     if (isSafePassword.test(formState.newPassword)) {
       try {
-        console.log('trueの処理:')
         const authenticationPasswordResetData = {
           Username: formState.email,
           Password: formState.currentPassword,
         }
-        // const authenticationDetails =
-        //   new AmazonCognitoIdentity.AuthenticationDetails(authenticationData)
-        console.log(
-          'authenticationPasswordResetData',
-          authenticationPasswordResetData,
-        )
 
         const poolData = {
           UserPoolId: `${process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID}`,
           ClientId: `${process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID}`,
         }
-        console.log('poolData:', poolData)
         const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData)
-        console.log('userPool:', userPool)
 
         const userData = {
           Username: formState.email,
           Pool: userPool,
         }
-        console.log('userData:', userData)
         const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData)
-        console.log('cognitoUser:', cognitoUser)
-        // 認証開始
         const authenticationDetails =
           new AmazonCognitoIdentity.AuthenticationDetails(
             authenticationPasswordResetData,
           )
-        console.log('authenticationDetails', authenticationDetails)
 
-        // セッション取得開始
         cognitoUser.authenticateUser(authenticationDetails, {
           onSuccess: function (result) {
-            console.log('onSuccess:', result)
-            const accessToken = result.getAccessToken().getJwtToken()
-            console.log('accessToken:', accessToken)
+            result.getAccessToken().getJwtToken()
 
             AWS.config.region = `${process.env.NEXT_PUBLIC_REGION}`
             AWS.config.credentials = new AWS.CognitoIdentityCredentials({
@@ -103,14 +80,11 @@ export default function Login() {
             if (AWS.config.credentials instanceof AWS.Credentials) {
               AWS.config.credentials.refresh((error) => {
                 if (error) {
-                  console.error(error)
-                } else {
-                  console.log('Successfully logged!')
+                  error
                 }
               })
             }
 
-            // パスワード更新
             cognitoUser.changePassword(
               formState.currentPassword,
               formState.newPassword,
@@ -119,7 +93,7 @@ export default function Login() {
                   alert(err.message || JSON.stringify(err))
                   return
                 }
-                console.log('call result: ' + result)
+                result
               },
             )
             showSuccessToast(
@@ -128,23 +102,20 @@ export default function Login() {
           },
 
           onFailure: async function (err) {
-            const res = await JSON.stringify(err)
-            console.log('res', res)
-
-            console.log('onFailure:', err)
+            await JSON.stringify(err)
             alert(err.message || JSON.stringify(err))
           },
           newPasswordRequired: function (userAttributes) {
-            console.log('newPasswordRequired:', userAttributes)
+            userAttributes
             cognitoUser.completeNewPasswordChallenge(
               formState.newPassword,
               {},
               {
                 onSuccess: function (result) {
-                  console.log('onSuccess:', result)
+                  result
                 },
                 onFailure: function (err) {
-                  console.log('onFailure:', err)
+                  err
                 },
               },
             )
@@ -154,12 +125,10 @@ export default function Login() {
         setError('パスワードの更新に失敗しました。')
       }
     } else {
-      console.log('falseの処理:')
       setError(`以下の要件を満たしてください。
         ・大文字と小文字のアルファベットが必要です。
         ・0~9の数字が必要です。
         ・文字数は${minPasswordLength}~${maxPasswordLength}文字でないといけません。`)
-      // throw new Error('パスワードの更新に失敗しました。')
     }
   }
   return (
