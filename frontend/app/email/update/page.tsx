@@ -41,7 +41,7 @@ export default function Login() {
 
     if (isSafeEmail.test(formState.newEmail)) {
       try {
-        const authenticationPasswordResetData = {
+        const authenticationEmailResetData = {
           Username: formState.currentEmail,
           Password: formState.password,
         }
@@ -59,7 +59,7 @@ export default function Login() {
         const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData)
         const authenticationDetails =
           new AmazonCognitoIdentity.AuthenticationDetails(
-            authenticationPasswordResetData,
+            authenticationEmailResetData,
           )
 
         cognitoUser.authenticateUser(authenticationDetails, {
