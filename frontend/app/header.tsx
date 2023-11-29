@@ -10,6 +10,8 @@ type HeaderProps = {
   signOut: () => Promise<void>
 }
 export const Header = ({ user, signOut }: HeaderProps) => {
+  console.log('user:', user)
+  console.log('signOut:', signOut)
   return user ? (
     <HeaderLoggedIn user={user} signOut={signOut} />
   ) : (

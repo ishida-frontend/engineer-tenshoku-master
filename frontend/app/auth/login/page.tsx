@@ -18,6 +18,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 import { AUTH } from '../../../constants'
+import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
+import * as AWS from 'aws-sdk/global'
 
 export default function Login() {
   const { status: authStatus } = useSession()
@@ -32,13 +34,55 @@ export default function Login() {
   ) => {
     e.preventDefault()
     try {
-      await signIn('credentials', {
-        email: formState.email,
-        password: formState.password,
-        redirect: false,
-        callbackUrl: '/',
+      const authenticationData = {
+        Username: formState.email,
+        Password: formState.password,
+      }
+
+      const poolData = {
+        UserPoolId: `${process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID}`,
+        ClientId: `${process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID}`,
+      }
+      const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData)
+
+      const userData = {
+        Username: formState.email,
+        Pool: userPool,
+      }
+      const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData)
+      const authenticationDetails =
+        new AmazonCognitoIdentity.AuthenticationDetails(authenticationData)
+      console.log('authenticationData:', authenticationData)
+      console.log('authenticationDetails:', authenticationDetails)
+
+      cognitoUser.authenticateUser(authenticationDetails, {
+        onSuccess: function (result) {
+          result.getAccessToken().getJwtToken()
+
+          AWS.config.region = `${process.env.NEXT_PUBLIC_REGION}`
+          AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: `${process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID}`,
+            Logins: {
+              [`cognito-idp.${process.env.NEXT_PUBLIC_REGION}.amazonaws.com/${process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID}`]:
+                result.getIdToken().getJwtToken(),
+            },
+          })
+
+          if (AWS.config.credentials instanceof AWS.Credentials) {
+            AWS.config.credentials.refresh((error) => {
+              if (error) {
+                error
+              }
+            })
+          }
+          router.push('/')
+        },
+
+        onFailure: async function (err) {
+          await JSON.stringify(err)
+          alert(err.message || JSON.stringify(err))
+        },
       })
-      router.push('/')
     } catch (err) {
       console.log('err', err)
       throw new Error('エラーが発生しました')
