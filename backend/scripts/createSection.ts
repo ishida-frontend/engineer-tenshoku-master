@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client'
+import prisma from '../utils/prismaClient'
 import crypto from 'crypto'
-
-const prisma = new PrismaClient()
 
 export async function createSection(sectionData: {
   course_id: string
