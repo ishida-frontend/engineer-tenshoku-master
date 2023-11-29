@@ -14,12 +14,10 @@ import {
 import React, { useState } from 'react'
 import { PATHS } from '../../../constants/paths'
 import { signOut } from 'next-auth/react'
-import { useCustomToast } from '../../../hooks/useCustomToast'
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import * as AWS from 'aws-sdk/global'
 
 export default function Login() {
-  const { showSuccessToast } = useCustomToast()
   const [formState, setFormState] = useState({
     currentEmail: '',
     password: '',
@@ -115,9 +113,6 @@ export default function Login() {
                 cognitoUser.verifyAttribute('email', verificationCode, this)
               },
             })
-            showSuccessToast(
-              '新しいメールアドレスへ認証コードを送りました。認証してログインしてください。',
-            )
           },
 
           onFailure: async function (err) {
