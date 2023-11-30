@@ -39,7 +39,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
   }
 
   return (
-    <Center bg={'gray.200'}>
+    <Center>
       <VStack mx="auto" padding={'60px 96px'}>
         <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
           コース一覧

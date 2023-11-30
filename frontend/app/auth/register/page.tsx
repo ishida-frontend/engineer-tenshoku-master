@@ -74,7 +74,7 @@ export default function Register() {
   }, [status])
 
   return (
-    <Center padding="60px 96px" bg={'gray.200'}>
+    <Center padding="60px 96px">
       <Container padding="60px 96px" bg={'white'}>
         <Heading
           fontSize={'2xl'}

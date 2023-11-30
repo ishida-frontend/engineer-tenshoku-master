@@ -37,7 +37,7 @@ export function FavoriteVideoList({ favoriteVideos }: FavoriteVideoListProps) {
     .filter((course) => course.sections.length > 0)
 
   return (
-    <Center bg={'gray.200'}>
+    <Center>
       <VStack mx="auto" padding={'60px 96px'}>
         <Heading my={5} color={PRIMARY_FONT_COLOR} fontSize="36px">
           お気に入り動画一覧
