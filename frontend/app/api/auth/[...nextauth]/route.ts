@@ -36,7 +36,7 @@ export const authOptions: AuthOptions = {
             const user = await getUser(getJwtDecoded(res.IdToken).sub)
 
             if (typeof res !== 'undefined') {
-              loggerInfo(`typeof res !== 'undefined'`, {
+              loggerInfo(`user: ${user}'`, {
                 caller: 'authorize',
                 status: 400,
               })
@@ -49,11 +49,6 @@ export const authOptions: AuthOptions = {
               return null
             }
           } else {
-            loggerInfo(`typeof credentials === 'undefined':`, {
-              caller: 'authorize',
-              status: 400,
-            })
-            return null
           }
         } catch (e) {
           loggerInfo(`error: ${e}`, {
