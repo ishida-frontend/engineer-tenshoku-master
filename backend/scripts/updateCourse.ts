@@ -1,17 +1,12 @@
-import prisma, { Prisma } from '../utils/prismaClient'
+import prisma from '../utils/prismaClient'
 
-type CourseUpdateInput = Prisma.CourseUpdateInput & {
-  id: string
-  tagIds: string[]
-}
-
-export async function updateCourse({
-  id,
-  name,
-  description,
-  published,
-  tagIds,
-}: CourseUpdateInput) {
+export async function updateCourse(
+  id: string,
+  name: string,
+  description: string,
+  published: boolean,
+  tagIds: string[],
+) {
   try {
     const targetCourse = await prisma.course.findUnique({
       where: {
