@@ -121,13 +121,13 @@ exports.updateCourse = async function (
   try {
     const { id, name, description, published, tagIds } = req.body
 
-    const response = await updateCourse(
+    const response = await updateCourse({
       id,
       name,
       description,
       published,
       tagIds,
-    )
+    })
 
     res.status(200).json({ message: '変更が保存されました。' })
   } catch (error) {
