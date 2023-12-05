@@ -38,7 +38,7 @@ export function CourseDetailAccordionMenu({
 }) {
   return (
     <Box w={'427px'} float={'right'} bg={'white'}>
-      {session.user.id && (
+      {session?.user?.id && (
         <Center
           minH="60px"
           bg="gray.100"
@@ -92,7 +92,7 @@ export function CourseDetailAccordionMenu({
                             >
                               <CardHeader>
                                 <HStack>
-                                  {session.user.id && (
+                                  {session?.user?.id && (
                                     <WatchedCheckCircle
                                       checkedStatus={
                                         checkedStatus?.[video.id] || false

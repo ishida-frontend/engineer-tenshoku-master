@@ -88,7 +88,7 @@ export function CourseDetailVideoSection({
               <Text pl={'40px'}>{selectedVideo?.sections.videos.order}.</Text>
               <Text pl={'3px'}>{selectedVideo?.sections.videos.name}</Text>
               <Spacer />
-              {session.user.id && selectedVideo && (
+              {session?.user?.id && selectedVideo && (
                 <>
                   <WatchedButton
                     watchedStatus={
