@@ -23,7 +23,9 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
   return (
     <Flex direction="column" minH="100vh">
       <Header user={user} signOut={triggerSignOut} />
-      <Box flex="1">{children}</Box>
+      <Box flex="1" bg="gray.200">
+        {children}
+      </Box>
       <Footer />
     </Flex>
   )

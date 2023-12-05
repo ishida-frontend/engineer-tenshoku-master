@@ -13,7 +13,7 @@ import NextLink from 'next/link'
 
 export default function EmailChangeConfirmPage() {
   return (
-    <Center padding="60px 96px" bg={'gray.200'}>
+    <Center padding="60px 96px">
       <Container padding="60px 96px" bg={'white'}>
         <Heading fontSize="2xl" mb="60px" textAlign="center" fontWeight="bold">
           認証コードを入力
