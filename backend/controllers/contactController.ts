@@ -1,9 +1,7 @@
-import express, { Request, Response, NextFunction } from 'express'
-import { PrismaClient } from '@prisma/client'
+import express, { Request, Response } from 'express'
 import { readAllContacts } from '../scripts/readContact'
 import { createContact } from '../scripts/createContact'
 
-const prisma = new PrismaClient()
 const router = express.Router()
 
 exports.checkCreateContact = async function (req: Request, res: Response) {

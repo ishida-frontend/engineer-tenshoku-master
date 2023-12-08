@@ -1,6 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import prisma, { Prisma } from '../utils/prismaClient'
 
 type CourseUpdateInput = Prisma.CourseUpdateInput & {
   id: string

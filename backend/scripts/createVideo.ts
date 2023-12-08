@@ -1,9 +1,7 @@
-import { PrismaClient } from '@prisma/client'
 import { convertVideoUrl } from '../utils/convertVideoUrl'
 import { VideoType } from '../types'
 import crypto from 'crypto'
-
-const prisma = new PrismaClient()
+import prisma from '../utils/prismaClient'
 
 export async function createVideo(videoData: VideoType) {
   try {
