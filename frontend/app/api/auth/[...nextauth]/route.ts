@@ -1,11 +1,12 @@
-import NextAuth from 'next-auth'
-import type { AuthOptions } from 'next-auth'
+import NextAuth, { AuthOptions } from 'next-auth'
+import CognitoProvider from 'next-auth/providers/cognito'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { login } from '../../auth'
 import { getJwtDecoded } from '../../../../utils/jwtDecode'
 import { getUser } from '../../user'
 import { USER_ROLE } from '../../../../constants/user'
 import { loggerInfo } from '../../../../utils/logger'
+import { AUTH } from '../../../../constants'
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -21,7 +22,7 @@ export const authOptions: AuthOptions = {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         try {
           if (typeof credentials !== 'undefined') {
             const res: {
@@ -63,22 +64,62 @@ export const authOptions: AuthOptions = {
         }
       },
     }),
+    CognitoProvider({
+      clientId: process.env.COGNITO_CLIENT_ID,
+      clientSecret: process.env.COGNITO_CLIENT_SECRET,
+      issuer: process.env.COGNITO_ISSUER,
+      checks: 'nonce',
+    }),
   ],
   callbacks: {
-    session: async ({ session, token, ...other }) => {
+    session: async ({ session, token }) => {
       const user = await getUser(token.sub || '')
       loggerInfo(`user: ${user}`, {
         caller: 'callbacks/session',
         status: 200,
       })
-      return {
-        ...session,
-        user: {
-          id: token.sub,
-          name: user.name,
-          isAdmin: user.role === USER_ROLE.ADMIN,
-        },
+
+      if (user) {
+        return {
+          ...session,
+          user: {
+            id: token.sub,
+            name: user.name,
+            isAdmin: user.role === USER_ROLE.ADMIN,
+          },
+        }
+      } else {
+        return session
       }
+    },
+    signIn: async ({ account, profile }) => {
+      if (account.provider === AUTH.COGNITO_PROVIDER) {
+        try {
+          const { sub: id, name, image } = profile
+          const existingUser = await getUser(id)
+
+          if (!existingUser) {
+            await fetch(
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google-signup`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  id,
+                  name,
+                  image,
+                }),
+              },
+            )
+          }
+          return true
+        } catch (err) {
+          throw new Error('Error: siginIn error')
+        }
+      }
+      return true
     },
   },
 }

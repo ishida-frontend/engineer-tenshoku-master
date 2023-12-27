@@ -11,12 +11,16 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { BsGoogle } from 'react-icons/bs'
+import { LuMail } from 'react-icons/lu'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
+import { AUTH } from '../../../constants'
 
 export default function Login() {
+  const { status: authStatus } = useSession()
   const router = useRouter()
   const [formState, setFormState] = useState({
     email: '',
@@ -41,8 +45,15 @@ export default function Login() {
     }
   }
 
+  useEffect(() => {
+    // Google認証でログイン後のリダイレクト
+    if (authStatus === AUTH.GOOGLE_AUTHENTICATED) {
+      router.push('/')
+    }
+  }, [status])
+
   return (
-    <Center padding="60px 96px" bg={'gray.200'}>
+    <Center padding="60px 96px">
       <Container padding="60px 96px" bg={'white'}>
         <Heading
           fontSize={'2xl'}
@@ -106,20 +117,30 @@ export default function Login() {
         <Button
           w={'100%'}
           mt={'42px'}
-          mb={'24px'}
+          mb={'12px'}
           colorScheme="teal"
           onClick={handleSubmit}
         >
-          ログイン
+          <Box mr={'16px'}>
+            <LuMail />
+          </Box>
+          メールアドレスでログイン
         </Button>
 
         <Box border={'1px solid #C400'} />
 
         {/* // TODO パスワードを忘れた場合       */}
         {/* <Text>パスワードを忘れた場合はこちら</Text> */}
-        <Box color={'teal'}>
+        <Box color={'teal'} mb={'36px'}>
           <Link href={'/auth/register'}>新規登録はこちら</Link>
         </Box>
+
+        <Button w={'100%'} colorScheme="blue" onClick={() => signIn('cognito')}>
+          <Box mr={'16px'}>
+            <BsGoogle />
+          </Box>
+          Googleアカウントでログイン
+        </Button>
       </Container>
     </Center>
   )

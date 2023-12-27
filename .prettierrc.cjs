@@ -11,5 +11,12 @@ module.exports = {
         parser: 'typescript',
       },
     },
+    {
+      files: ['**/*.json'],
+      options: {
+        parser: 'json',
+        trailingComma: 'none',
+      },
+    },
   ],
 }

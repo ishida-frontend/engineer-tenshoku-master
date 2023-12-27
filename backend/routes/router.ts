@@ -12,6 +12,7 @@ import { QuestionController } from '../controllers/questionController'
 import { AnswerController } from '../controllers/answerController'
 import { TagValidator } from '../validation/tagValidator'
 import { TagController } from '../controllers/tagController'
+import { UserValidator } from '../validation/userValidator'
 
 const {
   createCourse,
@@ -37,6 +38,7 @@ const {
 const router = express.Router()
 
 const userController = new UserController()
+const userValidator = new UserValidator()
 const videoValidator = new VideoValidator()
 const tagController = new TagController()
 const tagValidator = new TagValidator()
@@ -96,9 +98,8 @@ router.put('/tag', tagValidator.updateTag, (req, res) => {
 
 const userRouter = express.Router()
 router.use('/user', userRouter)
-userRouter.get('/:id', (req, res) => {
-  userController.get(req, res)
-})
+userRouter.get('/:id', userController.get)
+userRouter.put('/update', userValidator.updateUser, userController.update)
 
 const courseRouter = express.Router()
 router.use('/course', courseRouter)

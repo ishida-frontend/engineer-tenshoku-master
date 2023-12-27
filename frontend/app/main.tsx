@@ -3,7 +3,7 @@ import { Header } from './header'
 import { Footer } from '../components/organisms/Footer'
 import { PATHS } from '../constants/paths'
 import { useSession, signOut } from 'next-auth/react'
-import { loggerInfo } from '../utils/logger'
+import { Box, Flex } from '@chakra-ui/react'
 
 export const Main = ({ children }: { children: React.ReactNode }) => {
   const { data: session, status } = useSession()
@@ -21,10 +21,12 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
   const triggerSignOut = () => signOut({ callbackUrl: PATHS.LOGIN.path })
 
   return (
-    <>
+    <Flex direction="column" minH="100vh">
       <Header user={user} signOut={triggerSignOut} />
-      {children}
+      <Box flex="1" bg="gray.200">
+        {children}
+      </Box>
       <Footer />
-    </>
+    </Flex>
   )
 }

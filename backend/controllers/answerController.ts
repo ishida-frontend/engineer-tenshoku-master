@@ -12,7 +12,7 @@ export class AnswerController {
       })
       return res.status(200).json(data)
     } catch (error) {
-      throw error
+      throw new Error(`AnswerController: create answer error: ${error}`)
     }
   }
   async get(req: express.Request, res: express.Response) {
@@ -20,7 +20,7 @@ export class AnswerController {
       const data = await AnswerApplicationService.get(req.params.question_id)
       return res.status(200).json(data)
     } catch (error) {
-      throw error
+      throw new Error(`AnswerController: get answer error: ${error}`)
     }
   }
 }

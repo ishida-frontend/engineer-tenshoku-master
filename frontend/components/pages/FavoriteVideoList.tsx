@@ -16,8 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { BsChevronRight } from 'react-icons/bs'
 
-import { FavoriteVideoType } from 'types'
-import { UserType } from 'types'
+import { FavoriteVideoType } from '../../types'
 import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 
@@ -38,7 +37,7 @@ export function FavoriteVideoList({ favoriteVideos }: FavoriteVideoListProps) {
     .filter((course) => course.sections.length > 0)
 
   return (
-    <Center bg={'gray.200'}>
+    <Center>
       <VStack mx="auto" padding={'60px 96px'}>
         <Heading my={5} color={PRIMARY_FONT_COLOR} fontSize="36px">
           お気に入り動画一覧

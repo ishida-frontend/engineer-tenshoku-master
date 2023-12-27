@@ -1,5 +1,5 @@
 'use client'
-import { TagEditor as Component } from 'components/admin/organisms/TagEditor'
+import { TagEditor as Component } from '../../../components/admin/organisms/TagEditor'
 import { FormEvent, useCallback, useEffect, useState } from 'react'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 import { TagType } from '../../../types'
@@ -35,8 +35,7 @@ export const TagEditor = ({ tag }: TagEditorProps) => {
       }
     }, 10000)
     return () => clearTimeout(timeout)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tagData])
+  }, [tagData, showErrorToast, clearTimeout])
 
   const hasChanges = () => {
     return JSON.stringify(selectedTag) !== JSON.stringify(tag)

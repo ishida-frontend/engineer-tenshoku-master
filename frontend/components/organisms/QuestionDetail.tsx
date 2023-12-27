@@ -14,21 +14,20 @@ import {
   Container,
 } from '@chakra-ui/react'
 import { AiOutlineUser } from 'react-icons/ai'
-import { QuestionType } from 'types/QuestionType'
+import { QuestionType } from '../../types/QuestionType'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
-import { QUESTION_PAGES } from 'constants/index'
-import { QuestionPageType } from 'types/QuestionType'
-import { AnswerType } from 'types/AnswerType'
+import { QUESTION_PAGES } from '../../constants/index'
+import { QuestionPageType } from '../../types/QuestionType'
+import { AnswerType } from '../../types/AnswerType'
 import Link from 'next/link'
 import ReactMde from 'react-mde'
 import ReactMarkdown from 'react-markdown'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import '../../styles/markdown.css'
 import { Session } from 'next-auth'
-import { converter } from 'utils/markdown'
+import { converter } from '../../utils/markdown'
 
 export function QuestionDetail({
-  userId,
   courseId,
   videoId,
   answers,
@@ -37,7 +36,6 @@ export function QuestionDetail({
   selectedQuestion,
   createAnswer,
 }: {
-  userId: string | undefined
   courseId?: string
   videoId?: string
   answers?: AnswerType[]
@@ -80,7 +78,7 @@ export function QuestionDetail({
           </HStack>
         </Card>
       )}
-      {!userId && (
+      {!session.user.id && (
         <VStack>
           <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
             この質問の回答を見るにはログインをしてください。
@@ -93,7 +91,7 @@ export function QuestionDetail({
           </Button>
         </VStack>
       )}
-      {userId && !answers && (
+      {session.user.id && !answers && (
         <VStack>
           <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
             まだ回答はありません。
@@ -106,7 +104,7 @@ export function QuestionDetail({
           </Button>
         </VStack>
       )}
-      {userId && answers && (
+      {session.user.id && answers && (
         <Stack spacing="4">
           {answers.map((answer: AnswerType) => (
             <Card
@@ -151,7 +149,7 @@ export function QuestionDetail({
               </HStack>
             </Card>
           ))}
-          <Link href={`/course/${courseId}/?videoId=${videoId}`}>
+          <Link href={`/course/${courseId}/?videoId=${videoId}`} scroll={false}>
             <Button
               mt={'20px'}
               onClick={() => changeQuestionPage(QUESTION_PAGES.QuestionList)}
@@ -159,8 +157,8 @@ export function QuestionDetail({
               全ての質問へ戻る
             </Button>
           </Link>
-          {(session?.user.isAdmin ||
-            selectedQuestion?.user_id === session?.user.id) && (
+          {(session.user.isAdmin ||
+            selectedQuestion?.user_id === session.user.id) && (
             <FormControl mt={'40px'}>
               <FormControl isInvalid={!!answerComment} mb={'20px'} bg={'white'}>
                 <Container ml={'0px'} pb={'10px'} pl={'0px'}>

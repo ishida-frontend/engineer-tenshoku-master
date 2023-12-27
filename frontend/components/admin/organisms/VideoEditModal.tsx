@@ -102,8 +102,7 @@ export function VideoEditModal({
     if (isOpen && videoId !== null) {
       fetchVideoData()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, videoId])
+  }, [isOpen, videoId, fetchVideoData])
 
   const converter = new Showdown.Converter({
     tables: true,

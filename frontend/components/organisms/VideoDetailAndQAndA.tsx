@@ -3,18 +3,18 @@ import { Tab, Tabs, TabList, TabPanel, TabPanels, Box } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown'
 import { QuestionList } from './QuestionList'
 import { QuestionDetail } from './QuestionDetail'
-import { QuestionType } from 'types/QuestionType'
+import { QuestionType } from '../../types/QuestionType'
 import { SelectedVideo } from '../pages/CourseDetail'
 import { QuestionForm } from './QuestionForm'
-import { CreateQuestionErrorType } from 'types/QuestionType'
-import { QUESTION_PAGES } from 'constants/index'
-import { QuestionPageType } from 'types/QuestionType'
-import { AnswerType } from 'types/AnswerType'
+import { CreateQuestionErrorType } from '../../types/QuestionType'
+import { QUESTION_PAGES } from '../../constants/index'
+import { QuestionPageType } from '../../types/QuestionType'
+import { AnswerType } from '../../types/AnswerType'
 import { Session } from 'next-auth'
+import { UserProfileType } from '../../types'
 
 export function VideoDetailAndQAndA({
   selectedVideo,
-  userId,
   questionPage,
   questions,
   createQuestionErrors,
@@ -24,9 +24,12 @@ export function VideoDetailAndQAndA({
   session,
   selectedQuestion,
   createAnswer,
+  getAnotherUserProfile,
+  anotherUserProfile,
+  isProfileOpen,
+  closeProfileModal,
 }: {
   selectedVideo: SelectedVideo | null
-  userId: string | undefined
   questionPage: QuestionPageType
   questions?: QuestionType[]
   createQuestionErrors: CreateQuestionErrorType
@@ -39,6 +42,10 @@ export function VideoDetailAndQAndA({
   session: Session | null
   selectedQuestion?: QuestionType
   createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
+  getAnotherUserProfile?: (value: string) => void
+  anotherUserProfile?: UserProfileType
+  isProfileOpen?: boolean
+  closeProfileModal?: () => void
 }) {
   return (
     <Tabs isFitted colorScheme={'green'}>
@@ -60,11 +67,15 @@ export function VideoDetailAndQAndA({
             changeQuestionPage={changeQuestionPage}
             courseId={selectedVideo?.id}
             videoId={selectedVideo?.sections.videos.id}
+            getAnotherUserProfile={getAnotherUserProfile}
+            anotherUserProfile={anotherUserProfile}
+            isProfileOpen={isProfileOpen}
+            closeProfileModal={closeProfileModal}
           />
         )}
         {questionPage === QUESTION_PAGES.QuestionForm && (
           <QuestionForm
-            userId={userId}
+            session={session}
             createQuestionErrors={createQuestionErrors}
             createQuestion={createQuestion}
             changeQuestionPage={changeQuestionPage}
@@ -72,7 +83,6 @@ export function VideoDetailAndQAndA({
         )}
         {questionPage === QUESTION_PAGES.QuestionDetail && (
           <QuestionDetail
-            userId={userId}
             courseId={selectedVideo?.id}
             videoId={selectedVideo?.sections.videos.id}
             answers={answers}
