@@ -35,10 +35,10 @@ export function Footer() {
   )
   const snsIcons = () => (
     <>
-      <Link href="#">
+      <Link href="https://www.youtube.com/channel/UCggNRTYITJmOjpU2lgYoO0Q">
         <AiFillYoutube size={39} />
       </Link>
-      <Link href="#">
+      <Link href="https://twitter.com/issiyrun">
         <AiOutlineTwitter size={36} />
       </Link>
       <Link href="#">
