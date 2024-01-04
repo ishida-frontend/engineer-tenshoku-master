@@ -83,7 +83,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
             )}
             {courses && <CourseCard courses={courses} />}
           </Box>
-          <VStack>
+          <VStack mt={40} ml={20}>
             <Box>
               <LineBanner />
             </Box>

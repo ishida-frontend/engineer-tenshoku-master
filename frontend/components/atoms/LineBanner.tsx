@@ -1,4 +1,4 @@
-import { Image, Link, Box } from '@chakra-ui/react'
+import { Image, Link } from '@chakra-ui/react'
 
 export const LineBanner = () => {
   return (
@@ -11,8 +11,8 @@ export const LineBanner = () => {
         alt="LINEバナー"
         boxSize="210px"
         float="right"
-        mr={20}
-        ml={36}
+        mr={1}
+        ml={6}
         mt={22}
         mb={4}
         marginRight="auto"
