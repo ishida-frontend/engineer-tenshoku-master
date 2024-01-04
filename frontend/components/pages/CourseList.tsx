@@ -42,27 +42,32 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
 
   return (
     <Center>
-      <VStack padding={'60px 30px'}>
-        <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
-          コース一覧
-        </Heading>
-        <Box marginLeft={'auto'}>
-          <InputGroup>
-            <Input
-              value={text}
-              onChange={(e) => handleInputChange(e)}
-              onKeyDown={(e) => handleKeyDown(e)}
-              variant="outline"
-              placeholder="javaScript"
-              background={'white'}
-            />
-            <InputRightElement onClick={() => handleSubmit()}>
-              <SearchIcon color="gray.500" />
-            </InputRightElement>
-          </InputGroup>
-        </Box>
+      <VStack padding={'60px 20px'}>
         <Flex>
           <Box mb={10} minW={'880px'}>
+            <Heading
+              py={10}
+              color={PRIMARY_FONT_COLOR}
+              fontSize="36px"
+              textAlign="center"
+            >
+              コース一覧
+            </Heading>
+            <Flex justifyContent={'flex-end'} mb={4}>
+              <InputGroup width="300px">
+                <Input
+                  value={text}
+                  onChange={(e) => handleInputChange(e)}
+                  onKeyDown={(e) => handleKeyDown(e)}
+                  variant="outline"
+                  placeholder="javaScript"
+                  background={'white'}
+                />
+                <InputRightElement onClick={() => handleSubmit()}>
+                  <SearchIcon color="gray.500" />
+                </InputRightElement>
+              </InputGroup>
+            </Flex>
             <Flex
               alignItems="center"
               pb={2}
