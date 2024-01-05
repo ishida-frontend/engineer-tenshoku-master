@@ -33,7 +33,7 @@ export function CourseCard({ courses }: CourseCardProp) {
       {courses.map((course: CourseListType) => (
         <Card
           key={course.id}
-          w="288px"
+          w="260px"
           boxShadow="md"
           borderRadius="8px"
           margin={'auto'}
