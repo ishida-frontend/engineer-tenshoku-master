@@ -15,6 +15,8 @@ import { Loader } from '../atoms/Loader'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 import { SearchIcon } from '@chakra-ui/icons'
 import { CourseCard } from '../atoms/CourseCard'
+import { LineBanner } from '../atoms/LineBanner'
+import { AchievementBanner } from '../atoms/AchievementBanner'
 
 type CourseListProps = {
   courses: CourseListType[]
@@ -40,41 +42,52 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
 
   return (
     <Center>
-      <VStack mx="auto" padding={'60px 96px'}>
-        <Heading py={10} color={PRIMARY_FONT_COLOR} fontSize="36px">
-          コース一覧
-        </Heading>
-        <Box marginLeft={'auto'}>
-          <InputGroup>
-            <Input
-              value={text}
-              onChange={(e) => handleInputChange(e)}
-              onKeyDown={(e) => handleKeyDown(e)}
-              variant="outline"
-              placeholder="javaScript"
-              background={'white'}
-            />
-            <InputRightElement onClick={() => handleSubmit()}>
-              <SearchIcon color="gray.500" />
-            </InputRightElement>
-          </InputGroup>
-        </Box>
-        <Box mb={10} minW={'1024px'}>
-          <Flex
-            alignItems="center"
-            pb={2}
-            borderBottom="1px"
-            borderColor={'blackAlpha.500'}
-          ></Flex>
-          {courses.length === 0 && (
-            <VStack mt="40px">
-              <Heading color={PRIMARY_FONT_COLOR} fontSize="36px">
-                検索に一致するコースはありませんでした
-              </Heading>
-            </VStack>
-          )}
-          {courses && <CourseCard courses={courses} />}
-        </Box>
+      <VStack>
+        <Flex gap={10}>
+          <Box mb={10} minW={'880px'}>
+            <Heading
+              py={10}
+              color={PRIMARY_FONT_COLOR}
+              fontSize="36px"
+              textAlign="center"
+            >
+              コース一覧
+            </Heading>
+            <Flex justifyContent={'flex-end'} mb={4}>
+              <InputGroup width="300px">
+                <Input
+                  value={text}
+                  onChange={(e) => handleInputChange(e)}
+                  onKeyDown={(e) => handleKeyDown(e)}
+                  variant="outline"
+                  placeholder="javaScript"
+                  background={'white'}
+                />
+                <InputRightElement onClick={() => handleSubmit()}>
+                  <SearchIcon color="gray.500" />
+                </InputRightElement>
+              </InputGroup>
+            </Flex>
+            <Flex
+              alignItems="center"
+              pb={2}
+              borderBottom="1px"
+              borderColor={'blackAlpha.500'}
+            ></Flex>
+            {courses.length === 0 && (
+              <VStack mt="40px">
+                <Heading color={PRIMARY_FONT_COLOR} fontSize="36px">
+                  検索に一致するコースはありませんでした
+                </Heading>
+              </VStack>
+            )}
+            {courses && <CourseCard courses={courses} />}
+          </Box>
+          <VStack mt={40} gap={10}>
+            <LineBanner />
+            <AchievementBanner />
+          </VStack>
+        </Flex>
       </VStack>
     </Center>
   )

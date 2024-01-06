@@ -92,7 +92,8 @@ router.post('/signin', async (req, res) => {
   const secretHash = generateSecretHash(clientId, clientSecret, email)
 
   const params = {
-    AuthFlow: 'USER_PASSWORD_AUTH',
+    AuthFlow: undefined,
+    // AuthFlow: 'USER_PASSWORD_AUTH',
     ClientId: clientId,
     AuthParameters: {
       USERNAME: email,
@@ -147,7 +148,8 @@ router.post('/refresh', async (req, res) => {
   const secretHash = generateSecretHash(clientId, clientSecret, email)
 
   const params = {
-    AuthFlow: 'REFRESH_TOKEN_AUTH',
+    AuthFlow: undefined,
+    // AuthFlow: 'REFRESH_TOKEN_AUTH',
     ClientId: clientId,
     AuthParameters: {
       REFRESH_TOKEN: refreshToken,
