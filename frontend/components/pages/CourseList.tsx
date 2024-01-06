@@ -42,8 +42,8 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
 
   return (
     <Center>
-      <VStack padding={'60px 20px'}>
-        <Flex>
+      <VStack>
+        <Flex gap={10}>
           <Box mb={10} minW={'880px'}>
             <Heading
               py={10}
@@ -83,13 +83,9 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
             )}
             {courses && <CourseCard courses={courses} />}
           </Box>
-          <VStack mt={40} ml={20}>
-            <Box>
-              <LineBanner />
-            </Box>
-            <Box>
-              <AchievementBanner />
-            </Box>
+          <VStack mt={40} gap={10}>
+            <LineBanner />
+            <AchievementBanner />
           </VStack>
         </Flex>
       </VStack>
