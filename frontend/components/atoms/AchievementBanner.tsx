@@ -6,12 +6,7 @@ export const AchievementBanner = () => {
       <Image
         src="/images/img_achievementbanner.png"
         alt="実績バナー"
-        boxSize="210px"
-        float="right"
-        mr={1}
-        ml={6}
-        mt={4}
-        mb={22}
+        width="210px"
       />
     </Link>
   )
