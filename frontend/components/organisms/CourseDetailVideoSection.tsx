@@ -20,6 +20,10 @@ import { QuestionPageType } from '../../types/QuestionType'
 import { AnswerType } from '../../types/AnswerType'
 import { Session } from 'next-auth'
 import { UserProfileType } from '../../types'
+import { Link } from '@chakra-ui/react'
+import {  AiOutlineTwitter } from 'react-icons/ai'
+import { CiLink } from "react-icons/ci";
+
 
 export function CourseDetailVideoSection({
   selectedVideo,
@@ -69,6 +73,13 @@ export function CourseDetailVideoSection({
   isProfileOpen?: boolean
   closeProfileModal?: () => void
 }) {
+
+// 動画のURL、タイトル取得
+const shareUrl = location.href;
+const shareTitle = document.title;
+const shareTwitter = document.getElementById("shereToTwitter");
+console.log(location.href);
+
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
       <AspectRatio ratio={16 / 9}>
@@ -108,6 +119,22 @@ export function CourseDetailVideoSection({
                   />
                 </>
               )}
+
+      {/* Twitterにシェア */}
+      <>      
+        <Link
+        href="http://twitter.com/share?url=https://www.youtube.com/channel/UCggNRTYITJmOjpU2lgYoO0Q&text=ここに文章を入力&via=issiyrun"
+        target="_blank"
+        >
+          <AiOutlineTwitter size={36} />
+        </Link>
+      </>
+
+      {/* URLコピー */}
+      <>
+        <CiLink size={36} />
+      </>
+
             </HStack>
           </CardHeader>
           <CardBody bg={'white'} pl={'0px'} pr={'0px'}>
