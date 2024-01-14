@@ -76,9 +76,21 @@ export function CourseDetailVideoSection({
 
 // 動画のURL、タイトル取得
 const shareUrl = location.href;
-const shareTitle = document.title;
+const shareTitle = selectedVideo;
 const shareTwitter = document.getElementById("shereToTwitter");
 console.log(location.href);
+console.log(document.title);
+
+
+// クリップボードにコピーする関数
+function copyUrlToClipboard(shareUrl){
+  navigator.clipboard.writeText(shareUrl)
+  .then(function(){
+    console.log('Async: Copying to clipboard was successful!');
+  }, function(err){
+    console.error('Async: Could not copy text: ', err);
+  });
+}
 
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -123,7 +135,7 @@ console.log(location.href);
       {/* Twitterにシェア */}
       <>      
         <Link
-        href="http://twitter.com/share?url=https://www.youtube.com/channel/UCggNRTYITJmOjpU2lgYoO0Q&text=ここに文章を入力&via=issiyrun"
+        href={`http://twitter.com/share?url=${shareUrl}&text=${shareTitle}を学習しています！&via=issiyrun`}
         target="_blank"
         >
           <AiOutlineTwitter size={36} />
@@ -132,7 +144,7 @@ console.log(location.href);
 
       {/* URLコピー */}
       <>
-        <CiLink size={36} />
+        <CiLink size={36} onClick={()=> copyUrlToClipboard(shareUrl)} />
       </>
 
             </HStack>
