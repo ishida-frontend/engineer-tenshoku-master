@@ -157,3 +157,11 @@ model FavoriteVideo {
 
   @@unique([user_id, video_id])
 }
+
+model GoodVideo {
+  user_id    String    @db.VarChar(255)
+  video_id   String    @db.VarChar(255)
+  deleted_at DateTime?
+
+  @@unique([user_id, video_id])
+}

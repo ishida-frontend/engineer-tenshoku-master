@@ -20,6 +20,7 @@ import { QuestionPageType } from '../../types/QuestionType'
 import { AnswerType } from '../../types/AnswerType'
 import { Session } from 'next-auth'
 import { UserProfileType } from '../../types'
+import { GoodButton } from '../atoms/GoodButton'
 
 export function CourseDetailVideoSection({
   selectedVideo,
@@ -90,6 +91,7 @@ export function CourseDetailVideoSection({
               <Spacer />
               {session?.user?.id && selectedVideo && (
                 <>
+                  <GoodButton />
                   <WatchedButton
                     watchedStatus={
                       watchedStatus?.[selectedVideo.sections.videos.id] || false
