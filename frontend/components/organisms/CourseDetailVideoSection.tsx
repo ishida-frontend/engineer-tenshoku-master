@@ -23,6 +23,7 @@ import { UserProfileType } from '../../types'
 import { Link } from '@chakra-ui/react'
 import {  AiOutlineTwitter } from 'react-icons/ai'
 import { CiLink } from "react-icons/ci";
+import { useCustomToast } from '../../hooks/useCustomToast'
 
 
 export function CourseDetailVideoSection({
@@ -76,21 +77,24 @@ export function CourseDetailVideoSection({
 
 // 動画のURL、タイトル取得
 const shareUrl = location.href;
-const shareTitle = selectedVideo;
-const shareTwitter = document.getElementById("shereToTwitter");
-console.log(location.href);
-console.log(document.title);
+const videoname = window.addEventListener('DOMContentLoaded', function(){
+  const shareTitle = selectedVideo.sections.videos.name;
+  console.log(shareTitle);
+  return shareTitle;
+});
+  console.log(location.href);
 
 
 // クリップボードにコピーする関数
+const { showSuccessToast, showErrorToast } = useCustomToast()
 function copyUrlToClipboard(shareUrl){
   navigator.clipboard.writeText(shareUrl)
   .then(function(){
-    console.log('Async: Copying to clipboard was successful!');
-  }, function(err){
-    console.error('Async: Could not copy text: ', err);
-  });
+    showSuccessToast('Copying to clipboard was successful!')
+  }, function(err) {
+  showErrorToast('Could not copy text')
 }
+  )}
 
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -135,7 +139,7 @@ function copyUrlToClipboard(shareUrl){
       {/* Twitterにシェア */}
       <>      
         <Link
-        href={`http://twitter.com/share?url=${shareUrl}&text=${shareTitle}を学習しています！&via=issiyrun`}
+        // href={`http://twitter.com/share?url=${shareUrl}&text=${shareTitle}を学習しています！&via=issiyrun`}
         target="_blank"
         >
           <AiOutlineTwitter size={36} />
