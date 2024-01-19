@@ -8,6 +8,7 @@ import {
   Text,
   Spacer,
   CardBody,
+  Link
 } from '@chakra-ui/react'
 
 import { FavButton } from '../../components/atoms/FavButton'
@@ -20,8 +21,7 @@ import { QuestionPageType } from '../../types/QuestionType'
 import { AnswerType } from '../../types/AnswerType'
 import { Session } from 'next-auth'
 import { UserProfileType } from '../../types'
-import { Link } from '@chakra-ui/react'
-import {  AiOutlineTwitter } from 'react-icons/ai'
+import { FaSquareXTwitter } from "react-icons/fa6";
 import { CiLink } from "react-icons/ci";
 import { useCustomToast } from '../../hooks/useCustomToast'
 
@@ -77,22 +77,16 @@ export function CourseDetailVideoSection({
 
 // 動画のURL、タイトル取得
 const shareUrl = location.href;
-const videoname = window.addEventListener('DOMContentLoaded', function(){
-  const shareTitle = selectedVideo.sections.videos.name;
-  console.log(shareTitle);
-  return shareTitle;
-});
-  console.log(location.href);
+const shareTitle = selectedVideo?.sections.videos.name;
 
-
-// クリップボードにコピーする関数
+// 動画のURLをクリップボードにコピー
 const { showSuccessToast, showErrorToast } = useCustomToast()
 function copyUrlToClipboard(shareUrl){
   navigator.clipboard.writeText(shareUrl)
   .then(function(){
-    showSuccessToast('Copying to clipboard was successful!')
+    showSuccessToast('動画のURLをクリップボードにコピーしました!')
   }, function(err) {
-  showErrorToast('Could not copy text')
+  showErrorToast('動画のURLのコピーに失敗しました')
 }
   )}
 
@@ -139,17 +133,18 @@ function copyUrlToClipboard(shareUrl){
       {/* Twitterにシェア */}
       <>      
         <Link
-        // href={`http://twitter.com/share?url=${shareUrl}&text=${shareTitle}を学習しています！&via=issiyrun`}
+        href={`http://twitter.com/share?url=${shareUrl}&text=エンジニア転職マスター講座で${shareTitle}を学習中です！&via=issiyrun`}
         target="_blank"
+        _hover={{opacity:0.5}}
         >
-          <AiOutlineTwitter size={36} />
+          <FaSquareXTwitter size={36} />
         </Link>
       </>
 
       {/* URLコピー */}
-      <>
-        <CiLink size={36} onClick={()=> copyUrlToClipboard(shareUrl)} />
-      </>
+      <Link _hover={{opacity:0.5}}>
+        <CiLink size={36} onClick={() => copyUrlToClipboard(shareUrl)} />
+      </Link>
 
             </HStack>
           </CardHeader>
