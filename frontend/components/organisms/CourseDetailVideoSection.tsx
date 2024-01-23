@@ -85,7 +85,7 @@ function copyUrlToClipboard(shareUrl){
   navigator.clipboard.writeText(shareUrl)
   .then(function(){
     showSuccessToast('動画のURLをクリップボードにコピーしました!')
-  }, function(err) {
+  }, function() {
   showErrorToast('動画のURLのコピーに失敗しました')
 }
   )}
