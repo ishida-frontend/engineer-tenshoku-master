@@ -81,11 +81,11 @@ const shareTitle = selectedVideo?.sections.videos.name;
 
 // 動画のURLをクリップボードにコピー
 const { showSuccessToast } = useCustomToast()
-function copyUrlToClipboard(shareUrl){
-  navigator.clipboard.writeText(shareUrl)
-  .then(function(){
-    showSuccessToast('動画のURLをクリップボードにコピーしました!')
-  }
+const copyUrlToClipboard = (shareUrl: string) => {
+  navigator.clipboard.writeText(shareUrl).then(
+    function () {
+      showSuccessToast('動画のURLをクリップボードにコピーしました!')
+    }
   )}
 
   return (
