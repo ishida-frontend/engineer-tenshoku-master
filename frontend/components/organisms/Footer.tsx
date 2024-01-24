@@ -9,7 +9,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { AiFillYoutube, AiFillFacebook } from 'react-icons/ai'
-import { FaSquareXTwitter } from "react-icons/fa6";
+import { RiTwitterXFill } from "react-icons/ri";
 
 import { TitleLogo } from '../atoms/TitleLogo'
 
@@ -42,10 +42,10 @@ export function Footer() {
       </Link>
       <Link href="https://twitter.com/issiyrun"
       target="_blank">
-        <FaSquareXTwitter size={36} />
+        <RiTwitterXFill size={36} />
       </Link>
       <Link href="#">
-        <AiFillFacebook size={31} />
+        <AiFillFacebook size={36} />
       </Link>
     </>
   )
