@@ -157,3 +157,17 @@ model FavoriteVideo {
 
   @@unique([user_id, video_id])
 }
+
+model Advertisement {
+  id         String  @id
+  name       String
+  url        String?
+  author     String
+  isShow     Boolean
+  imageUrl   String
+  created_at DateTime
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+  startForm  DateTime
+  endAt      DateTime
+}
