@@ -8,6 +8,7 @@ import {
   Text,
   Spacer,
   CardBody,
+  Link
 } from '@chakra-ui/react'
 
 import { FavButton } from '../../components/atoms/FavButton'
@@ -20,6 +21,10 @@ import { QuestionPageType } from '../../types/QuestionType'
 import { AnswerType } from '../../types/AnswerType'
 import { Session } from 'next-auth'
 import { UserProfileType } from '../../types'
+import { FaSquareXTwitter } from "react-icons/fa6";
+import { CiLink } from "react-icons/ci";
+import { useCustomToast } from '../../hooks/useCustomToast'
+
 
 export function CourseDetailVideoSection({
   selectedVideo,
@@ -69,6 +74,19 @@ export function CourseDetailVideoSection({
   isProfileOpen?: boolean
   closeProfileModal?: () => void
 }) {
+
+// 動画のURL取得
+const shareUrl = location.href;
+
+// 動画のURLをクリップボードにコピー
+const { showSuccessToast } = useCustomToast()
+const copyUrlToClipboard = (shareUrl: string) => {
+  navigator.clipboard.writeText(shareUrl).then(
+    function () {
+      showSuccessToast('動画のURLをクリップボードにコピーしました!')
+    }
+  )}
+
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
       <AspectRatio ratio={16 / 9}>
@@ -108,6 +126,23 @@ export function CourseDetailVideoSection({
                   />
                 </>
               )}
+
+      {/* Twitterにシェア */}
+      <>      
+        <Link
+        href={`http://twitter.com/share?url=${shareUrl}&text=エンジニア転職マスター講座で${selectedVideo?.sections.videos.name}を学習中です！&via=issiyrun`}
+        target="_blank"
+        _hover={{opacity:0.5}}
+        >
+          <FaSquareXTwitter size={36} />
+        </Link>
+      </>
+
+      {/* URLコピー */}
+      <Link _hover={{opacity:0.5}}>
+        <CiLink size={36} onClick={() => copyUrlToClipboard(shareUrl)} />
+      </Link>
+
             </HStack>
           </CardHeader>
           <CardBody bg={'white'} pl={'0px'} pr={'0px'}>
