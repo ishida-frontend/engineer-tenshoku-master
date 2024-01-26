@@ -8,7 +8,8 @@ import {
   Stack,
   VStack,
 } from '@chakra-ui/react'
-import { AiFillYoutube, AiOutlineTwitter, AiFillFacebook } from 'react-icons/ai'
+import { AiFillYoutube, AiFillFacebook } from 'react-icons/ai'
+import { RiTwitterXFill } from "react-icons/ri";
 
 import { TitleLogo } from '../atoms/TitleLogo'
 
@@ -35,14 +36,16 @@ export function Footer() {
   )
   const snsIcons = () => (
     <>
-      <Link href="#">
+      <Link href="https://www.youtube.com/channel/UCggNRTYITJmOjpU2lgYoO0Q"
+      target="_blank">
         <AiFillYoutube size={39} />
       </Link>
-      <Link href="#">
-        <AiOutlineTwitter size={36} />
+      <Link href="https://twitter.com/issiyrun"
+      target="_blank">
+        <RiTwitterXFill size={36} />
       </Link>
       <Link href="#">
-        <AiFillFacebook size={31} />
+        <AiFillFacebook size={36} />
       </Link>
     </>
   )
