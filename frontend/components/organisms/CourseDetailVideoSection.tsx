@@ -75,9 +75,8 @@ export function CourseDetailVideoSection({
   closeProfileModal?: () => void
 }) {
 
-// 動画のURL、タイトル取得
+// 動画のURL取得
 const shareUrl = location.href;
-const shareTitle = selectedVideo?.sections.videos.name;
 
 // 動画のURLをクリップボードにコピー
 const { showSuccessToast } = useCustomToast()
@@ -131,7 +130,7 @@ const copyUrlToClipboard = (shareUrl: string) => {
       {/* Twitterにシェア */}
       <>      
         <Link
-        href={`http://twitter.com/share?url=${shareUrl}&text=エンジニア転職マスター講座で${shareTitle}を学習中です！&via=issiyrun`}
+        href={`http://twitter.com/share?url=${shareUrl}&text=エンジニア転職マスター講座で${selectedVideo?.sections.videos.name}を学習中です！&via=issiyrun`}
         target="_blank"
         _hover={{opacity:0.5}}
         >
