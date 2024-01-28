@@ -4,9 +4,11 @@ import {
   Center,
   Flex,
   Heading,
+  Image,
   Input,
   InputGroup,
   InputRightElement,
+  Link,
   VStack,
 } from '@chakra-ui/react'
 
@@ -86,6 +88,10 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
           <VStack mt={40} gap={10}>
             <LineBanner />
             <AchievementBanner />
+            <Link>
+              <Image 
+              src='images\img_linebanner.png' width="210px"></Image>
+            </Link>
           </VStack>
         </Flex>
       </VStack>
