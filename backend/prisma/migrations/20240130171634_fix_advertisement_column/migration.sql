@@ -9,7 +9,7 @@ CREATE TABLE `Advertisement` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
     `deleted_at` DATETIME(3) NULL,
-    `startForm` DATETIME(3) NOT NULL,
+    `startFrom` DATETIME(3) NOT NULL,
     `endAt` DATETIME(3) NOT NULL,
 
     PRIMARY KEY (`id`)
