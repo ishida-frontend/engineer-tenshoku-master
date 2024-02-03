@@ -23,5 +23,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix"
+  },
+  "dependencies": {
+    "react-datepicker": "^6.0.0"
   }
 }
