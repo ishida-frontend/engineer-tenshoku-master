@@ -1,45 +1,39 @@
 import React, { useState, useEffect } from 'react'
 import { IconButton, Icon } from '@chakra-ui/react'
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa'
-import axios from 'axios'
-import { count } from 'console'
 
 export const GoodButton = ({ videoId, userId }) => {
   const [isLiked, setIsLiked] = useState(false)
   const [likeCount, setLikeCount] = useState(0)
 
   useEffect(() => {
-    axios
-      .get(`/api/good/${videoId}count`)
-      .then((res) => {
-        setLikeCount(res.data.count)
-      })
-      .catch((error) => {
-        console.error('Error fetching like count', error)
-      })
+    const fetchLikeStatus = async () => {
+      try {
+        const res = await fetch(`/api/good/${videoId}/check?userId=${userId}`)
+        const data = await res.json()
+        setIsLiked(data.liked)
+      } catch (error) {
+        console.error('Error:', error)
+      }
+    }
 
-    axios
-      .get(`/api/good/${videoId}/check`)
-      .then((res) => {
-        setIsLiked(res.data.liked)
-      })
-      .catch((error) => {
-        console.error('Error checking if liked:', error)
-      })
-  }, [videoId])
+    fetchLikeStatus()
+  }, [videoId, userId])
 
   const handleLike = () => {
     const action = isLiked ? 'unlike' : 'like'
-    axios
-      .post(`/api/good/${videoId}/${action}`)
-      .then((res) => {
-        setIsLiked(!isLiked)
-        setLikeCount((count) => (isLiked ? count - 1 : count + 1))
+    try {
+      await fetch(`/api/good/${videoId}/${action}`, {
+        method: 'POST',
       })
-      .catch((error) => {
-        console.error('Error toggling like:', error)
-      })
+
+      setIsLiked(!isLiked)
+      setLikeCount((count) => (isLiked ? count - 1 : count + 1))
+    } catch (error) {
+      console.error('Error:', error)
+    }
   }
+}
 
   return (
     <div>
@@ -52,5 +46,6 @@ export const GoodButton = ({ videoId, userId }) => {
         {likeCount}
       </IconButton>
     </div>
-  )
+  );
 }
+
