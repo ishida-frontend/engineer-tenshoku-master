@@ -5,6 +5,6 @@ export type AdvertisementType = {
   imageUrl: string,
   author: string,
   isShow: boolean,
-  startForm: Date,
+  startFrom: Date,
   endAt: Date
 }

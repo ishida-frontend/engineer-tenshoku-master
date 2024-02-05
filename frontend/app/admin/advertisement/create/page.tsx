@@ -8,22 +8,33 @@ import "react-datepicker/dist/react-datepicker.css"
 export default function CreateAdvertisementPage() {
   const toast = useToast()
   const [name, setName] = useState<string>('')
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [url, setUrl] = useState<string>('')
+  const [author, setAuthor] = useState<string>('')
+  const [isShow, setIsShow] = useState<boolean>(false)
+  const [imageUrl, setImageUrl] = useState<string>('')
+  const [startFrom, setStartFrom] = useState<Date>();
+  const [endAt, setEndAt] = useState<Date>();
 
-  const isDisabled = name === '' 
+
+  const isDisabled = name === '' || url === ''|| author === "" || imageUrl === ""
   const handleSubmit = async (event: FormEvent) => {
-    setIsSubmitting(true)
+    setIsShow(true)
 
     event.preventDefault()
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/advertisement/create`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/advertisement`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name
+        name,
+        url,
+        author,
+        isShow,
+        imageUrl,
+        startFrom,
+        endAt
       }),
     })
 
@@ -44,7 +55,7 @@ export default function CreateAdvertisementPage() {
         duration: 3000,
       })
     }
-    setIsSubmitting(false)
+    setIsShow(false)
   }
 
   return (
@@ -52,8 +63,8 @@ export default function CreateAdvertisementPage() {
      <Box w="full" maxW="600px" mx="auto" p={6}>
       <Stack spacing={4}>
        <Heading size="lg">広告登録</Heading>
-       <FormControl>
-       <FormLabel htmlFor="courseName">広告名（必須）</FormLabel>
+       <FormControl isRequired>
+       <FormLabel>広告名（必須）</FormLabel>
             <Input
               id="courseName"
               type="text"
@@ -66,56 +77,72 @@ export default function CreateAdvertisementPage() {
               borderColor="gray.400"
             />
        </FormControl>
-       <FormControl id="#" isRequired>
-       <FormLabel htmlFor="courseName"> 画像 </FormLabel>
-        <Input type="file" accept="image/*" />
+       <FormControl isRequired>
+       <FormLabel> 画像 </FormLabel>
+        <Input
+          type="file"
+          accept="image/*"
+          value={imageUrl}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setImageUrl(e.target?.value)
+          }
+          />
           <>
             <img src="" />
           </>
        </FormControl>
-       <FormControl>
-       <FormLabel htmlFor="courseName">広告主</FormLabel>
+       <FormControl isRequired>
+       <FormLabel>企業名</FormLabel>
             <Input
-              id="courseName"
               type="text"
-              value={name}
+              value={author}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setName(e.target?.value)
+                setAuthor(e.target?.value)
               }
               aria-required={true}
               border="1px"
               borderColor="gray.400"
             />
        </FormControl>
-       <FormControl>
-       <FormLabel htmlFor="courseName" > 開始 </FormLabel>
+       <FormControl isRequired>
+        <FormLabel>リンク</FormLabel>
+        <Input
+          type="text"
+          value={url}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setUrl(e.target?.value)
+          }
+        >
+        </Input>
+       </FormControl>
+       <FormControl isRequired>
+       <FormLabel> 開始 </FormLabel>
         <DatePicker
             dateFormat="yyyy/MM/dd HH:mm"
             locale="ja"
-            selected={selectedDate} 
-            onChange={date => setSelectedDate(date!)}
+            selected={startFrom} 
+            onChange={date => setStartFrom(date!)}
             showTimeSelect
             timeIntervals={30}>
           
         </DatePicker>
        </FormControl>
-       <FormControl>
-       <FormLabel htmlFor="courseName"> 終了 </FormLabel>
+       <FormControl isRequired>
+       <FormLabel> 終了 </FormLabel>
         <DatePicker
             dateFormat="yyyy/MM/dd HH:mm"
             locale="ja"
-            selected={selectedDate} 
-            onChange={date => setSelectedDate(date!)}
+            selected={endAt} 
+            onChange={date => setEndAt(date!)}
             showTimeSelect
             timeIntervals={30}>
          
         </DatePicker>
        </FormControl>
-
        <Button
             isDisabled={isDisabled}
             onClick={handleSubmit}
-            isLoading={isSubmitting}
+            isLoading={isShow}
             colorScheme="teal"
             variant="solid"
           >

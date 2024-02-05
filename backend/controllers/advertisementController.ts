@@ -8,6 +8,7 @@ export class AdvertisementController {
   }
   createAdvertisement(req: express.Request, res: express.Response){
     try {
+      console.log('req',req);
       const advertisementData = req.body
       this.advertisementApplicationServise.createAdvertisement(advertisementData)
       res.status(201).json({ message: '正常に広告情報を追加しました' })
