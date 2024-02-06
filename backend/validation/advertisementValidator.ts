@@ -14,8 +14,8 @@ export class AdvertisementValidator {
       author: z.string(),
       isShow: z.boolean(),
       imageUrl: z.string(),
-      startFrom: z.date(),
-      endAt: z.date(),
+      startFrom: z.string().datetime(),
+      endAt: z.string().datetime(),
     })
 
     const advertisementData = advertisementCreateSchema.safeParse(req.body)
