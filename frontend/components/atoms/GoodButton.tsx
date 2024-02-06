@@ -20,7 +20,7 @@ export const GoodButton = ({ videoId, userId }) => {
     fetchLikeStatus()
   }, [videoId, userId])
 
-  const handleLike = () => {
+  const handleLike = async () => {
     const action = isLiked ? 'unlike' : 'like'
     try {
       await fetch(`/api/good/${videoId}/${action}`, {
@@ -30,22 +30,20 @@ export const GoodButton = ({ videoId, userId }) => {
       setIsLiked(!isLiked)
       setLikeCount((count) => (isLiked ? count - 1 : count + 1))
     } catch (error) {
-      console.error('Error:', error)
+      return (
+        <div>
+          <IconButton
+            icon={
+              isLiked ? <Icon as={FaRegThumbsUp} /> : <Icon as={FaThumbsUp} />
+            }
+            onClick={handleLike}
+            aria-label="Like Button"
+            variant="ghost"
+          >
+            {likeCount}
+          </IconButton>
+        </div>
+      )
     }
   }
 }
-
-  return (
-    <div>
-      <IconButton
-        icon={isLiked ? <Icon as={FaRegThumbsUp} /> : <Icon as={FaThumbsUp} />}
-        onClick={handleLike}
-        aria-label="Like Button"
-        variant="ghost"
-      >
-        {likeCount}
-      </IconButton>
-    </div>
-  );
-}
-

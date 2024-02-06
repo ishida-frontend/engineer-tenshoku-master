@@ -91,7 +91,10 @@ export function CourseDetailVideoSection({
               <Spacer />
               {session?.user?.id && selectedVideo && (
                 <>
-                  <GoodButton userId={user_id} />
+                  <GoodButton
+                    userId={session?.user?.id || false}
+                    videoId={selectedVideo?.sections.videos.id || false}
+                  />
                   <WatchedButton
                     watchedStatus={
                       watchedStatus?.[selectedVideo.sections.videos.id] || false
