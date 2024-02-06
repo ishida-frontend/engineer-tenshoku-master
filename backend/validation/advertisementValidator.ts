@@ -7,7 +7,7 @@ export class AdvertisementValidator {
     res: express.Response,
     next: express.NextFunction,
   ) => {
-    console.log('req.body',req.body);
+    console.log('req.body', req.body)
     const advertisementCreateSchema = z.object({
       name: z.string(),
       url: z.string(),
@@ -23,8 +23,10 @@ export class AdvertisementValidator {
     if (advertisementData.success) {
       next()
     } else {
-      console.log('advertisementData',advertisementData);
-      res.status(400).json({ errors: advertisementData.error.formErrors.fieldErrors })
+      console.log('advertisementData', advertisementData)
+      res
+        .status(400)
+        .json({ errors: advertisementData.error.formErrors.fieldErrors })
     }
   }
 }
