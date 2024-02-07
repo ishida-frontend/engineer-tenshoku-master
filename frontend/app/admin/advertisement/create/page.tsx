@@ -12,8 +12,7 @@ import {
   Flex,
 } from '@chakra-ui/react'
 import React, { useState, FormEvent } from 'react'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+import { THEME_COLOR } from '../../../../constants'
 
 export default function CreateAdvertisementPage() {
   const toast = useToast()
@@ -77,9 +76,9 @@ export default function CreateAdvertisementPage() {
         <Stack spacing={4}>
           <Heading size="lg">広告登録</Heading>
           <FormControl isRequired>
-            <FormLabel>広告名（必須）</FormLabel>
+            <FormLabel>広告名</FormLabel>
             <Input
-              id="courseName"
+              bg={THEME_COLOR.SECONDARY_WHITE}
               type="text"
               value={name}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -93,6 +92,7 @@ export default function CreateAdvertisementPage() {
           <FormControl isRequired>
             <FormLabel> 画像 </FormLabel>
             <Input
+              bg={THEME_COLOR.SECONDARY_WHITE}
               type="file"
               accept="image/*"
               value={imageUrl}
@@ -107,6 +107,7 @@ export default function CreateAdvertisementPage() {
           <FormControl isRequired>
             <FormLabel>企業名</FormLabel>
             <Input
+              bg={THEME_COLOR.SECONDARY_WHITE}
               type="text"
               value={author}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -120,31 +121,36 @@ export default function CreateAdvertisementPage() {
           <FormControl isRequired>
             <FormLabel>リンク</FormLabel>
             <Input
+              bg={THEME_COLOR.SECONDARY_WHITE}
               type="text"
               value={url}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setUrl(e.target?.value)
               }
+              border="1px"
+              borderColor="gray.400"
             ></Input>
           </FormControl>
           <Flex justify="center" align="center">
             <FormControl isRequired>
               <FormLabel> 開始 </FormLabel>
-              <DatePicker
-                showIcon
-                selected={startFrom}
-                onChange={(date) => setStartFrom(date)}
-                timeIntervals={30}
-              ></DatePicker>
+              <Input
+                bg={THEME_COLOR.SECONDARY_WHITE}
+                type="date"
+                value={startFrom.toISOString().slice(0,10)}
+                onChange={(e) => setStartFrom(new Date(Date.parse(e.target.value)))}
+              >
+              </Input>
             </FormControl>
             <FormControl isRequired>
               <FormLabel> 終了 </FormLabel>
-              <DatePicker
-                showIcon
-                selected={endAt}
-                onChange={(date) => setEndAt(date)}
-                timeIntervals={30}
-              ></DatePicker>
+              <Input
+                bg={THEME_COLOR.SECONDARY_WHITE}
+                type="date"
+                value={endAt.toISOString().slice(0,10)}
+                onChange={(e) => setEndAt(new Date(Date.parse(e.target.value)))}
+              >
+              </Input>
             </FormControl>
           </Flex>
           <Button

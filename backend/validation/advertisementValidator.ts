@@ -10,7 +10,7 @@ export class AdvertisementValidator {
     console.log('req.body', req.body)
     const advertisementCreateSchema = z.object({
       name: z.string(),
-      url: z.string(),
+      url: z.string().url({ message: 'Invalid URL format' }).refine(value => value.startsWith('https://'), { message: 'URL must start with HTTPS' }),
       author: z.string(),
       isShow: z.boolean(),
       imageUrl: z.string(),
