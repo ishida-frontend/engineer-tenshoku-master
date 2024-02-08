@@ -7,23 +7,55 @@ export class AdvertisementValidator {
     res: express.Response,
     next: express.NextFunction,
   ) => {
-    console.log('req.body', req.body)
-    const advertisementCreateSchema = z.object({
-      name: z.string(),
-      url: z.string().url({ message: 'Invalid URL format' }).refine(value => value.startsWith('https://'), { message: 'URL must start with HTTPS' }),
-      author: z.string(),
-      isShow: z.boolean(),
-      imageUrl: z.string(),
-      startFrom: z.string().datetime(),
-      endAt: z.string().datetime(),
-    })
+    const advertisementCreateSchema = z
+      .object({
+        name: z
+          .string()
+          .min(1, { message: '※必須項目です' }),
+        url: z
+          .string()
+          .url({ message: '※URLの形式で入力してください' })
+          .startsWith('https://', {
+             message: '※https://の形式で入力してください' }),
+        author: z
+          .string()
+          .min(1, { message: '※必須項目です' }),
+        isShow: z
+          .boolean(),
+        imageUrl: z
+          .string(),
+        startFrom: z
+          .string()
+          .refine(
+            (val) => {
+              return val.length > 0;
+            },
+            { message: '日付を選択してください' }),
+        endAt: z
+          .string()
+          .refine(
+            (val) => {
+              return val.length > 0;
+            },
+            { message: '日付を選択してください' }),    
+      })
+     .refine(
+      (args) => {
+        const { startFrom, endAt } = args;
+        // 終了日が開始日より未来かどうか
+        return new Date(endAt) > new Date(startFrom);
+      },
+      {
+        message: '終了日は開始日より未来の日付にしてください',
+        path: ["endAt"]
+      }
+     )
 
     const advertisementData = advertisementCreateSchema.safeParse(req.body)
 
     if (advertisementData.success) {
       next()
     } else {
-      console.log('advertisementData', advertisementData)
       res
         .status(400)
         .json({ errors: advertisementData.error.formErrors.fieldErrors })

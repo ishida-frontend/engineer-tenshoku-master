@@ -10,9 +10,13 @@ import {
   useToast,
   Button,
   Flex,
+  Text,
+  FormErrorMessage
 } from '@chakra-ui/react'
 import React, { useState, FormEvent } from 'react'
 import { THEME_COLOR } from '../../../../constants'
+// import { AdvertisementType, AdvertisementErrorType } from '../../../../types/AdvertisementType'
+
 
 export default function CreateAdvertisementPage() {
   const toast = useToast()
@@ -24,8 +28,6 @@ export default function CreateAdvertisementPage() {
   const [startFrom, setStartFrom] = useState<Date>(new Date())
   const [endAt, setEndAt] = useState<Date>(new Date())
 
-  const isDisabled =
-    name === '' || url === '' || author === '' || imageUrl === ''
   const handleSubmit = async (event: FormEvent) => {
     setIsShow(true)
 
@@ -75,8 +77,13 @@ export default function CreateAdvertisementPage() {
       <Box w="full" maxW="600px" mx="auto" p={6}>
         <Stack spacing={4}>
           <Heading size="lg">広告登録</Heading>
-          <FormControl isRequired>
-            <FormLabel>広告名</FormLabel>
+          <FormControl>
+            <FormLabel>
+              <Text>広告のタイトル</Text>
+              <FormErrorMessage>
+                {}
+              </FormErrorMessage>
+            </FormLabel>
             <Input
               bg={THEME_COLOR.SECONDARY_WHITE}
               type="text"
@@ -89,8 +96,13 @@ export default function CreateAdvertisementPage() {
               borderColor="gray.400"
             />
           </FormControl>
-          <FormControl isRequired>
-            <FormLabel> 画像 </FormLabel>
+          <FormControl>
+            <FormLabel>  
+              <Text>画像</Text>
+              <FormErrorMessage>
+                {}
+              </FormErrorMessage>
+            </FormLabel>
             <Input
               bg={THEME_COLOR.SECONDARY_WHITE}
               type="file"
@@ -104,7 +116,7 @@ export default function CreateAdvertisementPage() {
               <img src="" />
             </>
           </FormControl>
-          <FormControl isRequired>
+          <FormControl>
             <FormLabel>企業名</FormLabel>
             <Input
               bg={THEME_COLOR.SECONDARY_WHITE}
@@ -118,8 +130,13 @@ export default function CreateAdvertisementPage() {
               borderColor="gray.400"
             />
           </FormControl>
-          <FormControl isRequired>
-            <FormLabel>リンク</FormLabel>
+          <FormControl>
+            <FormLabel>
+              <Text>リンク</Text>
+              <FormErrorMessage>
+                {}
+              </FormErrorMessage>
+            </FormLabel>
             <Input
               bg={THEME_COLOR.SECONDARY_WHITE}
               type="text"
@@ -132,8 +149,13 @@ export default function CreateAdvertisementPage() {
             ></Input>
           </FormControl>
           <Flex justify="center" align="center">
-            <FormControl isRequired>
-              <FormLabel> 開始 </FormLabel>
+            <FormControl>
+              <FormLabel>
+                <Text>開始</Text>
+                <FormErrorMessage>
+                  {}
+                </FormErrorMessage>
+              </FormLabel>
               <Input
                 bg={THEME_COLOR.SECONDARY_WHITE}
                 type="date"
@@ -142,8 +164,13 @@ export default function CreateAdvertisementPage() {
               >
               </Input>
             </FormControl>
-            <FormControl isRequired>
-              <FormLabel> 終了 </FormLabel>
+            <FormControl>
+              <FormLabel>
+                <Text>終了</Text>
+                <FormErrorMessage>
+                  {}
+                </FormErrorMessage>
+              </FormLabel>
               <Input
                 bg={THEME_COLOR.SECONDARY_WHITE}
                 type="date"
@@ -154,7 +181,6 @@ export default function CreateAdvertisementPage() {
             </FormControl>
           </Flex>
           <Button
-            isDisabled={isDisabled}
             onClick={handleSubmit}
             isLoading={isShow}
             colorScheme="teal"

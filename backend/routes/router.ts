@@ -101,9 +101,7 @@ router.put('/tag', tagValidator.updateTag, (req, res) => {
 })
 
 // Advertisementのルーティング
-router.post('/advertisement', advertisementValidator.createAdvertisement, (req, res) => {
-  advertisementController.createAdvertisement(req, res)
-})
+router.post('/advertisement', advertisementValidator.createAdvertisement, advertisementController.createAdvertisement)
 
 const userRouter = express.Router()
 router.use('/user', userRouter)
