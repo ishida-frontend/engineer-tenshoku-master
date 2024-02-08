@@ -11,7 +11,10 @@ import {
   Button,
   Flex,
   Text,
-  FormErrorMessage
+  FormErrorMessage,
+  RadioGroup,
+  Radio,
+  HStack
 } from '@chakra-ui/react'
 import React, { useState, FormEvent } from 'react'
 import { THEME_COLOR } from '../../../../constants'
@@ -180,9 +183,19 @@ export default function CreateAdvertisementPage() {
               </Input>
             </FormControl>
           </Flex>
+          <FormControl>
+            <FormLabel>
+              <Text>表示設定</Text>
+            </FormLabel>
+            <RadioGroup onChange={setIsShow} value={isShow} defaultValue='private'>
+              <HStack spacing='24px'>
+                <Radio value='release'>表示する</Radio>
+                <Radio value='private'>表示しない</Radio>
+              </HStack>
+            </RadioGroup>
+          </FormControl>
           <Button
             onClick={handleSubmit}
-            isLoading={isShow}
             colorScheme="teal"
             variant="solid"
           >
