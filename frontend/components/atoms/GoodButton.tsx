@@ -29,21 +29,20 @@ export const GoodButton = ({ videoId, userId }) => {
 
       setIsLiked(!isLiked)
       setLikeCount((count) => (isLiked ? count - 1 : count + 1))
-    } catch (error) {
-      return (
-        <div>
-          <IconButton
-            icon={
-              isLiked ? <Icon as={FaRegThumbsUp} /> : <Icon as={FaThumbsUp} />
-            }
-            onClick={handleLike}
-            aria-label="Like Button"
-            variant="ghost"
-          >
-            {likeCount}
-          </IconButton>
-        </div>
-      )
-    }
+    } catch (error) {}
+    return (
+      <div>
+        <IconButton
+          icon={
+            isLiked ? <Icon as={FaRegThumbsUp} /> : <Icon as={FaThumbsUp} />
+          }
+          onClick={handleLike}
+          aria-label="Like Button"
+          variant="ghost"
+        >
+          {likeCount}
+        </IconButton>
+      </div>
+    )
   }
 }
