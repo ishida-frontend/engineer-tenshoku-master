@@ -19,6 +19,8 @@ import {
 import React, { useState, FormEvent } from 'react'
 import { THEME_COLOR } from '../../../../constants'
 
+import { advertisementSchema } from '../../../../../common/zod'
+
 export default function CreateAdvertisementPage() {
   const toast = useToast()
   const [name, setName] = useState<string>('')
@@ -39,39 +41,69 @@ export default function CreateAdvertisementPage() {
     }[]
   >([])
   const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault()
+    try {
+      const formData = {
+        name,
+        url,
+        author,
+        showStatus,
+        imageUrl,
+        startFrom,
+        endAt,
+      }
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/advertisement`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const validation = advertisementSchema.parse(formData)
+      console.log('validation', validation)
+
+      setShowStatus('show')
+
+      event.preventDefault()
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/advertisement`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name,
+            url,
+            author,
+            isShow: showStatus === 'show' ? true : false,
+            imageUrl,
+            startFrom,
+            endAt,
+          }),
         },
-        body: JSON.stringify({
-          name,
-          url,
-          author,
-          isShow: showStatus === 'show' ? true : false,
-          imageUrl,
-          startFrom,
-          endAt,
-        }),
-      },
-    )
+      )
 
-    const data = await response.json()
+      const data = await response.json()
 
-    if (response.ok) {
+      if (response.ok) {
+        toast({
+          title: data.message,
+          status: 'success',
+          position: 'top',
+          duration: 3000,
+        })
+      } else {
+        toast({
+          title: data.message,
+          status: 'error',
+          position: 'top',
+          duration: 3000,
+        })
+      }
+      setShowStatus('notShow')
+    } catch (e) {
+      if (e.issues) {
+        console.log('e', e.issues)
+        setErrors(e.issues)
+        return
+      }
       toast({
-        title: data.message,
-        status: 'success',
-        position: 'top',
-        duration: 3000,
-      })
-    } else {
-      toast({
-        title: data.message,
+        title: 'エラーが発生しました',
         status: 'error',
         position: 'top',
         duration: 3000,
@@ -202,7 +234,7 @@ export default function CreateAdvertisementPage() {
                     : setShowStatus('notShow')
                 }
                 value={showStatus}
-                defaultValue="show"
+                defaultValue={showStatus}
               >
                 <HStack spacing="24px">
                   <Radio value="show">表示する</Radio>
@@ -210,7 +242,11 @@ export default function CreateAdvertisementPage() {
                 </HStack>
               </RadioGroup>
             </FormControl>
-            <Button onClick={handleSubmit} colorScheme="teal" variant="solid">
+            <Button
+              onClick={(e) => handleSubmit(e)}
+              colorScheme="teal"
+              variant="solid"
+            >
               登録
             </Button>
           </Stack>
