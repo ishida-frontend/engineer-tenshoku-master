@@ -23,9 +23,11 @@ export class AdvertisementValidator {
         isShow: z
           .boolean(),
         imageUrl: z
-          .string(),
+          .string()
+          .min(1, { message: '※必須項目です' }),
         startFrom: z
           .string()
+          .datetime()
           .refine(
             (val) => {
               return val.length > 0;
@@ -33,6 +35,7 @@ export class AdvertisementValidator {
             { message: '日付を選択してください' }),
         endAt: z
           .string()
+          .datetime()
           .refine(
             (val) => {
               return val.length > 0;

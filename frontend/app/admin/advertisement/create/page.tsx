@@ -125,7 +125,6 @@ export default function CreateAdvertisementPage() {
           >
             <FormLabel>
               <Text>広告のタイトル</Text>
-              <FormErrorMessage>{}</FormErrorMessage>
             </FormLabel>
             <Input
               bg={THEME_COLOR.SECONDARY_WHITE}
@@ -146,10 +145,15 @@ export default function CreateAdvertisementPage() {
               }
             </FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl
+          isInvalid={
+            !!errors.find((e) => {
+              return e.path[0] === 'imageUrl'
+            })
+          }
+          >
             <FormLabel>
               <Text>画像</Text>
-              <FormErrorMessage>{}</FormErrorMessage>
             </FormLabel>
             {/* <Input
               bg={THEME_COLOR.SECONDARY_WHITE}
@@ -163,8 +167,21 @@ export default function CreateAdvertisementPage() {
             <>
               <img src="" />
             </>
+            <FormErrorMessage>
+              {
+                errors.find((e) => {
+                  return e.path[0] === 'imageUrl'
+                })?.message
+              }
+            </FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl
+          isInvalid={
+            !!errors.find((e) => {
+              return e.path[0] === 'author'
+            })
+          }
+          >
             <FormLabel>企業名</FormLabel>
             <Input
               bg={THEME_COLOR.SECONDARY_WHITE}
@@ -177,11 +194,23 @@ export default function CreateAdvertisementPage() {
               border="1px"
               borderColor="gray.400"
             />
+            <FormErrorMessage>
+              {
+                errors.find((e) => {
+                  return e.path[0] === 'author'
+                })?.message
+              }
+            </FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl
+          isInvalid={
+            !!errors.find((e) => {
+              return e.path[0] === 'url'
+            })
+          }
+          >
             <FormLabel>
               <Text>リンク</Text>
-              <FormErrorMessage>{}</FormErrorMessage>
             </FormLabel>
             <Input
               bg={THEME_COLOR.SECONDARY_WHITE}
@@ -192,13 +221,26 @@ export default function CreateAdvertisementPage() {
               }
               border="1px"
               borderColor="gray.400"
-            ></Input>
+            >
+            </Input>
+            <FormErrorMessage>
+              {
+                errors.find((e) => {
+                  return e.path[0] === 'url'
+                })?.message
+              }
+            </FormErrorMessage>
           </FormControl>
           <Flex justify="center" align="center">
-            <FormControl>
+            <FormControl
+          isInvalid={
+            !!errors.find((e) => {
+              return e.path[0] === 'startFrom'
+            })
+          }
+            >
               <FormLabel>
                 <Text>開始</Text>
-                <FormErrorMessage>{}</FormErrorMessage>
               </FormLabel>
               <Input
                 bg={THEME_COLOR.SECONDARY_WHITE}
@@ -207,19 +249,40 @@ export default function CreateAdvertisementPage() {
                 onChange={(e) =>
                   setStartFrom(new Date(Date.parse(e.target.value)))
                 }
-              ></Input>
+              >
+              </Input>
+              <FormErrorMessage>
+              {
+                errors.find((e) => {
+                  return e.path[0] === 'srartFrom'
+                })?.message
+              }
+            </FormErrorMessage>
             </FormControl>
-            <FormControl>
+            <FormControl
+          isInvalid={
+            !!errors.find((e) => {
+              return e.path[0] === 'endAt'
+            })
+          }
+            >
               <FormLabel>
                 <Text>終了</Text>
-                <FormErrorMessage>{}</FormErrorMessage>
               </FormLabel>
               <Input
                 bg={THEME_COLOR.SECONDARY_WHITE}
                 type="date"
                 value={endAt.toISOString().slice(0, 10)}
                 onChange={(e) => setEndAt(new Date(Date.parse(e.target.value)))}
-              ></Input>
+              >
+              </Input>
+              <FormErrorMessage>
+              {
+                errors.find((e) => {
+                  return e.path[0] === 'endAt'
+                })?.message
+              }
+            </FormErrorMessage>
             </FormControl>
           </Flex>
           <FormControl>
