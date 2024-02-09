@@ -69,6 +69,7 @@ export function CourseDetailVideoSection({
   anotherUserProfile?: UserProfileType
   isProfileOpen?: boolean
   closeProfileModal?: () => void
+  handleLikeStatus?: (videoId: string) => void
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>

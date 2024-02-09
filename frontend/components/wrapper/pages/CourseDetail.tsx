@@ -63,6 +63,9 @@ export function CourseDetailWrapper({
     const [isWatchingLoading, setIsWatchingLoading] = useState<boolean>()
     const [isFavoriteLoading, setIsFavoriteLoading] = useState<boolean>()
 
+    const [isLiked, setIsLiked] = useState(false)
+    const [likeCount, setLikeCount] = useState(0)
+
     const getCourseData = async (courseId: string) => {
       try {
         const courseData = await fetch(
@@ -155,6 +158,18 @@ export function CourseDetailWrapper({
       }
     }
 
+    const handleLikeStatus = async () => {
+      const action = isLiked ? 'unlike' : 'like'
+      try {
+        await fetch(`/api/good/${videoId}/${action}`, {
+          method: 'POST',
+        })
+
+        setIsLiked(!isLiked)
+        setLikeCount((count) => (isLiked ? count - 1 : count + 1))
+      } catch (error) {}
+    }
+
     useEffect(() => {
       setCompletePercentage(getCompletionPercentage())
       setIsWatchingLoading(true)
@@ -186,6 +201,20 @@ export function CourseDetailWrapper({
 
       fetchData()
     }, [courseData, session, videoId])
+
+    useEffect(() => {
+      const fetchLikeStatus = async () => {
+        try {
+          const res = await fetch(`/api/good/${videoId}/check?userId=${userId}`)
+          const data = await res.json()
+          setIsLiked(data.liked)
+        } catch (error) {
+          console.error('Error:', error)
+        }
+      }
+
+      fetchLikeStatus()
+    }, [videoId, userId])
 
     const getAnotherUserProfile = async (anotherUserId: string) => {
       try {
@@ -225,6 +254,7 @@ export function CourseDetailWrapper({
         anotherUserProfile={anotherUserProfile}
         isProfileOpen={isProfileOpen}
         closeProfileModal={closeProfileModal}
+        handleLikeStatus={handleLikeStatus}
       />
     )
   } catch (e) {

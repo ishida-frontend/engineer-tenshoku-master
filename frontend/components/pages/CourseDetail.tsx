@@ -71,6 +71,7 @@ export function CourseDetail({
   questions?: QuestionType[]
   answers: AnswerType[]
   questionId?: string
+  handleLikeStatus?: (videoId: string) => void
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
   handleFavoriteVideoStatus: (
     event: React.MouseEvent<HTMLButtonElement>,
