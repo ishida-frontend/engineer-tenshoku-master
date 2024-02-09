@@ -109,149 +109,145 @@ export default function CreateAdvertisementPage() {
         duration: 3000,
       })
     }
+  }
 
-    return (
-      <>
-        <Box w="full" maxW="600px" mx="auto" p={6}>
-          <Stack spacing={4}>
-            <Heading size="lg">広告登録</Heading>
-            <FormControl
-              isInvalid={
-                !!errors.find((e) => {
-                  return e.path[0] === 'name'
-                })
+  return (
+    <>
+      <Box w="full" maxW="600px" mx="auto" p={6}>
+        <Stack spacing={4}>
+          <Heading size="lg">広告登録</Heading>
+          <FormControl
+            isInvalid={
+              !!errors.find((e) => {
+                return e.path[0] === 'name'
+              })
+            }
+          >
+            <FormLabel>
+              <Text>広告のタイトル</Text>
+              <FormErrorMessage>{}</FormErrorMessage>
+            </FormLabel>
+            <Input
+              bg={THEME_COLOR.SECONDARY_WHITE}
+              type="text"
+              value={name}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setName(e.target?.value)
               }
-            >
+              aria-required={true}
+              border="1px"
+              borderColor="gray.400"
+            />
+            <FormErrorMessage>
+              {
+                errors.find((e) => {
+                  return e.path[0] === 'name'
+                })?.message
+              }
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl>
+            <FormLabel>
+              <Text>画像</Text>
+              <FormErrorMessage>{}</FormErrorMessage>
+            </FormLabel>
+            {/* <Input
+              bg={THEME_COLOR.SECONDARY_WHITE}
+              type="file"
+              accept="image/*"
+              value={imageUrl}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setImageUrl(e.target?.value)
+              }
+            /> */}
+            <>
+              <img src="" />
+            </>
+          </FormControl>
+          <FormControl>
+            <FormLabel>企業名</FormLabel>
+            <Input
+              bg={THEME_COLOR.SECONDARY_WHITE}
+              type="text"
+              value={author}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setAuthor(e.target.value)
+              }
+              aria-required={true}
+              border="1px"
+              borderColor="gray.400"
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>
+              <Text>リンク</Text>
+              <FormErrorMessage>{}</FormErrorMessage>
+            </FormLabel>
+            <Input
+              bg={THEME_COLOR.SECONDARY_WHITE}
+              type="text"
+              value={url}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setUrl(e.target?.value)
+              }
+              border="1px"
+              borderColor="gray.400"
+            ></Input>
+          </FormControl>
+          <Flex justify="center" align="center">
+            <FormControl>
               <FormLabel>
-                <Text>広告のタイトル</Text>
+                <Text>開始</Text>
                 <FormErrorMessage>{}</FormErrorMessage>
               </FormLabel>
               <Input
                 bg={THEME_COLOR.SECONDARY_WHITE}
-                type="text"
-                value={name}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setName(e.target?.value)
+                type="date"
+                value={startFrom.toISOString().slice(0, 10)}
+                onChange={(e) =>
+                  setStartFrom(new Date(Date.parse(e.target.value)))
                 }
-                aria-required={true}
-                border="1px"
-                borderColor="gray.400"
-              />
-              <FormErrorMessage>
-                {
-                  errors.find((e) => {
-                    return e.path[0] === 'name'
-                  })?.message
-                }
-              </FormErrorMessage>
-            </FormControl>
-            <FormControl>
-              <FormLabel>
-                <Text>画像</Text>
-                <FormErrorMessage>{}</FormErrorMessage>
-              </FormLabel>
-              <Input
-                bg={THEME_COLOR.SECONDARY_WHITE}
-                type="file"
-                accept="image/*"
-                value={imageUrl}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setImageUrl(e.target?.value)
-                }
-              />
-              <>
-                <img src="" />
-              </>
-            </FormControl>
-            <FormControl>
-              <FormLabel>企業名</FormLabel>
-              <Input
-                bg={THEME_COLOR.SECONDARY_WHITE}
-                type="text"
-                value={author}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setAuthor(e.target.value)
-                }
-                aria-required={true}
-                border="1px"
-                borderColor="gray.400"
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>
-                <Text>リンク</Text>
-                <FormErrorMessage>{}</FormErrorMessage>
-              </FormLabel>
-              <Input
-                bg={THEME_COLOR.SECONDARY_WHITE}
-                type="text"
-                value={url}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setUrl(e.target?.value)
-                }
-                border="1px"
-                borderColor="gray.400"
               ></Input>
             </FormControl>
-            <Flex justify="center" align="center">
-              <FormControl>
-                <FormLabel>
-                  <Text>開始</Text>
-                  <FormErrorMessage>{}</FormErrorMessage>
-                </FormLabel>
-                <Input
-                  bg={THEME_COLOR.SECONDARY_WHITE}
-                  type="date"
-                  value={startFrom.toISOString().slice(0, 10)}
-                  onChange={(e) =>
-                    setStartFrom(new Date(Date.parse(e.target.value)))
-                  }
-                ></Input>
-              </FormControl>
-              <FormControl>
-                <FormLabel>
-                  <Text>終了</Text>
-                  <FormErrorMessage>{}</FormErrorMessage>
-                </FormLabel>
-                <Input
-                  bg={THEME_COLOR.SECONDARY_WHITE}
-                  type="date"
-                  value={endAt.toISOString().slice(0, 10)}
-                  onChange={(e) =>
-                    setEndAt(new Date(Date.parse(e.target.value)))
-                  }
-                ></Input>
-              </FormControl>
-            </Flex>
             <FormControl>
               <FormLabel>
-                <Text>表示設定</Text>
+                <Text>終了</Text>
+                <FormErrorMessage>{}</FormErrorMessage>
               </FormLabel>
-              <RadioGroup
-                onChange={(v) =>
-                  v === 'show'
-                    ? setShowStatus('show')
-                    : setShowStatus('notShow')
-                }
-                value={showStatus}
-                defaultValue={showStatus}
-              >
-                <HStack spacing="24px">
-                  <Radio value="show">表示する</Radio>
-                  <Radio value="notShow">表示しない</Radio>
-                </HStack>
-              </RadioGroup>
+              <Input
+                bg={THEME_COLOR.SECONDARY_WHITE}
+                type="date"
+                value={endAt.toISOString().slice(0, 10)}
+                onChange={(e) => setEndAt(new Date(Date.parse(e.target.value)))}
+              ></Input>
             </FormControl>
-            <Button
-              onClick={(e) => handleSubmit(e)}
-              colorScheme="teal"
-              variant="solid"
+          </Flex>
+          <FormControl>
+            <FormLabel>
+              <Text>表示設定</Text>
+            </FormLabel>
+            <RadioGroup
+              onChange={(v) =>
+                v === 'show' ? setShowStatus('show') : setShowStatus('notShow')
+              }
+              value={showStatus}
+              defaultValue={showStatus}
             >
-              登録
-            </Button>
-          </Stack>
-        </Box>
-      </>
-    )
-  }
+              <HStack spacing="24px">
+                <Radio value="show">表示する</Radio>
+                <Radio value="notShow">表示しない</Radio>
+              </HStack>
+            </RadioGroup>
+          </FormControl>
+          <Button
+            onClick={(e) => handleSubmit(e)}
+            colorScheme="teal"
+            variant="solid"
+          >
+            登録
+          </Button>
+        </Stack>
+      </Box>
+    </>
+  )
 }
