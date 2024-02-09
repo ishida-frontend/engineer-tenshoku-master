@@ -42,11 +42,13 @@ export default function CreateAdvertisementPage() {
   >([])
   const handleSubmit = async (event: FormEvent) => {
     try {
+      event.preventDefault();
+
       const formData = {
         name,
         url,
         author,
-        showStatus,
+        isShow: showStatus === 'show' ? true : false,
         imageUrl,
         startFrom,
         endAt,
@@ -57,8 +59,6 @@ export default function CreateAdvertisementPage() {
 
       setShowStatus('show')
 
-      event.preventDefault()
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/advertisement`,
         {
@@ -66,16 +66,8 @@ export default function CreateAdvertisementPage() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            name,
-            url,
-            author,
-            isShow: showStatus === 'show' ? true : false,
-            imageUrl,
-            startFrom,
-            endAt,
-          }),
-        },
+          body: JSON.stringify(formData),
+        }
       )
 
       const data = await response.json()
@@ -100,7 +92,7 @@ export default function CreateAdvertisementPage() {
       if (e.issues) {
         console.log('e', e.issues)
         setErrors(e.issues)
-        return
+        return;
       }
       toast({
         title: 'エラーが発生しました',
@@ -164,9 +156,10 @@ export default function CreateAdvertisementPage() {
                 setImageUrl(e.target?.value)
               }
             /> */}
+            {/* TODO: 画像をs3に渡せるように追加対応を行う
             <>
               <img src="" />
-            </>
+            </> */}
             <FormErrorMessage>
               {
                 errors.find((e) => {
@@ -217,7 +210,7 @@ export default function CreateAdvertisementPage() {
               type="text"
               value={url}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setUrl(e.target?.value)
+                setUrl(e.target.value)
               }
               border="1px"
               borderColor="gray.400"
@@ -247,7 +240,7 @@ export default function CreateAdvertisementPage() {
                 type="date"
                 value={startFrom.toISOString().slice(0, 10)}
                 onChange={(e) =>
-                  setStartFrom(new Date(Date.parse(e.target.value)))
+                  setStartFrom(new Date(e.target.value))
                 }
               >
               </Input>
@@ -273,7 +266,7 @@ export default function CreateAdvertisementPage() {
                 bg={THEME_COLOR.SECONDARY_WHITE}
                 type="date"
                 value={endAt.toISOString().slice(0, 10)}
-                onChange={(e) => setEndAt(new Date(Date.parse(e.target.value)))}
+                onChange={(e) => setEndAt(new Date(e.target.value))}
               >
               </Input>
               <FormErrorMessage>

@@ -8,11 +8,3 @@ export type AdvertisementType = {
   startFrom: Date
   endAt: Date
 }
-
-export type AdvertisementErrorType = {
-  nameError: string
-  urlError: string
-  authorError: string
-  startFromError: Date
-  endAtError: Date
-}
