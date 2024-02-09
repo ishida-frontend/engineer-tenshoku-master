@@ -11,6 +11,33 @@ export const advertisementSchema = z
     author: z.string().min(1, { message: '※必須項目です' }),
     isShow: z.boolean(),
     imageUrl: z.string(),
-    startFrom: z.date(),
-    endAt: z.date(),
+    startFrom: z
+      .string()
+      .datetime()
+      .refine(
+        (val) => {
+          return val.length > 0
+        },
+        { message: '日付を選択してください' },
+      ),
+    endAt: z
+      .string()
+      .datetime()
+      .refine(
+        (val) => {
+          return val.length > 0
+        },
+        { message: '日付を選択してください' },
+      ),
   })
+  .refine(
+    (args) => {
+      const { startFrom, endAt } = args
+      // 終了日が開始日より未来かどうか
+      return new Date(endAt) > new Date(startFrom)
+    },
+    {
+      message: '※終了日は開始日より未来の日付にしてください',
+      path: ['endAt'],
+    },
+  )

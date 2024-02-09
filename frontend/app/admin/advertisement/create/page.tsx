@@ -26,7 +26,7 @@ export default function CreateAdvertisementPage() {
   const [name, setName] = useState<string>('')
   const [url, setUrl] = useState<string>('')
   const [author, setAuthor] = useState<string>('')
-  const [showStatus, setShowStatus] = useState<'show' | 'notShow'>('notShow')
+  const [showStatus, setShowStatus] = useState<'show' | 'notShow'>()
   // TODO S3が入るようになってから広告画像保存できるように修正
   const [imageUrl, setImageUrl] = useState<string>(
     'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.yuta-u.com%2Fprograming%2Freact-js-for-bigginer&psig=AOvVaw0l3T-LRKu7TksbHV0Vgp7O&ust=1707522385982000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJiXs9z2nIQDFQAAAAAdAAAAABAE',
@@ -42,7 +42,7 @@ export default function CreateAdvertisementPage() {
   >([])
   const handleSubmit = async (event: FormEvent) => {
     try {
-      event.preventDefault();
+      event.preventDefault()
 
       const formData = {
         name,
@@ -50,14 +50,11 @@ export default function CreateAdvertisementPage() {
         author,
         isShow: showStatus === 'show' ? true : false,
         imageUrl,
-        startFrom,
-        endAt,
+        startFrom: startFrom.toISOString(),
+        endAt: endAt.toISOString(),
       }
 
       const validation = advertisementSchema.parse(formData)
-      console.log('validation', validation)
-
-      setShowStatus('show')
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/advertisement`,
@@ -67,7 +64,7 @@ export default function CreateAdvertisementPage() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData),
-        }
+        },
       )
 
       const data = await response.json()
@@ -87,12 +84,10 @@ export default function CreateAdvertisementPage() {
           duration: 3000,
         })
       }
-      setShowStatus('notShow')
     } catch (e) {
       if (e.issues) {
-        console.log('e', e.issues)
         setErrors(e.issues)
-        return;
+        return
       }
       toast({
         title: 'エラーが発生しました',
@@ -138,11 +133,11 @@ export default function CreateAdvertisementPage() {
             </FormErrorMessage>
           </FormControl>
           <FormControl
-          isInvalid={
-            !!errors.find((e) => {
-              return e.path[0] === 'imageUrl'
-            })
-          }
+            isInvalid={
+              !!errors.find((e) => {
+                return e.path[0] === 'imageUrl'
+              })
+            }
           >
             <FormLabel>
               <Text>画像</Text>
@@ -153,7 +148,7 @@ export default function CreateAdvertisementPage() {
               accept="image/*"
               value={imageUrl}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setImageUrl(e.target?.value)
+                setImageUrl(e.target.value)
               }
             /> */}
             {/* TODO: 画像をs3に渡せるように追加対応を行う
@@ -169,11 +164,11 @@ export default function CreateAdvertisementPage() {
             </FormErrorMessage>
           </FormControl>
           <FormControl
-          isInvalid={
-            !!errors.find((e) => {
-              return e.path[0] === 'author'
-            })
-          }
+            isInvalid={
+              !!errors.find((e) => {
+                return e.path[0] === 'author'
+              })
+            }
           >
             <FormLabel>企業名</FormLabel>
             <Input
@@ -196,11 +191,11 @@ export default function CreateAdvertisementPage() {
             </FormErrorMessage>
           </FormControl>
           <FormControl
-          isInvalid={
-            !!errors.find((e) => {
-              return e.path[0] === 'url'
-            })
-          }
+            isInvalid={
+              !!errors.find((e) => {
+                return e.path[0] === 'url'
+              })
+            }
           >
             <FormLabel>
               <Text>リンク</Text>
@@ -214,8 +209,7 @@ export default function CreateAdvertisementPage() {
               }
               border="1px"
               borderColor="gray.400"
-            >
-            </Input>
+            ></Input>
             <FormErrorMessage>
               {
                 errors.find((e) => {
@@ -224,58 +218,58 @@ export default function CreateAdvertisementPage() {
               }
             </FormErrorMessage>
           </FormControl>
-          <Flex justify="center" align="center">
+          <Flex justify="center" align="center" gap={'10px'}>
             <FormControl
-          isInvalid={
-            !!errors.find((e) => {
-              return e.path[0] === 'startFrom'
-            })
-          }
+              isInvalid={
+                !!errors.find((e) => {
+                  return e.path[0] === 'startFrom'
+                })
+              }
             >
               <FormLabel>
                 <Text>開始</Text>
               </FormLabel>
               <Input
                 bg={THEME_COLOR.SECONDARY_WHITE}
+                border="1px"
+                borderColor="gray.400"
                 type="date"
                 value={startFrom.toISOString().slice(0, 10)}
-                onChange={(e) =>
-                  setStartFrom(new Date(e.target.value))
-                }
-              >
-              </Input>
+                onChange={(e) => setStartFrom(new Date(e.target.value))}
+              ></Input>
               <FormErrorMessage>
-              {
-                errors.find((e) => {
-                  return e.path[0] === 'srartFrom'
-                })?.message
-              }
-            </FormErrorMessage>
+                {
+                  errors.find((e) => {
+                    return e.path[0] === 'srartFrom'
+                  })?.message
+                }
+              </FormErrorMessage>
             </FormControl>
             <FormControl
-          isInvalid={
-            !!errors.find((e) => {
-              return e.path[0] === 'endAt'
-            })
-          }
+              isInvalid={
+                !!errors.find((e) => {
+                  return e.path[0] === 'endAt'
+                })
+              }
             >
               <FormLabel>
                 <Text>終了</Text>
               </FormLabel>
               <Input
                 bg={THEME_COLOR.SECONDARY_WHITE}
+                border="1px"
+                borderColor="gray.400"
                 type="date"
                 value={endAt.toISOString().slice(0, 10)}
                 onChange={(e) => setEndAt(new Date(e.target.value))}
-              >
-              </Input>
+              ></Input>
               <FormErrorMessage>
-              {
-                errors.find((e) => {
-                  return e.path[0] === 'endAt'
-                })?.message
-              }
-            </FormErrorMessage>
+                {
+                  errors.find((e) => {
+                    return e.path[0] === 'endAt'
+                  })?.message
+                }
+              </FormErrorMessage>
             </FormControl>
           </Flex>
           <FormControl>

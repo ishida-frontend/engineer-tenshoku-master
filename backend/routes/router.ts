@@ -12,7 +12,8 @@ import { QuestionController } from '../controllers/questionController'
 import { AnswerController } from '../controllers/answerController'
 import { TagValidator } from '../validation/tagValidator'
 import { TagController } from '../controllers/tagController'
-import { AdvertisementController } from '../controllers/advertisementController' 
+import { AdvertisementValidator } from '../validation/advertisementValidator'
+import { AdvertisementController } from '../controllers/advertisementController'
 import { UserValidator } from '../validation/userValidator'
 
 const {
@@ -44,6 +45,7 @@ const videoValidator = new VideoValidator()
 const tagController = new TagController()
 const tagValidator = new TagValidator()
 const advertisementController = new AdvertisementController()
+const advertisementValidator = new AdvertisementValidator()
 const videoController = new VideoController()
 const questionController = new QuestionController()
 const answerController = new AnswerController()
@@ -99,7 +101,13 @@ router.put('/tag', tagValidator.updateTag, (req, res) => {
 })
 
 // Advertisementのルーティング
-
+router.post(
+  '/advertisement',
+  advertisementValidator.createAdvertisement,
+  (req, res) => {
+    advertisementController.createAdvertisement(req, res)
+  },
+)
 
 const userRouter = express.Router()
 router.use('/user', userRouter)
