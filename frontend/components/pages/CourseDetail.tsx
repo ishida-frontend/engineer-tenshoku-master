@@ -71,7 +71,6 @@ export function CourseDetail({
   questions?: QuestionType[]
   answers: AnswerType[]
   questionId?: string
-  handleLikeStatus?: (videoId: string) => void
   handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
   handleFavoriteVideoStatus: (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -80,6 +79,7 @@ export function CourseDetail({
   anotherUserProfile?: UserProfileType
   isProfileOpen?: boolean
   closeProfileModal?: () => void
+  handleLikeStatus?: (videoId: string) => void
 }) {
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
@@ -294,6 +294,8 @@ export function CourseDetail({
             anotherUserProfile={anotherUserProfile}
             isProfileOpen={isProfileOpen}
             closeProfileModal={closeProfileModal}
+            isLiked={false}
+            likeCount={0}
           />
         </Container>
       </Container>

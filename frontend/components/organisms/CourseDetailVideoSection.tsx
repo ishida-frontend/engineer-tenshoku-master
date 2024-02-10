@@ -43,6 +43,10 @@ export function CourseDetailVideoSection({
   anotherUserProfile,
   isProfileOpen,
   closeProfileModal,
+  isLiked,
+  handleLike,
+  handleLikeStatus,
+  likeCount,
 }: {
   selectedVideo: SelectedVideo | null
   questionPage: QuestionPageType
@@ -69,7 +73,10 @@ export function CourseDetailVideoSection({
   anotherUserProfile?: UserProfileType
   isProfileOpen?: boolean
   closeProfileModal?: () => void
+  isLiked: boolean
+  handleLike?: (event: React.MouseEvent<HTMLButtonElement>) => void
   handleLikeStatus?: (videoId: string) => void
+  likeCount: number
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -92,7 +99,11 @@ export function CourseDetailVideoSection({
               <Spacer />
               {session?.user?.id && selectedVideo && (
                 <>
-                  <GoodButton />
+                  <GoodButton
+                    handleLike={handleLike}
+                    isLiked={isLiked}
+                    likeCount={likeCount}
+                  />
                   <WatchedButton
                     watchedStatus={
                       watchedStatus?.[selectedVideo.sections.videos.id] || false

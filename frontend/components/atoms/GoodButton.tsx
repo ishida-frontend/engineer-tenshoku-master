@@ -8,7 +8,7 @@ export const GoodButton = ({
   likeCount,
 }: {
   isLiked: boolean
-  handleLike: () => void
+  handleLike: (event: React.MouseEvent<HTMLButtonElement>) => void
   likeCount: number
 }) => {
   return (

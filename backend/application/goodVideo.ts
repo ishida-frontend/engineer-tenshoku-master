@@ -12,7 +12,7 @@ export class GoodVideoApplicationService {
     return likeCount
   }
 
-  async LikeVideo(userId: string, videoId: string): Promise<void> {
+  async goodVideo(userId: string, videoId: string): Promise<void> {
     const existingLike = await prisma.goodVideo.findUnique({
       where: {
         user_id_video_id: {
@@ -32,7 +32,7 @@ export class GoodVideoApplicationService {
     }
   }
 
-  async unLikeVideo(userId: string, videoId: string): Promise<void> {
+  async cancelGoodVideo(userId: string, videoId: string): Promise<void> {
     const existingLike = await prisma.goodVideo.findUnique({
       where: {
         user_id_video_id: {
