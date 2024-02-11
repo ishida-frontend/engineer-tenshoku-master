@@ -9,7 +9,6 @@ export const advertisementSchema = z
         message: '※URLはhttpsで始めてください',
       }),
     author: z.string().min(1, { message: '※必須項目です' }),
-    isShow: z.boolean(),
     imageUrl: z.string(),
     startFrom: z
       .string()

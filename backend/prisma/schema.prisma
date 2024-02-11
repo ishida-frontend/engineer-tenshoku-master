@@ -163,7 +163,6 @@ model Advertisement {
   name       String    @db.VarChar(255)
   url        String    @db.VarChar(255)
   author     String    @db.VarChar(255)
-  isShow     Boolean   @default(false)
   imageUrl   String    @db.VarChar(255)
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt

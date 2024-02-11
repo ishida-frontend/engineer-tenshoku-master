@@ -8,13 +8,11 @@ export class AdvertisementApplicationService {
     url: string,
     imageUrl: string,
     author: string,
-    isShow: boolean,
     startFrom: Date,
     endAt: Date
   }) {
     try {
-      console.log('params',params);
-      const { name, url, imageUrl, author, isShow, startFrom, endAt } = params
+      const { name, url, imageUrl, author, startFrom, endAt } = params
       const advertisement = await prisma.advertisement.create({
         data: {
           id: crypto.randomUUID(),
@@ -22,7 +20,6 @@ export class AdvertisementApplicationService {
           url,
           imageUrl,
           author,
-          isShow,
           startFrom,
           endAt
         }

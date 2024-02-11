@@ -17,7 +17,6 @@ export class AdvertisementValidator {
             message: '※https://の形式で入力してください',
           }),
         author: z.string().min(1, { message: '※必須項目です' }),
-        isShow: z.boolean(),
         imageUrl: z.string().min(1, { message: '※必須項目です' }),
         startFrom: z
           .string()
