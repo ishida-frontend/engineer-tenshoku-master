@@ -14,8 +14,10 @@ export const GoodButton = ({
   return (
     <div>
       <IconButton
+        onClick={(e) => {
+          handleLike(e)
+        }}
         icon={isLiked ? <Icon as={FaRegThumbsUp} /> : <Icon as={FaThumbsUp} />}
-        onClick={handleLike}
         aria-label="Like Button"
         variant="ghost"
       >

@@ -99,17 +99,18 @@ export function CourseDetailVideoSection({
               <Spacer />
               {session?.user?.id && selectedVideo && (
                 <>
-                  <GoodButton
-                    handleLike={handleLike}
-                    isLiked={isLiked}
-                    likeCount={likeCount}
-                  />
                   <WatchedButton
                     watchedStatus={
                       watchedStatus?.[selectedVideo.sections.videos.id] || false
                     }
                     loadingState={isWatchingLoading}
                     handleViewingStatus={handleViewingStatus}
+                  />
+
+                  <GoodButton
+                    handleLike={handleLike}
+                    isLiked={isLiked}
+                    likeCount={likeCount}
                   />
 
                   <FavButton

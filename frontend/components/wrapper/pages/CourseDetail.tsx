@@ -158,7 +158,7 @@ export function CourseDetailWrapper({
       }
     }
 
-    const handleLikeStatus = async () => {
+    const handleLike = async () => {
       const action = isLiked ? 'unlike' : 'like'
       try {
         await fetch(`/api/good/${videoId}/${action}`, {
@@ -203,7 +203,7 @@ export function CourseDetailWrapper({
     }, [courseData, session, videoId])
 
     useEffect(() => {
-      const fetchLikeStatus = async () => {
+      const handleLikeStatus = async () => {
         try {
           const res = await fetch(`/api/good/${videoId}/check?userId=${userId}`)
           const data = await res.json()
@@ -213,7 +213,7 @@ export function CourseDetailWrapper({
         }
       }
 
-      fetchLikeStatus()
+      handleLikeStatus()
     }, [videoId, userId])
 
     const getAnotherUserProfile = async (anotherUserId: string) => {
@@ -254,7 +254,7 @@ export function CourseDetailWrapper({
         anotherUserProfile={anotherUserProfile}
         isProfileOpen={isProfileOpen}
         closeProfileModal={closeProfileModal}
-        handleLikeStatus={handleLikeStatus}
+        handleLike={handleLike}
       />
     )
   } catch (e) {
