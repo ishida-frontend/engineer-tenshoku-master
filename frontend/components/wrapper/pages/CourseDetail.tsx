@@ -38,6 +38,7 @@ export function CourseDetailWrapper({
   questions?: QuestionType[]
   answers: AnswerType[]
   questionId?: string
+  likeCount?: number
 }) {
   const { showErrorToast } = useCustomToast()
 
@@ -167,7 +168,9 @@ export function CourseDetailWrapper({
 
         setIsLiked(!isLiked)
         setLikeCount((count) => (isLiked ? count - 1 : count + 1))
-      } catch (error) {}
+      } catch (error) {
+        console.error('Error toggling like:', error)
+      }
     }
 
     useEffect(() => {

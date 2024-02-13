@@ -20,7 +20,7 @@ import { QuestionPageType } from '../../types/QuestionType'
 import { AnswerType } from '../../types/AnswerType'
 import { Session } from 'next-auth'
 import { UserProfileType } from '../../types'
-import { GoodButton } from '../atoms/GoodButton'
+import { GoodButton } from '../../components/atoms/GoodButton'
 
 export function CourseDetailVideoSection({
   selectedVideo,

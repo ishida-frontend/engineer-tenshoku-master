@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { IconButton, Icon } from '@chakra-ui/react'
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa'
 
@@ -20,6 +20,7 @@ export const GoodButton = ({
         icon={isLiked ? <Icon as={FaRegThumbsUp} /> : <Icon as={FaThumbsUp} />}
         aria-label="Like Button"
         variant="ghost"
+        color="teal.500"
       >
         {likeCount}
       </IconButton>

@@ -59,6 +59,7 @@ export function CourseDetail({
   anotherUserProfile,
   isProfileOpen,
   closeProfileModal,
+  handleLike,
 }: {
   courseData: CourseWithSectionsType
   session: Session | null
@@ -80,6 +81,7 @@ export function CourseDetail({
   isProfileOpen?: boolean
   closeProfileModal?: () => void
   handleLikeStatus?: (videoId: string) => void
+  handleLike?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) {
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
@@ -296,6 +298,7 @@ export function CourseDetail({
             closeProfileModal={closeProfileModal}
             isLiked={false}
             likeCount={0}
+            handleLike={handleLike}
           />
         </Container>
       </Container>
