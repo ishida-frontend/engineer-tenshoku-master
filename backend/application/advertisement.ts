@@ -1,16 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import crypto from 'crypto'
 const prisma = new PrismaClient()
 
 export class AdvertisementApplicationService {
-  async createAdvertisement(params: {
-    name: string,
-    url: string,
-    imageUrl: string,
-    author: string,
-    startFrom: Date,
-    endAt: Date
-  }) {
+  async createAdvertisement(params: Prisma.AdvertisementCreateInput)
+   {
     try {
       const { name, url, imageUrl, author, startFrom, endAt } = params
       const advertisement = await prisma.advertisement.create({

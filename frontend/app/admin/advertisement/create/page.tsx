@@ -48,7 +48,7 @@ export default function CreateAdvertisementPage() {
       if (advertisementValidationResult.success === false) {
         setErrors(advertisementValidationResult.error.issues)
         toast({
-          title: '入力に誤りがあります',
+          title: 'フォームの入力に誤りがあります',
           status: 'error',
           position: 'top',
           duration: 3000,

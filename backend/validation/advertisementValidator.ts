@@ -62,7 +62,7 @@ export class AdvertisementValidator {
     } catch (e) {
       res
         .status(500)
-        .json({ error: 'An error occurred  rocessing your request.' })
+        .json({ error: 'サーバーエラーが発生しました' })
     }
   }
 }
