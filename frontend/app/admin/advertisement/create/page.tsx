@@ -23,7 +23,7 @@ export default function CreateAdvertisementPage() {
   const [url, setUrl] = useState<string>('')
   const [author, setAuthor] = useState<string>('')
   // TODO S3が入るようになってから広告画像保存できるように修正
-  const [imageUrl, setImageUrl] = useState<string>(
+  const [imageUrl] = useState<string>(
     'https://2.bp.blogspot.com/-irp34LY2m-Q/W-0g4E5_fMI/AAAAAAABQNU/GDXJYSCRDqkyPcj2YAoSdKqdYmti_8KVwCLcBGAs/s180-c/kaisya_computer_sports_woman.png',
   )
   const [startFrom, setStartFrom] = useState<Date>(new Date())
@@ -70,6 +70,14 @@ export default function CreateAdvertisementPage() {
           position: 'top',
           duration: 3000,
         })
+        if (!response.ok) {
+          toast({
+            title: data.message,
+            status: 'error',
+            position: 'top',
+            duration: 3000,
+          })
+        }
       } else {
         toast({
           title: data.message,
@@ -135,7 +143,8 @@ export default function CreateAdvertisementPage() {
           <FormLabel>
             <Text>画像</Text>
           </FormLabel>
-          <Input
+          {/* TODO: 画像をs3に渡せるように追加対応を行う */}
+          {/* <Input
             bg={THEME_COLOR.SECONDARY_WHITE}
             type="file"
             accept="image/*"
@@ -143,7 +152,7 @@ export default function CreateAdvertisementPage() {
               setImageUrl(e.target.value)
             }
           />
-          {/* TODO: 画像をs3に渡せるように追加対応を行う */}
+
           <img src={imageUrl} />
           <FormErrorMessage>
             {
@@ -151,7 +160,7 @@ export default function CreateAdvertisementPage() {
                 return e.path[0] === 'imageUrl'
               })?.message
             }
-          </FormErrorMessage>
+          </FormErrorMessage> */}
         </FormControl>
         <FormControl
           isInvalid={

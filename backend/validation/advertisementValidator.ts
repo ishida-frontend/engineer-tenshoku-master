@@ -50,6 +50,7 @@ export class AdvertisementValidator {
       )
 
     try {
+      throw new Error('test Error')
       const advertisementData = advertisementCreateSchema.safeParse(req.body)
 
       if (advertisementData.success) {
@@ -60,7 +61,10 @@ export class AdvertisementValidator {
           .json({ errors: advertisementData.error.formErrors.fieldErrors })
       }
     } catch (e) {
-      console.log('err', e)
+      console.log('Error', Error)
+      res
+        .status(500)
+        .json({ error: 'An error occurred while processing your request.' })
     }
   }
 }
