@@ -70,21 +70,8 @@ export default function CreateAdvertisementPage() {
           position: 'top',
           duration: 3000,
         })
-        if (!response.ok) {
-          toast({
-            title: data.message,
-            status: 'error',
-            position: 'top',
-            duration: 3000,
-          })
-        }
       } else {
-        toast({
-          title: data.message,
-          status: 'error',
-          position: 'top',
-          duration: 3000,
-        })
+        throw new Error(data.message)
       }
     } catch (e) {
       if (e.issues) {
