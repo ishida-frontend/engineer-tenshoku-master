@@ -71,7 +71,8 @@ export default function CreateAdvertisementPage() {
           duration: 3000,
         })
       } else {
-        throw new Error(data.message)
+        const errorMessage = await response.text()
+        throw new Error(errorMessage)
       }
     } catch (e) {
       if (e.issues) {
@@ -79,7 +80,7 @@ export default function CreateAdvertisementPage() {
         return
       }
       toast({
-        title: 'エラーが発生しました',
+        title: e.message,
         status: 'error',
         position: 'top',
         duration: 3000,

@@ -50,21 +50,19 @@ export class AdvertisementValidator {
       )
 
     try {
-      throw new Error('test Error')
-      const advertisementData = advertisementCreateSchema.safeParse(req.body)
+      throw new Error('バックエンドでエラーが発生')
+      // const advertisementData = advertisementCreateSchema.safeParse(req.body)
 
-      if (advertisementData.success) {
-        next()
-      } else {
-        res
-          .status(400)
-          .json({ errors: advertisementData.error.formErrors.fieldErrors })
-      }
+      // if (advertisementData.success) {
+      //   next()
+      // } else {
+      //   res
+      //     .status(400)
+      //     .json({ errors: advertisementData.error.formErrors.fieldErrors })
+      // }
     } catch (e) {
-      console.log('Error', Error)
-      res
-        .status(500)
-        .json({ error: 'An error occurred while processing your request.' })
+      console.log('Error', e)
+      res.status(500).json({ error: 'An error occurred while processing your request.' });
     }
   }
 }
