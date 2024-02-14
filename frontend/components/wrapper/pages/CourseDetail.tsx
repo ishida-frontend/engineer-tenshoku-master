@@ -162,9 +162,12 @@ export function CourseDetailWrapper({
     const handleLike = async () => {
       const action = isLiked ? 'unlike' : 'like'
       try {
-        await fetch(`/api/good/${videoId}/${action}`, {
-          method: 'POST',
-        })
+        await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodvideo/${videoId}`,
+          {
+            method: 'POST',
+          },
+        )
 
         setIsLiked(!isLiked)
         setLikeCount((count) => (isLiked ? count - 1 : count + 1))

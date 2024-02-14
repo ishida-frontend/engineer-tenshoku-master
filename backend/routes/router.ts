@@ -13,6 +13,7 @@ import { AnswerController } from '../controllers/answerController'
 import { TagValidator } from '../validation/tagValidator'
 import { TagController } from '../controllers/tagController'
 import { UserValidator } from '../validation/userValidator'
+import { GoodVideoController } from '../controllers/goodVideoController'
 
 const {
   createCourse,
@@ -47,6 +48,7 @@ const questionController = new QuestionController()
 const answerController = new AnswerController()
 const viewingStatusController = new ViewingStatusController()
 const favoriteVideoController = new FavoriteVideoController()
+const goodVideoController = new GoodVideoController()
 
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -172,5 +174,11 @@ favoriteVideoRouter.get(
   favoriteVideoController.getFavoriteVideo,
 )
 favoriteVideoRouter.get('/:userId', favoriteVideoController.getFavoriteVideos)
+
+const goodVideoRouter = express.Router()
+router.use('/goodvideo', goodVideoRouter)
+goodVideoRouter.get('/:videoId', goodVideoController.getLikeCount)
+goodVideoRouter.post('/:videoId', goodVideoController.goodVideo)
+goodVideoRouter.delete('/videoId', goodVideoController.cancelGoodVideo)
 
 export default router
