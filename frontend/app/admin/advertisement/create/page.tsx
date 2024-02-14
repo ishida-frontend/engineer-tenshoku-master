@@ -16,6 +16,7 @@ import React, { useState, FormEvent } from 'react'
 import { THEME_COLOR } from '../../../../constants'
 
 import { advertisementSchema } from '../../../../zod'
+import { ZodIssue } from 'zod'
 
 export default function CreateAdvertisementPage() {
   const toast = useToast()
@@ -28,13 +29,7 @@ export default function CreateAdvertisementPage() {
   )
   const [startFrom, setStartFrom] = useState<Date>(new Date())
   const [endAt, setEndAt] = useState<Date>(new Date())
-  const [errors, setErrors] = useState<
-    {
-      message: string
-      path: string[]
-      type: string
-    }[]
-  >([])
+  const [errors, setErrors] = useState<ZodIssue[]>([])
   const handleSubmit = async (event: FormEvent) => {
     try {
       event.preventDefault()
@@ -48,7 +43,18 @@ export default function CreateAdvertisementPage() {
         endAt: endAt.toISOString(),
       }
 
-      advertisementSchema.parse(formData)
+      const advertisementValidationResult =
+        advertisementSchema.safeParse(formData)
+      if (advertisementValidationResult.success === false) {
+        setErrors(advertisementValidationResult.error.issues)
+        toast({
+          title: '入力に誤りがあります',
+          status: 'error',
+          position: 'top',
+          duration: 3000,
+        })
+        return
+      }
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/advertisement`,
@@ -63,17 +69,21 @@ export default function CreateAdvertisementPage() {
 
       const data = await response.json()
 
-      if (response.ok) {
+      if (!response.ok) {
+        setErrors(data)
         toast({
-          title: data.message,
-          status: 'success',
+          title: '入力に誤りがあります',
+          status: 'error',
           position: 'top',
           duration: 3000,
         })
-      } else {
-        const errorMessage = await response.text()
-        throw new Error(errorMessage)
       }
+      toast({
+        title: data.message,
+        status: 'success',
+        position: 'top',
+        duration: 3000,
+      })
     } catch (e) {
       if (e.issues) {
         setErrors(e.issues)
