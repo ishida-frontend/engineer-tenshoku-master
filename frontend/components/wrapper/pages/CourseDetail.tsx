@@ -166,6 +166,13 @@ export function CourseDetailWrapper({
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodvideo/${videoId}`,
           {
             method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId,
+              videoId,
+            }),
           },
         )
 
