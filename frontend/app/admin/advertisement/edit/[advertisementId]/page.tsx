@@ -9,8 +9,13 @@ export default async function AdminEditAdvertisement({
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/advertisement/${params.advertisementId}`,
     {
-      cache: 'no-cache',
-    },
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // body: JSON.stringify()
+
+  },
   )
   console.log(' params.advertisementId', params.advertisementId)
   const advertisement: AdvertisementType = await res.json()
