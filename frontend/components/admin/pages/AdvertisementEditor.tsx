@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, FormEvent, useEffect } from 'react'
+import React, { useState, FormEvent, useEffect, useCallback } from 'react'
 
 import {
   Box,
@@ -9,26 +9,21 @@ import {
   FormLabel,
   Input,
   Stack,
-  Select,
-  Textarea,
   Link,
-  CheckboxGroup,
+  useToast,
   HStack,
   Text,
 } from '@chakra-ui/react'
 
-import { useCustomToast } from '../../../hooks/useCustomToast'
 import { AdvertisementType } from '../../../types/AdvertisementType'
+import { advertisementSchema } from '../../../zod'
+import { ZodIssue } from 'zod'
 import { Loader } from '../atoms/Loader'
 
 type AdvertisementEditorProps = {
   advertisement: AdvertisementType
 }
-export const AdverrisementEditor = ({
-  advertisement,
-}: AdvertisementEditorProps) => {
-  const { showSuccessToast, showErrorToast } = useCustomToast()
-
+export function AdverrisementEditor({ advertisement }: AdvertisementEditorProps){
   const selectedAdvertisement: AdvertisementType = {
     id: advertisement.id,
     name: advertisement.name,
@@ -38,47 +33,35 @@ export const AdverrisementEditor = ({
     startFrom: advertisement.startFrom,
     endAt: advertisement.endAt,
   }
-  const [advertisementData, setAdvertisementData] = useState<
-    AdvertisementType[]
-  >([selectedAdvertisement])
-  const [errors, setErrors] = useState({
-    nameError: '',
-    urlError: '',
-    imageUrlError: '',
-    authorError: '',
-  })
+  const toast = useToast()
+  const [advertisementData, setAdvertisementData] = useState<AdvertisementType>(
+    selectedAdvertisement,
+  )
+  const [errors, setErrors] = useState<ZodIssue[]>([])
   const [isSubmitting, SetIsSubmitting] = useState(false)
-  const [advertisementIds, setAdvertisementIds] = useState<string[]>([])
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (!advertisementData) {
-        showSuccessToast('広告情報の取得に失敗しました')
+        toast({
+          title: '広告情報の取得に失敗しました',
+          status: 'error',
+          position: 'top',
+          duration: 3000,
+        })
       }
     }, 10000)
     return () => clearTimeout(timeout)
-  }, [advertisementData, showSuccessToast])
+  }, [advertisementData, clearTimeout])
 
   const hasChanges = () => {
     return (
       JSON.stringify(selectedAdvertisement) !== JSON.stringify(advertisement)
     )
   }
-  const handleAdvertisementIds = (advertisementId: string) => () => {
-    // idが選択されていたら
-    if (advertisementId.includes(advertisementId)) {
-      // idを取り除く
-      setAdvertisementIds(
-        advertisementIds.filter((id) => id !== advertisementId),
-      )
-    } else {
-      // idを追加する
-      setAdvertisementIds([...advertisementIds, advertisementId])
-    }
-  }
-  const isButtonDisabled = () => {
+  const isNotChanged = useCallback(() => {
     return !hasChanges()
-  }
+  }, [hasChanges])
 
   const updateAdvertisement = async (event: FormEvent) => {
     event.preventDefault()
@@ -93,24 +76,35 @@ export const AdverrisementEditor = ({
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(advertisementData[0]),
+          body: JSON.stringify({ advertisementData }),
         },
       )
-      const validResults = await response.json()
+      advertisementSchema.safeParse(advertisementData)
+      const data = await response.json()
 
-      if (response.ok) {
-        showSuccessToast(validResults.message)
-        setErrors({
-          nameError: '',
-          urlError: '',
-          imageUrlError: '',
-          authorError: '',
+      if (!response.ok) {
+        setErrors(data)
+        toast({
+          title: '入力に誤りがあります',
+          status: 'error',
+          position: 'top',
+          duration: 3000,
         })
       } else {
-        showErrorToast('広告情報の更新に失敗しました')
+        toast({
+          title: '広告情報の更新に成功しました',
+          status: 'success',
+          position: 'top',
+          duration: 3000,
+        })
       }
-    } catch (error) {
-      showErrorToast('広告情報の更新に失敗しました')
+    } catch (e) {
+      toast({
+        title: '広告情報の更新に失敗しました',
+        status: 'error',
+        position: 'top',
+        duration: 3000,
+      })
     } finally {
       SetIsSubmitting(false)
     }
@@ -125,113 +119,182 @@ export const AdverrisementEditor = ({
           <Button colorScheme="green">一覧へ戻る</Button>
         </Link>
         <Box p={4} border="1px" borderColor="gray.400" borderRadius={9}>
-          <Text>広告ID：{advertisement.id}</Text>
+          <Text>広告ID：{advertisementData.id}</Text>
         </Box>
-        <FormControl>
-          <FormLabel>広告タイトル</FormLabel>
+        <FormControl
+          isInvalid={
+            !!errors.find((e) => {
+              return e.path[0] === 'name'
+            })
+          }
+        >
+          <FormLabel>広告のタイトル</FormLabel>
           <Input
             type="text"
-            value={advertisementData[0].name}
+            value={advertisementData.name}
             onChange={(e) =>
-              setAdvertisementData([{
-                ...advertisementData[0],
+              setAdvertisementData({
+                ...advertisementData,
                 name: e.target.value,
-              }])
+              })
             }
             aria-required={true}
             border="1px"
             borderColor="gray.400"
           />
-          <FormErrorMessage>{errors.nameError}</FormErrorMessage>
-        </FormControl>
-        <FormControl>
-          <FormLabel>リンク</FormLabel>
-          <Textarea
-            value={advertisementData[0].url}
-            onChange={(e) =>
-              setAdvertisementData([{
-                ...advertisementData[0],
-                url: e.target.value,
-              }])
+          <FormErrorMessage>
+            {
+              errors.find((e) => {
+                return e.path[0] === 'name'
+              })?.message
             }
-            size="lg"
-            rows={10}
-            aria-required={true}
-            border="1px"
-            borderColor="gray.400"
-          ></Textarea>
-          <FormErrorMessage>{errors.urlError}</FormErrorMessage>
+          </FormErrorMessage>
         </FormControl>
-        <FormControl>
-          <FormLabel>広告画像URL</FormLabel>
+        <FormControl
+          isInvalid={
+            !!errors.find((e) => {
+              return e.path[0] === 'imageUrl'
+            })
+          }
+        >
+          <FormLabel>広告画像</FormLabel>
           <Input
             type="text"
-            value={advertisementData[0].imageUrl}
+            value={advertisementData.imageUrl}
             onChange={(e) =>
-              setAdvertisementData([{
-                ...advertisementData[0],
+              setAdvertisementData({
+                ...advertisementData,
                 imageUrl: e.target.value,
-              }])
+              })
             }
             aria-required={true}
             border="1px"
             borderColor="gray.400"
           />
-          <FormErrorMessage>{errors.imageUrlError}</FormErrorMessage>
+          <FormErrorMessage>
+            {
+              errors.find((e) => {
+                return e.path[0] === 'imageUrl'
+              })?.message
+            }
+          </FormErrorMessage>
         </FormControl>
-        <FormControl>
+        <FormControl
+          isInvalid={
+            !!errors.find((e) => {
+              return e.path[0] === 'author'
+            })
+          }
+        >
           <FormLabel>企業名</FormLabel>
           <HStack>
             <Input
-              value={advertisementData[0].author}
+              value={advertisementData.author}
               onChange={(e) =>
-                setAdvertisementData([{
-                  ...advertisementData[0],
+                setAdvertisementData({
+                  ...advertisementData,
                   author: e.target.value,
-                }])
+                })
               }
-              aria-required={true}
               border="1px"
               borderColor="gray.400"
             ></Input>
-            <Text>(h)</Text>
           </HStack>
-          <FormErrorMessage>{errors.nameError}</FormErrorMessage>
+          <FormErrorMessage>
+            {
+              errors.find((e) => {
+                return e.path[0] === 'author'
+              })?.message
+            }
+          </FormErrorMessage>
         </FormControl>
-        <FormControl>
-          <FormLabel>開始日</FormLabel>
-          <Select
-            value={advertisementData[0].startFrom.toString()}
+
+        <FormControl
+          isInvalid={
+            !!errors.find((e) => {
+              return e.path[0] === 'url'
+            })
+          }
+        >
+          <FormLabel>リンク</FormLabel>
+          <Input
+            value={advertisementData.url}
             onChange={(e) =>
-              setAdvertisementData([{
-                ...advertisementData[0],
+              setAdvertisementData({
+                ...advertisementData,
+                url: e.target.value,
+              })
+            }
+            border="1px"
+            borderColor="gray.400"
+          ></Input>
+          <FormErrorMessage>
+            {
+              errors.find((e) => {
+                return e.path[0] === 'url'
+              })?.message
+            }
+          </FormErrorMessage>
+        </FormControl>
+        <FormControl
+          isInvalid={
+            !!errors.find((e) => {
+              return e.path[0] === 'startFrom'
+            })
+          }
+        >
+          <FormLabel>開始日</FormLabel>
+          <Input
+            value={advertisementData.startFrom.toString()}
+            onChange={(e) =>
+              setAdvertisementData({
+                ...advertisementData,
                 startFrom: new Date(e.target.value),
-              }])
+              })
+            }
+            border="1px"
+            borderColor="gray.400"
+          ></Input>
+          <FormErrorMessage>
+            {
+              errors.find((e) => {
+                return e.path[0] === 'srartFrom'
+              })?.message
+            }
+          </FormErrorMessage>
+        </FormControl>
+        <FormControl
+          isInvalid={
+            !!errors.find((e) => {
+              return e.path[0] === 'endAt'
+            })
+          }
+        >
+          <FormLabel>終了日</FormLabel>
+          <Input
+            value={advertisementData.endAt.toString()}
+            onChange={(e) =>
+              setAdvertisementData({
+                ...advertisementData,
+                endAt: new Date(e.target.value),
+              })
             }
             aria-required={true}
             border="1px"
             borderColor="gray.400"
-          ></Select>
+          ></Input>
+          <FormErrorMessage>
+            {
+              errors.find((e) => {
+                return e.path[0] === 'endAt'
+              })?.message
+            }
+          </FormErrorMessage>
         </FormControl>
-        <CheckboxGroup colorScheme="primary">
-          <Stack spacing={[5]} direction={['row']} flexWrap={'wrap'}>
-            {advertisementData.map((advertisement) => (
-              <HStack cursor={'pointer'} key={advertisement.id}>
-                <input
-                  id={advertisement.id}
-                  type="checkbox"
-                  checked={advertisementIds.includes(advertisement.id)}
-                  onChange={handleAdvertisementIds(advertisement.id)}
-                />
-                <Text>{advertisement.name}</Text>
-              </HStack>
-            ))}
-          </Stack>
-        </CheckboxGroup>
         <Button
           onClick={updateAdvertisement}
           isLoading={isSubmitting}
-          isDisabled={isButtonDisabled()}
+          isDisabled={isNotChanged()}
           colorScheme="green"
           variant="solid"
         >

@@ -21,7 +21,7 @@ export class AdvertisementController {
   async getAdvertisement(req: express.Request, res: express.Response) {
     try {
       const advertisement =
-        await AdvertisementApplicationService.getAdvertisement(req.params.id)
+        await this.advertisementApplicationServise.getAdvertisement(req.params.id)
       res.status(200).json(advertisement)
     } catch (e) {
       res.status(500).json({ message: 'サーバー内部のエラーが発生しました' })
@@ -30,7 +30,7 @@ export class AdvertisementController {
   async getAdvertisements(req: express.Request, res: express.Response) {
     try {
       const advertisements =
-        await AdvertisementApplicationService.getAdvertisements()
+        await this.advertisementApplicationServise.getAdvertisements()
       res.status(200).json(advertisements)
     } catch (e) {
       res.status(500).json({ message: 'サーバー内部のエラーが発生しました' })
@@ -38,9 +38,11 @@ export class AdvertisementController {
   }
 
   async updateAdvertisement(req: express.Request, res: express.Response) {
+    console.log('req', req)
+    console.log('res', res)
     try {
       const advertisementData = req.body
-      await AdvertisementApplicationService.updateAdvertisement(
+      await this.advertisementApplicationServise.updateAdvertisement(
         advertisementData,
       )
       res.status(201).json({ message: '正常に広告情報が更新されました' })

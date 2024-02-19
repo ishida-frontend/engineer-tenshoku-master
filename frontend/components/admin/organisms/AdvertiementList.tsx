@@ -44,12 +44,9 @@ export function AdvertisementList({ advertisements }: AdvertisementTypeProps) {
               <Text>
                 <strong>広告名</strong>：{advertisement.name}
               </Text>
-              <Text>
-                <strong>リンク</strong>：{advertisement.url}
-              </Text>
-              <Text>
+              {/* <Text>
                 <strong>画像</strong>：{advertisement.imageUrl}
-              </Text>
+              </Text> */}
               <Text>
                 <strong>リンク</strong>：{advertisement.url}
               </Text>

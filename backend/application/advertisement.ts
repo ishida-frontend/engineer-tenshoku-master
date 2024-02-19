@@ -24,7 +24,7 @@ export class AdvertisementApplicationService {
       )
     }
   }
-  static async getAdvertisement(id: string) {
+  async getAdvertisement(id: string) {
     try {
       const advertisement = await prisma.advertisement.findUnique({
         where: { id },
@@ -36,7 +36,7 @@ export class AdvertisementApplicationService {
       )
     }
   }
-  static async getAdvertisements() {
+  async getAdvertisements() {
     try {
       const advertisement = await prisma.advertisement.findMany({
         where: {
@@ -53,7 +53,7 @@ export class AdvertisementApplicationService {
     }
   }
 
-  static async updateAdvertisement(params: {
+  async updateAdvertisement(params: {
     id: string
     name: string
     url: string
@@ -82,5 +82,4 @@ export class AdvertisementApplicationService {
       )
     }
   }
-  
 }
