@@ -22,6 +22,7 @@ function formatDate(date: Date): string {
 
 import { useCustomToast } from '../../../hooks/useCustomToast'
 import { AdvertisementType } from '../../../types/AdvertisementType'
+
 type AdvertisementTypeProps = {
   advertisements: AdvertisementType[]
 }
@@ -54,10 +55,10 @@ export function AdvertisementList({ advertisements }: AdvertisementTypeProps) {
                 <strong>企業名</strong>：{advertisement.author}
               </Text>
               <Text>
-                <strong>開始日</strong>：{formatDate(advertisement.startFrom)}
+                <strong>開始日</strong>：{formatDate(new Date(advertisement.startFrom))}
               </Text>
               <Text>
-                <strong>終了日</strong>：{formatDate(advertisement.endAt)}
+                <strong>終了日</strong>：{formatDate(new Date(advertisement.endAt))}
               </Text>
 
               <Link href={`/admin/advertisement/edit/${advertisement.id}`}>
