@@ -12,9 +12,9 @@ import { QuestionController } from '../controllers/questionController'
 import { AnswerController } from '../controllers/answerController'
 import { TagValidator } from '../validation/tagValidator'
 import { TagController } from '../controllers/tagController'
+import { AdvertisementValidator } from '../validation/advertisementValidator'
+import { AdvertisementController } from '../controllers/advertisementController'
 import { UserValidator } from '../validation/userValidator'
-import { AdvertisementValidator } from '../validation/advertisementValidator' 
-import { AdvertisementController } from '../controllers/advertisementController' 
 
 const {
   createCourse,
@@ -44,13 +44,13 @@ const userValidator = new UserValidator()
 const videoValidator = new VideoValidator()
 const tagController = new TagController()
 const tagValidator = new TagValidator()
+const advertisementController = new AdvertisementController()
+const advertisementValidator = new AdvertisementValidator()
 const videoController = new VideoController()
 const questionController = new QuestionController()
 const answerController = new AnswerController()
 const viewingStatusController = new ViewingStatusController()
 const favoriteVideoController = new FavoriteVideoController()
-const advertisementValidator = new AdvertisementValidator()
-const advertisementController = new AdvertisementController()
 
 router.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -99,6 +99,15 @@ router.post('/tag', tagValidator.createTag, (req, res) => {
 router.put('/tag', tagValidator.updateTag, (req, res) => {
   tagController.updateTag(req, res)
 })
+
+// Advertisementのルーティング
+router.post(
+  '/advertisement',
+  advertisementValidator.createAdvertisement,
+  (req, res) => {
+    advertisementController.createAdvertisement(req, res)
+  },
+)
 
 // Advertisementのルーティング
 router.get('/advertisement',(req, res) => advertisementController.getAdvertisements(req, res))
