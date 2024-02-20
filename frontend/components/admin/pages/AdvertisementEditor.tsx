@@ -23,7 +23,9 @@ import { Loader } from '../atoms/Loader'
 type AdvertisementEditorProps = {
   advertisement: AdvertisementType
 }
-export function AdverrisementEditor({ advertisement }: AdvertisementEditorProps){
+export function AdverrisementEditor({
+  advertisement,
+}: AdvertisementEditorProps) {
   const selectedAdvertisement: AdvertisementType = {
     id: advertisement.id,
     name: advertisement.name,
@@ -70,31 +72,38 @@ export function AdverrisementEditor({ advertisement }: AdvertisementEditorProps)
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/advrttisement/edit/${advertisement.id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/advrttisement`,
         {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ advertisementData }),
+          body: JSON.stringify({
+            id: advertisementData.id,
+            name: advertisementData.name,
+            url: advertisementData.url,
+            imageUrl: advertisementData.imageUrl,
+            author: advertisementData.author,
+            startFrom: advertisementData.startFrom,
+            endAt: advertisementData.endAt,
+          }),
         },
       )
-      console.log('advertisementData', advertisementData)
       advertisementSchema.safeParse(advertisementData)
       const data = await response.json()
 
-      if (!response.ok) {
-        setErrors(data)
-        toast({
-          title: '入力に誤りがあります',
-          status: 'error',
-          position: 'top',
-          duration: 3000,
-        })
-      } else {
+      if (response.ok) {
         toast({
           title: '広告情報の更新に成功しました',
           status: 'success',
+          position: 'top',
+          duration: 3000,
+        })
+        setErrors(data)
+      } else {
+        toast({
+          title: '広告情報の更新に失敗しました',
+          status: 'error',
           position: 'top',
           duration: 3000,
         })
