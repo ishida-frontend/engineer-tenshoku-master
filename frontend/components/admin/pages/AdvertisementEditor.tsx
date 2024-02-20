@@ -32,8 +32,8 @@ export function AdverrisementEditor({
     url: advertisement.url,
     imageUrl: advertisement.imageUrl,
     author: advertisement.author,
-    startFrom: advertisement.startFrom,
-    endAt: advertisement.endAt,
+    startFrom: new Date(advertisement.startFrom),
+    endAt: new Date(advertisement.endAt),
   }
   const toast = useToast()
   const [advertisementData, setAdvertisementData] = useState<AdvertisementType>(
@@ -45,8 +45,17 @@ export function AdverrisementEditor({
     try {
       event.preventDefault()
 
+      const formData = {
+        name: advertisementData.name,
+        url: advertisementData.url,
+        author: advertisementData.author,
+        imageUrl: advertisementData.imageUrl,
+        startFrom: advertisementData.startFrom.toISOString(),
+        endAt: advertisementData.endAt.toISOString(),
+      }
+      
       const advertisementValidationResult =
-        advertisementSchema.safeParse(advertisementData)
+        advertisementSchema.safeParse(formData)
       if (advertisementValidationResult.success === false) {
         setErrors(advertisementValidationResult.error.issues)
         toast({
@@ -99,6 +108,7 @@ export function AdverrisementEditor({
         })
       }
     } catch (e) {
+      console.log('e', e)
       toast({
         title: '広告情報の更新に失敗しました',
         status: 'error',
