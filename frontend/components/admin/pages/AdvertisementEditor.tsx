@@ -79,6 +79,7 @@ export function AdverrisementEditor({ advertisement }: AdvertisementEditorProps)
           body: JSON.stringify({ advertisementData }),
         },
       )
+      console.log('advertisementData', advertisementData)
       advertisementSchema.safeParse(advertisementData)
       const data = await response.json()
 

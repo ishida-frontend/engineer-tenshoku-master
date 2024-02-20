@@ -42,6 +42,7 @@ export class AdvertisementController {
     console.log('res', res)
     try {
       const advertisementData = req.body
+      console.log('req.body', req.body)
       await this.advertisementApplicationServise.updateAdvertisement(
         advertisementData,
       )

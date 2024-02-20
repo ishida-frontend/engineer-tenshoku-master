@@ -112,20 +112,8 @@ router.post(
 )
 router.put('/advertisement', advertisementValidator.updateAdvertisement, (req, res) => {
   advertisementController.updateAdvertisement(req, res)
-})
-
-// Advertisementのルーティング
-router.get('/advertisement',(req, res) => advertisementController.getAdvertisements(req, res))
-router.get('advertisemnet/:id', (req, res) => advertisementController.getAdvertisement(req, res))
-router.post(
-  '/advertisement',
-  advertisementValidator.createAdvertisement,
-  (req, res) => {
-    advertisementController.createAdvertisement(req, res)
-  },
-)
-router.put('/advertisement', advertisementValidator.updateAdvertisement, (req, res) => {
-  advertisementController.updateAdvertisement(req, res)
+  console.log('advertisementController req', req)
+  console.log('advertisementController res', res)
 })
 
 const userRouter = express.Router()
