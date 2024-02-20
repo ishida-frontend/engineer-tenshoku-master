@@ -177,7 +177,6 @@ favoriteVideoRouter.get('/:userId', favoriteVideoController.getFavoriteVideos)
 
 const goodVideoRouter = express.Router()
 router.use('/goodvideo', goodVideoRouter)
-goodVideoRouter.get('/:videoId', goodVideoController.getLikeCount)
 goodVideoRouter.post('/:videoId', goodVideoController.goodVideo)
 goodVideoRouter.delete('/videoId', goodVideoController.cancelGoodVideo)
 

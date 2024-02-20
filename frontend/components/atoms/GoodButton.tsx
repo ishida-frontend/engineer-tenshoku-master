@@ -12,18 +12,16 @@ export const GoodButton = ({
   likeCount: number
 }) => {
   return (
-    <div>
-      <IconButton
-        onClick={(e) => {
-          handleLike(e)
-        }}
-        icon={isLiked ? <Icon as={FaRegThumbsUp} /> : <Icon as={FaThumbsUp} />}
-        aria-label="Like Button"
-        variant="ghost"
-        color="teal.500"
-      >
-        {likeCount}
-      </IconButton>
-    </div>
+    <IconButton
+      onClick={(e) => {
+        handleLike(e)
+      }}
+      icon={isLiked ? <Icon as={FaRegThumbsUp} /> : <Icon as={FaThumbsUp} />}
+      aria-label="Like Button"
+      variant="ghost"
+      color="teal.500"
+    >
+      {likeCount}
+    </IconButton>
   )
 }

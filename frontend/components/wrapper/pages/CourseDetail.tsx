@@ -64,8 +64,8 @@ export function CourseDetailWrapper({
     const [isWatchingLoading, setIsWatchingLoading] = useState<boolean>()
     const [isFavoriteLoading, setIsFavoriteLoading] = useState<boolean>()
 
-    const [isLiked, setIsLiked] = useState(false)
-    const [likeCount, setLikeCount] = useState(0)
+    //const [isLiked, setIsLiked] = useState(false)
+    //const [likeCount, setLikeCount] = useState(0)
 
     const getCourseData = async (courseId: string) => {
       try {
@@ -160,7 +160,6 @@ export function CourseDetailWrapper({
     }
 
     const handleLike = async () => {
-      const action = isLiked ? 'unlike' : 'like'
       try {
         await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodvideo/${videoId}`,

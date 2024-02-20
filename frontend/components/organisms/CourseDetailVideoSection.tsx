@@ -45,7 +45,6 @@ export function CourseDetailVideoSection({
   closeProfileModal,
   isLiked,
   handleLike,
-  handleLikeStatus,
   likeCount,
 }: {
   selectedVideo: SelectedVideo | null

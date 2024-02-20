@@ -3,7 +3,9 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export class GoodVideoApplicationService {
+  //videoIdに対するいいねの数を取得するメソッド
   async getLikeCount(videoId: string): Promise<number> {
+    //Prismaを使用して、videoIdに対するいいねの数を取得
     const likeCount = await prisma.goodVideo.count({
       where: {
         video_id: videoId,
@@ -12,6 +14,7 @@ export class GoodVideoApplicationService {
     return likeCount
   }
 
+  //いいねを追加、または取り消すメソッド
   async goodVideo(
     userId: string,
     videoId: string,
@@ -20,6 +23,7 @@ export class GoodVideoApplicationService {
     video_id: string
     deleted_at: Date | null
   }> {
+    //ユーザーと動画のいいね情報を取得
     const existingGoodVideo = await prisma.goodVideo.findUnique({
       where: {
         user_id_video_id: {
@@ -28,6 +32,7 @@ export class GoodVideoApplicationService {
         },
       },
     })
+    //すでに削除されている場合は削除を解除して、削除されていない場合は新たにいいねを追加する
     if (existingGoodVideo?.deleted_at) {
       const goodVideo = await prisma.goodVideo.update({
         where: {
@@ -50,7 +55,7 @@ export class GoodVideoApplicationService {
     })
     return goodVideo
   }
-
+  //いいねを取り消すメソッド
   async cancelGoodVideo(
     userId: string,
     videoId: string,
@@ -59,6 +64,7 @@ export class GoodVideoApplicationService {
     video_id: string
     deleted_at: Date | null
   }> {
+    //ユーザーと動画のいいね情報を取得
     const existingGoodVideo = await prisma.goodVideo.findUnique({
       where: {
         user_id_video_id: {
@@ -67,6 +73,12 @@ export class GoodVideoApplicationService {
         },
       },
     })
+    //いいね情報が存在しない場合エラーを投げる処理
+    if (!existingGoodVideo) {
+      throw new Error('target goodVideo data is not exist')
+    }
+
+    //いいね情報が存在する場合の処理
     if (existingGoodVideo) {
       if (!existingGoodVideo.deleted_at) {
         //すでにキャンセルされている場合、再度いいね追加する
@@ -95,6 +107,7 @@ export class GoodVideoApplicationService {
         return deletedGoodVideo
       }
     } else {
+      //データが存在しない場合エラーを投げる
       throw new Error('Good video not found')
     }
   }
