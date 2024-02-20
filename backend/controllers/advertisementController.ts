@@ -18,7 +18,6 @@ export class AdvertisementController {
     }
   }
 
-  
   async getAdvertisement(req: express.Request, res: express.Response) {
     try {
       const advertisement =

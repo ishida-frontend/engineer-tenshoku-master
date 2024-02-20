@@ -110,12 +110,14 @@ export class AdvertisementValidator {
         },
       )
 
-      const advertisementData = advertisementUpdateSchema.safeParse(req.body)
+    const advertisementData = advertisementUpdateSchema.safeParse(req.body)
 
-      if (advertisementData.success) {
-        next()
-      } else {
-        res.status(400).json({ errors: advertisementData.error.formErrors.fieldErrors })
-      }
+    if (advertisementData.success) {
+      next()
+    } else {
+      res
+        .status(400)
+        .json({ errors: advertisementData.error.formErrors.fieldErrors })
+    }
   }
 }
