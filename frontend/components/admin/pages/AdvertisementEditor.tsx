@@ -53,7 +53,7 @@ export function AdverrisementEditor({
         startFrom: advertisementData.startFrom.toISOString(),
         endAt: advertisementData.endAt.toISOString(),
       }
-      
+
       const advertisementValidationResult =
         advertisementSchema.safeParse(formData)
       if (advertisementValidationResult.success === false) {
@@ -330,6 +330,12 @@ export function AdverrisementEditor({
         <Button
           onClick={updateAdvertisement}
           isLoading={isSubmitting}
+          isDisabled={
+            !(
+              JSON.stringify(selectedAdvertisement) !==
+              JSON.stringify(advertisementData)
+            )
+          }
           colorScheme="green"
           variant="solid"
         >
