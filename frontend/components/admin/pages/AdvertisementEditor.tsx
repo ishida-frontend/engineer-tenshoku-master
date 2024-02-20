@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, FormEvent, useEffect, useCallback } from 'react'
+import React, { useState, FormEvent } from 'react'
 
 import {
   Box,
@@ -19,7 +19,6 @@ import { THEME_COLOR } from '../../../constants'
 import { AdvertisementType } from '../../../types/AdvertisementType'
 import { advertisementSchema } from '../../../zod'
 import { ZodIssue } from 'zod'
-import { Loader } from '../atoms/Loader'
 
 type AdvertisementEditorProps = {
   advertisement: AdvertisementType
@@ -42,36 +41,27 @@ export function AdverrisementEditor({
   )
   const [errors, setErrors] = useState<ZodIssue[]>([])
   const [isSubmitting, SetIsSubmitting] = useState(false)
+  const updateAdvertisement = async (event: FormEvent) => {
+    try {
+      event.preventDefault()
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (!advertisementData) {
+      const advertisementValidationResult =
+        advertisementSchema.safeParse(advertisementData)
+      if (advertisementValidationResult.success === false) {
+        setErrors(advertisementValidationResult.error.issues)
         toast({
-          title: '広告情報の取得に失敗しました',
+          title: 'フォームの入力に誤りがあります',
           status: 'error',
           position: 'top',
           duration: 3000,
         })
+        return
       }
-    }, 10000)
-    return () => clearTimeout(timeout)
-  }, [advertisementData, clearTimeout])
 
-  const hasChanges = () => {
-    return (
-      JSON.stringify(selectedAdvertisement) !== JSON.stringify(advertisement)
-    )
-  }
-  const isNotChanged = useCallback(() => {
-    return !hasChanges()
-  }, [hasChanges])
+      event.preventDefault()
 
-  const updateAdvertisement = async (event: FormEvent) => {
-    event.preventDefault()
+      SetIsSubmitting(true)
 
-    SetIsSubmitting(true)
-
-    try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/advertisement`,
         {
@@ -119,9 +109,6 @@ export function AdverrisementEditor({
       SetIsSubmitting(false)
     }
   }
-
-  if (!advertisementData) return <Loader />
-
   return (
     <Box w="full" maxW="600px" mx="auto" p={6}>
       <Stack spacing={4}>
@@ -334,7 +321,6 @@ export function AdverrisementEditor({
         <Button
           onClick={updateAdvertisement}
           isLoading={isSubmitting}
-          isDisabled={isNotChanged()}
           colorScheme="green"
           variant="solid"
         >
