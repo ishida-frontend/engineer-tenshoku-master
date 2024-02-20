@@ -21,9 +21,6 @@ export class AdvertisementController {
   
   async getAdvertisement(req: express.Request, res: express.Response) {
     try {
-      console.log('コントローラー')
-      console.log('req', req)
-      console.log('res', res)
       const advertisement =
         await this.advertisementApplicationServise.getAdvertisement(
           req.params.id,
@@ -45,7 +42,6 @@ export class AdvertisementController {
 
   async updateAdvertisement(req: express.Request, res: express.Response) {
     try {
-      console.log('コントローラー2')
       const advertisementData = req.body
       await this.advertisementApplicationServise.updateAdvertisement(
         advertisementData,

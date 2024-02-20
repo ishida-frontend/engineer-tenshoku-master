@@ -11,7 +11,6 @@ export default async function AdminEditAdvertisement({
       cache: 'no-cache',
     },
   )
-  console.log('res', res)
   const advertisement = await res.json()
 
   return <AdverrisementEditor advertisement={advertisement} />

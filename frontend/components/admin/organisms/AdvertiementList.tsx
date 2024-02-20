@@ -12,7 +12,6 @@ import {
 import { format } from 'date-fns'
 function formatDate(date: Date): string {
   try {
-    console.log('date', date)
     return format(date, 'yyyy/MM/dd')
   } catch (error) {
     console.error('Error formatting date:', error)
@@ -30,7 +29,6 @@ export function AdvertisementList({ advertisements }: AdvertisementTypeProps) {
   const { showErrorToast } = useCustomToast()
 
   if (!Array.isArray(advertisements)) {
-    console.log('advertisements', advertisements)
     showErrorToast('広告情報の取得に失敗しました')
     return null
   }

@@ -101,12 +101,9 @@ router.put('/tag', tagValidator.updateTag, (req, res) => {
 })
 
 // Advertisementのルーティング
-console.log('ルーティング')
 router.get('/advertisement',(req, res) => {advertisementController.getAdvertisements(req, res)
-  console.log('getreq', req)
-  console.log('getres', res)
 })
-router.get('/advertisemnet/:id', (req, res) => {advertisementController.getAdvertisement(req, res)})
+router.get('/advertisement/:id', (req, res) => {advertisementController.getAdvertisement(req, res)})
 router.post(
   '/advertisement',
   advertisementValidator.createAdvertisement,
@@ -114,13 +111,8 @@ router.post(
     advertisementController.createAdvertisement(req, res)
   },
 )
-console.log('ルーティング2')
 router.put('/advertisement', advertisementValidator.updateAdvertisement, (req, res) => {
   advertisementController.updateAdvertisement(req, res)
-  console.log('advertisementController req', req)
-  console.log('advertisementController res', res)
-  console.log('putreq', req)
-  console.log('putres', res)
 
 })
 

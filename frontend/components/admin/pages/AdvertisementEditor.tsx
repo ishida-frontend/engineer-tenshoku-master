@@ -14,6 +14,7 @@ import {
   HStack,
   Text,
 } from '@chakra-ui/react'
+import { THEME_COLOR } from '../../../constants'
 
 import { AdvertisementType } from '../../../types/AdvertisementType'
 import { advertisementSchema } from '../../../zod'
@@ -72,7 +73,7 @@ export function AdverrisementEditor({
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/advrttisement`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/advertisement`,
         {
           method: 'PUT',
           headers: {
@@ -89,21 +90,20 @@ export function AdverrisementEditor({
           }),
         },
       )
-      advertisementSchema.safeParse(advertisementData)
-      const data = await response.json()
+      const responseData = await response.json()
 
-      if (response.ok) {
+      if (!response.ok) {
+        setErrors(responseData)
         toast({
-          title: '広告情報の更新に成功しました',
-          status: 'success',
+          title: '入力に誤りがあります',
+          status: 'error',
           position: 'top',
           duration: 3000,
         })
-        setErrors(data)
       } else {
         toast({
-          title: '広告情報の更新に失敗しました',
-          status: 'error',
+          title: responseData.message,
+          status: 'success',
           position: 'top',
           duration: 3000,
         })
@@ -128,11 +128,19 @@ export function AdverrisementEditor({
         <Link href="/admin/advertisement">
           <Button colorScheme="green">一覧へ戻る</Button>
         </Link>
-        <Box p={4} border="1px" borderColor="gray.400" borderRadius={9}>
+        <Box
+          p={4}
+          border="1px"
+          borderColor="gray.400"
+          borderRadius={9}
+          bg={THEME_COLOR.SECONDARY_WHITE}
+        >
           <Text>広告ID：{advertisementData.id}</Text>
         </Box>
         <FormControl
           isInvalid={
+            !!errors &&
+            errors.find &&
             !!errors.find((e) => {
               return e.path[0] === 'name'
             })
@@ -149,20 +157,21 @@ export function AdverrisementEditor({
               })
             }
             aria-required={true}
+            bg={THEME_COLOR.SECONDARY_WHITE}
             border="1px"
             borderColor="gray.400"
           />
           <FormErrorMessage>
-            {
+            {errors &&
+              errors.find &&
               errors.find((e) => {
                 return e.path[0] === 'name'
-              })?.message
-            }
+              })?.message}
           </FormErrorMessage>
         </FormControl>
-        <FormControl
+        {/* <FormControl
           isInvalid={
-            !!errors.find((e) => {
+            !!errors && errors.find && !!errors.find((e) => {
               return e.path[0] === 'imageUrl'
             })
           }
@@ -183,14 +192,16 @@ export function AdverrisementEditor({
           />
           <FormErrorMessage>
             {
-              errors.find((e) => {
+              errors && errors.find && errors.find((e) => {
                 return e.path[0] === 'imageUrl'
               })?.message
             }
           </FormErrorMessage>
-        </FormControl>
+        </FormControl> */}
         <FormControl
           isInvalid={
+            !!errors &&
+            errors.find &&
             !!errors.find((e) => {
               return e.path[0] === 'author'
             })
@@ -206,21 +217,24 @@ export function AdverrisementEditor({
                   author: e.target.value,
                 })
               }
+              bg={THEME_COLOR.SECONDARY_WHITE}
               border="1px"
               borderColor="gray.400"
             ></Input>
           </HStack>
           <FormErrorMessage>
-            {
+            {errors &&
+              errors.find &&
               errors.find((e) => {
                 return e.path[0] === 'author'
-              })?.message
-            }
+              })?.message}
           </FormErrorMessage>
         </FormControl>
 
         <FormControl
           isInvalid={
+            !!errors &&
+            errors.find &&
             !!errors.find((e) => {
               return e.path[0] === 'url'
             })
@@ -235,72 +249,88 @@ export function AdverrisementEditor({
                 url: e.target.value,
               })
             }
+            bg={THEME_COLOR.SECONDARY_WHITE}
             border="1px"
             borderColor="gray.400"
           ></Input>
           <FormErrorMessage>
-            {
+            {errors &&
+              errors.find &&
               errors.find((e) => {
                 return e.path[0] === 'url'
-              })?.message
-            }
+              })?.message}
           </FormErrorMessage>
         </FormControl>
-        <FormControl
-          isInvalid={
-            !!errors.find((e) => {
-              return e.path[0] === 'startFrom'
-            })
-          }
-        >
-          <FormLabel>開始日</FormLabel>
-          <Input
-            value={advertisementData.startFrom.toString()}
-            onChange={(e) =>
-              setAdvertisementData({
-                ...advertisementData,
-                startFrom: new Date(e.target.value),
+        <Stack direction={'row'}>
+          <FormControl
+            isInvalid={
+              !!errors &&
+              errors.find &&
+              !!errors.find((e) => {
+                return e.path[0] === 'startFrom'
               })
             }
-            border="1px"
-            borderColor="gray.400"
-          ></Input>
-          <FormErrorMessage>
-            {
-              errors.find((e) => {
-                return e.path[0] === 'srartFrom'
-              })?.message
-            }
-          </FormErrorMessage>
-        </FormControl>
-        <FormControl
-          isInvalid={
-            !!errors.find((e) => {
-              return e.path[0] === 'endAt'
-            })
-          }
-        >
-          <FormLabel>終了日</FormLabel>
-          <Input
-            value={advertisementData.endAt.toString()}
-            onChange={(e) =>
-              setAdvertisementData({
-                ...advertisementData,
-                endAt: new Date(e.target.value),
-              })
-            }
-            aria-required={true}
-            border="1px"
-            borderColor="gray.400"
-          ></Input>
-          <FormErrorMessage>
-            {
-              errors.find((e) => {
+          >
+            <FormLabel>開始</FormLabel>
+            <Input
+              value={
+                new Date(advertisementData.startFrom)
+                  .toISOString()
+                  .split('T')[0]
+              }
+              onChange={(e) =>
+                setAdvertisementData({
+                  ...advertisementData,
+                  startFrom: new Date(e.target.value),
+                })
+              }
+              type="date"
+              bg={THEME_COLOR.SECONDARY_WHITE}
+              border="1px"
+              borderColor="gray.400"
+            ></Input>
+            <FormErrorMessage>
+              {errors &&
+                errors.find &&
+                errors.find((e) => {
+                  return e.path[0] === 'srartFrom'
+                })?.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl
+            isInvalid={
+              !!errors &&
+              errors.find &&
+              !!errors.find((e) => {
                 return e.path[0] === 'endAt'
-              })?.message
+              })
             }
-          </FormErrorMessage>
-        </FormControl>
+          >
+            <FormLabel>終了</FormLabel>
+            <Input
+              value={
+                new Date(advertisementData.endAt).toISOString().split('T')[0]
+              }
+              onChange={(e) =>
+                setAdvertisementData({
+                  ...advertisementData,
+                  endAt: new Date(e.target.value),
+                })
+              }
+              type="date"
+              bg={THEME_COLOR.SECONDARY_WHITE}
+              border="1px"
+              borderColor="gray.400"
+            ></Input>
+            <FormErrorMessage>
+              {errors &&
+                errors.find &&
+                errors.find((e) => {
+                  return e.path[0] === 'endAt'
+                })?.message}
+            </FormErrorMessage>
+          </FormControl>
+        </Stack>
         <Button
           onClick={updateAdvertisement}
           isLoading={isSubmitting}
