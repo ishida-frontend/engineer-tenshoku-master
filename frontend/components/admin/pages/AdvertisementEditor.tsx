@@ -108,7 +108,6 @@ export function AdverrisementEditor({
         })
       }
     } catch (e) {
-      console.log('e', e)
       toast({
         title: '広告情報の更新に失敗しました',
         status: 'error',
