@@ -1,4 +1,4 @@
-import { AdverrisementEditor } from '../../../../../components/admin/pages/AdvertisementEditor'
+import { AdvertisementEditor } from '../../../../../components/admin/pages/AdvertisementEditor'
 
 export default async function AdminEditAdvertisement({
   params,
@@ -13,5 +13,5 @@ export default async function AdminEditAdvertisement({
   )
   const advertisement = await res.json()
 
-  return <AdverrisementEditor advertisement={advertisement} />
+  return <AdvertisementEditor advertisement={advertisement} />
 }

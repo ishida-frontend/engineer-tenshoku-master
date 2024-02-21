@@ -1,5 +1,4 @@
-import React from "react";
-import { AdvertisementList } from "../../../components/admin/organisms/AdvertiementList"; 
+import { AdvertisementList } from "../../../components/admin/organisms/AdvertisementList"; 
 import { AdvertisementType } from "../../../types/AdvertisementType";
 
 export default async function AdminAdvertisement(){

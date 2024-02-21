@@ -116,9 +116,9 @@ router.post(
 )
 router.put(
   '/advertisement',
-  advertisementValidator.updateAdvertisement,
+  advertisementValidator.updatedAdvertisement,
   (req, res) => {
-    advertisementController.updateAdvertisement(req, res)
+    advertisementController.updatedAdvertisement(req, res)
   },
 )
 

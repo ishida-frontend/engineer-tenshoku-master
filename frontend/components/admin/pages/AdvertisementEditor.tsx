@@ -23,7 +23,7 @@ import { ZodIssue } from 'zod'
 type AdvertisementEditorProps = {
   advertisement: AdvertisementType
 }
-export function AdverrisementEditor({
+export function AdvertisementEditor({
   advertisement,
 }: AdvertisementEditorProps) {
   const selectedAdvertisement: AdvertisementType = {
@@ -45,13 +45,16 @@ export function AdverrisementEditor({
     try {
       event.preventDefault()
 
+      const { name, url, author, imageUrl, startFrom, endAt } =
+        advertisementData
+
       const formData = {
-        name: advertisementData.name,
-        url: advertisementData.url,
-        author: advertisementData.author,
-        imageUrl: advertisementData.imageUrl,
-        startFrom: advertisementData.startFrom.toISOString(),
-        endAt: advertisementData.endAt.toISOString(),
+        name,
+        url,
+        author,
+        imageUrl,
+        startFrom: startFrom.toISOString(),
+        endAt: endAt.toISOString(),
       }
 
       const advertisementValidationResult =
@@ -67,8 +70,6 @@ export function AdverrisementEditor({
         return
       }
 
-      event.preventDefault()
-
       SetIsSubmitting(true)
 
       const response = await fetch(
@@ -81,11 +82,11 @@ export function AdverrisementEditor({
           body: JSON.stringify({
             id: advertisementData.id,
             name: advertisementData.name,
-            url: advertisementData.url,
-            imageUrl: advertisementData.imageUrl,
-            author: advertisementData.author,
-            startFrom: advertisementData.startFrom,
-            endAt: advertisementData.endAt,
+            url,
+            imageUrl,
+            author,
+            startFrom,
+            endAt
           }),
         },
       )
@@ -289,7 +290,7 @@ export function AdverrisementEditor({
               {errors &&
                 errors.find &&
                 errors.find((e) => {
-                  return e.path[0] === 'srartFrom'
+                  return e.path[0] === 'startFrom'
                 })?.message}
             </FormErrorMessage>
           </FormControl>

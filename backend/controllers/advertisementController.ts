@@ -2,14 +2,14 @@ import express from 'express'
 import { AdvertisementApplicationService } from '../application/advertisement'
 
 export class AdvertisementController {
-  private advertisementApplicationServise: AdvertisementApplicationService
+  private advertisementApplicationService: AdvertisementApplicationService
   constructor() {
-    this.advertisementApplicationServise = new AdvertisementApplicationService()
+    this.advertisementApplicationService = new AdvertisementApplicationService()
   }
   async createAdvertisement(req: express.Request, res: express.Response) {
     try {
       const advertisementData = req.body
-      await this.advertisementApplicationServise.createAdvertisement(
+      await this.advertisementApplicationService.createAdvertisement(
         advertisementData,
       )
       res.status(201).json({ message: '正常に広告情報を追加しました' })
@@ -21,7 +21,7 @@ export class AdvertisementController {
   async getAdvertisement(req: express.Request, res: express.Response) {
     try {
       const advertisement =
-        await this.advertisementApplicationServise.getAdvertisement(
+        await this.advertisementApplicationService.getAdvertisement(
           req.params.id,
         )
       res.status(200).json(advertisement)
@@ -32,17 +32,17 @@ export class AdvertisementController {
   async getAdvertisements(req: express.Request, res: express.Response) {
     try {
       const advertisements =
-        await this.advertisementApplicationServise.getAdvertisements()
+        await this.advertisementApplicationService.getAdvertisements()
       res.status(200).json(advertisements)
     } catch (e) {
       res.status(500).json({ message: 'サーバー内部のエラーが発生しました' })
     }
   }
 
-  async updateAdvertisement(req: express.Request, res: express.Response) {
+  async updatedAdvertisement(req: express.Request, res: express.Response) {
     try {
       const advertisementData = req.body
-      await this.advertisementApplicationServise.updateAdvertisement(
+      await this.advertisementApplicationService.updatedAdvertisement(
         advertisementData,
       )
       res.status(201).json({ message: '正常に広告情報が更新されました' })

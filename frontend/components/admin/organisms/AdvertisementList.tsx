@@ -47,16 +47,18 @@ export function AdvertisementList({ advertisements }: AdvertisementTypeProps) {
                 <strong>画像</strong>：{advertisement.imageUrl}
               </Text> */}
               <Text>
-                <strong>リンク</strong>：{advertisement.url}
-              </Text>
-              <Text>
                 <strong>企業名</strong>：{advertisement.author}
               </Text>
               <Text>
-                <strong>開始日</strong>：{formatDate(new Date(advertisement.startFrom))}
+                <strong>リンク</strong>：{advertisement.url}
               </Text>
               <Text>
-                <strong>終了日</strong>：{formatDate(new Date(advertisement.endAt))}
+                <strong>開始日</strong>：
+                {formatDate(new Date(advertisement.startFrom))}
+              </Text>
+              <Text>
+                <strong>終了日</strong>：
+                {formatDate(new Date(advertisement.endAt))}
               </Text>
 
               <Link href={`/admin/advertisement/edit/${advertisement.id}`}>

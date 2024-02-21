@@ -63,7 +63,7 @@ export class AdvertisementValidator {
       res.status(500).json({ error: 'サーバーエラーが発生しました' })
     }
   }
-  updateAdvertisement = (
+  updatedAdvertisement = (
     req: express.Request,
     res: express.Response,
     next: express.NextFunction,

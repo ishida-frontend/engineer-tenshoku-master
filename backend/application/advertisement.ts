@@ -38,14 +38,14 @@ export class AdvertisementApplicationService {
   }
   async getAdvertisements() {
     try {
-      const advertisement = await prisma.advertisement.findMany({
+      const advertisements = await prisma.advertisement.findMany({
         where: {
           startFrom: {
             lte: new Date(), // 現在の日付以前の開始日時
           },
         },
       })
-      return advertisement
+      return advertisements
     } catch (error) {
       throw new Error(
         `AdvertisementApplicationService: get advertisements error: ${error}`,
@@ -53,7 +53,7 @@ export class AdvertisementApplicationService {
     }
   }
 
-  async updateAdvertisement(params: {
+  async updatedAdvertisement(params: {
     id: string
     name: string
     url: string
@@ -64,7 +64,7 @@ export class AdvertisementApplicationService {
   }) {
     try {
       const { id, name, url, imageUrl, author, startFrom, endAt } = params
-      const updateAdvertisement = await prisma.advertisement.update({
+      const updatedAdvertisement = await prisma.advertisement.update({
         where: { id },
         data: {
           name,
@@ -75,7 +75,7 @@ export class AdvertisementApplicationService {
           endAt,
         },
       })
-      return updateAdvertisement
+      return updatedAdvertisement
     } catch (error) {
       throw new Error(
         `AdvertisementApplicationService: update user error: ${error}`,
