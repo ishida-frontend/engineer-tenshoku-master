@@ -39,11 +39,7 @@ export class AdvertisementApplicationService {
   async getAdvertisements() {
     try {
       const advertisements = await prisma.advertisement.findMany({
-        where: {
-          startFrom: {
-            lte: new Date(), // 現在の日付以前の開始日時
-          },
-        },
+        where: { deleted_at: null },
       })
       return advertisements
     } catch (error) {

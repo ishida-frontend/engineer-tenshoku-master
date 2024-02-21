@@ -12,27 +12,10 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 
-import { AdvertisementType } from '../../../types/AdvertisementType' 
 import { useCustomToast } from '../../../hooks/useCustomToast'
 import { PATHS } from '../../../constants/paths'
 
-type AdvertisementEditorProps = {
-  advertisement: AdvertisementType
-}
-
-export function AdvertisementRemover({
-  advertisement,
-}: AdvertisementEditorProps) {
-  const deleteAdvertisementData: AdvertisementType = {
-    id: advertisement.id,
-    name: advertisement.name,
-    url: advertisement.url,
-    imageUrl: advertisement.imageUrl,
-    author: advertisement.author,
-    startFrom: new Date(advertisement.startFrom),
-    endAt: new Date(advertisement.endAt),
-
-  }
+export function AdvertisementRemover() {
   const { showSuccessToast, showErrorToast } = useCustomToast()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -47,13 +30,12 @@ export function AdvertisementRemover({
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/advertisement`,
         {
-          method: 'PUT',
+          method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             advertisementId,
-            deleteAdvertisementData
           }),
         },
       )
@@ -63,7 +45,7 @@ export function AdvertisementRemover({
         showSuccessToast(result.message)
         setShowModalContent(false)
         setTimeout(() => {
-          router.push(PATHS.ADMIN.COURSE.LIST.path)
+          router.push(PATHS.ADMIN.ADVERTISEMENT.LIST.path)
         }, 4000)
       } else {
         showErrorToast(result.message)

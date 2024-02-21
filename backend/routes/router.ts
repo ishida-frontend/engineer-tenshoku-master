@@ -121,7 +121,7 @@ router.put(
     advertisementController.updateAdvertisement(req, res)
   },
 )
-router.put('/advertisement', (req, res) => {
+router.delete('/advertisement', (req, res) => {
   advertisementController.deleteAdvertisement(req, res)
   })
 

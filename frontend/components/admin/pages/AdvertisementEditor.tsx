@@ -343,7 +343,7 @@ export function AdvertisementEditor({
         >
           変更を保存
         </Button>
-        <AdvertisementRemover advertisement={advertisement} />
+        <AdvertisementRemover />
       </Stack>
     </Box>
   )

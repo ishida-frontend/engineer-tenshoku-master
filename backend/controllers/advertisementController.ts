@@ -55,7 +55,7 @@ export class AdvertisementController {
     try {
       const advertisementData = req.body
       await this.advertisementApplicationService.deleteAdvertisement(
-        advertisementData,
+        advertisementData.advertisementId,
       )
       res.status(201).json({ message: '広告情報が削除されました' })
     } catch (error) {
