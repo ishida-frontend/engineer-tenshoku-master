@@ -53,7 +53,7 @@ export class AdvertisementApplicationService {
     }
   }
 
-  async updatedAdvertisement(params: {
+  async updateAdvertisement(params: {
     id: string
     name: string
     url: string

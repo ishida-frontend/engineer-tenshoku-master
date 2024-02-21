@@ -39,10 +39,10 @@ export class AdvertisementController {
     }
   }
 
-  async updatedAdvertisement(req: express.Request, res: express.Response) {
+  async updateAdvertisement(req: express.Request, res: express.Response) {
     try {
       const advertisementData = req.body
-      await this.advertisementApplicationService.updatedAdvertisement(
+      await this.advertisementApplicationService.updateAdvertisement(
         advertisementData,
       )
       res.status(201).json({ message: '正常に広告情報が更新されました' })
