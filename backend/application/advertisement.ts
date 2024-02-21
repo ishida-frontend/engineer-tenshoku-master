@@ -81,12 +81,11 @@ export class AdvertisementApplicationService {
 
   async deleteAdvertisement(id: string) {
     try {
-      // deleted_atに値を渡して論理削除
-      const deleteAdvertisement = await prisma.advertisement.update({
+      const deletedAdvertisement = await prisma.advertisement.update({
         where: { id },
         data: { deleted_at: new Date() },
       })
-      return deleteAdvertisement
+      return deletedAdvertisement
     } catch (error) {
       throw new Error(
         `AdvertisementApplicationService: delete advertisement error: ${error}`,

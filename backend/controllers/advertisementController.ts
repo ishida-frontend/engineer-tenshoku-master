@@ -53,9 +53,9 @@ export class AdvertisementController {
 
   async deleteAdvertisement(req: express.Request, res: express.Response) {
     try {
-      const advertisementData = req.body
+      const { advertisementId } = req.body
       await this.advertisementApplicationService.deleteAdvertisement(
-        advertisementData.advertisementId,
+        advertisementId,
       )
       res.status(201).json({ message: '広告情報が削除されました' })
     } catch (error) {
