@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 
 export class GoodVideoApplicationService {
   //videoIdに対するいいねの数を取得するメソッド
-  async getLikeCount(videoId: string): Promise<number> {
+  static async getLikeCount(videoId: string): Promise<number> {
     //Prismaを使用して、videoIdに対するいいねの数を取得
     const likeCount = await prisma.goodVideo.count({
       where: {
@@ -15,7 +15,7 @@ export class GoodVideoApplicationService {
   }
 
   //いいねを追加、または取り消すメソッド
-  async goodVideo(
+  static async goodVideo(
     userId: string,
     videoId: string,
   ): Promise<{
@@ -56,7 +56,7 @@ export class GoodVideoApplicationService {
     return goodVideo
   }
   //いいねを取り消すメソッド
-  async cancelGoodVideo(
+  static async cancelGoodVideo(
     userId: string,
     videoId: string,
   ): Promise<{
