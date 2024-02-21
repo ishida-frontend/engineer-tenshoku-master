@@ -19,6 +19,7 @@ import { THEME_COLOR } from '../../../constants'
 import { AdvertisementType } from '../../../types/AdvertisementType'
 import { advertisementSchema } from '../../../zod'
 import { ZodIssue } from 'zod'
+import { AdvertisementRemover } from '../organisms/AdvertisementRemover'
 
 type AdvertisementEditorProps = {
   advertisement: AdvertisementType
@@ -342,6 +343,7 @@ export function AdvertisementEditor({
         >
           変更を保存
         </Button>
+        <AdvertisementRemover advertisement={advertisement} />
       </Stack>
     </Box>
   )

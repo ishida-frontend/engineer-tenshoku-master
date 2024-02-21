@@ -50,4 +50,16 @@ export class AdvertisementController {
       res.status(500).json({ message: 'サーバー内部のエラーが発生しました' })
     }
   }
+
+  async deleteAdvertisement(req: express.Request, res: express.Response) {
+    try {
+      const advertisementData = req.body
+      await this.advertisementApplicationService.deleteAdvertisement(
+        advertisementData,
+      )
+      res.status(201).json({ message: '広告情報が削除されました' })
+    } catch (error) {
+      res.status(500).json({ message: 'サーバー内部のエラーが発生しました' })
+    }
+  }
 }
