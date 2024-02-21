@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { THEME_COLOR } from '../../../constants'
 
-import { AdvertisementType } from '../../../types/AdvertisementType'
+import { AdvertisementType } from '../../../types'
 import { advertisementSchema } from '../../../zod'
 import { ZodIssue } from 'zod'
 
@@ -194,6 +194,7 @@ export function AdvertisementEditor({
               })?.message
             }
           </FormErrorMessage>
+          TODO 画像が保存できるようになったら修正
         </FormControl> */}
         <FormControl
           isInvalid={
@@ -268,7 +269,7 @@ export function AdvertisementEditor({
               })
             }
           >
-            <FormLabel>開始</FormLabel>
+            <FormLabel>開始日</FormLabel>
             <Input
               value={
                 new Date(advertisementData.startFrom)
@@ -303,7 +304,7 @@ export function AdvertisementEditor({
               })
             }
           >
-            <FormLabel>終了</FormLabel>
+            <FormLabel>終了日</FormLabel>
             <Input
               value={
                 new Date(advertisementData.endAt).toISOString().split('T')[0]
