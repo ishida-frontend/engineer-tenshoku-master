@@ -6,16 +6,19 @@ export class GoodVideoController {
 
   constructor() {
     this.goodVideoApplicationService = new GoodVideoApplicationService()
+    this.goodVideo = this.goodVideo.bind(this)
+    this.cancelGoodVideo = this.cancelGoodVideo.bind(this)
+    this.getGoodCount = this.getGoodCount.bind(this)
   }
 
-  async getLikeCount(req: express.Request, res: express.Response) {
+  async getGoodCount(req: express.Request, res: express.Response) {
     try {
       const { videoId } = req.params
-      const likeCount =
-        await GoodVideoController.goodVideoApplicationService.getLikeCount(
+      const goodCount =
+        await GoodVideoController.goodVideoApplicationService.getGoodCount(
           videoId,
         )
-      res.status(200).json(likeCount)
+      res.status(200).json(goodCount)
     } catch (error) {
       res.status(500).json({ message: 'エラーが発生しました' })
     }
@@ -23,13 +26,11 @@ export class GoodVideoController {
   async goodVideo(req: express.Request, res: express.Response) {
     try {
       const { userId, videoId } = req.body
-      console.log('userId', userId)
 
       await GoodVideoApplicationService.goodVideo(userId, videoId)
       res.status(200).json({ message: 'いいねをしました' })
     } catch (error) {
-      console.log('error: ', error)
-      res.status(500).json({ message: 'エラーが発生しました' })
+      res.status(500).json({ message: 'いいねした際にエラーが発生しました' })
     }
   }
   async cancelGoodVideo(req: express.Request, res: express.Response) {
@@ -38,7 +39,9 @@ export class GoodVideoController {
       await this.goodVideoApplicationService.cancelGoodVideo(userId, videoId)
       res.status(200).json({ message: 'いいねをキャンセルしました' })
     } catch (error) {
-      res.status(500).json({ message: 'エラーが発生しました' })
+      res
+        .status(500)
+        .json({ message: 'いいねをキャンセルした際にエラーが発生しました' })
     }
   }
 }

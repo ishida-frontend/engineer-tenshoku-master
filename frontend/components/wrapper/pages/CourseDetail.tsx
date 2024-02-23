@@ -38,7 +38,7 @@ export function CourseDetailWrapper({
   questions?: QuestionType[]
   answers: AnswerType[]
   questionId?: string
-  likeCount?: number
+  goodCount?: number
 }) {
   const { showErrorToast } = useCustomToast()
 
@@ -65,7 +65,7 @@ export function CourseDetailWrapper({
     const [isFavoriteLoading, setIsFavoriteLoading] = useState<boolean>()
 
     const [isLiked, setIsLiked] = useState(false)
-    const [likeCount, setLikeCount] = useState(0)
+    const [goodCount, setGoodCount] = useState(0)
 
     const getCourseData = async (courseId: string) => {
       try {
@@ -176,7 +176,7 @@ export function CourseDetailWrapper({
         )
 
         setIsLiked(!isLiked)
-        setLikeCount((count) => (isLiked ? count - 1 : count + 1))
+        setGoodCount((count) => (isLiked ? count - 1 : count + 1))
       } catch (error) {
         console.error('Error toggling like:', error)
         console.error(error)

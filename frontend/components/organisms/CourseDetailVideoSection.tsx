@@ -45,7 +45,7 @@ export function CourseDetailVideoSection({
   closeProfileModal,
   isLiked,
   handleLike,
-  likeCount,
+  goodCount,
 }: {
   selectedVideo: SelectedVideo | null
   questionPage: QuestionPageType
@@ -75,7 +75,7 @@ export function CourseDetailVideoSection({
   isLiked: boolean
   handleLike?: (event: React.MouseEvent<HTMLButtonElement>) => void
   handleLikeStatus?: (videoId: string) => void
-  likeCount: number
+  goodCount: number
 }) {
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
@@ -109,7 +109,7 @@ export function CourseDetailVideoSection({
                   <GoodButton
                     handleLike={handleLike}
                     isLiked={isLiked}
-                    likeCount={likeCount}
+                    goodCount={goodCount}
                   />
 
                   <FavButton

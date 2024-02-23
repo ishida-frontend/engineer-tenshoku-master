@@ -5,11 +5,11 @@ import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa'
 export const GoodButton = ({
   isLiked,
   handleLike,
-  likeCount,
+  goodCount,
 }: {
   isLiked: boolean
   handleLike: (event: React.MouseEvent<HTMLButtonElement>) => void
-  likeCount: number
+  goodCount: number
 }) => {
   return (
     <IconButton
@@ -21,7 +21,7 @@ export const GoodButton = ({
       variant="ghost"
       color="teal.500"
     >
-      {likeCount}
+      {goodCount}
     </IconButton>
   )
 }
