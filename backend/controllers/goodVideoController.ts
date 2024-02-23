@@ -14,10 +14,9 @@ export class GoodVideoController {
   async getGoodCount(req: express.Request, res: express.Response) {
     try {
       const { videoId } = req.params
-      const goodCount =
-        await GoodVideoController.goodVideoApplicationService.getGoodCount(
-          videoId,
-        )
+      const goodCount = await this.goodVideoApplicationService.getGoodCount(
+        videoId,
+      )
       res.status(200).json(goodCount)
     } catch (error) {
       res.status(500).json({ message: 'エラーが発生しました' })
@@ -27,7 +26,7 @@ export class GoodVideoController {
     try {
       const { userId, videoId } = req.body
 
-      await GoodVideoApplicationService.goodVideo(userId, videoId)
+      await this.goodVideoApplicationService.goodVideo(userId, videoId)
       res.status(200).json({ message: 'いいねをしました' })
     } catch (error) {
       res.status(500).json({ message: 'いいねした際にエラーが発生しました' })

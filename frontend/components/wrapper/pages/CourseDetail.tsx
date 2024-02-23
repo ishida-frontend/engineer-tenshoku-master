@@ -179,7 +179,6 @@ export function CourseDetailWrapper({
         setGoodCount((count) => (isLiked ? count - 1 : count + 1))
       } catch (error) {
         console.error('Error toggling like:', error)
-        console.error(error)
       }
     }
 
