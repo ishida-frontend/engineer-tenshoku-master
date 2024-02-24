@@ -48,6 +48,26 @@ export class AdvertisementApplicationService {
       )
     }
   }
+  async getTestAdvertisements() {
+    try {
+      const testAdvertisement = await prisma.advertisement.findMany({
+        where: {
+          deleted_at: null,
+          startFrom: {
+            lt: new Date(), // startFrom が現在時刻より過去
+          },
+          endAt: {
+            gt: new Date(), // endAt が現在時刻より未来
+          },
+        },
+      })
+      return testAdvertisement
+    } catch (error) {
+      throw new Error(
+        `AdvertisementApplicationService: get advertisements error: ${error}`,
+      )
+    }
+  }
 
   async updateAdvertisement(params: {
     id: string
