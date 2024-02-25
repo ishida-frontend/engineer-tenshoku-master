@@ -52,13 +52,13 @@ export class AdvertisementApplicationService {
     try {
       const testAdvertisement = await prisma.advertisement.findMany({
         where: {
-          deleted_at: null,
           startFrom: {
-            lt: new Date(), // startFrom が現在時刻より過去
+            lt: new Date(), 
           },
           endAt: {
-            gt: new Date(), // endAt が現在時刻より未来
+            gt: new Date(), 
           },
+          deleted_at: null,
         },
       })
       return testAdvertisement

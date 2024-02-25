@@ -104,7 +104,7 @@ router.put('/tag', tagValidator.updateTag, (req, res) => {
 router.get('/advertisement', (req, res) => {
   advertisementController.getAdvertisements(req, res)
 })
-router.get('/advertisement', (req, res) => {
+router.get('/advertisement/test', (req, res) => {
   advertisementController.getTestAdvertisements(req, res)
 })
 

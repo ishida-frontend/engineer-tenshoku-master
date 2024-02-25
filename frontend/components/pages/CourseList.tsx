@@ -17,6 +17,9 @@ import { SearchIcon } from '@chakra-ui/icons'
 import { CourseCard } from '../atoms/CourseCard'
 import { LineBanner } from '../atoms/LineBanner'
 import { AchievementBanner } from '../atoms/AchievementBanner'
+// import { AdvertisementBanner } from '../atoms/AdvertisementBanner'
+// import { AdvertisementType } from "../../types/AdvertisementType";
+
 
 type CourseListProps = {
   courses: CourseListType[]
@@ -24,6 +27,17 @@ type CourseListProps = {
 }
 
 export function CourseList({ courses, handleTextChange }: CourseListProps) {
+  // const [advertisementData, setAdvertisementData] = useState(null);
+
+  // useEffect(() => {
+  //   async function fetchAdvertisement() {
+  //     const data = await fetchAdvertisementData(); // advertisementデータを取得する関数を実行
+  //     setAdvertisementData(data); // advertisementデータをセット
+  //   }
+
+  //   fetchAdvertisement();
+  // }, []);
+
   if (!courses) return <Loader />
   const [text, setText] = useState<string>()
 
@@ -86,6 +100,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
           <VStack mt={40} gap={10}>
             <LineBanner />
             <AchievementBanner />
+            {/* <AdvertisementBanner advertisements={advertisementData}/> */}
           </VStack>
         </Flex>
       </VStack>

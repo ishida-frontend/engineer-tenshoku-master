@@ -2,7 +2,7 @@ import { AdvertisementTest } from "../../../../components/admin/organisms/Advert
 import { AdvertisementType } from "../../../../types/AdvertisementType";
 
 export default async function TestAdvertisement(){
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/advertisement`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/advertisement/test`, {
     cache: 'no-cache'
   }) 
   const advertisements: AdvertisementType[] = await res.json()

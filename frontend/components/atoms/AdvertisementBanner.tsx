@@ -9,14 +9,14 @@ import {
   Link,
 } from '@chakra-ui/react'
 
-import { useCustomToast } from '../../../hooks/useCustomToast'
-import { AdvertisementType } from '../../../types/AdvertisementType'
+import { useCustomToast } from '../../hooks/useCustomToast'
+import { AdvertisementType } from '../../types/AdvertisementType'
 import { useState } from 'react'
 
 type AdvertisementTypeProps = {
   advertisements: AdvertisementType[]
 }
-export function AdvertisementTest({ advertisements }: AdvertisementTypeProps) {
+export function AdvertisementBanner({ advertisements }: AdvertisementTypeProps) {
   const { showErrorToast } = useCustomToast()
   const [showAdBanners, setShowAdBanners] = useState(
     Array(advertisements.length).fill(true),
