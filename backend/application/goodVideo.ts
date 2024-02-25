@@ -14,7 +14,7 @@ export class GoodVideoApplicationService {
     return goodCount
   }
 
-  //いいねを追加、または取り消すメソッド
+  //いいねを追加メソッド
   async goodVideo(
     userId: string,
     videoId: string,
@@ -32,7 +32,7 @@ export class GoodVideoApplicationService {
         },
       },
     })
-    //すでに削除されている場合は削除を解除して、削除されていない場合は新たにいいねを追加する
+    //すでに削除されている場合は削除を解除
     if (existingGoodVideo?.deleted_at) {
       const goodVideo = await prisma.goodVideo.update({
         where: {
@@ -47,6 +47,20 @@ export class GoodVideoApplicationService {
       })
       return goodVideo
     }
+
+    //existingGoodVideoが存在しかつ削除されていない場合は削除
+    if (existingGoodVideo && !existingGoodVideo.deleted_at) {
+      const deletedGoodVideo = await prisma.goodVideo.delete({
+        where: {
+          user_id_video_id: {
+            user_id: userId,
+            video_id: videoId,
+          },
+        },
+      })
+      return deletedGoodVideo
+    }
+    //削除されていた場合は、新たにいいねを追加
     const goodVideo = await prisma.goodVideo.create({
       data: {
         user_id: userId,
@@ -54,61 +68,5 @@ export class GoodVideoApplicationService {
       },
     })
     return goodVideo
-  }
-  //いいねを取り消すメソッド
-  async cancelGoodVideo(
-    userId: string,
-    videoId: string,
-  ): Promise<{
-    user_id: string
-    video_id: string
-    deleted_at: Date | null
-  }> {
-    //ユーザーと動画のいいね情報を取得
-    const existingGoodVideo = await prisma.goodVideo.findUnique({
-      where: {
-        user_id_video_id: {
-          user_id: userId,
-          video_id: videoId,
-        },
-      },
-    })
-    //いいね情報が存在しない場合エラーを投げる処理
-    if (!existingGoodVideo) {
-      throw new Error('target goodVideo data is not exist')
-    }
-
-    //いいね情報が存在する場合の処理
-    if (existingGoodVideo) {
-      if (!existingGoodVideo.deleted_at) {
-        //すでにキャンセルされている場合、再度いいね追加する
-        const reGoodVideo = await prisma.goodVideo.update({
-          where: {
-            user_id_video_id: {
-              user_id: userId,
-              video_id: videoId,
-            },
-          },
-          data: {
-            deleted_at: new Date(),
-          },
-        })
-        return reGoodVideo
-      } else {
-        //まだキャンセルされていない場合、通常のキャンセル処理を行う
-        const deletedGoodVideo = await prisma.goodVideo.delete({
-          where: {
-            user_id_video_id: {
-              user_id: userId,
-              video_id: videoId,
-            },
-          },
-        })
-        return deletedGoodVideo
-      }
-    } else {
-      //データが存在しない場合エラーを投げる
-      throw new Error('Good video not found')
-    }
   }
 }

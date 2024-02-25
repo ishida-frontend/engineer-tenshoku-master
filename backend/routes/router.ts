@@ -178,6 +178,6 @@ favoriteVideoRouter.get('/:userId', favoriteVideoController.getFavoriteVideos)
 const goodVideoRouter = express.Router()
 router.use('/goodVideo', goodVideoRouter)
 goodVideoRouter.post('/:videoId', goodVideoController.goodVideo)
-goodVideoRouter.delete('/videoId', goodVideoController.cancelGoodVideo)
+goodVideoRouter.delete('/videoId', goodVideoController.goodVideo)
 
 export default router

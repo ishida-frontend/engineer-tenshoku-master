@@ -7,7 +7,6 @@ export class GoodVideoController {
   constructor() {
     this.goodVideoApplicationService = new GoodVideoApplicationService()
     this.goodVideo = this.goodVideo.bind(this)
-    this.cancelGoodVideo = this.cancelGoodVideo.bind(this)
     this.getGoodCount = this.getGoodCount.bind(this)
   }
 
@@ -30,17 +29,6 @@ export class GoodVideoController {
       res.status(200).json({ message: 'いいねをしました' })
     } catch (error) {
       res.status(500).json({ message: 'いいねした際にエラーが発生しました' })
-    }
-  }
-  async cancelGoodVideo(req: express.Request, res: express.Response) {
-    try {
-      const { userId, videoId } = req.body
-      await this.goodVideoApplicationService.cancelGoodVideo(userId, videoId)
-      res.status(200).json({ message: 'いいねをキャンセルしました' })
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: 'いいねをキャンセルした際にエラーが発生しました' })
     }
   }
 }
