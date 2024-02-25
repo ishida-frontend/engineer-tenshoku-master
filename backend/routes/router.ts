@@ -105,6 +105,7 @@ router.get('/advertisement', (req, res) => {
   advertisementController.getAdvertisements(req, res)
 })
 router.get('/advertisement/test', (req, res) => {
+  console.log('ルーティング確認')
   advertisementController.getTestAdvertisements(req, res)
 })
 
