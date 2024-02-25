@@ -2,6 +2,7 @@ import React from 'react'
 
 import { CourseListType } from '../../types/CourseType'
 import { CourseListWrapper } from '../../components/wrapper/pages/CourseList'
+import { AdBannerData } from '../../components/wrapper/AdvertisementBanner' 
 import Error from '../error'
 export default async function Course() {
   try {
@@ -16,6 +17,7 @@ export default async function Course() {
     )
 
     const initialCourses: CourseListType[] = await res.json()
+    await AdBannerData();
 
     return <CourseListWrapper initialCourses={initialCourses} />
   } catch (e) {
