@@ -65,7 +65,7 @@ export function CourseDetailWrapper({
     const [isFavoriteLoading, setIsFavoriteLoading] = useState<boolean>()
 
     const [isLiked, setIsLiked] = useState(false)
-    const [goodCount, setGoodCount] = useState(0)
+    const [, setGoodCount] = useState(0)
 
     const getCourseData = async (courseId: string) => {
       try {
