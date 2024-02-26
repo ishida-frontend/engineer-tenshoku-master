@@ -155,7 +155,6 @@ yarn prisma migrate dev --create-only
 今回の対応で関係ないものが含まれていないか確認してください。
 確認が済んだら
 
-
 以下を実行で schema を更新
 
 ```bash
@@ -194,3 +193,4 @@ DEMO の実行方法など、"エンジニア転職マスター講座"の基本�
 "エンジニア転職マスター講座" is under [MIT license](https://).
 
 "エンジニア転職マスター講座" is Confidential.
+aaaaaa
