@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   Center,
@@ -18,25 +18,16 @@ import { CourseCard } from '../atoms/CourseCard'
 import { LineBanner } from '../atoms/LineBanner'
 import { AchievementBanner } from '../atoms/AchievementBanner'
 import { AdvertisementBanner } from '../atoms/AdvertisementBanner'
-import { AdBannerData } from '../wrapper/AdvertisementBanner' 
+import { AdvertisementType } from '../../types/AdvertisementType'
 
 
 type CourseListProps = {
   courses: CourseListType[]
+  advertisements: AdvertisementType[]
   handleTextChange: (text: string) => void
 }
 
-export function CourseList({ courses, handleTextChange }: CourseListProps) {
-  const [advertisementData, setAdvertisementData] = useState(null);
-
-  useEffect(() => {
-    async function fetchAdvertisement() {
-      const data = await AdBannerData(); // advertisementデータを取得する関数を実行
-      setAdvertisementData(data); // advertisementデータをセット
-    }
-
-    fetchAdvertisement();
-  }, []);
+export function CourseList({ courses, advertisements, handleTextChange }: CourseListProps) {
 
   if (!courses) return <Loader />
   const [text, setText] = useState<string>()
@@ -100,7 +91,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
           <VStack mt={40} gap={10}>
             <LineBanner />
             <AchievementBanner />
-            <AdvertisementBanner advertisements={advertisementData}/>
+            <AdvertisementBanner advertisements={advertisements}/>
           </VStack>
         </Flex>
       </VStack>

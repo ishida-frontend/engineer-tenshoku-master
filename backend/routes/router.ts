@@ -104,9 +104,8 @@ router.put('/tag', tagValidator.updateTag, (req, res) => {
 router.get('/advertisement', (req, res) => {
   advertisementController.getAdvertisements(req, res)
 })
-router.get('/advertisement/test', (req, res) => {
-  console.log('ルーティング確認')
-  advertisementController.getTestAdvertisements(req, res)
+router.get('/advertisement/banner', (req, res) => {
+  advertisementController.getBannerAd(req, res)
 })
 
 router.get('/advertisement/:id', (req, res) => {

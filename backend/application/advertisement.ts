@@ -48,9 +48,9 @@ export class AdvertisementApplicationService {
       )
     }
   }
-  async getTestAdvertisements() {
+  async getBannerAd() {
     try {
-      const testAdvertisement = await prisma.advertisement.findMany({
+      const BannerAd = await prisma.advertisement.findMany({
         where: {
           startFrom: {
             lt: new Date(), 
@@ -61,7 +61,7 @@ export class AdvertisementApplicationService {
           deleted_at: null,
         },
       })
-      return testAdvertisement
+      return BannerAd
     } catch (error) {
       throw new Error(
         `AdvertisementApplicationService: get advertisements error: ${error}`,

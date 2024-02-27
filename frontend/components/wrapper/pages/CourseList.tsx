@@ -4,11 +4,12 @@ import React, { useState } from 'react'
 import { CourseList } from '../../pages/CourseList'
 import { CourseListType } from '../../../types/CourseType'
 import Error from '../../../app/error'
+import { AdvertisementType } from '../../../types/AdvertisementType'
 
 export function CourseListWrapper({
-  initialCourses,
+  initialCourses, advertisements
 }: {
-  initialCourses: CourseListType[]
+  initialCourses: CourseListType[], advertisements: AdvertisementType[]
 }) {
   try {
     const [courses, setCourses] = useState<CourseListType[]>(initialCourses)
@@ -43,7 +44,7 @@ export function CourseListWrapper({
         setCourses(allCourses)
       }
     }
-    return <CourseList courses={courses} handleTextChange={handleTextChange} />
+    return <CourseList courses={courses} handleTextChange={handleTextChange} advertisements={advertisements}/>
   } catch (e) {
     return <Error />
   }
