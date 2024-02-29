@@ -38,7 +38,7 @@ export function CourseDetailWrapper({
   questions?: QuestionType[]
   answers: AnswerType[]
   questionId?: string
-  likeCount?: number
+  goodCount?: number
 }) {
   const { showErrorToast } = useCustomToast()
 
@@ -65,7 +65,7 @@ export function CourseDetailWrapper({
     const [isFavoriteLoading, setIsFavoriteLoading] = useState<boolean>()
 
     const [isLiked, setIsLiked] = useState(false)
-    const [likeCount, setLikeCount] = useState(0)
+    const [, setGoodCount] = useState(0)
 
     const getCourseData = async (courseId: string) => {
       try {
@@ -160,10 +160,9 @@ export function CourseDetailWrapper({
     }
 
     const handleLike = async () => {
-      const action = isLiked ? 'unlike' : 'like'
       try {
         await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodvideo/${videoId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodVideo/${videoId}`,
           {
             method: 'POST',
             headers: {
@@ -177,7 +176,7 @@ export function CourseDetailWrapper({
         )
 
         setIsLiked(!isLiked)
-        setLikeCount((count) => (isLiked ? count - 1 : count + 1))
+        setGoodCount((count) => (isLiked ? count - 1 : count + 1))
       } catch (error) {
         console.error('Error toggling like:', error)
       }
@@ -218,7 +217,9 @@ export function CourseDetailWrapper({
     useEffect(() => {
       const handleLikeStatus = async () => {
         try {
-          const res = await fetch(`/api/good/${videoId}/check?userId=${userId}`)
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodVideo/${videoId}`,
+          )
           const data = await res.json()
           setIsLiked(data.liked)
         } catch (error) {
