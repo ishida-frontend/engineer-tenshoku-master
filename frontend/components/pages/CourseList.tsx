@@ -40,6 +40,8 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
     setText(event.target.value)
   }
 
+  console.log('courses', courses)
+
   return (
     <Center>
       <VStack>
