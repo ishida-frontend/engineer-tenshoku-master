@@ -40,10 +40,11 @@ export class AdvertisementApplicationService {
     try {
       const advertisements = await prisma.advertisement.findMany({
         where: {
-          startFrom: {
-            lte: new Date(), // 現在の日付以前の開始日時
-          },
+          deleted_at: null, 
         },
+        orderBy: {
+          startFrom: 'asc',
+        },  
       })
       return advertisements
     } catch (error) {
