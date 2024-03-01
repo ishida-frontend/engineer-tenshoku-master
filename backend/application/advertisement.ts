@@ -1,11 +1,11 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from '@prisma/client'
 import crypto from 'crypto'
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient()
 
 export class AdvertisementApplicationService {
-  async createAdvertisement(params: Prisma.AdvertisementCreateInput)
-   {
+  async createAdvertisement(params: Prisma.AdvertisementCreateInput) {
     try {
+      const test = 'test'
       const { name, url, imageUrl, author, startFrom, endAt } = params
       const advertisement = await prisma.advertisement.create({
         data: {
@@ -15,12 +15,14 @@ export class AdvertisementApplicationService {
           imageUrl,
           author,
           startFrom,
-          endAt
-        }
+          endAt,
+        },
       })
       return advertisement
     } catch (error) {
-      throw new Error(`AdvertisementApplicationService: create advertisement error: ${error}`)
+      throw new Error(
+        `AdvertisementApplicationService: create advertisement error: ${error}`,
+      )
     }
   }
 }
