@@ -65,7 +65,7 @@ export function CourseDetailWrapper({
     const [isFavoriteLoading, setIsFavoriteLoading] = useState<boolean>()
 
     const [isLiked, setIsLiked] = useState(false)
-    const [, setGoodCount] = useState(0)
+    const [goodCount, setGoodCount] = useState(0)
 
     const getCourseData = async (courseId: string) => {
       try {
@@ -229,6 +229,21 @@ export function CourseDetailWrapper({
 
       handleLikeStatus()
     }, [videoId, userId])
+
+    const fetchGoodCount = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodVideo/${videoId}`,
+        )
+        const data = await res.json()
+        setGoodCount(data.goodCount)
+      } catch (error) {
+        console.error('Error goodCount:', error)
+      }
+    }
+    // コンポーネントが初めてマウントされたときに一度だけ goodCount を取得
+    // （例えば、いいねボタンの初期表示の際に実行される）
+    fetchGoodCount()
 
     const getAnotherUserProfile = async (anotherUserId: string) => {
       try {
