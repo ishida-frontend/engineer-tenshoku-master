@@ -162,7 +162,7 @@ export function CourseDetailWrapper({
     const handleLike = async () => {
       try {
         await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodVideo/${videoId}/count`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodVideo/${videoId}`,
           {
             method: 'POST',
             headers: {
@@ -233,7 +233,7 @@ export function CourseDetailWrapper({
     const fetchGoodCount = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodVideo/${videoId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodVideo/${videoId}/count`,
         )
         const data = await res.json()
         setGoodCount(data.goodCount)
