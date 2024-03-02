@@ -18,7 +18,6 @@ export class GoodVideoController {
       )
       res.status(200).json(goodCount)
     } catch (error) {
-      console.log('goodCount', error)
       res.status(500).json({ message: 'カウントエラーが発生しました' })
     }
   }

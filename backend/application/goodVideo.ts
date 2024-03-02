@@ -6,14 +6,14 @@ export class GoodVideoApplicationService {
   //videoIdに対するいいねの数を取得するメソッド
   async getGoodCount(videoId: string): Promise<number> {
     //Prismaを使用して、videoIdに対するいいねの数を取得
-    const existingGoodVideo = await prisma.goodVideo.count({
+    const goodCount = await prisma.goodVideo.count({
       where: {
         video_id: videoId,
         deleted_at: null,
       },
     })
     //deleted_at が null のいいねのみをカウントする
-    return existingGoodVideo
+    return goodCount
   }
 
   //いいねを追加メソッド
