@@ -39,7 +39,12 @@ export class AdvertisementApplicationService {
   async getAdvertisements() {
     try {
       const advertisements = await prisma.advertisement.findMany({
-        where: { deleted_at: null },
+        where: {
+          deleted_at: null, 
+        },
+        orderBy: {
+          startFrom: 'asc',
+        },  
       })
       return advertisements
     } catch (error) {

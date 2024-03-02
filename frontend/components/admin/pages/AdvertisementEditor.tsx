@@ -13,13 +13,19 @@ import {
   useToast,
   HStack,
   Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalCloseButton,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { THEME_COLOR } from '../../../constants'
 
-import { AdvertisementType } from '../../../types/AdvertisementType'
+import { AdvertisementType } from '../../../types'
 import { advertisementSchema } from '../../../zod'
 import { ZodIssue } from 'zod'
-import { AdvertisementRemover } from '../organisms/AdvertisementRemover'
 
 type AdvertisementEditorProps = {
   advertisement: AdvertisementType
@@ -87,7 +93,7 @@ export function AdvertisementEditor({
             imageUrl,
             author,
             startFrom,
-            endAt
+            endAt,
           }),
         },
       )
@@ -195,6 +201,7 @@ export function AdvertisementEditor({
               })?.message
             }
           </FormErrorMessage>
+          TODO 画像が保存できるようになったら修正
         </FormControl> */}
         <FormControl
           isInvalid={
@@ -269,7 +276,7 @@ export function AdvertisementEditor({
               })
             }
           >
-            <FormLabel>開始</FormLabel>
+            <FormLabel>開始日</FormLabel>
             <Input
               value={
                 new Date(advertisementData.startFrom)
@@ -304,7 +311,7 @@ export function AdvertisementEditor({
               })
             }
           >
-            <FormLabel>終了</FormLabel>
+            <FormLabel>終了日</FormLabel>
             <Input
               value={
                 new Date(advertisementData.endAt).toISOString().split('T')[0]
@@ -343,7 +350,32 @@ export function AdvertisementEditor({
         >
           変更を保存
         </Button>
-        <AdvertisementRemover />
+        <>
+          <Button colorScheme="red" onClick={onOpen}>
+            削除
+          </Button>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            {showModalContent && (
+              <ModalContent>
+                <ModalHeader>この広告を削除しますか？</ModalHeader>
+                <ModalCloseButton />
+                <ModalFooter>
+                  <Button
+                    colorScheme="red"
+                    mr={3}
+                    onClick={deleteAdvertisement}
+                  >
+                    はい
+                  </Button>
+                  <Button variant="ghost" onClick={onClose}>
+                    いいえ
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            )}
+          </Modal>
+        </>
       </Stack>
     </Box>
   )
