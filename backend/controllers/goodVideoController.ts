@@ -18,7 +18,8 @@ export class GoodVideoController {
       )
       res.status(200).json(goodCount)
     } catch (error) {
-      res.status(500).json({ message: 'エラーが発生しました' })
+      console.error('getGoodCount エラー:', error)
+      res.status(500).json({ message: 'カウントエラーが発生しました' })
     }
   }
   async goodVideo(req: express.Request, res: express.Response) {
