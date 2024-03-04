@@ -51,6 +51,7 @@ export function CourseDetailWrapper({
     const [anotherUserProfile, setAnotherUserProfile] =
       useState<UserProfileType>()
     const [completePercentage, setCompletePercentage] = useState(0)
+    const [sectionCompletePercentage, setSectionCompletionPercentage] = useState(0)
     const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
       {},
     )
@@ -87,6 +88,7 @@ export function CourseDetailWrapper({
       let watchedVideos = 0
 
       courseData.sections.forEach((section) => {
+        console.log('section', section)
         section.videos.forEach((video) => {
           totalVideos++
           if (
@@ -100,6 +102,27 @@ export function CourseDetailWrapper({
           }
         })
       })
+      return totalVideos > 0 ? (watchedVideos / totalVideos) * 100 : 0
+    }
+
+    const getSectionCompletionPercentage = (sectionIndex: number) => {
+      if (sectionIndex < 0 || sectionIndex >= courseData.sections.length) {
+        return 0;
+      }
+      const totalVideos = courseData.sections[sectionIndex]?.videos.length ?? 0
+      let watchedVideos = 0
+
+      courseData.sections[sectionIndex]?.videos.forEach((video) => {
+          if (
+            video.ViewingStatus.some(
+              (viewingStatus) =>
+                viewingStatus.status === true &&
+                viewingStatus.user_id === userId,
+            )
+          ) {
+            watchedVideos++
+          }
+        })
       return totalVideos > 0 ? (watchedVideos / totalVideos) * 100 : 0
     }
 
@@ -156,7 +179,9 @@ export function CourseDetailWrapper({
     }
 
     useEffect(() => {
+      const sectionIndex = 0
       setCompletePercentage(getCompletionPercentage())
+      setSectionCompletionPercentage(getSectionCompletionPercentage(sectionIndex))
       setIsWatchingLoading(true)
       setIsFavoriteLoading(true)
 
@@ -211,6 +236,7 @@ export function CourseDetailWrapper({
         courseData={courseData}
         session={session}
         completePercentage={completePercentage}
+        sectionCompletePercentage={sectionCompletePercentage}
         watchedStatus={watchedStatus}
         checkedStatus={checkedStatus}
         favoritedStatus={favoritedStatus}

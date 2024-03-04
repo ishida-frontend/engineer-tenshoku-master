@@ -22,16 +22,19 @@ import { CourseWithSectionsType } from '../../types/CourseType'
 import { HandleChangeVideo } from '../pages/CourseDetail'
 import Link from 'next/link'
 import { Session } from 'next-auth'
+import { SectionProgressBar } from '../atoms/SectionProgressBar'
 
 export function CourseDetailAccordionMenu({
   session,
   completePercentage,
+  sectionCompletePercentage,
   checkedStatus,
   courseData,
   handleChangeVideo,
 }: {
   session: Session | null
   completePercentage: number
+  sectionCompletePercentage: number
   courseData: CourseWithSectionsType
   checkedStatus: { [videoId: string]: boolean }
   handleChangeVideo: HandleChangeVideo
@@ -66,6 +69,7 @@ export function CourseDetailAccordionMenu({
                           <Text>{section.title}</Text>
                         </HStack>
                       </Heading>
+                      <SectionProgressBar sectionCompletePercentage={sectionCompletePercentage}/>
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>

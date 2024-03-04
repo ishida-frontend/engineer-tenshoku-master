@@ -45,6 +45,7 @@ export function CourseDetail({
   courseData,
   session,
   completePercentage,
+  sectionCompletePercentage,
   watchedStatus,
   checkedStatus,
   favoritedStatus,
@@ -63,6 +64,7 @@ export function CourseDetail({
   courseData: CourseWithSectionsType
   session: Session | null
   completePercentage: number
+  sectionCompletePercentage: number
   watchedStatus: Record<string, boolean>
   checkedStatus: Record<string, boolean>
   favoritedStatus: Record<string, boolean>
@@ -268,6 +270,7 @@ export function CourseDetail({
           <CourseDetailAccordionMenu
             session={session}
             completePercentage={completePercentage}
+            sectionCompletePercentage={sectionCompletePercentage}
             checkedStatus={checkedStatus}
             courseData={courseData}
             handleChangeVideo={handleChangeVideo}
