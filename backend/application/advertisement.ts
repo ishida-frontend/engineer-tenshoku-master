@@ -83,4 +83,18 @@ export class AdvertisementApplicationService {
       )
     }
   }
+
+  async deleteAdvertisement(id: string) {
+    try {
+      const deletedAdvertisement = await prisma.advertisement.update({
+        where: { id },
+        data: { deleted_at: new Date() },
+      })
+      return deletedAdvertisement
+    } catch (error) {
+      throw new Error(
+        `AdvertisementApplicationService: delete advertisement error: ${error}`,
+      )
+    }
+  }
 }
