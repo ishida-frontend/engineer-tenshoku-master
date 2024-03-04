@@ -24,7 +24,6 @@ export class GoodVideoController {
   async goodVideo(req: express.Request, res: express.Response) {
     try {
       const { userId, videoId } = req.body
-
       await this.goodVideoApplicationService.goodVideo(userId, videoId)
       res.status(200).json({ message: 'いいねをしました' })
     } catch (error) {
