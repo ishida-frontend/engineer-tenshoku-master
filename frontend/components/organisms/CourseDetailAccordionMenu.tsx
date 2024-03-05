@@ -61,7 +61,7 @@ export function CourseDetailAccordionMenu({
                 <h2>
                   <AccordionButton borderBottomWidth={'2px'}>
                     <Box as="span" flex="1" textAlign="left" p={'18px 0px'}>
-                      <Heading size={'sm'}>
+                      <Heading size={'sm'} mb={'12px'}>
                         <HStack>
                           <Text color={'teal.400'}>
                             SECTION {section.order}
