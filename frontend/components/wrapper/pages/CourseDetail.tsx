@@ -50,8 +50,9 @@ export function CourseDetailWrapper({
     } = useDisclosure()
     const [anotherUserProfile, setAnotherUserProfile] =
       useState<UserProfileType>()
-    const [completePercentage, setCompletePercentage] = useState(0)
-    const [sectionCompletePercentage, setSectionCompletionPercentage] = useState(0)
+    const [completePercentage, setCompletePercentage] = useState<number>(0)
+    const [sectionCompletePercentage, setSectionCompletionPercentage] =
+      useState(0)
     const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
       {},
     )
@@ -105,14 +106,20 @@ export function CourseDetailWrapper({
       return totalVideos > 0 ? (watchedVideos / totalVideos) * 100 : 0
     }
 
-    const getSectionCompletionPercentage = (sectionIndex: number) => {
-      if (sectionIndex < 0 || sectionIndex >= courseData.sections.length) {
-        return 0;
-      }
-      const totalVideos = courseData.sections[sectionIndex]?.videos.length ?? 0
-      let watchedVideos = 0
-
-      courseData.sections[sectionIndex]?.videos.forEach((video) => {
+    const getSectionCompletionPercentage = async (
+      courseId: string,
+      sectionIndex: number,
+      userId: string,
+    ) => {
+      try {
+        const courseData = await getCourseData(courseId)
+        if (sectionIndex < 0 || sectionIndex >= courseData.sections.length) {
+          return 0
+        }
+        const section = courseData.sections[sectionIndex]
+        const totalVideos = section.videos.length
+        let watchedVideos = 0
+        section.videos.forEach((video) => {
           if (
             video.ViewingStatus.some(
               (viewingStatus) =>
@@ -123,7 +130,11 @@ export function CourseDetailWrapper({
             watchedVideos++
           }
         })
-      return totalVideos > 0 ? (watchedVideos / totalVideos) * 100 : 0
+        return totalVideos > 0 ? (watchedVideos / totalVideos) * 100 : 0
+      } catch (error) {
+        showErrorToast('セクションの進捗率の取得に失敗しました')
+        return 0
+      }
     }
 
     const handleViewingStatus = async () => {
@@ -180,8 +191,13 @@ export function CourseDetailWrapper({
 
     useEffect(() => {
       const sectionIndex = 0
+      const sectionProgressData = async () => {
+        const sectionCompletionPercentage =
+          await getSectionCompletionPercentage(courseId, sectionIndex, userId)
+        setSectionCompletionPercentage(sectionCompletionPercentage)
+      }
+      sectionProgressData()
       setCompletePercentage(getCompletionPercentage())
-      setSectionCompletionPercentage(getSectionCompletionPercentage(sectionIndex))
       setIsWatchingLoading(true)
       setIsFavoriteLoading(true)
 

@@ -5,17 +5,6 @@ const prisma = new PrismaClient()
 
 async function main() {
   for (let i: number = 1; i <= 5; i++) {
-    const videos = [];
-    for (let j = 1; j <= 3; j++) {
-      videos.push({
-        id: crypto.randomUUID(),
-        name: `Video ${j} for Course ${i}`,
-        order: j,
-        url: `https://www.youtube.com/embed/1SnOhALvS5c`, // Sample URL
-        description: `Description ${j} for Course ${i}`,
-        published: true,
-      });
-    }
     const post = await prisma.course.create({
       data: {
         id: crypto.randomUUID(),
@@ -31,22 +20,6 @@ async function main() {
               published: true,
               videos: {
                 create: [
-                  {
-                    id: crypto.randomUUID(),
-                    name: `Video ${i}`,
-                    order: i,
-                    url: `https://www.youtube.com/embed/1SnOhALvS5c`,
-                    description: `Description ${i}`,
-                    published: true,
-                  },
-                  {
-                    id: crypto.randomUUID(),
-                    name: `Video ${i}`,
-                    order: i,
-                    url: `https://www.youtube.com/embed/1SnOhALvS5c`,
-                    description: `Description ${i}`,
-                    published: true,
-                  },
                   {
                     id: crypto.randomUUID(),
                     name: `Video ${i}`,
