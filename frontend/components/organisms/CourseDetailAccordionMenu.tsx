@@ -77,7 +77,7 @@ export function CourseDetailAccordionMenu({
                         return (
                           <Link
                             key={video.id}
-                            href={`/course/${courseData.id}/?videoId=${video.id}`}
+                            href={`/course/${courseData.id}/${video.id}`}
                           >
                             <Card
                               key={video.id}

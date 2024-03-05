@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { Container, VStack } from '@chakra-ui/react'
 
@@ -82,8 +82,8 @@ export function CourseDetail({
 }) {
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
-  const searchParams = useSearchParams()
-  const searchedVideoId = searchParams.get('videoId')
+  const params = useParams<{ videoId: string }>()
+  const searchedVideoId = params.videoId
 
   const minTitleLength = 10
   const maxTitleLength = 255

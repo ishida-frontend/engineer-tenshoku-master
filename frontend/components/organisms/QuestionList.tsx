@@ -107,7 +107,7 @@ export function QuestionList({
                   )}
                   <Link
                     key={question.id}
-                    href={`/course/${courseId}/?videoId=${videoId}&questionId=${question.id}`}
+                    href={`/course/${courseId}/${videoId}?questionId=${question.id}`}
                     scroll={false}
                     onClick={changeToQuestionDetail}
                   >

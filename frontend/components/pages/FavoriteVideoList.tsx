@@ -103,7 +103,7 @@ export function FavoriteVideoList({ favoriteVideos }: FavoriteVideoListProps) {
                               </Text>
                               <Flex justify="flex-end">
                                 <Link
-                                  href={`/course/${course.id}?videoId=${video.id}`}
+                                  href={`/course/${course.id}/${video.id}`}
                                   mt="2"
                                   color={PRIMARY_FONT_COLOR}
                                   _hover={{ textDecoration: 'none' }}
