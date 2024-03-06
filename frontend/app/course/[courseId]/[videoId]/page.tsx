@@ -1,20 +1,20 @@
 import React from 'react'
 import { getServerSession } from 'next-auth/next'
 
-import { authOptions } from '../../api/auth/[...nextauth]/route'
-import { CourseWithSectionsType } from '../../../types/CourseType'
-import { CourseDetailWrapper } from '../../../components/wrapper/pages/CourseDetail'
-import { QuestionType } from '../../../types/QuestionType'
-import { AnswerType } from '../../../types/AnswerType'
-import Error from '../../error'
-import { loggerInfo } from '../../../utils/logger'
+import { authOptions } from '../../../api/auth/[...nextauth]/route'
+import { CourseWithSectionsType } from '../../../../types/CourseType'
+import { CourseDetailWrapper } from '../../../../components/wrapper/pages/CourseDetail'
+import { QuestionType } from '../../../../types/QuestionType'
+import { AnswerType } from '../../../../types/AnswerType'
+import Error from '../../../error'
+import { loggerInfo } from '../../../../utils/logger'
 
 export default async function CourseDetailPage({
   params,
   searchParams,
 }: {
-  params: { courseId: string }
-  searchParams: { videoId: string; questionId: string }
+  params: { courseId: string; videoId: string }
+  searchParams: { questionId: string }
 }) {
   const session = await getServerSession(authOptions)
   const userId = session?.user?.id
@@ -29,10 +29,11 @@ export default async function CourseDetailPage({
         },
       },
     )
+
     const initialCourseData: CourseWithSectionsType = await getCourseData.json()
 
     const getQuestionsData = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${searchParams.videoId}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/question/${params.videoId}`,
       {
         cache: 'no-cache',
         headers: {
@@ -59,7 +60,7 @@ export default async function CourseDetailPage({
         initialCourseData={initialCourseData}
         session={session}
         userId={userId}
-        videoId={searchParams.videoId}
+        videoId={params.videoId}
         questions={questions}
         answers={answers}
         questionId={searchParams.questionId}
@@ -67,7 +68,7 @@ export default async function CourseDetailPage({
     )
   } catch (e) {
     loggerInfo(`error: ${e}`, {
-      caller: 'frontend/app/course/[courseId]/page.tsx',
+      caller: 'frontend/app/course/[courseId]/[videoId]/page.tsx',
       status: 400,
     })
     return <Error />
