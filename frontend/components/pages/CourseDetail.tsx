@@ -82,6 +82,7 @@ export function CourseDetail({
   closeProfileModal?: () => void
   handleLikeStatus?: (videoId: string) => void
   handleLike?: (event: React.MouseEvent<HTMLButtonElement>) => void
+  goodCount?: number
 }) {
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
