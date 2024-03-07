@@ -27,18 +27,39 @@ import { SectionProgressBar } from '../atoms/SectionProgressBar'
 export function CourseDetailAccordionMenu({
   session,
   completePercentage,
-  sectionCompletePercentage,
   checkedStatus,
   courseData,
   handleChangeVideo,
 }: {
   session: Session | null
   completePercentage: number
-  sectionCompletePercentage: number
   courseData: CourseWithSectionsType
   checkedStatus: { [videoId: string]: boolean }
   handleChangeVideo: HandleChangeVideo
 }) {
+  const getSectionCompletionPercentage = (
+    sectionIndex: number,
+    userId: string,
+  ) => {
+    if (sectionIndex < 0 || sectionIndex >= courseData.sections.length) {
+      return 0
+    }
+    const section = courseData.sections[sectionIndex]
+    const totalVideos = section.videos.length
+    let watchedVideos = 0
+    section.videos.forEach((video) => {
+      if (
+        video.ViewingStatus.some(
+          (viewingStatus) =>
+            viewingStatus.status === true && viewingStatus.user_id === userId,
+        )
+      ) {
+        watchedVideos++
+      }
+    })
+    return totalVideos > 0 ? (watchedVideos / totalVideos) * 100 : 0
+  }
+
   return (
     <Box w={'427px'} float={'right'} bg={'white'}>
       {session?.user?.id && (
@@ -56,6 +77,10 @@ export function CourseDetailAccordionMenu({
       <Accordion allowToggle>
         {courseData.sections &&
           courseData.sections.map((section, sectionIndex) => {
+            const sectionProgress = getSectionCompletionPercentage(
+              sectionIndex,
+              session?.user?.id,
+            )
             return (
               <AccordionItem key={section.id} borderTopWidth={'1px'}>
                 <h2>
@@ -69,7 +94,7 @@ export function CourseDetailAccordionMenu({
                           <Text>{section.title}</Text>
                         </HStack>
                       </Heading>
-                      <SectionProgressBar sectionCompletePercentage={sectionCompletePercentage}/>
+                      <SectionProgressBar sectionProgress={sectionProgress} />
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>

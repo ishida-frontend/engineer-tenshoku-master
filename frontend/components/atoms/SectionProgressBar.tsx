@@ -1,15 +1,13 @@
-import { Box, Text } from "@chakra-ui/react"
+import { Box, Text } from '@chakra-ui/react'
 
 export const SectionProgressBar = ({
-  sectionCompletePercentage
+  sectionProgress,
 }: {
-  sectionCompletePercentage: number
+  sectionProgress: number
 }) => {
   return (
     <Box>
-      <Text>
-        進捗率{sectionCompletePercentage.toFixed(0)}%
-      </Text>
+      <Text>進捗率{sectionProgress.toFixed(0)}%</Text>
     </Box>
   )
 }
