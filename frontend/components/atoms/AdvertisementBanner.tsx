@@ -11,7 +11,7 @@ export function AdvertisementBanner({
   advertisements,
 }: AdvertisementTypeProps) {
   if (!advertisements || !Array.isArray(advertisements)) {
-    return <ErrorMessage message="広告の取得に失敗しました" />
+    return null
   }
 
   return (
@@ -40,7 +40,4 @@ function Advertisement({ advertisement }: AdvertisementProps) {
       </Link>
     </Box>
   )
-}
-function ErrorMessage({ message }: { message: string }) {
-  return <div>{message}</div>
 }

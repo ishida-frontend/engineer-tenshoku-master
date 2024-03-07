@@ -48,7 +48,7 @@ export class AdvertisementApplicationService {
       )
     }
   }
-  async getBannerAd() {
+  async getUserAdvertisments() {
     try {
       const BannerAd = await prisma.advertisement.findMany({
         where: {

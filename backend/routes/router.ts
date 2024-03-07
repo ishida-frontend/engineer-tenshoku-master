@@ -105,7 +105,7 @@ router.get('/advertisement', (req, res) => {
   advertisementController.getAdvertisements(req, res)
 })
 router.get('/advertisement/banner', (req, res) => {
-  advertisementController.getBannerAd(req, res)
+  advertisementController.getUserAdvertisments(req, res)
 })
 
 router.get('/advertisement/:id', (req, res) => {
