@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, HStack, Icon } from '@chakra-ui/react'
+import { Button, HStack } from '@chakra-ui/react'
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa'
 
 export const GoodButton = ({
