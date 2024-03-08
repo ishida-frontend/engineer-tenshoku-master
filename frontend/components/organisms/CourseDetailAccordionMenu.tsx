@@ -22,7 +22,6 @@ import { CourseWithSectionsType } from '../../types/CourseType'
 import { HandleChangeVideo } from '../pages/CourseDetail'
 import Link from 'next/link'
 import { Session } from 'next-auth'
-import { SectionProgressBar } from '../atoms/SectionProgressBar'
 
 export function CourseDetailAccordionMenu({
   session,
@@ -45,7 +44,7 @@ export function CourseDetailAccordionMenu({
       return 0
     }
     const section = courseData.sections[sectionIndex]
-    const totalVideos = section.videos.length
+    const totalVideoCount = section.videos.length
     let watchedVideos = 0
     section.videos.forEach((video) => {
       if (
@@ -57,7 +56,7 @@ export function CourseDetailAccordionMenu({
         watchedVideos++
       }
     })
-    return totalVideos > 0 ? (watchedVideos / totalVideos) * 100 : 0
+    return totalVideoCount > 0 ? (watchedVideos / totalVideoCount) * 100 : 0
   }
 
   return (
@@ -79,7 +78,7 @@ export function CourseDetailAccordionMenu({
           courseData.sections.map((section, sectionIndex) => {
             const sectionProgress = getSectionCompletionPercentage(
               sectionIndex,
-              session?.user?.id,
+              session.user.id,
             )
             return (
               <AccordionItem key={section.id} borderTopWidth={'1px'}>
@@ -94,7 +93,9 @@ export function CourseDetailAccordionMenu({
                           <Text>{section.title}</Text>
                         </HStack>
                       </Heading>
-                      <SectionProgressBar sectionProgress={sectionProgress} />
+                      <Box>
+                        <Text>進捗率{sectionProgress.toFixed(0)}%</Text>
+                      </Box>
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
