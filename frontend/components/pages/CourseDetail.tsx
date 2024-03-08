@@ -6,15 +6,11 @@ import { Container, VStack } from '@chakra-ui/react'
 
 import { CourseDetailVideoSection } from '../organisms/CourseDetailVideoSection'
 import { CourseDetailAccordionMenu } from '../organisms/CourseDetailAccordionMenu'
-import { CourseWithSectionsType } from '../../types/CourseType'
-import { QuestionType } from '../../types/QuestionType'
-import { Session } from 'next-auth'
+
 import { useCustomToast } from '../../hooks/useCustomToast'
-import { CreateQuestionErrorType } from '../../types/QuestionType'
 import { QUESTION_PAGES } from '../../constants/index'
-import { QuestionPageType } from '../../types/QuestionType'
-import { AnswerType } from '../../types/AnswerType'
-import { UserProfileType } from '../../types'
+import { CreateQuestionErrorType, QuestionType } from '../../types/QuestionType'
+import { courseDetailPropsType, QuestionPageType } from '../../types'
 
 export type SelectedVideo = {
   id: string
@@ -41,45 +37,7 @@ type QuestionValidationError = {
   message: string
 }
 
-export function CourseDetail({
-  courseData,
-  session,
-  completePercentage,
-  watchedStatus,
-  checkedStatus,
-  favoritedStatus,
-  isWatchingLoading,
-  isFavoriteLoading,
-  questions,
-  answers,
-  questionId,
-  handleViewingStatus,
-  handleFavoriteVideoStatus,
-  getAnotherUserProfile,
-  anotherUserProfile,
-  isProfileOpen,
-  closeProfileModal,
-}: {
-  courseData: CourseWithSectionsType
-  session: Session | null
-  completePercentage: number
-  watchedStatus: Record<string, boolean>
-  checkedStatus: Record<string, boolean>
-  favoritedStatus: Record<string, boolean>
-  isWatchingLoading: boolean
-  isFavoriteLoading: boolean
-  questions?: QuestionType[]
-  answers: AnswerType[]
-  questionId?: string
-  handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
-  handleFavoriteVideoStatus: (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => void
-  getAnotherUserProfile?: (value: string) => void
-  anotherUserProfile?: UserProfileType
-  isProfileOpen?: boolean
-  closeProfileModal?: () => void
-}) {
+export function CourseDetail(courseDetailProps: courseDetailPropsType) {
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
   const params = useParams<{ videoId: string }>()
@@ -96,23 +54,24 @@ export function CourseDetail({
   )
 
   const [videoId, setVideoId] = useState<string>(
-    searchedVideoId || courseData.sections[0].videos[0].id,
+    searchedVideoId || courseDetailProps.courseData.sections[0].videos[0].id,
   )
   const [selectedQuestion, setSelectedQuestion] = useState<QuestionType>()
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo | null>(null)
 
   useEffect(() => {
-    if (questions) {
-      const questionData = questions.find((question) => {
-        return question.id === questionId
+    if (courseDetailProps.questions) {
+      const questionData = courseDetailProps.questions.find((question) => {
+        return question.id === courseDetailProps.questionId
       })
       setSelectedQuestion(questionData)
     }
-  }, [questionId, questions])
+  }, [courseDetailProps.questionId, courseDetailProps.questions])
 
   useEffect(() => {
-    const section = courseData.sections.find((currentSection) =>
-      currentSection.videos.some((video) => video.id === searchedVideoId),
+    const section = courseDetailProps.courseData.sections.find(
+      (currentSection) =>
+        currentSection.videos.some((video) => video.id === searchedVideoId),
     )
 
     const video = section
@@ -121,7 +80,7 @@ export function CourseDetail({
 
     if (video && section) {
       const selectedVideoData = {
-        id: courseData.id,
+        id: courseDetailProps.courseData.id,
         sections: {
           id: section.id,
           order: section.order,
@@ -139,21 +98,32 @@ export function CourseDetail({
     } else {
       showErrorToast('該当の動画が見つかりませんでした')
     }
-  }, [searchedVideoId, courseData])
+  }, [searchedVideoId, courseDetailProps.courseData])
 
   const handleChangeVideo = (sectionIndex: number, videoIndex: number) => {
     const currentlySelectedVideo = {
-      id: courseData.id,
+      id: courseDetailProps.courseData.id,
       sections: {
-        id: courseData.sections[sectionIndex].id,
-        order: courseData.sections[sectionIndex].order,
+        id: courseDetailProps.courseData.sections[sectionIndex].id,
+        order: courseDetailProps.courseData.sections[sectionIndex].order,
         videos: {
-          id: courseData.sections[sectionIndex].videos[videoIndex].id,
-          order: courseData.sections[sectionIndex].videos[videoIndex].order,
-          name: courseData.sections[sectionIndex].videos[videoIndex].name,
+          id: courseDetailProps.courseData.sections[sectionIndex].videos[
+            videoIndex
+          ].id,
+          order:
+            courseDetailProps.courseData.sections[sectionIndex].videos[
+              videoIndex
+            ].order,
+          name: courseDetailProps.courseData.sections[sectionIndex].videos[
+            videoIndex
+          ].name,
           description:
-            courseData.sections[sectionIndex].videos[videoIndex].description,
-          url: courseData.sections[sectionIndex].videos[videoIndex].url,
+            courseDetailProps.courseData.sections[sectionIndex].videos[
+              videoIndex
+            ].description,
+          url: courseDetailProps.courseData.sections[sectionIndex].videos[
+            videoIndex
+          ].url,
         },
       },
     }
@@ -202,7 +172,7 @@ export function CourseDetail({
             title,
             content,
             video_id: videoId,
-            user_id: session.user.id,
+            user_id: courseDetailProps.session.user.id,
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -239,7 +209,7 @@ export function CourseDetail({
         method: 'POST',
         body: JSON.stringify({
           question_id: selectedQuestion?.id,
-          user_id: session?.user.id,
+          user_id: courseDetailProps.session?.user.id,
           comment,
         }),
         headers: {
@@ -256,6 +226,37 @@ export function CourseDetail({
     setQuestionPage(value)
   }
 
+  let accordionMenuProps = {
+    session: courseDetailProps.session,
+    completePercentage: courseDetailProps.completePercentage,
+    checkedStatus: courseDetailProps.checkedStatus,
+    courseData: courseDetailProps.courseData,
+    handleChangeVideo: handleChangeVideo,
+  }
+
+  let videoSectionProps = {
+    questions: courseDetailProps.questions,
+    handleViewingStatus: courseDetailProps.handleViewingStatus,
+    watchedStatus: courseDetailProps.watchedStatus,
+    favoritedStatus: courseDetailProps.favoritedStatus,
+    isWatchingLoading: courseDetailProps.isWatchingLoading,
+    isFavoriteLoading: courseDetailProps.isFavoriteLoading,
+    handleFavoriteVideoStatus: courseDetailProps.handleFavoriteVideoStatus,
+    answers: courseDetailProps.answers,
+    session: courseDetailProps.session,
+    getAnotherUserProfile: courseDetailProps.getAnotherUserProfile,
+    anotherUserProfile: courseDetailProps.anotherUserProfile,
+    isProfileOpen: courseDetailProps.isProfileOpen,
+    closeProfileModal: courseDetailProps.closeProfileModal,
+    selectedVideo: selectedVideo,
+    questionPage: questionPage,
+    changeQuestionPage: changeQuestionPage,
+    createQuestion: createQuestion,
+    createQuestionErrors: createQuestionErrors,
+    selectedQuestion: selectedQuestion,
+    createAnswer: createAnswer,
+  }
+
   return (
     <VStack minH={'100vh'} bg={'gray.100'}>
       <Container minWidth={'100%'} padding={'0px'} bg={'white'}>
@@ -265,35 +266,8 @@ export function CourseDetail({
           overflow={'hidden'}
           bg={'gray.100'}
         >
-          <CourseDetailAccordionMenu
-            session={session}
-            completePercentage={completePercentage}
-            checkedStatus={checkedStatus}
-            courseData={courseData}
-            handleChangeVideo={handleChangeVideo}
-          />
-          <CourseDetailVideoSection
-            selectedVideo={selectedVideo}
-            questionPage={questionPage}
-            changeQuestionPage={changeQuestionPage}
-            questions={questions}
-            createQuestion={createQuestion}
-            createQuestionErrors={createQuestionErrors}
-            handleViewingStatus={handleViewingStatus}
-            watchedStatus={watchedStatus}
-            favoritedStatus={favoritedStatus}
-            isWatchingLoading={isWatchingLoading}
-            isFavoriteLoading={isFavoriteLoading}
-            handleFavoriteVideoStatus={handleFavoriteVideoStatus}
-            answers={answers}
-            session={session}
-            selectedQuestion={selectedQuestion}
-            createAnswer={createAnswer}
-            getAnotherUserProfile={getAnotherUserProfile}
-            anotherUserProfile={anotherUserProfile}
-            isProfileOpen={isProfileOpen}
-            closeProfileModal={closeProfileModal}
-          />
+          <CourseDetailAccordionMenu {...accordionMenuProps} />
+          <CourseDetailVideoSection {...videoSectionProps} />
         </Container>
       </Container>
     </VStack>

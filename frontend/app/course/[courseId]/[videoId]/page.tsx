@@ -54,18 +54,18 @@ export default async function CourseDetailPage({
     )
     const answers: AnswerType[] = await getAnswersData.json()
 
-    return (
-      <CourseDetailWrapper
-        courseId={params.courseId}
-        initialCourseData={initialCourseData}
-        session={session}
-        userId={userId}
-        videoId={params.videoId}
-        questions={questions}
-        answers={answers}
-        questionId={searchParams.questionId}
-      />
-    )
+    let WrapperProps = {
+      courseId: params.courseId,
+      initialCourseData: initialCourseData,
+      session: session,
+      userId: userId,
+      videoId: params.videoId,
+      questions: questions,
+      answers: answers,
+      questionId: searchParams.questionId,
+    }
+
+    return <CourseDetailWrapper {...WrapperProps} />
   } catch (e) {
     loggerInfo(`error: ${e}`, {
       caller: 'frontend/app/course/[courseId]/[videoId]/page.tsx',

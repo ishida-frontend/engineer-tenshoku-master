@@ -1,7 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { Session } from 'next-auth'
-
 import {
   upsertViewingStatus,
   fetchButtonStatus,
@@ -11,38 +9,19 @@ import {
   upsertFavoriteVideo,
   fetchFavButtonStatus,
 } from '../../../app/api/course/[courseId]/favoriteVideo'
-import { CourseWithSectionsType } from '../../../types/CourseType'
-import { QuestionType } from '../../../types/QuestionType'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-import { AnswerType } from '../../../types/AnswerType'
 import { CourseDetail } from '../../pages/CourseDetail'
 import Error from '../../../app/error'
 import { useDisclosure } from '@chakra-ui/react'
-import { UserProfileType } from '../../../types'
+import { UserProfileType, WrapperPropsType } from '../../../types'
 
-export function CourseDetailWrapper({
-  courseId,
-  initialCourseData,
-  session,
-  userId,
-  videoId,
-  questions,
-  answers,
-  questionId,
-}: {
-  courseId: string
-  session: Session | null
-  initialCourseData: CourseWithSectionsType
-  userId: string
-  videoId: string
-  questions?: QuestionType[]
-  answers: AnswerType[]
-  questionId?: string
-}) {
+export function CourseDetailWrapper(WrapperProps: WrapperPropsType) {
   const { showErrorToast } = useCustomToast()
+  const userId = WrapperProps.userId
+  const videoId = WrapperProps.videoId
 
   try {
-    const [courseData, setCourseData] = useState(initialCourseData)
+    const [courseData, setCourseData] = useState(WrapperProps.initialCourseData)
     const {
       isOpen: isProfileOpen,
       onOpen: openProfileModal,
@@ -93,7 +72,7 @@ export function CourseDetailWrapper({
             video.ViewingStatus.some(
               (viewingStatus) =>
                 viewingStatus.status === true &&
-                viewingStatus.user_id === userId,
+                viewingStatus.user_id === WrapperProps.userId,
             )
           ) {
             watchedVideos++
@@ -106,10 +85,10 @@ export function CourseDetailWrapper({
     const handleViewingStatus = async () => {
       setIsWatchingLoading(true)
 
-      const newWatchedStatus = !(watchedStatus?.[videoId] || false)
+      const newWatchedStatus = !(watchedStatus?.[WrapperProps.videoId] || false)
       setWatchedStatus((prevStatus) => ({
         ...prevStatus,
-        [videoId]: newWatchedStatus,
+        [WrapperProps.videoId]: newWatchedStatus,
       }))
 
       try {
@@ -120,10 +99,10 @@ export function CourseDetailWrapper({
         })
         setCheckedStatus((prevViewingStatus) => ({
           ...prevViewingStatus,
-          [videoId]: newWatchedStatus,
+          [WrapperProps.videoId]: newWatchedStatus,
         }))
 
-        const updatedCourseData = await getCourseData(courseId)
+        const updatedCourseData = await getCourseData(WrapperProps.courseId)
 
         setCourseData(updatedCourseData)
       } catch (error) {
@@ -136,10 +115,12 @@ export function CourseDetailWrapper({
     const handleFavoriteVideoStatus = async () => {
       setIsFavoriteLoading(true)
 
-      const newFavoritedStatus = !(favoritedStatus?.[videoId] || false)
+      const newFavoritedStatus = !(
+        favoritedStatus?.[WrapperProps.videoId] || false
+      )
       setFavoritedStatus((prevFavoriteStatus) => ({
         ...prevFavoriteStatus,
-        [videoId]: newFavoritedStatus,
+        [WrapperProps.videoId]: newFavoritedStatus,
       }))
 
       try {
@@ -166,7 +147,7 @@ export function CourseDetailWrapper({
           setWatchedStatus(buttonStatus as { [key: string]: boolean })
 
           const checkMarkStatuses = await fetchCheckMarkStatuses({
-            userId: session?.user?.id,
+            userId: WrapperProps.session?.user?.id,
             courseId: courseData.id,
           })
           setCheckedStatus(checkMarkStatuses)
@@ -185,7 +166,7 @@ export function CourseDetailWrapper({
       }
 
       fetchData()
-    }, [courseData, session, videoId])
+    }, [courseData, WrapperProps.session, WrapperProps.videoId])
 
     const getAnotherUserProfile = async (anotherUserId: string) => {
       try {
@@ -206,27 +187,27 @@ export function CourseDetailWrapper({
       }
     }
 
-    return (
-      <CourseDetail
-        courseData={courseData}
-        session={session}
-        completePercentage={completePercentage}
-        watchedStatus={watchedStatus}
-        checkedStatus={checkedStatus}
-        favoritedStatus={favoritedStatus}
-        isWatchingLoading={isWatchingLoading}
-        isFavoriteLoading={isFavoriteLoading}
-        questions={questions}
-        answers={answers}
-        questionId={questionId}
-        handleViewingStatus={handleViewingStatus}
-        handleFavoriteVideoStatus={handleFavoriteVideoStatus}
-        getAnotherUserProfile={getAnotherUserProfile}
-        anotherUserProfile={anotherUserProfile}
-        isProfileOpen={isProfileOpen}
-        closeProfileModal={closeProfileModal}
-      />
-    )
+    let courseDetailProps = {
+      session: WrapperProps.session,
+      questions: WrapperProps.questions,
+      answers: WrapperProps.answers,
+      questionId: WrapperProps.questionId,
+      courseData: courseData,
+      completePercentage: completePercentage,
+      watchedStatus: watchedStatus,
+      checkedStatus: checkedStatus,
+      favoritedStatus: favoritedStatus,
+      isWatchingLoading: isWatchingLoading,
+      isFavoriteLoading: isFavoriteLoading,
+      handleViewingStatus: handleViewingStatus,
+      handleFavoriteVideoStatus: handleFavoriteVideoStatus,
+      getAnotherUserProfile: getAnotherUserProfile,
+      anotherUserProfile: anotherUserProfile,
+      isProfileOpen: isProfileOpen,
+      closeProfileModal: closeProfileModal,
+    }
+
+    return <CourseDetail {...courseDetailProps} />
   } catch (e) {
     return <Error />
   }
