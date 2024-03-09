@@ -36,6 +36,29 @@ export function CourseDetailAccordionMenu({
   checkedStatus: { [videoId: string]: boolean }
   handleChangeVideo: HandleChangeVideo
 }) {
+  const getSectionCompletionPercentage = (
+    sectionIndex: number,
+    userId: string,
+  ) => {
+    if (sectionIndex < 0 || sectionIndex >= courseData.sections.length) {
+      return 0
+    }
+    const section = courseData.sections[sectionIndex]
+    const totalVideoCount = section.videos.length
+    let watchedVideos = 0
+    section.videos.forEach((video) => {
+      if (
+        video.ViewingStatus.some(
+          (viewingStatus) =>
+            viewingStatus.status === true && viewingStatus.user_id === userId,
+        )
+      ) {
+        watchedVideos++
+      }
+    })
+    return totalVideoCount > 0 ? (watchedVideos / totalVideoCount) * 100 : 0
+  }
+
   return (
     <Box w={'427px'} float={'right'} bg={'white'}>
       {session?.user?.id && (
@@ -53,12 +76,16 @@ export function CourseDetailAccordionMenu({
       <Accordion allowToggle>
         {courseData.sections &&
           courseData.sections.map((section, sectionIndex) => {
+            const sectionProgress = getSectionCompletionPercentage(
+              sectionIndex,
+              session.user.id,
+            )
             return (
               <AccordionItem key={section.id} borderTopWidth={'1px'}>
                 <h2>
                   <AccordionButton borderBottomWidth={'2px'}>
                     <Box as="span" flex="1" textAlign="left" p={'18px 0px'}>
-                      <Heading size={'sm'}>
+                      <Heading size={'sm'} mb={'12px'}>
                         <HStack>
                           <Text color={'teal.400'}>
                             SECTION {section.order}
@@ -66,6 +93,9 @@ export function CourseDetailAccordionMenu({
                           <Text>{section.title}</Text>
                         </HStack>
                       </Heading>
+                      <Box>
+                        <Text>進捗率{sectionProgress.toFixed(0)}%</Text>
+                      </Box>
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
@@ -77,7 +107,7 @@ export function CourseDetailAccordionMenu({
                         return (
                           <Link
                             key={video.id}
-                            href={`/course/${courseData.id}/?videoId=${video.id}`}
+                            href={`/course/${courseData.id}/${video.id}`}
                           >
                             <Card
                               key={video.id}
