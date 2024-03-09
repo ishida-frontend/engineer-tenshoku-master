@@ -178,8 +178,7 @@ export function CourseDetailWrapper({
         )
 
         setIsLiked(!isLiked)
-        setGoodCount((count) => (isLiked ? count - 1 : count + 1))
-        router.refresh()
+        setGoodCount(!isLiked ? goodCount + 1 : goodCount - 1)
       } catch (error) {
         console.error('Error toggling like:', error)
       }
@@ -239,9 +238,10 @@ export function CourseDetailWrapper({
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodVideo/${videoId}/count`,
         )
         const data = await res.json()
+        console.log('data:', data)
         setGoodCount(data.goodCount)
       } catch (error) {
-        console.error('Error goodCount:', error)
+        console.error('goodCountの取得中にエラーが発生しました。', error)
       }
     }
     // コンポーネントが初めてマウントされたときに一度だけ goodCount を取得

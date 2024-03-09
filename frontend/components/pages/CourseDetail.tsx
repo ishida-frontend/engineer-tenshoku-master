@@ -298,7 +298,7 @@ export function CourseDetail({
             isProfileOpen={isProfileOpen}
             closeProfileModal={closeProfileModal}
             isLiked={false}
-            goodCount={0}
+            goodCount={goodCount}
             handleLike={handleLike}
           />
         </Container>
