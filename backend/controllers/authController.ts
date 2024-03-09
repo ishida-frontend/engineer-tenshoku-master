@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express'
-import { validationResult, body } from 'express-validator'
+import { validationResult } from 'express-validator'
 import { CognitoClient } from '../config/awsConfig'
 import {
   InitiateAuthCommand,
