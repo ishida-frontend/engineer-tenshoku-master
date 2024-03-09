@@ -1,5 +1,5 @@
-import { prismaMock } from '../singleton'
-import { TagApplicationService } from '../../application/tag'
+import { prismaMock } from '../../singleton'
+import { TagApplicationService } from '../../../application/tag'
 
 let tagService: TagApplicationService
 
