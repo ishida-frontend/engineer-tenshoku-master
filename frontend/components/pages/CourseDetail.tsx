@@ -10,7 +10,13 @@ import { CourseDetailAccordionMenu } from '../organisms/CourseDetailAccordionMen
 import { useCustomToast } from '../../hooks/useCustomToast'
 import { QUESTION_PAGES } from '../../constants/index'
 import { CreateQuestionErrorType, QuestionType } from '../../types/QuestionType'
-import { courseDetailPropsType, QuestionPageType } from '../../types'
+import {
+  CourseWithSectionsType,
+  QuestionPageType,
+  UserProfileType,
+} from '../../types'
+import { Session } from 'next-auth'
+import { AnswerType } from '../../types/AnswerType'
 
 export type SelectedVideo = {
   id: string
@@ -35,6 +41,28 @@ export type HandleChangeVideo = (
 type QuestionValidationError = {
   path: string[]
   message: string
+}
+
+type courseDetailPropsType = {
+  anotherUserProfile?: UserProfileType
+  answers: AnswerType[]
+  checkedStatus: Record<string, boolean>
+  closeProfileModal?: () => void
+  completePercentage: number
+  courseData: CourseWithSectionsType
+  favoritedStatus: Record<string, boolean>
+  getAnotherUserProfile?: (value: string) => void
+  handleFavoriteVideoStatus: (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => void
+  handleViewingStatus: (event: React.MouseEvent<HTMLButtonElement>) => void
+  isFavoriteLoading: boolean
+  isProfileOpen?: boolean
+  isWatchingLoading: boolean
+  questionId?: string
+  questions?: QuestionType[]
+  session: Session | null
+  watchedStatus: Record<string, boolean>
 }
 
 export function CourseDetail(courseDetailProps: courseDetailPropsType) {
@@ -226,35 +254,54 @@ export function CourseDetail(courseDetailProps: courseDetailPropsType) {
     setQuestionPage(value)
   }
 
-  let accordionMenuProps = {
-    session: courseDetailProps.session,
-    completePercentage: courseDetailProps.completePercentage,
-    checkedStatus: courseDetailProps.checkedStatus,
-    courseData: courseDetailProps.courseData,
-    handleChangeVideo: handleChangeVideo,
+  const {
+    anotherUserProfile,
+    answers,
+    checkedStatus,
+    closeProfileModal,
+    completePercentage,
+    courseData,
+    favoritedStatus,
+    getAnotherUserProfile,
+    handleFavoriteVideoStatus,
+    handleViewingStatus,
+    isFavoriteLoading,
+    isProfileOpen,
+    isWatchingLoading,
+    questions,
+    session,
+    watchedStatus,
+  } = courseDetailProps
+
+  const accordionMenuProps = {
+    checkedStatus,
+    completePercentage,
+    courseData,
+    handleChangeVideo,
+    session,
   }
 
-  let videoSectionProps = {
-    questions: courseDetailProps.questions,
-    handleViewingStatus: courseDetailProps.handleViewingStatus,
-    watchedStatus: courseDetailProps.watchedStatus,
-    favoritedStatus: courseDetailProps.favoritedStatus,
-    isWatchingLoading: courseDetailProps.isWatchingLoading,
-    isFavoriteLoading: courseDetailProps.isFavoriteLoading,
-    handleFavoriteVideoStatus: courseDetailProps.handleFavoriteVideoStatus,
-    answers: courseDetailProps.answers,
-    session: courseDetailProps.session,
-    getAnotherUserProfile: courseDetailProps.getAnotherUserProfile,
-    anotherUserProfile: courseDetailProps.anotherUserProfile,
-    isProfileOpen: courseDetailProps.isProfileOpen,
-    closeProfileModal: courseDetailProps.closeProfileModal,
-    selectedVideo: selectedVideo,
-    questionPage: questionPage,
-    changeQuestionPage: changeQuestionPage,
-    createQuestion: createQuestion,
-    createQuestionErrors: createQuestionErrors,
-    selectedQuestion: selectedQuestion,
-    createAnswer: createAnswer,
+  const videoSectionProps = {
+    anotherUserProfile,
+    answers,
+    changeQuestionPage,
+    closeProfileModal,
+    createAnswer,
+    createQuestion,
+    createQuestionErrors,
+    favoritedStatus,
+    getAnotherUserProfile,
+    handleFavoriteVideoStatus,
+    handleViewingStatus,
+    isFavoriteLoading,
+    isProfileOpen,
+    isWatchingLoading,
+    questionPage,
+    questions,
+    selectedQuestion,
+    selectedVideo,
+    session,
+    watchedStatus,
   }
 
   return (
