@@ -60,6 +60,7 @@ export function CourseDetail({
   isProfileOpen,
   closeProfileModal,
   handleLike,
+  goodCount,
 }: {
   courseData: CourseWithSectionsType
   session: Session | null

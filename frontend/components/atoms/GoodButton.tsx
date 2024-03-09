@@ -24,7 +24,6 @@ export const GoodButton = ({
     >
       <HStack mr="1px">
         {isLiked ? <FaRegThumbsUp size="20px" /> : <FaThumbsUp size="20px" />}
-        <text>{goodCount}</text>
       </HStack>
     </Button>
   )
