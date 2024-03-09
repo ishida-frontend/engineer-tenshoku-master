@@ -17,7 +17,7 @@ export class AnswerApplicationService {
       })
       return answer
     } catch (error) {
-      throw error
+      throw new Error(`AnswerApplicationService error: ${error}`)
     }
   }
 
@@ -33,7 +33,7 @@ export class AnswerApplicationService {
       })
       return answer
     } catch (error) {
-      throw error
+      throw new Error(`AnswerApplicationService: get answer error: ${error}`)
     }
   }
 }

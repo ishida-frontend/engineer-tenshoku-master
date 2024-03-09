@@ -16,10 +16,17 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { signIn, useSession } from 'next-auth/react'
+import React, { useEffect, useState } from 'react'
+import { BsGoogle } from 'react-icons/bs'
+import { LuMail } from 'react-icons/lu'
 import { useCustomToast } from '../../../hooks/useCustomToast'
+import { AUTH } from '../../../constants/auth'
 
 export default function Register() {
+  const { status: authStatus } = useSession()
+  const router = useRouter()
   const { showSuccessToast, showErrorToast } = useCustomToast()
   const [formState, setFormState] = useState({
     email: '',
@@ -59,8 +66,15 @@ export default function Register() {
     }
   }
 
+  useEffect(() => {
+    // Google認証でログイン後のリダイレクト
+    if (authStatus === AUTH.GOOGLE_AUTHENTICATED) {
+      router.push('/')
+    }
+  }, [status])
+
   return (
-    <Center padding="60px 96px" bg={'gray.200'}>
+    <Center padding="60px 96px">
       <Container padding="60px 96px" bg={'white'}>
         <Heading
           fontSize={'2xl'}
@@ -141,17 +155,33 @@ export default function Register() {
         </VStack>
         <Button
           w={'100%'}
-          mt={'42px'}
-          mb={'24px'}
+          mt={'28px'}
+          mb={'12px'}
           colorScheme="teal"
+          pl={'26px'}
           onClick={handleSubmit}
         >
-          登録する
+          <Box mr={'16px'}>
+            <LuMail />
+          </Box>
+          メールアドレスで新規登録
         </Button>
         <Box border={'1px solid'} borderColor={'#C400'} />
-        <Box color={'teal'}>
+        <Box color={'teal'} mb={'36px'}>
           <Link href={'/auth/login'}>ログインはこちら</Link>
-        </Box>{' '}
+        </Box>
+
+        <Button
+          w={'100%'}
+          colorScheme="blue"
+          pl={'26px'}
+          onClick={() => signIn('cognito')}
+        >
+          <Box mr={'16px'}>
+            <BsGoogle />
+          </Box>
+          Googleアカウントで新規登録
+        </Button>
       </Container>
     </Center>
   )

@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { BsChevronRight } from 'react-icons/bs'
 
-import { CourseType } from 'types'
+import { CourseType } from '../../types'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 
 export function VideoCard({ course }: { course: CourseType }) {

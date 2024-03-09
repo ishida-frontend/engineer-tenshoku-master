@@ -108,6 +108,13 @@ export async function readPublishedCourseContent(id: string) {
                 order: 'asc',
               },
             ],
+            include: {
+              ViewingStatus: {
+                where: {
+                  status: true,
+                },
+              },
+            },
           },
         },
       },

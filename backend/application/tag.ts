@@ -23,7 +23,7 @@ export class TagApplicationService {
       })
       return question
     } catch (error) {
-      throw error
+      throw new Error(`TagApplicationService: create tag error: ${error}`)
     }
   }
 
@@ -45,7 +45,7 @@ export class TagApplicationService {
       })
       return tag
     } catch (error) {
-      throw error
+      throw new Error(`TagApplicationService: update tag error: ${error}`)
     }
   }
 
@@ -56,7 +56,7 @@ export class TagApplicationService {
       })
       return question
     } catch (error) {
-      throw error
+      throw new Error(`TagApplicationService: get tag error: ${error}`)
     }
   }
 
@@ -67,7 +67,7 @@ export class TagApplicationService {
       })
       return question
     } catch (error) {
-      throw error
+      throw new Error(`TagApplicationService: get tags error: ${error}`)
     }
   }
 }

@@ -174,7 +174,7 @@ export function SectionManage({
   }
 
   return (
-    <Center minH={'100vh'} bg={'gray.200'}>
+    <Center minH={'100vh'}>
       <Container bg="white" minW={'100vh'} centerContent>
         <Heading fontSize={'2xl'} fontWeight={'bold'} mt={'80px'}>
           コース内容

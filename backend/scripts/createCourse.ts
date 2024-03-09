@@ -4,6 +4,7 @@ import crypto from 'crypto'
 export async function createCourse(
   name: string,
   description: string,
+  image: string,
   published: boolean,
   tagIds: string[],
 ) {
@@ -11,9 +12,10 @@ export async function createCourse(
     const createdCourse = await prisma.course.create({
       data: {
         id: crypto.randomUUID(),
-        name: name,
-        description: description,
-        published: published,
+        name,
+        description,
+        image,
+        published,
         tags: {
           create: tagIds.map((tagId) => ({
             tag: {
@@ -26,8 +28,9 @@ export async function createCourse(
       },
     })
     return createdCourse
-  } catch (e: any) {
-    console.log(e.message)
+  } catch (e) {
+    console.log(e)
+    throw new Error(`createCourse error: ${e}`)
   } finally {
     await prisma.$disconnect()
   }

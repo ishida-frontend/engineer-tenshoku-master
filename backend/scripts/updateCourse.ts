@@ -9,8 +9,10 @@ export async function updateCourse({
   id,
   name,
   description,
+  image,
   published,
   tagIds,
+  requiredTime,
 }: CourseUpdateInput) {
   try {
     const targetCourse = await prisma.course.findUnique({
@@ -35,7 +37,9 @@ export async function updateCourse({
       data: {
         name,
         description,
+        image,
         published,
+        requiredTime,
         tags: {
           upsert: tagIds.map((tagId) => ({
             where: {
@@ -67,12 +71,12 @@ export async function updateCourse({
 
     return updatedCourse
   } catch (error) {
-    throw error
+    throw new Error(`updateCourse error: ${error}`)
   }
 }
 
 export async function updateCourses() {
-  const courses = await prisma.course.updateMany({
+  await prisma.course.updateMany({
     where: {
       description: {
         contains: 'Enjoy the course!',

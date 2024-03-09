@@ -19,7 +19,7 @@ export async function createContact(req: createContactParamsType) {
       message: req.message,
       status: req.status,
     }
-    const createdContact = await prisma.contact.create({
+    await prisma.contact.create({
       data: {
         name: contactData.name,
         email: contactData.email,
@@ -46,8 +46,8 @@ export async function createContact(req: createContactParamsType) {
         new Promise((resolve) => setTimeout(resolve, 3000))
       }
     }
-  } catch (e: any) {
-    console.log(e.message)
+  } catch (e) {
+    throw new Error(`createContact error: ${e}`)
   } finally {
     await prisma.$disconnect()
   }

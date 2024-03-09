@@ -9,10 +9,6 @@ export async function readVideo(id: string) {
   return video
 }
 
-export async function readVideos() {
-  const videos = await prisma.video.findMany()
-}
-
 export async function readFilteredVideos() {
   const filteredVideos = await prisma.video.findMany({
     where: {

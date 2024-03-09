@@ -8,6 +8,7 @@ import {
   Box,
   Card,
   CardHeader,
+  Center,
   Heading,
   HStack,
   Text,
@@ -15,24 +16,40 @@ import {
   StackDivider,
 } from '@chakra-ui/react'
 
-import { WatchedCheckCircle } from 'components/atoms/WatchedCheckCircle'
+import { CourseProgressBar } from '../../components/atoms/CourseProgressBar'
+import { WatchedCheckCircle } from '../../components/atoms/WatchedCheckCircle'
 import { CourseWithSectionsType } from '../../types/CourseType'
 import { HandleChangeVideo } from '../pages/CourseDetail'
 import Link from 'next/link'
+import { Session } from 'next-auth'
 
 export function CourseDetailAccordionMenu({
-  userId,
+  session,
+  completePercentage,
   checkedStatus,
   courseData,
   handleChangeVideo,
 }: {
-  userId: string | undefined
+  session: Session | null
+  completePercentage: number
   courseData: CourseWithSectionsType
   checkedStatus: { [videoId: string]: boolean }
   handleChangeVideo: HandleChangeVideo
 }) {
   return (
     <Box w={'427px'} float={'right'} bg={'white'}>
+      {session?.user?.id && (
+        <Center
+          minH="60px"
+          bg="gray.100"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Box w="403px" bg="white" borderRadius="30px">
+            <CourseProgressBar completePercentage={completePercentage} />
+          </Box>
+        </Center>
+      )}
       <Accordion allowToggle>
         {courseData.sections &&
           courseData.sections.map((section, sectionIndex) => {
@@ -59,7 +76,8 @@ export function CourseDetailAccordionMenu({
                       section.videos.map((video, videoIndex) => {
                         return (
                           <Link
-                            href={`/course/${courseData.id}/?videoId=${video.id}`}
+                            key={video.id}
+                            href={`/course/${courseData.id}/${video.id}`}
                           >
                             <Card
                               key={video.id}
@@ -74,7 +92,7 @@ export function CourseDetailAccordionMenu({
                             >
                               <CardHeader>
                                 <HStack>
-                                  {userId && (
+                                  {session?.user?.id && (
                                     <WatchedCheckCircle
                                       checkedStatus={
                                         checkedStatus?.[video.id] || false

@@ -1,13 +1,6 @@
-// Tagコンポーネント作って
-
-// Path: frontend/components/atoms/Tag.tsx
-
 import { Tag as ChakraTag, TagLabel, TagProps } from '@chakra-ui/react'
 import React from 'react'
 
-type PropsType = TagProps & {
-  backgroundColor?: string
-}
 export const Tag = (props: TagProps) => {
   return (
     <ChakraTag

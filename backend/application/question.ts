@@ -19,7 +19,9 @@ export class QuestionApplicationService {
       })
       return question
     } catch (error) {
-      throw error
+      throw new Error(
+        `QuestionApplicationService: create question error: ${error}`,
+      )
     }
   }
 
@@ -35,7 +37,9 @@ export class QuestionApplicationService {
       })
       return question
     } catch (error) {
-      throw error
+      throw new Error(
+        `QuestionApplicationService: get question error: ${error}`,
+      )
     }
   }
 }

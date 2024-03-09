@@ -1,4 +1,4 @@
-import { QUESTION_PAGES } from 'constants/index'
+import { QUESTION_PAGES } from '../constants/index'
 
 export type QuestionType = {
   id: string

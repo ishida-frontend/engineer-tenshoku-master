@@ -8,27 +8,33 @@ import {
   Text,
   Spacer,
   CardBody,
+  Link
 } from '@chakra-ui/react'
 
-import { FavButton } from 'components/atoms/FavButton'
-import { WatchedButton } from 'components/atoms/WatchedButton'
+import { FavButton } from '../../components/atoms/FavButton'
+import { WatchedButton } from '../../components/atoms/WatchedButton'
 import { SelectedVideo } from '../pages/CourseDetail'
-import { QuestionType } from 'types/QuestionType'
+import { QuestionType } from '../../types/QuestionType'
 import { VideoDetailAndQAndA } from './VideoDetailAndQAndA'
-import { CreateQuestionErrorType } from 'types/QuestionType'
-import { QuestionPageType } from 'types/QuestionType'
-import { AnswerType } from 'types/AnswerType'
+import { CreateQuestionErrorType } from '../../types/QuestionType'
+import { QuestionPageType } from '../../types/QuestionType'
+import { AnswerType } from '../../types/AnswerType'
 import { Session } from 'next-auth'
+import { UserProfileType } from '../../types'
+import { FaSquareXTwitter } from "react-icons/fa6";
+import { CiLink } from "react-icons/ci";
+import { useCustomToast } from '../../hooks/useCustomToast'
+
 
 export function CourseDetailVideoSection({
-  userId,
   selectedVideo,
   questionPage,
   questions,
   createQuestionErrors,
   watchedStatus,
   favoritedStatus,
-  loadingStates,
+  isWatchingLoading,
+  isFavoriteLoading,
   handleViewingStatus,
   handleFavoriteVideoStatus,
   createQuestion,
@@ -37,15 +43,19 @@ export function CourseDetailVideoSection({
   session,
   selectedQuestion,
   createAnswer,
+  getAnotherUserProfile,
+  anotherUserProfile,
+  isProfileOpen,
+  closeProfileModal,
 }: {
-  userId: string | undefined
   selectedVideo: SelectedVideo | null
   questionPage: QuestionPageType
   questions: QuestionType[] | undefined
   createQuestionErrors: CreateQuestionErrorType
   watchedStatus: { [videoId: string]: boolean }
   favoritedStatus: { [videoId: string]: boolean }
-  loadingStates: { [key: string]: boolean }
+  isWatchingLoading: boolean
+  isFavoriteLoading: boolean
   createQuestion: (createQuestionParams: {
     title: string
     content: string
@@ -59,7 +69,24 @@ export function CourseDetailVideoSection({
   session: Session | null
   selectedQuestion?: QuestionType
   createAnswer: (createAnswerParams: { comment: string }) => Promise<void>
+  getAnotherUserProfile?: (value: string) => void
+  anotherUserProfile?: UserProfileType
+  isProfileOpen?: boolean
+  closeProfileModal?: () => void
 }) {
+
+// 動画のURL取得
+const shareUrl = location.href;
+
+// 動画のURLをクリップボードにコピー
+const { showSuccessToast } = useCustomToast()
+const copyUrlToClipboard = (shareUrl: string) => {
+  navigator.clipboard.writeText(shareUrl).then(
+    function () {
+      showSuccessToast('動画のURLをクリップボードにコピーしました!')
+    }
+  )}
+
   return (
     <Box bg={'white'} mr={'430px'} overflow={'hidden'}>
       <AspectRatio ratio={16 / 9}>
@@ -79,13 +106,13 @@ export function CourseDetailVideoSection({
               <Text pl={'40px'}>{selectedVideo?.sections.videos.order}.</Text>
               <Text pl={'3px'}>{selectedVideo?.sections.videos.name}</Text>
               <Spacer />
-              {userId && selectedVideo && (
+              {session?.user?.id && selectedVideo && (
                 <>
                   <WatchedButton
                     watchedStatus={
                       watchedStatus?.[selectedVideo.sections.videos.id] || false
                     }
-                    loadingState={loadingStates.watching}
+                    loadingState={isWatchingLoading}
                     handleViewingStatus={handleViewingStatus}
                   />
 
@@ -94,17 +121,33 @@ export function CourseDetailVideoSection({
                       favoritedStatus?.[selectedVideo.sections.videos.id] ||
                       false
                     }
-                    loadingState={loadingStates.isFavorite}
+                    loadingState={isFavoriteLoading}
                     handleFavoriteVideoStatus={handleFavoriteVideoStatus}
                   />
                 </>
               )}
+
+      {/* Twitterにシェア */}
+      <>      
+        <Link
+        href={`http://twitter.com/share?url=${shareUrl}&text=エンジニア転職マスター講座で${selectedVideo?.sections.videos.name}を学習中です！&via=issiyrun`}
+        target="_blank"
+        _hover={{opacity:0.5}}
+        >
+          <FaSquareXTwitter size={36} />
+        </Link>
+      </>
+
+      {/* URLコピー */}
+      <Link _hover={{opacity:0.5}}>
+        <CiLink size={36} onClick={() => copyUrlToClipboard(shareUrl)} />
+      </Link>
+
             </HStack>
           </CardHeader>
           <CardBody bg={'white'} pl={'0px'} pr={'0px'}>
             <VideoDetailAndQAndA
               selectedVideo={selectedVideo}
-              userId={userId}
               questionPage={questionPage}
               questions={questions}
               createQuestionErrors={createQuestionErrors}
@@ -114,6 +157,10 @@ export function CourseDetailVideoSection({
               session={session}
               selectedQuestion={selectedQuestion}
               createAnswer={createAnswer}
+              getAnotherUserProfile={getAnotherUserProfile}
+              anotherUserProfile={anotherUserProfile}
+              isProfileOpen={isProfileOpen}
+              closeProfileModal={closeProfileModal}
             />
           </CardBody>
         </Card>

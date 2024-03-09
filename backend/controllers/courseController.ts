@@ -17,7 +17,7 @@ exports.createCourse = async function (
   res: express.Response,
 ) {
   try {
-    const { name, description, published, tagIds } = req.body
+    const { name, description, image, published, tagIds } = req.body
 
     if (!name || !description) {
       return res
@@ -28,6 +28,7 @@ exports.createCourse = async function (
     const createdCourse = await createCourse(
       name,
       description,
+      image,
       published,
       tagIds,
     )
@@ -39,7 +40,7 @@ exports.createCourse = async function (
     res.status(201).json({
       message: `新しいコース(${createdCourse.name})が作成されました！`,
     })
-  } catch (e: any) {
+  } catch (e) {
     res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })
   }
 }
@@ -51,7 +52,7 @@ exports.readCourse = async function (
   try {
     const course = await readCourse(req.params.id)
     res.status(200).json(course)
-  } catch (e: any) {
+  } catch (e) {
     res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })
   }
 }
@@ -63,7 +64,7 @@ exports.readAllCourses = async function (
   try {
     const courses = await readAllCourses()
     res.status(200).json(courses)
-  } catch (e: any) {
+  } catch (e) {
     res.status(500).send('エラーが発生しました')
   }
 }
@@ -72,7 +73,7 @@ exports.readFilteredCourses = async function (res: express.Response) {
   try {
     const filteredCourses = await readFilteredCourses()
     res.status(200).json(filteredCourses)
-  } catch (e: any) {
+  } catch (e) {
     res.status(500).send('エラーが発生しました')
   }
 }
@@ -84,7 +85,7 @@ exports.getPublishedCourse = async function (
   try {
     const publishedCourse = await readPublishedCourseContent(req.params.id)
     res.status(200).json(publishedCourse)
-  } catch (e: any) {
+  } catch (e) {
     res.status(500).send('エラーが発生しました')
   }
 }
@@ -97,7 +98,7 @@ exports.getSearchedCourses = async function (
     const { text } = req.body
     const searchCourses = await getSearchedCourses({ text })
     res.status(200).json(searchCourses)
-  } catch (e: any) {
+  } catch (e) {
     res.status(500).send('エラーが発生しました')
   }
 }
@@ -109,7 +110,7 @@ exports.readFilteredCourses = async function (
   try {
     const filteredCourses = await readFilteredCourses()
     res.status(200).json(filteredCourses)
-  } catch (e: any) {
+  } catch (e) {
     res.status(500).send('エラーが発生しました')
   }
 }
@@ -119,14 +120,17 @@ exports.updateCourse = async function (
   res: express.Response,
 ) {
   try {
-    const { id, name, description, published, tagIds } = req.body
+    const { id, name, description, image, published, tagIds, requiredTime } =
+      req.body
 
-    const response = await updateCourse({
+    await updateCourse({
       id,
       name,
       description,
+      image,
       published,
       tagIds,
+      requiredTime,
     })
 
     res.status(200).json({ message: '変更が保存されました。' })
@@ -144,7 +148,7 @@ exports.updateCourses = async function (
   try {
     await updateCourses()
     res.send('複数のコースを更新しました！')
-  } catch (e: any) {
+  } catch (e) {
     res.status(500).send('エラーが発生しました')
   }
 }
@@ -158,7 +162,7 @@ exports.deleteCourse = async function (
     res.status(201).json({
       message: '削除されました。自動的にコース一覧へ戻ります。',
     })
-  } catch (e: any) {
+  } catch (e) {
     res.status(500).json({ message: 'サーバー内部エラーが発生しました。' })
   }
 }
@@ -170,7 +174,7 @@ exports.deleteCourses = async function (
   try {
     await deleteCourses('5', '8')
     res.send('複数のコースを削除しました！')
-  } catch (e: any) {
+  } catch (e) {
     res.status(500).send('エラーが発生しました')
   }
 }

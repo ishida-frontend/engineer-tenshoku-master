@@ -33,9 +33,6 @@ export function CourseList({ courses }: CourseListProps) {
           {courses.map((course: CourseType) => (
             <Box key={course.id} p="4" boxShadow="lg" rounded="md">
               <Text>
-                <strong>コースID</strong>：{course.id}
-              </Text>
-              <Text>
                 <strong>コース名</strong>：{course.name}
               </Text>
               <Text>
