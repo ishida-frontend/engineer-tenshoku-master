@@ -99,7 +99,7 @@ router.post('/tag', tagValidator.createTag, (req, res) => {
 router.put('/tag', tagValidator.updateTag, (req, res) => {
   tagController.updateTag(req, res)
 })
-router.patch('/tag/:id', (req, res) => {
+router.delete('/tag/:id', (req, res) => {
   tagController.deleteTag(req, res)
 })
 

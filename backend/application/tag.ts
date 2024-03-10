@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import prisma from '../prisma/prismaClient'
 
 export class TagApplicationService {
   async createTag(params: {
@@ -68,11 +67,8 @@ export class TagApplicationService {
 
   async deleteTag(tagId: string) {
     try {
-      await prisma.tag.update({
+      await prisma.tag.delete({
         where: { id: tagId },
-        data: {
-          deleted_at: new Date(),
-        },
       })
     } catch (error) {
       throw new Error(`TagApplicationService: get tags error: ${error}`)
