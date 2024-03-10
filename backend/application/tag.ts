@@ -21,6 +21,7 @@ export class TagApplicationService {
       throw new Error(`TagApplicationService: create tag error: ${error}`)
     }
   }
+
   async updateTag(params: {
     id: string
     name: string
@@ -53,12 +54,26 @@ export class TagApplicationService {
       throw new Error(`TagApplicationService: get tag error: ${error}`)
     }
   }
+
   async getTags() {
     try {
       const question = await prisma.tag.findMany({
         where: { deleted_at: null },
       })
       return question
+    } catch (error) {
+      throw new Error(`TagApplicationService: get tags error: ${error}`)
+    }
+  }
+
+  async deleteTag(tagId: string) {
+    try {
+      await prisma.tag.update({
+        where: { id: tagId },
+        data: {
+          deleted_at: new Date(),
+        },
+      })
     } catch (error) {
       throw new Error(`TagApplicationService: get tags error: ${error}`)
     }
