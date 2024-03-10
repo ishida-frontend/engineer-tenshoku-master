@@ -176,7 +176,6 @@ export function CourseDetailWrapper({
             }),
           },
         )
-
         setIsLiked(!isLiked)
         setGoodCount(!isLiked ? goodCount + 1 : goodCount - 1)
       } catch (error) {
@@ -238,7 +237,6 @@ export function CourseDetailWrapper({
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodVideo/${videoId}/count`,
         )
         const data = await res.json()
-        console.log('data:', data)
         setGoodCount(data.goodCount)
       } catch (error) {
         console.error('goodCountの取得中にエラーが発生しました。', error)

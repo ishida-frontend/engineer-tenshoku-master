@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, HStack } from '@chakra-ui/react'
+import { Button, HStack, Text } from '@chakra-ui/react'
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa'
 
 export const GoodButton = ({
@@ -24,6 +24,7 @@ export const GoodButton = ({
     >
       <HStack mr="1px">
         {isLiked ? <FaRegThumbsUp size="20px" /> : <FaThumbsUp size="20px" />}
+        <Text>{goodCount}</Text>
       </HStack>
     </Button>
   )
