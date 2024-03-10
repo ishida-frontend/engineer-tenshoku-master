@@ -1,7 +1,6 @@
-import { PrismaClient } from '@prisma/client'
+import prisma from '../../utils/prismaClient'
 import crypto from 'crypto'
 import { THEME_COLOR } from '../../constants'
-const prisma = new PrismaClient()
 
 async function main() {
   for (let i: number = 1; i <= 5; i++) {

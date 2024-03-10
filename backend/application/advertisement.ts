@@ -1,6 +1,5 @@
-import { Prisma, PrismaClient } from '@prisma/client'
+import prisma, { Prisma } from '../utils/prismaClient'
 import crypto from 'crypto'
-const prisma = new PrismaClient()
 
 export class AdvertisementApplicationService {
   async createAdvertisement(params: Prisma.AdvertisementCreateInput) {
@@ -40,11 +39,11 @@ export class AdvertisementApplicationService {
     try {
       const advertisements = await prisma.advertisement.findMany({
         where: {
-          deleted_at: null, 
+          deleted_at: null,
         },
         orderBy: {
           startFrom: 'asc',
-        },  
+        },
       })
       return advertisements
     } catch (error) {

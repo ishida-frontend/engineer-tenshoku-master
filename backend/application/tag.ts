@@ -1,7 +1,12 @@
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import prisma, { PrismaClient } from '../utils/prismaClient'
 
 export class TagApplicationService {
+  private prisma: PrismaClient
+
+  constructor(prismaClient: PrismaClient = prisma) {
+    this.prisma = prismaClient
+  }
+
   async createTag(params: {
     name: string
     color: string
@@ -9,7 +14,7 @@ export class TagApplicationService {
   }) {
     try {
       const { name, color, backgroundColor } = params
-      const question = await prisma.tag.create({
+      const question = await this.prisma.tag.create({
         data: {
           name,
           color,
@@ -21,6 +26,7 @@ export class TagApplicationService {
       throw new Error(`TagApplicationService: create tag error: ${error}`)
     }
   }
+
   async updateTag(params: {
     id: string
     name: string
@@ -29,7 +35,7 @@ export class TagApplicationService {
   }) {
     try {
       const { id, name, color, backgroundColor } = params
-      const tag = await prisma.tag.update({
+      const tag = await this.prisma.tag.update({
         where: { id },
         data: {
           name,
@@ -45,7 +51,7 @@ export class TagApplicationService {
 
   async getTag(tagId: string) {
     try {
-      const question = await prisma.tag.findUnique({
+      const question = await this.prisma.tag.findUnique({
         where: { id: tagId },
       })
       return question
@@ -53,9 +59,10 @@ export class TagApplicationService {
       throw new Error(`TagApplicationService: get tag error: ${error}`)
     }
   }
+
   async getTags() {
     try {
-      const question = await prisma.tag.findMany({
+      const question = await this.prisma.tag.findMany({
         where: { deleted_at: null },
       })
       return question
