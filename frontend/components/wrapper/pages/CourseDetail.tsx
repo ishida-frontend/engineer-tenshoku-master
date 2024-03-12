@@ -42,7 +42,6 @@ export function CourseDetailWrapper({
   goodCount?: number
 }) {
   const { showErrorToast } = useCustomToast()
-  const router = useRouter()
 
   try {
     const [courseData, setCourseData] = useState(initialCourseData)
@@ -178,8 +177,6 @@ export function CourseDetailWrapper({
         )
         setIsLiked(!isLiked)
         setGoodCount((count) => (isLiked ? count - 1 : count + 1))
-        router.refresh()
-        fetchGoodCount()
       } catch (error) {
         console.error('Error toggling like:', error)
       }
@@ -232,21 +229,22 @@ export function CourseDetailWrapper({
 
       handleLikeStatus()
     }, [videoId, userId])
-
-    const fetchGoodCount = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodVideo/${videoId}/count`,
-        )
-        const data = await res.json()
-        setGoodCount(data)
-      } catch (error) {
-        console.error('goodCountの取得中にエラーが発生しました。', error)
+    useEffect(() => {
+      const fetchGoodCount = async () => {
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodVideo/${videoId}/count`,
+          )
+          const data = await res.json()
+          setGoodCount(data)
+        } catch (error) {
+          console.error('goodCountの取得中にエラーが発生しました。', error)
+        }
       }
-    }
-    // コンポーネントが初めてマウントされたときに一度だけ goodCount を取得
-    // （例えば、いいねボタンの初期表示の際に実行される）
-    fetchGoodCount()
+      // コンポーネントが初めてマウントされたときに一度だけ goodCount を取得
+      // （例えば、いいねボタンの初期表示の際に実行される）
+      fetchGoodCount()
+    }, [])
 
     const getAnotherUserProfile = async (anotherUserId: string) => {
       try {

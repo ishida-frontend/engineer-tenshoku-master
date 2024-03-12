@@ -12,7 +12,6 @@ export class GoodVideoApplicationService {
         deleted_at: null,
       },
     })
-    //deleted_at が null のいいねのみをカウントする
     return goodCount
   }
 
