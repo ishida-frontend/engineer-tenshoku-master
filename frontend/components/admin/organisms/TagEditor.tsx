@@ -13,6 +13,7 @@ import {
   Link,
 } from '@chakra-ui/react'
 
+import { DeleteButton } from '../organisms/DeleteButton'
 import { TagType } from '../../../types'
 import formatDate from '../../../utils/formatDate'
 
@@ -100,6 +101,7 @@ export function TagEditor({
         >
           変更を保存
         </Button>
+        <DeleteButton id={tagData.id} itemToDelete="tag" />
       </Stack>
     </Box>
   )
