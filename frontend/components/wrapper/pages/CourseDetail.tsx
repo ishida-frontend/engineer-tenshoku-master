@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { Session } from 'next-auth'
-import { useRouter } from 'next/navigation'
 
 import {
   upsertViewingStatus,
