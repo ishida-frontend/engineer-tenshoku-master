@@ -1,5 +1,5 @@
 'use client'
-import { useRouter, useParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import { useCustomToast } from '../../../hooks/useCustomToast'
 import { useState } from 'react'
