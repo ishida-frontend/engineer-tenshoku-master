@@ -14,12 +14,12 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 
-type DeleteButton = {
+type DeleteButtonProps = {
   id: string
   itemToDelete: string
 }
 
-export const DeleteButton = ({ id, itemToDelete }: DeleteButton) => {
+export const DeleteButton = ({ id, itemToDelete }: DeleteButtonProps) => {
   const router = useRouter()
   const { showSuccessToast, showErrorToast } = useCustomToast()
   const [showModalContent, setShowModalContent] = useState(true)
