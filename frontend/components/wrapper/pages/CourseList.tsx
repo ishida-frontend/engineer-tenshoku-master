@@ -6,11 +6,15 @@ import { CourseListType } from '../../../types/CourseType'
 import Error from '../../../app/error'
 import { AdvertisementType } from '../../../types/AdvertisementType'
 
+type CourseListWrapperProps = {
+  initialCourses: CourseListType[]
+  advertisements: AdvertisementType[]
+}
+
 export function CourseListWrapper({
-  initialCourses, advertisements
-}: {
-  initialCourses: CourseListType[], advertisements: AdvertisementType[]
-}) {
+  initialCourses,
+  advertisements,
+}: CourseListWrapperProps) {
   try {
     const [courses, setCourses] = useState<CourseListType[]>(initialCourses)
 
@@ -44,7 +48,13 @@ export function CourseListWrapper({
         setCourses(allCourses)
       }
     }
-    return <CourseList courses={courses} handleTextChange={handleTextChange} advertisements={advertisements}/>
+    return (
+      <CourseList
+        courses={courses}
+        handleTextChange={handleTextChange}
+        advertisements={advertisements}
+      />
+    )
   } catch (e) {
     return <Error />
   }
