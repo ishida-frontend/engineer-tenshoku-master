@@ -46,6 +46,12 @@ export const PATHS = {
         title: 'コース作成',
       },
     },
+    ADVERTISEMENT: {
+      LIST:{
+        path: '/admin/advertisement',
+        title: '広告一覧',
+      }
+    }
   },
 }
 

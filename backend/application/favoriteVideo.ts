@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import prisma from '../utils/prismaClient'
 
 export class FavoriteVideoApplicationService {
   static async upsert({

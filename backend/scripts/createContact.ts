@@ -1,7 +1,6 @@
 import axios from 'axios'
-import { PrismaClient } from '@prisma/client'
+import prisma from '../utils/prismaClient'
 import { ContactType } from '../types/index'
-const prisma = new PrismaClient()
 
 type createContactParamsType = {
   name: string

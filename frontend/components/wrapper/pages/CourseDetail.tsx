@@ -50,7 +50,8 @@ export function CourseDetailWrapper({
     } = useDisclosure()
     const [anotherUserProfile, setAnotherUserProfile] =
       useState<UserProfileType>()
-    const [completePercentage, setCompletePercentage] = useState(0)
+    const [completePercentage, setCompletePercentage] = useState<number>(0)
+      useState(0)
     const [watchedStatus, setWatchedStatus] = useState<Record<string, boolean>>(
       {},
     )
