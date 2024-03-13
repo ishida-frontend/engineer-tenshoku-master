@@ -38,6 +38,16 @@ export class AdvertisementController {
       res.status(500).json({ message: 'サーバー内部のエラーが発生しました' })
     }
   }
+  async getUserAdvertisments(req: express.Request, res: express.Response) {
+    try {
+      const advertisements =
+        await this.advertisementApplicationService.getUserAdvertisments()
+      res.status(200).json(advertisements)
+    } catch (e) {
+      res.status(500).json({ message: 'サーバー内部のエラーが発生しました' })
+    }
+  }
+
 
   async updateAdvertisement(req: express.Request, res: express.Response) {
     try {
