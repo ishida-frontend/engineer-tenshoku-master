@@ -237,7 +237,7 @@ export default function CreateAdvertisementPage() {
             <FormErrorMessage>
               {
                 errors.find((e) => {
-                  return e.path[0] === 'srartFrom'
+                  return e.path[0] === 'startFrom'
                 })?.message
               }
             </FormErrorMessage>

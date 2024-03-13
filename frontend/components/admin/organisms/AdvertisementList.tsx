@@ -21,6 +21,7 @@ function formatDate(date: Date): string {
 
 import { useCustomToast } from '../../../hooks/useCustomToast'
 import { AdvertisementType } from '../../../types/AdvertisementType'
+import { THEME_COLOR } from '../../../constants'
 
 type AdvertisementTypeProps = {
   advertisements: AdvertisementType[]
@@ -39,7 +40,7 @@ export function AdvertisementList({ advertisements }: AdvertisementTypeProps) {
         <Heading size="lg">広告一覧</Heading>
         <SimpleGrid columns={2} spacing={5}>
           {advertisements.map((advertisement: AdvertisementType) => (
-            <Box key={advertisement.id} p="4" boxShadow="lg" rounded="md">
+            <Box key={advertisement.id} p="4" boxShadow="lg" rounded="md" bg={THEME_COLOR.SECONDARY_WHITE}>
               <Text>
                 <strong>広告名</strong>：{advertisement.name}
               </Text>

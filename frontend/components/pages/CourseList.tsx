@@ -17,13 +17,18 @@ import { SearchIcon } from '@chakra-ui/icons'
 import { CourseCard } from '../atoms/CourseCard'
 import { LineBanner } from '../atoms/LineBanner'
 import { AchievementBanner } from '../atoms/AchievementBanner'
+import { AdvertisementBanner } from '../atoms/AdvertisementBanner'
+import { AdvertisementType } from '../../types/AdvertisementType'
+
 
 type CourseListProps = {
   courses: CourseListType[]
+  advertisements: AdvertisementType[]
   handleTextChange: (text: string) => void
 }
 
-export function CourseList({ courses, handleTextChange }: CourseListProps) {
+export function CourseList({ courses, advertisements, handleTextChange }: CourseListProps) {
+
   if (!courses) return <Loader />
   const [text, setText] = useState<string>()
 
@@ -86,6 +91,7 @@ export function CourseList({ courses, handleTextChange }: CourseListProps) {
           <VStack mt={40} gap={10}>
             <LineBanner />
             <AchievementBanner />
+            <AdvertisementBanner advertisements={advertisements}/>
           </VStack>
         </Flex>
       </VStack>
