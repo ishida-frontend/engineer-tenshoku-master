@@ -34,7 +34,7 @@ export class FavoriteVideoApplicationService {
     }
   }
 
-  static async get({ userId, videoId }: { userId: string; videoId: string }) {
+  async get({ userId, videoId }: { userId: string; videoId: string }) {
     try {
       const fetchedStatus = await prisma.favoriteVideo.findUnique({
         where: {
@@ -53,7 +53,7 @@ export class FavoriteVideoApplicationService {
     }
   }
 
-  static async getAll({ userId }: { userId: string }) {
+  async getAll({ userId }: { userId: string }) {
     try {
       const favoriteVideos = await prisma.course.findMany({
         orderBy: [

@@ -3,9 +3,14 @@ import express from 'express'
 import { FavoriteVideoApplicationService } from '../application/favoriteVideo'
 
 export class FavoriteVideoController {
+  private favoriteVideoApplicationService: FavoriteVideoApplicationService
+  constructor() {
+    this.favoriteVideoApplicationService = new FavoriteVideoApplicationService()
+  }
   upsertFavoriteVideo = async (req: express.Request, res: express.Response) => {
     try {
       const { favoritedStatus, userId, videoId } = req.body
+      console.log('req.body', req.body)
       const newStatus = await FavoriteVideoApplicationService.upsert({
         favoritedStatus,
         userId,
@@ -21,7 +26,7 @@ export class FavoriteVideoController {
   getFavoriteVideo = async (req: express.Request, res: express.Response) => {
     try {
       const { userId, videoId } = req.params
-      const fetchedStatus = await FavoriteVideoApplicationService.get({
+      const fetchedStatus = await this.favoriteVideoApplicationService.get({
         userId,
         videoId,
       })
@@ -34,11 +39,14 @@ export class FavoriteVideoController {
 
   getFavoriteVideos = async (req: express.Request, res: express.Response) => {
     try {
-      const { userId } = req.params
-      const favoriteVideos = await FavoriteVideoApplicationService.getAll({
+      const { userId, videoId } = req.params
+      const favoriteVideos = await this.favoriteVideoApplicationService.get({
         userId,
+        videoId,
       })
+      console.log('userId', userId)
       res.status(200).json(favoriteVideos)
+      console.log('favoriteVideos', favoriteVideos)
     } catch (error) {
       res.status(500)
       throw error

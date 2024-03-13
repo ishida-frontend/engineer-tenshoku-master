@@ -13,6 +13,7 @@ export type VideoType = {
   updated_at: string
   deleted_at: string
   ViewingStatus: ViewingStatusType[]
+  FavoriteStatus: FavoriteVideoType[]
 }
 
 export type ViewingStatusType = {
@@ -24,22 +25,9 @@ export type ViewingStatusType = {
 }
 
 export type FavoriteVideoType = {
-  id: string
-  name: string
-  image: string
+  favoriteStatus: boolean
+  user_id: string
+  videos: VideoType[]
   created_at: string
-  sections: {
-    id: string
-    title: string
-    order: number
-    videos: {
-      id: string
-      name: string
-      description: string
-      order: number
-      FavoriteVideo: {
-        status: boolean
-      }[]
-    }[]
-  }[]
+  updated_at: string
 }
