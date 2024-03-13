@@ -3,9 +3,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export class GoodVideoApplicationService {
-  //videoIdに対するいいねの数を取得するメソッド
   async getGoodCount(videoId: string): Promise<number> {
-    //Prismaを使用して、videoIdに対するいいねの数を取得
     const goodCount = await prisma.goodVideo.count({
       where: {
         video_id: videoId,
@@ -14,7 +12,6 @@ export class GoodVideoApplicationService {
     return goodCount
   }
 
-  //いいねを追加メソッド
   async goodVideo(
     userId: string,
     videoId: string,
@@ -23,7 +20,6 @@ export class GoodVideoApplicationService {
     video_id: string
     deleted_at: Date | null
   }> {
-    //ユーザーと動画のいいね情報を取得
     const existingGoodVideo = await prisma.goodVideo.findUnique({
       where: {
         user_id_video_id: {
@@ -32,7 +28,6 @@ export class GoodVideoApplicationService {
         },
       },
     })
-    //すでに削除されている場合は削除を解除
     if (existingGoodVideo?.deleted_at) {
       const goodVideo = await prisma.goodVideo.update({
         where: {
@@ -48,7 +43,6 @@ export class GoodVideoApplicationService {
       return goodVideo
     }
 
-    //existingGoodVideoが存在しかつ削除されていない場合は削除
     if (existingGoodVideo && !existingGoodVideo.deleted_at) {
       const deletedGoodVideo = await prisma.goodVideo.delete({
         where: {
@@ -60,7 +54,6 @@ export class GoodVideoApplicationService {
       })
       return deletedGoodVideo
     }
-    //削除されていた場合は、新たにいいねを追加
     const goodVideo = await prisma.goodVideo.create({
       data: {
         user_id: userId,
