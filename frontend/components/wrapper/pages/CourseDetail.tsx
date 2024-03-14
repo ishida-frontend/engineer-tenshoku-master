@@ -33,12 +33,19 @@ export function CourseDetailWrapper(
   courseDetailWrapperProps: CourseDetailWrapperPropsType,
 ) {
   const { showErrorToast } = useCustomToast()
-  const { userId, videoId } = courseDetailWrapperProps
+  const {
+    initialCourseData,
+    userId,
+    courseId,
+    videoId,
+    session,
+    questions,
+    answers,
+    questionId,
+  } = courseDetailWrapperProps
 
   try {
-    const [courseData, setCourseData] = useState(
-      courseDetailWrapperProps.initialCourseData,
-    )
+    const [courseData, setCourseData] = useState(initialCourseData)
     const {
       isOpen: isProfileOpen,
       onOpen: openProfileModal,
@@ -89,7 +96,7 @@ export function CourseDetailWrapper(
             video.ViewingStatus.some(
               (viewingStatus) =>
                 viewingStatus.status === true &&
-                viewingStatus.user_id === courseDetailWrapperProps.userId,
+                viewingStatus.user_id === userId,
             )
           ) {
             watchedVideos++
@@ -102,12 +109,10 @@ export function CourseDetailWrapper(
     const handleViewingStatus = async () => {
       setIsWatchingLoading(true)
 
-      const newWatchedStatus = !(
-        watchedStatus?.[courseDetailWrapperProps.videoId] || false
-      )
+      const newWatchedStatus = !(watchedStatus?.[videoId] || false)
       setWatchedStatus((prevStatus) => ({
         ...prevStatus,
-        [courseDetailWrapperProps.videoId]: newWatchedStatus,
+        [videoId]: newWatchedStatus,
       }))
 
       try {
@@ -118,12 +123,10 @@ export function CourseDetailWrapper(
         })
         setCheckedStatus((prevViewingStatus) => ({
           ...prevViewingStatus,
-          [courseDetailWrapperProps.videoId]: newWatchedStatus,
+          [videoId]: newWatchedStatus,
         }))
 
-        const updatedCourseData = await getCourseData(
-          courseDetailWrapperProps.courseId,
-        )
+        const updatedCourseData = await getCourseData(courseId)
 
         setCourseData(updatedCourseData)
       } catch (error) {
@@ -136,12 +139,10 @@ export function CourseDetailWrapper(
     const handleFavoriteVideoStatus = async () => {
       setIsFavoriteLoading(true)
 
-      const newFavoritedStatus = !(
-        favoritedStatus?.[courseDetailWrapperProps.videoId] || false
-      )
+      const newFavoritedStatus = !(favoritedStatus?.[videoId] || false)
       setFavoritedStatus((prevFavoriteStatus) => ({
         ...prevFavoriteStatus,
-        [courseDetailWrapperProps.videoId]: newFavoritedStatus,
+        [videoId]: newFavoritedStatus,
       }))
 
       try {
@@ -168,7 +169,7 @@ export function CourseDetailWrapper(
           setWatchedStatus(buttonStatus as { [key: string]: boolean })
 
           const checkMarkStatuses = await fetchCheckMarkStatuses({
-            userId: courseDetailProps.session?.user?.id,
+            userId: session?.user?.id,
             courseId: courseData.id,
           })
           setCheckedStatus(checkMarkStatuses)
@@ -187,11 +188,7 @@ export function CourseDetailWrapper(
       }
 
       fetchData()
-    }, [
-      courseData,
-      courseDetailWrapperProps.session,
-      courseDetailWrapperProps.videoId,
-    ])
+    }, [courseData, session, videoId])
 
     const getAnotherUserProfile = async (anotherUserId: string) => {
       try {
@@ -211,8 +208,6 @@ export function CourseDetailWrapper(
         throw new error()
       }
     }
-
-    const { session, questions, answers, questionId } = courseDetailWrapperProps
 
     const courseDetailProps = {
       anotherUserProfile,
