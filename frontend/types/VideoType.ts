@@ -25,7 +25,7 @@ export type ViewingStatusType = {
 }
 
 export type FavoriteVideoType = {
-  favoriteStatus: boolean
+  status: boolean
   user_id: string
   videos: VideoType[]
   created_at: string

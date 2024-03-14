@@ -52,6 +52,31 @@ export class FavoriteVideoApplicationService {
       )
     }
   }
+  async getfavoriteVideos() {
+    try {
+      const favoriteVideos = await prisma.favoriteVideo.findMany({
+        where: {
+          deleted_at: null,
+        },
+        include: {
+          video: {
+            include: {
+              section: {
+                include: {
+                  course: {},
+                },
+              },
+            },
+          },
+        },
+      })
+      return favoriteVideos
+    } catch (error) {
+      throw new Error(
+        `FavoriteVideoApplicationService: getfavoriteVideos error: ${error}`,
+      )
+    }
+  }
 
   async getAll({ userId }: { userId: string }) {
     try {

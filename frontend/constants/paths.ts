@@ -67,6 +67,12 @@ export const APIS = {
         `${backendUrl}/favoritevideo/${userId}/${videoId}`,
       title: '動画のお気に入りステータスのフェッチ',
     },
+    LIST: {
+      path: (userId: string | undefined, videoId: string, favoritedStatus: boolean) =>
+        `${backendUrl}/favoritevideos/${userId}/${videoId}/${favoritedStatus}`,
+      title: 'お気に入り動画の一覧を取得',
+    },
+
   },
   VIEWING_STATUS: {
     UPSERT: {
