@@ -23,6 +23,11 @@ type FavoriteVideoListProps = {
   favoriteVideos: FavoriteVideoType[]
 }
 
+type FilterdVideoType = {
+  video_id: string
+  video: VideoType
+}
+
 export function FavoriteVideoList({ favoriteVideos }: FavoriteVideoListProps) {
   console.log('favoriteVideos', favoriteVideos)
 
@@ -38,9 +43,11 @@ export function FavoriteVideoList({ favoriteVideos }: FavoriteVideoListProps) {
   filteredVideos.forEach((filteredVideo: FavoriteVideoType) => {
     console.log('filteredVideo.video_id', filteredVideo.video_id)
     console.log('filteredVideo.video', filteredVideo.video)
-    if (filteredVideo.video && filteredVideo.video.name) {
-      console.log('filteredVideo.video.name', filteredVideo.video.name)
-    }
+    filteredVideo.video.forEach((video: VideoType) => {
+      if (video.name) {
+        console.log('video.name', video.name)
+      }
+    })
   })
 
   return (
