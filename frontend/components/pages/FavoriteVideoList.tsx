@@ -19,12 +19,19 @@ import { TimeIcon } from '@chakra-ui/icons'
 
 import { FavoriteVideoType } from '../../types'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
+import { useCustomToast } from '../../hooks/useCustomToast'
 
 type FavoriteVideoListProps = {
   favoriteVideos: FavoriteVideoType[]
 }
 
 export function FavoriteVideoList({ favoriteVideos }: FavoriteVideoListProps) {
+  const { showErrorToast } = useCustomToast()
+
+  if (!Array.isArray(favoriteVideos)) {
+    showErrorToast('広告情報の取得に失敗しました')
+    return null
+  }
   return (
     <Center bg={'gray.200'}>
       <VStack mx="auto" padding={'60px 96px'}>

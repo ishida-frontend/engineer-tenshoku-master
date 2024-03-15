@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { FavoriteVideoList } from '../../../components/pages/FavoriteVideoList'
 import { FavoriteVideoType } from '../../../types'
 
