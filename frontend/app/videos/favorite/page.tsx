@@ -8,9 +8,6 @@ export default async function FavoriteVideos() {
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/favoritevideo`,
     {
       cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     },
   )
   const favoriteVideos: FavoriteVideoType[] = await res.json()
