@@ -1,5 +1,5 @@
 'use client'
-import React, { Fragment }from 'react'
+import React, { Fragment } from 'react'
 import {
   Box,
   Card,
@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { BsChevronRight } from 'react-icons/bs'
 
-import { FavoriteVideoType } from '../../types'
+import { FavoriteVideoType, VideoType } from '../../types'
 import { PRIMARY_FONT_COLOR } from '../../constants/colors'
 
 type FavoriteVideoListProps = {
@@ -26,15 +26,22 @@ type FavoriteVideoListProps = {
 export function FavoriteVideoList({ favoriteVideos }: FavoriteVideoListProps) {
   console.log('favoriteVideos', favoriteVideos)
 
-  const filteredVideos = [];
+  const filteredVideos = []
   for (let i = 0; i < favoriteVideos.length; i++) {
-   const videoItem = favoriteVideos[i];
-   if (videoItem.status === true) {
-    filteredVideos.push(videoItem)
-   }
+    const videoItem = favoriteVideos[i]
+    if (videoItem.status === true) {
+      filteredVideos.push(videoItem)
+    }
   }
 
   console.log('filteredVideos', filteredVideos)
+  filteredVideos.forEach((filteredVideo: FavoriteVideoType) => {
+    console.log('filteredVideo.video_id', filteredVideo.video_id)
+    console.log('filteredVideo.video', filteredVideo.video)
+    if (filteredVideo.video && filteredVideo.video.name) {
+      console.log('filteredVideo.video.name', filteredVideo.video.name)
+    }
+  })
 
   return (
     <Center bg={'gray.200'}>
@@ -44,8 +51,8 @@ export function FavoriteVideoList({ favoriteVideos }: FavoriteVideoListProps) {
         </Heading>
         <Box mb={10} minW={'1024px'}>
           {filteredVideos.length > 0 ? (
-            filteredVideos.map((video, videoIndex) => (
-              <Fragment key={videoIndex}>
+            filteredVideos.map((filteredVideo: FavoriteVideoType) => (
+              <Fragment>
                 <Flex
                   alignItems="center"
                   mt={6}
@@ -53,10 +60,12 @@ export function FavoriteVideoList({ favoriteVideos }: FavoriteVideoListProps) {
                   borderBottom="1px"
                   borderColor={'blackAlpha.500'}
                 ></Flex>
-                <Heading size="lg" mt={4}>
-                  {video.section?.course.name}
-                </Heading>
-                {video?.sections?.map((section, sectionIndex) => (
+                {filteredVideo.video.map((video: VideoType) => (
+                  <Heading size="lg" mt={4}>
+                    {video.name}
+                  </Heading>
+                ))}
+                {/* {filteredVideo?.sections?.map((section, sectionIndex) => (
                   <Fragment key={sectionIndex}>
                     <Heading size="md" mt={6} ml="28px">
                       {section.title}
@@ -118,8 +127,8 @@ export function FavoriteVideoList({ favoriteVideos }: FavoriteVideoListProps) {
                           </Card>
                         ))}
                     </SimpleGrid>
-                  </Fragment>
-                ))}
+                  </Fragment> */}
+                {/* ))} */}
               </Fragment>
             ))
           ) : (

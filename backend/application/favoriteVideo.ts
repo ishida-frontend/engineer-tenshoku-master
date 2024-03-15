@@ -63,7 +63,7 @@ export class FavoriteVideoApplicationService {
             include: {
               section: {
                 include: {
-                  course: {},
+                  course: true,
                 },
               },
             },
