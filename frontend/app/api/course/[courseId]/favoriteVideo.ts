@@ -60,31 +60,3 @@ export const fetchFavButtonStatus = async ({
     return null
   }
 }
-
-export const favoriteVideoList = async ({
-  userId,
-  videoId,
-  favoritedStatus,
-}: {
-  userId: string | undefined
-  videoId: string
-  favoritedStatus: boolean
-}) => {
-  try {
-    console.log('API通信')
-
-    const res = await fetch(
-      APIS.FAVORITE_VIDEO.LIST.path(userId, videoId, favoritedStatus),
-    )
-    if (!res.ok) {
-      throw new Error(
-        `お気に入り動画一覧の取得に失敗しました: ${res.statusText}`,
-      )
-    }
-
-    const favoritedVideos = await res.json()
-    return favoritedVideos
-  } catch (error) {
-    return null
-  }
-}

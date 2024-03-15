@@ -2,7 +2,7 @@ import { SectionType } from './SectionType'
 
 export type VideoType = {
   id: string
-  sections: SectionType[]
+  section: SectionType
   sectionId: string
   order: number
   url: string
@@ -13,7 +13,6 @@ export type VideoType = {
   updated_at: string
   deleted_at: string
   ViewingStatus: ViewingStatusType[]
-  FavoriteStatus: FavoriteVideoType[]
 }
 
 export type ViewingStatusType = {
@@ -30,6 +29,6 @@ export type FavoriteVideoType = {
   status: boolean
   updated_at: string
   user_id: string
-  video: VideoType[]
+  video: VideoType
   video_id: string
 }

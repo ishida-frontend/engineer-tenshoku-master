@@ -10,7 +10,6 @@ export class FavoriteVideoController {
   upsertFavoriteVideo = async (req: express.Request, res: express.Response) => {
     try {
       const { favoritedStatus, userId, videoId } = req.body
-      console.log('req.body', req.body)
       const newStatus = await FavoriteVideoApplicationService.upsert({
         favoritedStatus,
         userId,
@@ -24,7 +23,6 @@ export class FavoriteVideoController {
   }
 
   getFavoriteVideo = async (req: express.Request, res: express.Response) => {
-    console.log('getFavoriteVideo')
     try {
       const { userId, videoId } = req.params
       const fetchedStatus = await this.favoriteVideoApplicationService.get({
@@ -38,12 +36,11 @@ export class FavoriteVideoController {
     }
   }
 
-  getFavoriteVideos = async (req: express.Request, res: express.Response) => {
+  getFavoritedVideos = async (req: express.Request, res: express.Response) => {
     try {
       const favoriteVideos =
-        await this.favoriteVideoApplicationService.getfavoriteVideos()
+        await this.favoriteVideoApplicationService.getFavoritedVideos()
       res.status(200).json(favoriteVideos)
-      console.log('favoriteVideos', favoriteVideos)
     } catch (error) {
       res.status(500)
       throw error

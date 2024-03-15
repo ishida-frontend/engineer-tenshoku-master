@@ -52,11 +52,14 @@ export class FavoriteVideoApplicationService {
       )
     }
   }
-  async getfavoriteVideos() {
+  async getFavoritedVideos() {
     try {
       const favoriteVideos = await prisma.favoriteVideo.findMany({
         where: {
-          deleted_at: null,
+          status: true,
+        },
+        orderBy: {
+          updated_at: 'asc',
         },
         include: {
           video: {
@@ -73,70 +76,7 @@ export class FavoriteVideoApplicationService {
       return favoriteVideos
     } catch (error) {
       throw new Error(
-        `FavoriteVideoApplicationService: getfavoriteVideos error: ${error}`,
-      )
-    }
-  }
-
-  async getAll({ userId }: { userId: string }) {
-    try {
-      const favoriteVideos = await prisma.course.findMany({
-        orderBy: [
-          {
-            created_at: 'asc',
-          },
-        ],
-        include: {
-          sections: {
-            orderBy: [
-              {
-                order: 'asc',
-              },
-            ],
-            include: {
-              videos: {
-                orderBy: [
-                  {
-                    order: 'asc',
-                  },
-                ],
-                where: {
-                  published: true,
-                  deleted_at: null,
-                },
-                select: {
-                  id: true,
-                  name: true,
-                  description: true,
-                  order: true,
-                  FavoriteVideo: {
-                    where: {
-                      status: true,
-                      user_id: userId,
-                      deleted_at: null,
-                    },
-                    select: {
-                      status: true,
-                    },
-                  },
-                },
-              },
-            },
-            where: {
-              published: true,
-              deleted_at: null,
-            },
-          },
-        },
-        where: {
-          published: true,
-          deleted_at: null,
-        },
-      })
-      return favoriteVideos
-    } catch (error) {
-      throw new Error(
-        `FavoriteVideoApplicationService: get favorite videos error: ${error}`,
+        `FavoriteVideoApplicationService: getFavoriteVideos error: ${error}`,
       )
     }
   }
