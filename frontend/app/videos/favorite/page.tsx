@@ -1,14 +1,20 @@
 import { FavoriteVideoList } from '../../../components/pages/FavoriteVideoList'
 import { FavoriteVideoType } from '../../../types'
+import Error from '../../error'
 
 export default async function FavoriteVideos() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/favoritevideo`,
-    {
-      cache: 'no-cache',
-    },
-  )
-  const favoriteVideos: FavoriteVideoType[] = await res.json()
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/favoritevideo`,
+      {
+        cache: 'no-cache',
+      },
+    )
+    const favoriteVideos: FavoriteVideoType[] = await res.json()
+    console.log('favoriteVideos', favoriteVideos)
 
-  return <FavoriteVideoList favoriteVideos={favoriteVideos} />
+    return <FavoriteVideoList favoriteVideos={favoriteVideos} />
+  } catch (e) {
+    return <Error />
+  }
 }
