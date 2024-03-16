@@ -204,7 +204,6 @@ favoriteVideoRouter.get(
   '/:userId/:videoId',
   favoriteVideoController.getFavoriteVideo,
 )
-favoriteVideoRouter.get('/favoritevideo', (req, res) => {
-  favoriteVideoController.getFavoritedVideos(req, res)
-})
+favoriteVideoRouter.get('/',
+  favoriteVideoController.getFavoritedVideos)
 export default router
