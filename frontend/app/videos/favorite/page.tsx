@@ -11,7 +11,6 @@ export default async function FavoriteVideos() {
       },
     )
     const favoriteVideos: FavoriteVideoType[] = await res.json()
-    console.log('favoriteVideos', favoriteVideos)
 
     return <FavoriteVideoList favoriteVideos={favoriteVideos} />
   } catch (e) {

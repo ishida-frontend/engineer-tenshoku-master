@@ -29,7 +29,7 @@ export function FavoriteVideoList({ favoriteVideos }: FavoriteVideoListProps) {
   const { showErrorToast } = useCustomToast()
 
   if (!Array.isArray(favoriteVideos)) {
-    showErrorToast('広告情報の取得に失敗しました')
+    showErrorToast('お気に入り動画一覧の取得に失敗しました')
     return null
   }
   return (

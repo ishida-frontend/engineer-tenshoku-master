@@ -129,11 +129,6 @@ router.delete('/advertisement', (req, res) => {
   advertisementController.deleteAdvertisement(req, res)
 })
 
-// FavoriteVideoListのルーティング
-router.get('/favoritevideo', (req, res) => {
-  favoriteVideoController.getFavoritedVideos(req, res)
-})
-
 const userRouter = express.Router()
 router.use('/user', userRouter)
 userRouter.get('/:id', userController.get)
@@ -209,4 +204,7 @@ favoriteVideoRouter.get(
   '/:userId/:videoId',
   favoriteVideoController.getFavoriteVideo,
 )
+router.get('/favoritevideo', (req, res) => {
+  favoriteVideoController.getFavoritedVideos(req, res)
+})
 export default router
