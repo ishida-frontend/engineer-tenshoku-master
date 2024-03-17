@@ -1,4 +1,4 @@
-import prisma from '../prisma/prismaClient'
+import prisma from '../utils/prismaClient'
 
 export class TagApplicationService {
   async createTag(params: {
@@ -45,10 +45,10 @@ export class TagApplicationService {
 
   async getTag(tagId: string) {
     try {
-      const question = await prisma.tag.findUnique({
+      const tag = await prisma.tag.findUnique({
         where: { id: tagId },
       })
-      return question
+      return tag
     } catch (error) {
       throw new Error(`TagApplicationService: get tag error: ${error}`)
     }
@@ -56,10 +56,8 @@ export class TagApplicationService {
 
   async getTags() {
     try {
-      const question = await prisma.tag.findMany({
-        where: { deleted_at: null },
-      })
-      return question
+      const tags = await prisma.tag.findMany()
+      return tags
     } catch (error) {
       throw new Error(`TagApplicationService: get tags error: ${error}`)
     }
@@ -67,9 +65,7 @@ export class TagApplicationService {
 
   async deleteTag(tagId: string) {
     try {
-      await prisma.tag.delete({
-        where: { id: tagId },
-      })
+      await prisma.tag.softDelete(tagId)
     } catch (error) {
       throw new Error(`TagApplicationService: get tags error: ${error}`)
     }
