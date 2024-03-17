@@ -18,13 +18,14 @@ export class GoodVideoController {
       )
       res.status(200).json(goodCount)
     } catch (error) {
-      res.status(500).json({ message: 'エラーが発生しました' })
+      res
+        .status(500)
+        .json({ message: 'ビデオのいいね数取得でエラーが発生しました' })
     }
   }
   async goodVideo(req: express.Request, res: express.Response) {
     try {
       const { userId, videoId } = req.body
-
       await this.goodVideoApplicationService.goodVideo(userId, videoId)
       res.status(200).json({ message: 'いいねをしました' })
     } catch (error) {

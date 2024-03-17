@@ -105,12 +105,13 @@ export function CourseDetailVideoSection({
                     loadingState={isWatchingLoading}
                     handleViewingStatus={handleViewingStatus}
                   />
-
-                  <GoodButton
-                    handleLike={handleLike}
-                    isLiked={isLiked}
-                    goodCount={goodCount}
-                  />
+                  <Box>
+                    <GoodButton
+                      handleLike={handleLike}
+                      isLiked={isLiked}
+                      goodCount={goodCount}
+                    />
+                  </Box>
 
                   <FavButton
                     favoritedStatus={

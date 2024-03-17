@@ -60,6 +60,7 @@ export function CourseDetail({
   isProfileOpen,
   closeProfileModal,
   handleLike,
+  goodCount,
 }: {
   courseData: CourseWithSectionsType
   session: Session | null
@@ -82,6 +83,7 @@ export function CourseDetail({
   closeProfileModal?: () => void
   handleLikeStatus?: (videoId: string) => void
   handleLike?: (event: React.MouseEvent<HTMLButtonElement>) => void
+  goodCount?: number
 }) {
   const router = useRouter()
   const { showErrorToast } = useCustomToast()
@@ -297,7 +299,7 @@ export function CourseDetail({
             isProfileOpen={isProfileOpen}
             closeProfileModal={closeProfileModal}
             isLiked={false}
-            goodCount={0}
+            goodCount={goodCount}
             handleLike={handleLike}
           />
         </Container>

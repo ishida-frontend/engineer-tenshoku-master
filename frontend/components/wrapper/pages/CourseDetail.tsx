@@ -65,7 +65,7 @@ export function CourseDetailWrapper({
     const [isFavoriteLoading, setIsFavoriteLoading] = useState<boolean>()
 
     const [isLiked, setIsLiked] = useState(false)
-    const [, setGoodCount] = useState(0)
+    const [goodCount, setGoodCount] = useState(0)
 
     const getCourseData = async (courseId: string) => {
       try {
@@ -174,7 +174,6 @@ export function CourseDetailWrapper({
             }),
           },
         )
-
         setIsLiked(!isLiked)
         setGoodCount((count) => (isLiked ? count - 1 : count + 1))
       } catch (error) {
@@ -229,6 +228,22 @@ export function CourseDetailWrapper({
 
       handleLikeStatus()
     }, [videoId, userId])
+    useEffect(() => {
+      const fetchGoodCount = async () => {
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/goodVideo/${videoId}/count`,
+          )
+          const data = await res.json()
+          setGoodCount(data)
+        } catch (error) {
+          console.error('goodCountの取得中にエラーが発生しました。', error)
+        }
+      }
+      // コンポーネントが初めてマウントされたときに一度だけ goodCount を取得
+      // （例えば、いいねボタンの初期表示の際に実行される）
+      fetchGoodCount()
+    }, [])
 
     const getAnotherUserProfile = async (anotherUserId: string) => {
       try {
@@ -269,6 +284,7 @@ export function CourseDetailWrapper({
         isProfileOpen={isProfileOpen}
         closeProfileModal={closeProfileModal}
         handleLike={handleLike}
+        goodCount={goodCount}
       />
     )
   } catch (e) {

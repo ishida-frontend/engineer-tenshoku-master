@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconButton, Icon } from '@chakra-ui/react'
+import { Button, HStack, Text } from '@chakra-ui/react'
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa'
 
 export const GoodButton = ({
@@ -7,21 +7,25 @@ export const GoodButton = ({
   handleLike,
   goodCount,
 }: {
+  goodCount: number
   isLiked: boolean
   handleLike: (event: React.MouseEvent<HTMLButtonElement>) => void
-  goodCount: number
 }) => {
   return (
-    <IconButton
+    <Button
       onClick={(e) => {
         handleLike(e)
       }}
-      icon={isLiked ? <Icon as={FaRegThumbsUp} /> : <Icon as={FaThumbsUp} />}
-      aria-label="Like Button"
-      variant="ghost"
       color="teal.500"
+      backgroundColor="white"
+      border="1px"
+      height="34px"
+      fontSize="14px"
     >
-      {goodCount}
-    </IconButton>
+      <HStack mr="1px">
+        {isLiked ? <FaRegThumbsUp size="20px" /> : <FaThumbsUp size="20px" />}
+        <Text>{goodCount}</Text>
+      </HStack>
+    </Button>
   )
 }

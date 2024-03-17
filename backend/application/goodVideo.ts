@@ -7,6 +7,7 @@ export class GoodVideoApplicationService {
     const goodCount = await prisma.goodVideo.count({
       where: {
         video_id: videoId,
+        deleted_at: null,
       },
     })
     return goodCount

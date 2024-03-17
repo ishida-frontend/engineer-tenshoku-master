@@ -179,5 +179,6 @@ const goodVideoRouter = express.Router()
 router.use('/goodVideo', goodVideoRouter)
 goodVideoRouter.post('/:videoId', goodVideoController.goodVideo)
 goodVideoRouter.delete('/videoId', goodVideoController.goodVideo)
+goodVideoRouter.get('/:videoId/count', goodVideoController.getGoodCount)
 
 export default router
