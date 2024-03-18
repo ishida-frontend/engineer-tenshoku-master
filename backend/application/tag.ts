@@ -1,9 +1,9 @@
 import prisma from '../utils/prismaClient'
 
 export class TagApplicationService {
-  private prisma: PrismaClient
+  private prisma
 
-  constructor(prismaClient: PrismaClient = prisma) {
+  constructor(prismaClient = prisma) {
     this.prisma = prismaClient
   }
 
@@ -71,7 +71,11 @@ export class TagApplicationService {
 
   async deleteTag(tagId: string) {
     try {
-      await prisma.tag.softDelete(tagId)
+      await prisma.tag.delete({
+        where: {
+          id: tagId,
+        },
+      })
     } catch (error) {
       throw new Error(`TagApplicationService: get tags error: ${error}`)
     }
