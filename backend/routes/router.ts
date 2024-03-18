@@ -107,6 +107,10 @@ router.delete('/tag/:id', (req, res) => {
 router.get('/advertisement', (req, res) => {
   advertisementController.getAdvertisements(req, res)
 })
+router.get('/advertisement/banner', (req, res) => {
+  advertisementController.getUserAdvertisments(req, res)
+})
+
 router.get('/advertisement/:id', (req, res) => {
   advertisementController.getAdvertisement(req, res)
 })

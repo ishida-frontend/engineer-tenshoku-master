@@ -1,6 +1,12 @@
 import prisma from '../utils/prismaClient'
 
 export class TagApplicationService {
+  private prisma: PrismaClient
+
+  constructor(prismaClient: PrismaClient = prisma) {
+    this.prisma = prismaClient
+  }
+
   async createTag(params: {
     name: string
     color: string
@@ -8,7 +14,7 @@ export class TagApplicationService {
   }) {
     try {
       const { name, color, backgroundColor } = params
-      const question = await prisma.tag.create({
+      const question = await this.prisma.tag.create({
         data: {
           name,
           color,
@@ -29,7 +35,7 @@ export class TagApplicationService {
   }) {
     try {
       const { id, name, color, backgroundColor } = params
-      const tag = await prisma.tag.update({
+      const tag = await this.prisma.tag.update({
         where: { id },
         data: {
           name,

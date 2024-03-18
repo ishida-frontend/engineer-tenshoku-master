@@ -1,6 +1,5 @@
-import { Prisma, PrismaClient } from '@prisma/client'
+import prisma, { Prisma } from '../utils/prismaClient'
 import crypto from 'crypto'
-const prisma = new PrismaClient()
 
 export class AdvertisementApplicationService {
   async createAdvertisement(params: Prisma.AdvertisementCreateInput) {
@@ -40,16 +39,36 @@ export class AdvertisementApplicationService {
     try {
       const advertisements = await prisma.advertisement.findMany({
         where: {
-          deleted_at: null, 
+          deleted_at: null,
         },
         orderBy: {
           startFrom: 'asc',
-        },  
+        },
       })
       return advertisements
     } catch (error) {
       throw new Error(
         `AdvertisementApplicationService: get advertisements error: ${error}`,
+      )
+    }
+  }
+  async getUserAdvertisments() {
+    try {
+      const bannerAd = await prisma.advertisement.findMany({
+        where: {
+          startFrom: {
+            lt: new Date(), 
+          },
+          endAt: {
+            gt: new Date(), 
+          },
+          deleted_at: null,
+        },
+      })
+      return bannerAd
+    } catch (error) {
+      throw new Error(
+        `AdvertisementApplicationService: getUserAdvertisments error: ${error}`,
       )
     }
   }

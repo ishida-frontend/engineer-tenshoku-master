@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import prisma from '../utils/prismaClient'
 
 prisma.$use(async (params, next) => {
   if (params.model === 'Section') {

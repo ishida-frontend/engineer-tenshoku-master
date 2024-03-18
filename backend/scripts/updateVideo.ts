@@ -1,8 +1,6 @@
-import { PrismaClient } from '@prisma/client'
+import prisma from '../utils/prismaClient'
 import { convertVideoUrl } from '../utils/convertVideoUrl'
 import { VideoType } from '../types'
-
-const prisma = new PrismaClient()
 
 export async function updateVideo({
   id,

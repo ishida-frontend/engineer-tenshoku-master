@@ -1,7 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { Session } from 'next-auth'
-
 import {
   upsertViewingStatus,
   fetchButtonStatus,
@@ -11,25 +9,16 @@ import {
   upsertFavoriteVideo,
   fetchFavButtonStatus,
 } from '../../../app/api/course/[courseId]/favoriteVideo'
-import { CourseWithSectionsType } from '../../../types/CourseType'
-import { QuestionType } from '../../../types/QuestionType'
 import { useCustomToast } from '../../../hooks/useCustomToast'
-import { AnswerType } from '../../../types/AnswerType'
 import { CourseDetail } from '../../pages/CourseDetail'
 import Error from '../../../app/error'
 import { useDisclosure } from '@chakra-ui/react'
-import { UserProfileType } from '../../../types'
+import { Session } from 'next-auth'
+import { CourseWithSectionsType, UserProfileType } from '../../../types'
+import { QuestionType } from '../../../types/QuestionType'
+import { AnswerType } from '../../../types/AnswerType'
 
-export function CourseDetailWrapper({
-  courseId,
-  initialCourseData,
-  session,
-  userId,
-  videoId,
-  questions,
-  answers,
-  questionId,
-}: {
+type CourseDetailWrapperPropsType = {
   courseId: string
   session: Session | null
   initialCourseData: CourseWithSectionsType
@@ -38,8 +27,22 @@ export function CourseDetailWrapper({
   questions?: QuestionType[]
   answers: AnswerType[]
   questionId?: string
-}) {
+}
+
+export function CourseDetailWrapper(
+  courseDetailWrapperProps: CourseDetailWrapperPropsType,
+) {
   const { showErrorToast } = useCustomToast()
+  const {
+    initialCourseData,
+    userId,
+    courseId,
+    videoId,
+    session,
+    questions,
+    answers,
+    questionId,
+  } = courseDetailWrapperProps
 
   try {
     const [courseData, setCourseData] = useState(initialCourseData)
@@ -207,27 +210,27 @@ export function CourseDetailWrapper({
       }
     }
 
-    return (
-      <CourseDetail
-        courseData={courseData}
-        session={session}
-        completePercentage={completePercentage}
-        watchedStatus={watchedStatus}
-        checkedStatus={checkedStatus}
-        favoritedStatus={favoritedStatus}
-        isWatchingLoading={isWatchingLoading}
-        isFavoriteLoading={isFavoriteLoading}
-        questions={questions}
-        answers={answers}
-        questionId={questionId}
-        handleViewingStatus={handleViewingStatus}
-        handleFavoriteVideoStatus={handleFavoriteVideoStatus}
-        getAnotherUserProfile={getAnotherUserProfile}
-        anotherUserProfile={anotherUserProfile}
-        isProfileOpen={isProfileOpen}
-        closeProfileModal={closeProfileModal}
-      />
-    )
+    const courseDetailProps = {
+      anotherUserProfile,
+      answers,
+      checkedStatus,
+      closeProfileModal,
+      completePercentage,
+      courseData,
+      favoritedStatus,
+      getAnotherUserProfile,
+      handleFavoriteVideoStatus,
+      handleViewingStatus,
+      isFavoriteLoading,
+      isProfileOpen,
+      isWatchingLoading,
+      questionId,
+      questions,
+      session,
+      watchedStatus,
+    }
+
+    return <CourseDetail {...courseDetailProps} />
   } catch (e) {
     return <Error />
   }
