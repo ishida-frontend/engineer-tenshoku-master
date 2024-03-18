@@ -1,12 +1,10 @@
 import { prismaMock } from '../../singleton'
 import { TagApplicationService } from '../../../application/tag'
-import * as jest_mock_extended_1 from 'jest-mock-extended'
 
 let tagService: TagApplicationService
 
 beforeEach(() => {
   tagService = new TagApplicationService(prismaMock)
-  jest_mock_extended_1.mockReset(prismaMock)
 })
 
 test('タグの新規作成が成功すること', async () => {
@@ -42,7 +40,6 @@ test('タグの新規作成に失敗した際にエラーが投げられるこ�
 
   const errorMessage = 'タグの新規作成に失敗しました'
   prismaMock.tag.create.mockRejectedValue(new Error(errorMessage))
-  console.log("aaaaaaaaaaaaaaa",exports.prismaMock)
 
   await expect(tagService.createTag(tagParams)).rejects.toThrow(errorMessage)
 })
