@@ -13,7 +13,7 @@ import {
   Link,
 } from '@chakra-ui/react'
 
-import { DeleteButton } from '../organisms/DeleteButton'
+import { DeleteButton } from '../atoms/DeleteButton'
 import { TagType } from '../../../types'
 import formatDate from '../../../utils/formatDate'
 
