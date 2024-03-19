@@ -7,6 +7,10 @@ beforeEach(() => {
   favoriteVideoService = new FavoriteVideoApplicationService(prismaMock)
 })
 
+afterEach(() => {
+  jest.clearAllMocks()
+})
+
 const userId = 'user_id_1'
 const videoId = 'video_id_1'
 const expectedDate = expect.any(Date)
