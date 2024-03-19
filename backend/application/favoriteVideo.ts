@@ -52,7 +52,7 @@ export class FavoriteVideoApplicationService {
       )
     }
   }
-  async getFavoritedVideos() {
+  async getFavoriteVideos() {
     try {
       const favoriteVideos = await prisma.favoriteVideo.findMany({
         where: {
