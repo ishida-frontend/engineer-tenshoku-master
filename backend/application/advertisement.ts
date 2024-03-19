@@ -1,7 +1,12 @@
-import prisma, { Prisma } from '../utils/prismaClient'
+import prisma, { Prisma, PrismaClient } from '../utils/prismaClient'
 import crypto from 'crypto'
 
 export class AdvertisementApplicationService {
+  private prisma: PrismaClient
+
+  constructor(prismaClient: PrismaClient = prisma) {
+    this.prisma = prismaClient
+  }
   async createAdvertisement(params: Prisma.AdvertisementCreateInput) {
     try {
       const { name, url, imageUrl, author, startFrom, endAt } = params
