@@ -2,7 +2,7 @@ import { SectionType } from './SectionType'
 
 export type VideoType = {
   id: string
-  sections: SectionType[]
+  section: SectionType
   sectionId: string
   order: number
   url: string
@@ -24,22 +24,11 @@ export type ViewingStatusType = {
 }
 
 export type FavoriteVideoType = {
-  id: string
-  name: string
-  image: string
   created_at: string
-  sections: {
-    id: string
-    title: string
-    order: number
-    videos: {
-      id: string
-      name: string
-      description: string
-      order: number
-      FavoriteVideo: {
-        status: boolean
-      }[]
-    }[]
-  }[]
+  deleted_at: string
+  status: boolean
+  updated_at: string
+  user_id: string
+  video: VideoType
+  video_id: string
 }

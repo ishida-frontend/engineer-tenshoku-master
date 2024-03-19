@@ -105,7 +105,7 @@ router.get('/advertisement', (req, res) => {
   advertisementController.getAdvertisements(req, res)
 })
 router.get('/advertisement/banner', (req, res) => {
-  advertisementController.getUserAdvertisments(req, res)
+  advertisementController.getUserAdvertisements(req, res)
 })
 
 router.get('/advertisement/:id', (req, res) => {
@@ -127,7 +127,7 @@ router.put(
 )
 router.delete('/advertisement', (req, res) => {
   advertisementController.deleteAdvertisement(req, res)
-  })
+})
 
 const userRouter = express.Router()
 router.use('/user', userRouter)
@@ -204,6 +204,6 @@ favoriteVideoRouter.get(
   '/:userId/:videoId',
   favoriteVideoController.getFavoriteVideo,
 )
-favoriteVideoRouter.get('/:userId', favoriteVideoController.getFavoriteVideos)
-
+favoriteVideoRouter.get('/',
+  favoriteVideoController.getFavoritedVideos)
 export default router

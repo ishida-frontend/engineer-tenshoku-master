@@ -34,7 +34,7 @@ export class FavoriteVideoApplicationService {
     }
   }
 
-  static async get({ userId, videoId }: { userId: string; videoId: string }) {
+  async get({ userId, videoId }: { userId: string; videoId: string }) {
     try {
       const fetchedStatus = await prisma.favoriteVideo.findUnique({
         where: {
@@ -52,66 +52,31 @@ export class FavoriteVideoApplicationService {
       )
     }
   }
-
-  static async getAll({ userId }: { userId: string }) {
+  async getFavoriteVideos() {
     try {
-      const favoriteVideos = await prisma.course.findMany({
-        orderBy: [
-          {
-            created_at: 'asc',
-          },
-        ],
-        include: {
-          sections: {
-            orderBy: [
-              {
-                order: 'asc',
-              },
-            ],
-            include: {
-              videos: {
-                orderBy: [
-                  {
-                    order: 'asc',
-                  },
-                ],
-                where: {
-                  published: true,
-                  deleted_at: null,
-                },
-                select: {
-                  id: true,
-                  name: true,
-                  description: true,
-                  order: true,
-                  FavoriteVideo: {
-                    where: {
-                      status: true,
-                      user_id: userId,
-                      deleted_at: null,
-                    },
-                    select: {
-                      status: true,
-                    },
-                  },
-                },
-              },
-            },
-            where: {
-              published: true,
-              deleted_at: null,
-            },
-          },
-        },
+      const favoriteVideos = await prisma.favoriteVideo.findMany({
         where: {
-          published: true,
-          deleted_at: null,
+          status: true,
+        },
+        orderBy: {
+          updated_at: 'asc',
+        },
+        include: {
+          video: {
+            include: {
+              section: {
+                include: {
+                  course: true,
+                },
+              },
+            },
+          },
         },
       })
       return favoriteVideos
     } catch (error) {
       throw new Error(
-        `FavoriteVideoApplicationService: get favorite videos error: ${error}`,
+        `FavoriteVideoApplicationService: getFavoriteVideos error: ${error}`,
       )
     }
   }

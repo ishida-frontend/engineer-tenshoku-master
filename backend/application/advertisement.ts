@@ -52,7 +52,7 @@ export class AdvertisementApplicationService {
       )
     }
   }
-  async getUserAdvertisments() {
+  async getUserAdvertisements() {
     try {
       const bannerAd = await prisma.advertisement.findMany({
         where: {
@@ -68,7 +68,7 @@ export class AdvertisementApplicationService {
       return bannerAd
     } catch (error) {
       throw new Error(
-        `AdvertisementApplicationService: getUserAdvertisments error: ${error}`,
+        `AdvertisementApplicationService: getUserAdvertisements error: ${error}`,
       )
     }
   }
