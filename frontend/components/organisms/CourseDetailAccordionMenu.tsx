@@ -78,7 +78,11 @@ export function CourseDetailAccordionMenu({
           courseData.sections.map((section, sectionIndex) => {
             const sectionProgress = getSectionCompletionPercentage(
               sectionIndex,
-              session?.user?.id,
+
+              session?.user.id,
+
+     
+
             )
             return (
               <AccordionItem key={section.id} borderTopWidth={'1px'}>
