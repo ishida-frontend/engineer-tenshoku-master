@@ -1,10 +1,11 @@
 import express from 'express'
 import { TagApplicationService } from '../application/tag'
+import prisma from '../utils/prismaClient'
 
 export class TagController {
   private tagApplicationService: TagApplicationService
   constructor() {
-    this.tagApplicationService = new TagApplicationService()
+    this.tagApplicationService = new TagApplicationService(prisma)
   }
   async createTag(req: express.Request, res: express.Response) {
     try {
