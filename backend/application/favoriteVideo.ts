@@ -1,7 +1,13 @@
-import prisma from '../utils/prismaClient'
+import prisma, { PrismaClient } from '../utils/prismaClient'
 
 export class FavoriteVideoApplicationService {
-  static async upsert({
+  private prisma: PrismaClient
+
+  constructor(prismaClient: PrismaClient = prisma) {
+    this.prisma = prismaClient
+  }
+
+  async upsert({
     favoritedStatus,
     userId,
     videoId,
