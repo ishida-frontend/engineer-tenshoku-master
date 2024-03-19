@@ -71,11 +71,7 @@ export class TagApplicationService {
 
   async deleteTag(tagId: string) {
     try {
-      await prisma.tag.delete({
-        where: {
-          id: tagId,
-        },
-      })
+      await prisma.tag.softDelete(tagId)
     } catch (error) {
       throw new Error(`TagApplicationService: get tags error: ${error}`)
     }
