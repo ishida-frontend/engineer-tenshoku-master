@@ -33,14 +33,6 @@ const prisma = new PrismaClient().$extends({
         }
         return query(args)
       },
-      // async delete({ args, query }) {
-      //   const { where } = args
-      //   const updateArgs = {
-      //     where,
-      //     data: { deleted_at: new Date() },
-      //   }
-      //   return query.updateMany(updateArgs)
-      // },
     },
   },
 })
