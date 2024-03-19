@@ -104,6 +104,10 @@ router.put('/tag', tagValidator.updateTag, (req, res) => {
 router.get('/advertisement', (req, res) => {
   advertisementController.getAdvertisements(req, res)
 })
+router.get('/advertisement/banner', (req, res) => {
+  advertisementController.getUserAdvertisements(req, res)
+})
+
 router.get('/advertisement/:id', (req, res) => {
   advertisementController.getAdvertisement(req, res)
 })
@@ -123,7 +127,7 @@ router.put(
 )
 router.delete('/advertisement', (req, res) => {
   advertisementController.deleteAdvertisement(req, res)
-  })
+})
 
 const userRouter = express.Router()
 router.use('/user', userRouter)
@@ -200,6 +204,6 @@ favoriteVideoRouter.get(
   '/:userId/:videoId',
   favoriteVideoController.getFavoriteVideo,
 )
-favoriteVideoRouter.get('/:userId', favoriteVideoController.getFavoriteVideos)
-
+favoriteVideoRouter.get('/',
+  favoriteVideoController.getFavoritedVideos)
 export default router

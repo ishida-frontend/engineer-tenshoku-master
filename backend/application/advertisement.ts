@@ -52,6 +52,26 @@ export class AdvertisementApplicationService {
       )
     }
   }
+  async getUserAdvertisements() {
+    try {
+      const bannerAd = await prisma.advertisement.findMany({
+        where: {
+          startFrom: {
+            lt: new Date(), 
+          },
+          endAt: {
+            gt: new Date(), 
+          },
+          deleted_at: null,
+        },
+      })
+      return bannerAd
+    } catch (error) {
+      throw new Error(
+        `AdvertisementApplicationService: getUserAdvertisements error: ${error}`,
+      )
+    }
+  }
 
   async updateAdvertisement(params: {
     id: string

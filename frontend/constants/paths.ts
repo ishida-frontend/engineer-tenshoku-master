@@ -47,11 +47,11 @@ export const PATHS = {
       },
     },
     ADVERTISEMENT: {
-      LIST:{
+      LIST: {
         path: '/admin/advertisement',
         title: '広告一覧',
-      }
-    }
+      },
+    },
   },
 }
 
