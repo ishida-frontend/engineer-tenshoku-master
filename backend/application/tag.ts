@@ -1,4 +1,5 @@
-import prisma, { PrismaClient, Prisma } from '../utils/prismaClient'
+import prisma, { PrismaClient } from '../utils/prismaClient'
+import { readCourse } from '../scripts/readCourse'
 
 export class TagApplicationService {
   private prisma: PrismaClient
