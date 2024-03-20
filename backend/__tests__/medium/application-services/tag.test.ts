@@ -36,20 +36,30 @@ beforeEach(() => {
   tagService = new TagApplicationService(prismaMock)
 })
 
-test('タグの新規作成が成功すること', async () => {
-  const expectedTag = createExpectedTag()
+describe('広告の新規作成機能', () => {
+  test('タグの新規作成が成功すること', async () => {
+    const expectedTag = createExpectedTag()
 
-  prismaMock.tag.create.mockResolvedValue(expectedTag)
+    prismaMock.tag.create.mockResolvedValue(expectedTag)
 
-  const createdTag = await tagService.createTag(tagParams)
-  expect(createdTag).toEqual(expectedTag)
-})
+    const createdTag = await tagService.createTag(tagParams)
+    expect(createdTag).toEqual(expectedTag)
+  })
 
-test('タグの新規作成に失敗した際にエラーが投げられること', async () => {
-  const errorMessage = 'タグの新規作成に失敗しました'
-  prismaMock.tag.create.mockRejectedValue(new Error(errorMessage))
+  test('タグの新規作成に失敗した際にエラーが投げられること', async () => {
+    const errorMessage =
+      'TagApplicationService: create tag error: Error: エラーメッセージ'
+    const expectedError = new Error('エラーメッセージ')
+    prismaMock.tag.create.mockRejectedValue(expectedError)
 
-  await expect(tagService.createTag(tagParams)).rejects.toThrow(errorMessage)
+    try {
+      await tagService.createTag(tagParams)
+
+      fail('エラーが投げられませんでした')
+    } catch (error) {
+      expect((error as Error).message).toBe(errorMessage)
+    }
+  })
 })
 
 test('タグの更新が成功すること', async () => {
