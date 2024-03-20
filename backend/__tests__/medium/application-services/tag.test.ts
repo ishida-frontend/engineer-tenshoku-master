@@ -127,14 +127,13 @@ describe('削除されていないタグを全て取得する機能', () => {
     })
   })
 
-  test('削除されていないタグが取得されない場合、エラーが投げられること', async () => {
+  test('タグの取得に失敗した際にエラーが投げられること', async () => {
     const expectedError = 'エラーメッセージ'
     const errorMessage = `TagApplicationService: get tags error: エラーメッセージ`
-    prismaMock.tag.findMany.mockResolvedValue(expectedError)
+
+    prismaMock.tag.findMany.mockRejectedValue(expectedError)
 
     expect.assertions(1)
-    await expect(tagService.getTags()).rejects.toThrow(
-      errorMessage,
-    )
+    await expect(tagService.getTags()).rejects.toThrow(errorMessage)
   })
 })
