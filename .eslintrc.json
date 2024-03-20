@@ -5,15 +5,30 @@
     "commonjs": true,
     "es6": true
   },
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
   "rules": {
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": true
+      }
+    ],
     "@typescript-eslint/no-var-requires": "off",
     "no-useless-escape": "off"
   },
-  "ignorePatterns": ["views/", "next.config.js", "next-auth.d.ts"]
+  "ignorePatterns": [
+    "views/",
+    "next.config.js",
+    "next-auth.d.ts"
+  ]
 }
