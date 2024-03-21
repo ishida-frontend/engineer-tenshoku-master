@@ -14,6 +14,8 @@ import {
   VStack,
   Wrap,
   Link as ChakraLink,
+  useToast,
+  FormErrorMessage,
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -23,6 +25,8 @@ import { BsGoogle } from 'react-icons/bs'
 import { LuMail } from 'react-icons/lu'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 import { AUTH } from '../../../constants/auth'
+import { ZodIssue } from 'zod'
+import { registerSchema } from '../../../zod'
 
 export default function Register() {
   const { status: authStatus } = useSession()
@@ -32,18 +36,33 @@ export default function Register() {
     email: '',
     password: '',
   })
-
+  const [isSubmitting, SetIsSubmitting] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
+  const [errors, setErrors] = useState<ZodIssue[]>([])
 
-  const handleSubmit = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  const toast = useToast()
+
+  const cretateAccount = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    e.preventDefault()
-    if (!isChecked) {
-      showErrorToast('利用規約とプライバシーポリシーに同意してください')
-      return
-    }
     try {
+      event.preventDefault()
+      if (!isChecked) {
+        showErrorToast('利用規約とプライバシーポリシーに同意してください')
+        return
+      }
+
+      const registerValidationResult = registerSchema.safeParse(formState)
+      if (registerValidationResult.success === false) {
+        setErrors(registerValidationResult.error.issues)
+        toast({
+          title: 'フォームの入力に誤りがあります',
+          status: 'error',
+          position: 'top',
+          duration: 3000,
+        })
+        return
+      }
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup`,
         {
@@ -55,14 +74,20 @@ export default function Register() {
         },
       )
       const data = await res.json()
-
       if (data.success) {
         showSuccessToast(
           'メールアドレスに認証メールをお届けしました。そちらのリンクからログインしてください。',
         )
       }
-    } catch (err) {
-      throw new Error('エラーが発生しました')
+    } catch (e) {
+      toast({
+        title: '新規登録に失敗しました',
+        status: 'error',
+        position: 'top',
+        duration: 3000,
+      })
+    } finally {
+      SetIsSubmitting(false)
     }
   }
 
@@ -71,7 +96,7 @@ export default function Register() {
     if (authStatus === AUTH.GOOGLE_AUTHENTICATED) {
       router.push('/')
     }
-  }, [status])
+  }, [authStatus])
 
   return (
     <Center padding="60px 96px">
@@ -85,7 +110,17 @@ export default function Register() {
           新規登録
         </Heading>
         <VStack gap={'36px'}>
-          <FormControl id="courseDescription" isRequired>
+          <FormControl
+            id="courseDescription"
+            isRequired
+            isInvalid={
+              !!errors &&
+              errors.find &&
+              !!errors.find((e) => {
+                return e.path[0] === 'email'
+              })
+            }
+          >
             <Container ml={'0px'} pb={'10px'} pl={'0px'}>
               <Flex>
                 <Text>メールアドレス</Text>
@@ -106,9 +141,25 @@ export default function Register() {
               border="1px"
               borderColor="gray.400"
             />
+            <FormErrorMessage>
+              {errors &&
+                errors.find &&
+                errors.find((e) => {
+                  return e.path[0] === 'email'
+                })?.message}
+            </FormErrorMessage>
           </FormControl>
-
-          <FormControl id="courseDescription" isRequired>
+          <FormControl
+            id="courseDescription"
+            isRequired
+            isInvalid={
+              !!errors &&
+              errors.find &&
+              !!errors.find((e) => {
+                return e.path[0] === 'password'
+              })
+            }
+          >
             <Container ml={'0px'} pb={'10px'} pl={'0px'}>
               <Flex>
                 <Text>パスワード</Text>
@@ -129,8 +180,14 @@ export default function Register() {
               border="1px"
               borderColor="gray.400"
             />
+            <FormErrorMessage>
+              {errors &&
+                errors.find &&
+                errors.find((e) => {
+                  return e.path[0] === 'password'
+                })?.message}
+            </FormErrorMessage>
           </FormControl>
-
           <Container ml={'0px'} p={'0px'}>
             <HStack>
               <Checkbox
@@ -159,7 +216,8 @@ export default function Register() {
           mb={'12px'}
           colorScheme="teal"
           pl={'26px'}
-          onClick={handleSubmit}
+          isLoading={isSubmitting}
+          onClick={cretateAccount}
         >
           <Box mr={'16px'}>
             <LuMail />
