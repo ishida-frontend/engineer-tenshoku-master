@@ -42,7 +42,7 @@ export default function Register() {
 
   const toast = useToast()
 
-  const cretateAccount = async (
+  const handleSubmit = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     try {
@@ -217,7 +217,7 @@ export default function Register() {
           colorScheme="teal"
           pl={'26px'}
           isLoading={isSubmitting}
-          onClick={cretateAccount}
+          onClick={handleSubmit}
         >
           <Box mr={'16px'}>
             <LuMail />
