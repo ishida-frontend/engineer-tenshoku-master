@@ -10,6 +10,7 @@ import {
   Input,
   Text,
   VStack,
+  useToast,
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { BsGoogle } from 'react-icons/bs'
@@ -27,21 +28,28 @@ export default function Login() {
     password: '',
   })
 
+  const toast = useToast()
+
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault()
-    try {
-      await signIn('credentials', {
-        email: formState.email,
-        password: formState.password,
-        redirect: false,
-        callbackUrl: '/',
+
+    const result = await signIn('credentials', {
+      email: formState.email,
+      password: formState.password,
+      redirect: false,
+      callbackUrl: '/',
+    })
+    if (result.error) {
+      toast({
+        title: 'このメールアドレスは登録されていません',
+        status: 'error',
+        position: 'top',
+        duration: 3000,
       })
+    } else {
       router.push('/')
-    } catch (err) {
-      console.log('err', err)
-      throw new Error('エラーが発生しました')
     }
   }
 
