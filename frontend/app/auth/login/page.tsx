@@ -43,7 +43,7 @@ export default function Login() {
     })
     if (result.error) {
       toast({
-        title: 'このメールアドレスは登録されていません',
+        title: 'このメールアドレスは登録されていないかパスワードが誤っています',
         status: 'error',
         position: 'top',
         duration: 3000,
