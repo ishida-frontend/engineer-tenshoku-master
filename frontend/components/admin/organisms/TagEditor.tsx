@@ -11,9 +11,11 @@ import {
   Select,
   Text,
   Link,
+  useDisclosure,
 } from '@chakra-ui/react'
 
 import { DeleteButton } from '../atoms/DeleteButton'
+import { DeleteConfirmModal } from '../atoms/DeleteConfirmModal'
 import { TagType } from '../../../types'
 import formatDate from '../../../utils/formatDate'
 
@@ -34,6 +36,7 @@ export function TagEditor({
     nameError: string
   }
 }) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <Box w="full" maxW="600px" mx="auto" p={6}>
       <Stack spacing={4}>
@@ -101,7 +104,13 @@ export function TagEditor({
         >
           変更を保存
         </Button>
-        <DeleteButton id={tagData.id} itemToDelete="tag" />
+        <DeleteButton onOpen={onOpen} />
+        <DeleteConfirmModal
+          id={tagData.id}
+          itemToDelete="tag"
+          isOpen={isOpen}
+          onClose={onClose}
+        />
       </Stack>
     </Box>
   )
