@@ -34,16 +34,16 @@ enum UserRole {
 }
 
 model Course {
-  id          String      @id @default(uuid()) @db.VarChar(255)
-  sections    Section[]
-  name        String
-  description String?
-  image       String?
-  published   Boolean     @default(false) // コースが公開されているかどうか。
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @updatedAt
-  deleted_at  DateTime?
-  tags        CourseTag[]
+  id           String      @id @default(uuid()) @db.VarChar(255)
+  sections     Section[]
+  name         String
+  description  String?
+  image        String?
+  published    Boolean     @default(false) // コースが公開されているかどうか。
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
+  deleted_at   DateTime?
+  tags         CourseTag[]
   requiredTime String?
 }
 
@@ -89,16 +89,17 @@ model Contact {
 }
 
 model Question {
-  id         String   @id @default(uuid()) @db.VarChar(255)
+  id         String    @id @default(uuid()) @db.VarChar(255)
   answer     Answer[]
-  video      Video    @relation(fields: [video_id], references: [id])
-  video_id   String   @db.VarChar(255)
-  user       User     @relation(fields: [user_id], references: [id])
-  user_id    String   @db.VarChar(255)
-  title      String   @db.VarChar(255)
-  content    String   @db.LongText
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  video      Video     @relation(fields: [video_id], references: [id])
+  video_id   String    @db.VarChar(255)
+  user       User      @relation(fields: [user_id], references: [id])
+  user_id    String    @db.VarChar(255)
+  title      String    @db.VarChar(255)
+  content    String    @db.LongText
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
 }
 
 model Answer {
