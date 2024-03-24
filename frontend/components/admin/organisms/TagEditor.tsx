@@ -107,7 +107,7 @@ export function TagEditor({
         <DeleteButton onOpen={onOpen} />
         <DeleteConfirmModal
           id={tagData.id}
-          itemToDelete="tag"
+          deleteTarget="tag"
           isOpen={isOpen}
           onClose={onClose}
         />

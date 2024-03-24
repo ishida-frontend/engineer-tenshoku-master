@@ -5,10 +5,10 @@ export const useDeleteItem = () => {
   const router = useRouter()
   const { showSuccessToast, showErrorToast } = useCustomToast()
 
-  const deleteItem = async ({ id, itemToDelete }) => {
+  const deleteItem = async ({ id, deleteTarget }) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/${itemToDelete}/${id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/${deleteTarget}/${id}`,
         {
           method: 'DELETE',
           headers: {
@@ -22,7 +22,7 @@ export const useDeleteItem = () => {
       if (response.ok) {
         showSuccessToast(result.message)
         setTimeout(() => {
-          router.push(`/admin/${itemToDelete}`)
+          router.push(`/admin/${deleteTarget}`)
         }, 4000)
       } else {
         showErrorToast(result.message)

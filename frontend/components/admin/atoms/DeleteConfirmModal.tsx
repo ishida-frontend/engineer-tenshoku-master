@@ -11,19 +11,19 @@ import { useDeleteItem } from '../../../hooks/useDeleteItem'
 
 export const DeleteConfirmModal = ({
   id,
-  itemToDelete,
+  deleteTarget,
   isOpen,
   onClose,
 }: {
   id: string
-  itemToDelete: string
+  deleteTarget: string
   isOpen: boolean
   onClose: () => void
 }) => {
   const { deleteItem } = useDeleteItem()
 
   const handleDelete = () => {
-    deleteItem({ id, itemToDelete })
+    deleteItem({ id, deleteTarget })
     onClose()
   }
 
