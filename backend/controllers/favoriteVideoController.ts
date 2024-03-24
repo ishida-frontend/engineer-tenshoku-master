@@ -10,7 +10,7 @@ export class FavoriteVideoController {
   upsertFavoriteVideo = async (req: express.Request, res: express.Response) => {
     try {
       const { favoritedStatus, userId, videoId } = req.body
-      const newStatus = await FavoriteVideoApplicationService.upsert({
+      const newStatus = await this.favoriteVideoApplicationService.upsert({
         favoritedStatus,
         userId,
         videoId,
