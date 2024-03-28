@@ -57,10 +57,10 @@ export class AdvertisementApplicationService {
       const bannerAd = await prisma.advertisement.findMany({
         where: {
           startFrom: {
-            lt: new Date(), 
+            lt: new Date(),
           },
           endAt: {
-            gt: new Date(), 
+            gt: new Date(),
           },
           deleted_at: null,
         },

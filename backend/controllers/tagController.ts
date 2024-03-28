@@ -25,6 +25,7 @@ export class TagController {
       res.status(500).json({ message: 'サーバー内部のエラーが発生しました。' })
     }
   }
+
   async getTags(req: express.Request, res: express.Response) {
     try {
       const tags = await this.tagApplicationService.getTags()
@@ -56,16 +57,14 @@ export class TagController {
     }
   }
 
-  // deleteTag = async function (req: express.Request, res: express.Response) {
-  //   try {
-  //     const { id } = req.body
-
-  //     await deleteTag(id)
-  //     res.status(201).json({
-  //       message: '正常に削除されました',
-  //     })
-  //   } catch (e) {
-  //     res.status(500).json({ message: 'エラーが発生しました' })
-  //   }
-  // }
+  async deleteTag(req: express.Request, res: express.Response) {
+    try {
+      await this.tagApplicationService.deleteTag(req.params.id)
+      res.status(200).json({
+        message: '正常に削除されました',
+      })
+    } catch (error) {
+      res.status(500).json({ message: 'エラーが発生しました' })
+    }
+  }
 }
