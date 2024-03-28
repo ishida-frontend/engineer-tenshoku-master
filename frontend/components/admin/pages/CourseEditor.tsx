@@ -297,6 +297,9 @@ export function CourseEditor({
           変更を保存
         </Button>
         <CourseRemover />
+        <Link href={`/admin/section/manage/${course.id}`}>
+          <Button width="full">セクション編集</Button>
+        </Link>
       </Stack>
     </Box>
   )
