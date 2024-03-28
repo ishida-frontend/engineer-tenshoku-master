@@ -1,4 +1,4 @@
-import { usePathname } from 'next/navigation'
+import { headers } from 'next/headers'
 export const isAdmin = (
   user:
     | {
@@ -9,10 +9,11 @@ export const isAdmin = (
     | undefined,
 ) => {
   if (!user) return false
-  return !(user && user.isAdmin)
+  return user && user.isAdmin
 }
 
 export const isAdminPage = () => {
-  const pathname = usePathname()
-  return pathname.includes('admin')
+  const headersList = headers()
+  const headerUrl = headersList.get('x-url') || ''
+  return headerUrl.includes('admin')
 }

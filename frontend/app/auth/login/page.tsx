@@ -41,6 +41,7 @@ export default function Login() {
       redirect: false,
       callbackUrl: '/',
     })
+    router.refresh()
     if (result.error) {
       toast({
         title: 'このメールアドレスは登録されていないかパスワードが誤っています',
