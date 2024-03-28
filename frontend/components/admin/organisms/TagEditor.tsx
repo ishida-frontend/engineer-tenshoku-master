@@ -16,6 +16,7 @@ import {
 
 import { DeleteButton } from '../atoms/DeleteButton'
 import { DeleteConfirmModal } from '../atoms/DeleteConfirmModal'
+import { useDeleteItem } from '../../../hooks/useDeleteItem'
 import { TagType } from '../../../types'
 import formatDate from '../../../utils/formatDate'
 
@@ -37,6 +38,13 @@ export function TagEditor({
   }
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { deleteItem } = useDeleteItem()
+
+  const handleDelete = () => {
+    deleteItem({ id: tagData.id, deleteTarget: 'tag' })
+    onClose()
+  }
+
   return (
     <Box w="full" maxW="600px" mx="auto" p={6}>
       <Stack spacing={4}>
@@ -106,10 +114,9 @@ export function TagEditor({
         </Button>
         <DeleteButton onOpen={onOpen} />
         <DeleteConfirmModal
-          id={tagData.id}
-          deleteTarget="tag"
           isOpen={isOpen}
           onClose={onClose}
+          onClick={handleDelete}
         />
       </Stack>
     </Box>

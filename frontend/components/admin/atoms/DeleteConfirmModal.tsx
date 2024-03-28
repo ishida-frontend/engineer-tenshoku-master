@@ -7,26 +7,16 @@ import {
   ModalCloseButton,
   ModalFooter,
 } from '@chakra-ui/react'
-import { useDeleteItem } from '../../../hooks/useDeleteItem'
 
 export const DeleteConfirmModal = ({
-  id,
-  deleteTarget,
   isOpen,
   onClose,
+  onClick,
 }: {
-  id: string
-  deleteTarget: string
   isOpen: boolean
   onClose: () => void
+  onClick: () => void
 }) => {
-  const { deleteItem } = useDeleteItem()
-
-  const handleDelete = () => {
-    deleteItem({ id, deleteTarget })
-    onClose()
-  }
-
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -35,7 +25,7 @@ export const DeleteConfirmModal = ({
         <ModalHeader>削除しますか？</ModalHeader>
         <ModalCloseButton />
         <ModalFooter>
-          <Button colorScheme="red" mr={3} onClick={handleDelete}>
+          <Button colorScheme="red" mr={3} onClick={onClick}>
             はい
           </Button>
           <Button variant="ghost" onClick={onClose}>
