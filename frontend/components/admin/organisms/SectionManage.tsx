@@ -15,6 +15,8 @@ import {
   useDisclosure,
   FormLabel,
   Switch,
+  Stack,
+  Link,
 } from '@chakra-ui/react'
 import { useCustomToast } from '../../../hooks/useCustomToast'
 import { VideoType } from '../../../types'
@@ -242,15 +244,17 @@ export function SectionManage({
                   セクションを追加
                 </Button>
               </HStack>
-              <VStack>
+              <VStack mb={'8px'}>
                 <Button
-                  mb={'10'}
                   colorScheme="teal"
                   type="submit"
                   onClick={(e) => onSubmit(e)}
                 >
                   保存する
                 </Button>
+                <Link href={`/admin/video/manage/${course_id}`}>
+                  <Button>ビデオ編集</Button>
+                </Link>
               </VStack>
             </FormControl>
           </VStack>
