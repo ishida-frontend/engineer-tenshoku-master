@@ -1,28 +1,25 @@
-import { Loader } from '../components/atoms/Loader'
-import { Header } from './header'
+import { Header } from './_layouts/header'
 import { Footer } from '../components/organisms/Footer'
-import { PATHS } from '../constants/paths'
-import { useSession, signOut } from 'next-auth/react'
 import { Box, Flex } from '@chakra-ui/react'
+import { isAdmin, isAdminPage } from '../utils/useAdminAuth'
+import { getServerSession } from 'next-auth'
+import { authOptions } from './api/auth/[...nextauth]/route'
 
-export const Main = ({ children }: { children: React.ReactNode }) => {
-  const { data: session, status } = useSession()
+export const Main = async ({ children }: { children: React.ReactNode }) => {
+  const session = await getServerSession(authOptions)
+  const user = session?.user
 
-  if (status === 'loading') {
-    return <Loader />
+  if (isAdminPage()) {
+    const canShowAdminPage = isAdmin(user)
+
+    if (!canShowAdminPage) {
+      return <Box>管理者権限がありません</Box>
+    }
   }
-
-  const user = session?.user as {
-    id: string
-    isAdmin: boolean
-    name: string
-  }
-
-  const triggerSignOut = () => signOut({ callbackUrl: PATHS.LOGIN.path })
 
   return (
     <Flex direction="column" minH="100vh">
-      <Header user={user} signOut={triggerSignOut} />
+      <Header user={user} />
       <Box flex="1" bg="gray.200">
         {children}
       </Box>
